@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dock Menu Flutuante</title>
+  
+  <style>
+    /* Estilo para simular o fundo claro da imagem e permitir rolagem */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7;
+      font-family: system-ui, -apple-system, sans-serif;
+      height: 200vh; /* Altura extra apenas para testar que o menu fica fixo ao rolar a página */
+    }
+
+    /* Container fixo e em formato de pílula */
+    .dock-menu {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      
+      background-color: #3b3b3b;
+      padding: 8px;
+      border-radius: 999px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+    }
+
+    /* Reset básico para os links */
+    .dock-menu a {
+      text-decoration: none;
+      box-sizing: border-box;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease-in-out;
+    }
+
+    /* Foco acessível para navegação por teclado */
+    .dock-menu a:focus-visible {
+      outline: 2px solid #1e1e1e;
+      outline-offset: 4px;
+    }
+
+    /* Logo "W." à esquerda */
+    .dock-logo {
+      background-color: #1e1e1e;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1.25rem;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+    }
+
+    /* Container do grupo de botões centrais */
+    .dock-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Itens de texto centrais */
+    .dock-item {
+      color: #e0e0e0;
+      font-size: 0.875rem;
+      padding: 0 16px;
+      height: 48px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .dock-item:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+
+    /* Item Ativo ("Indicados") */
+    .dock-item.active {
+      border: 1px solid #ffffff;
+      color: #ffffff;
+    }
+
+    /* Botão de chamada para ação à direita */
+    .dock-cta {
+      background-color: #eaeaea;
+      color: #1e1e1e;
+      font-weight: 500;
+      font-size: 0.875rem;
+      padding: 0 24px;
+      height: 48px;
+      border-radius: 12px;
+    }
+
+    .dock-cta:hover {
+      background-color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navegação principal flutuante -->
+  <nav class="dock-menu" aria-label="Navegação principal">
+    
+    <!-- Logo -->
+    <a href="#" class="dock-logo" aria-label="Página inicial">W.</a>
+
+    <!-- Links Centrais -->
+    <div class="dock-links">
+      <a href="#" class="dock-item active" aria-current="page">Indicados</a>
+      <a href="#" class="dock-item">Cursos</a>
+      <a href="#" class="dock-item">Coleções</a>
+      <a href="#" class="dock-item">Diretório</a>
+      <a href="#" class="dock-item">Mercado</a>
+    </div>
+
+    <!-- Call to action -->
+    <a href="#" class="dock-cta">Visite Sotd.</a>
+
+  </nav>
+
+</body>
+</html>
