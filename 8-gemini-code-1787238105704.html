@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu Circular e Dock Flutuante</title>
+<style>
+  /* --- LAYOUT PRINCIPAL --- */
+  body {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 60px;
+    padding: 40px;
+    height: 100vh;
+    box-sizing: border-box;
+    margin: 0;
+    background-color: #f7f7f7;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+
+  /* --- MENU CIRCULAR LATERAL --- */
+  .radial-nav-container {
+    flex-shrink: 0;
+    width: 250px;
+  }
+
+  .radial-nav {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    border: 1px solid #e0e0e0;
+    border-radius: 50%;
+    background-color: #fff;
+  }
+
+  .center-cursor {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg);
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+  }
+
+  .center-cursor svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: #aaa;
+    stroke-width: 1.5;
+    transition: stroke 0.3s ease;
+  }
+
+  .nav-item {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 30px;
+    padding: 8px; 
+    cursor: pointer;
+    text-decoration: none;
+    color: #333;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                border-color 0.3s ease,
+                background-color 0.3s ease;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    z-index: 10;
+    width: 36px; 
+    overflow: hidden; 
+    white-space: nowrap; 
+  }
+
+  .nav-item:hover, .nav-item:focus {
+    border-color: #000;
+    outline: none;
+    z-index: 20;
+  }
+
+  .nav-item.active {
+    background-color: #E8F0FE; 
+    border-color: #1857B0;     
+    box-shadow: 0 2px 8px rgba(24, 87, 176, 0.2);
+    z-index: 15;
+  }
+
+  .item-0h:hover, .item-0h:focus, .item-0h.active { width: 170px; }
+  .item-3h:hover, .item-3h:focus, .item-3h.active { width: 155px; }
+  .item-6h:hover, .item-6h:focus, .item-6h.active { width: 130px; }
+  /* Largura ajustada para comportar o texto "Acessibilidade Digital" */
+  .item-9h:hover, .item-9h:focus, .item-9h.active { width: 210px; }
+
+  .nav-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .nav-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: #666;
+    stroke-width: 1.5;
+    transition: stroke 0.3s ease;
+  }
+
+  .nav-item:hover .nav-icon svg path, 
+  .nav-item:hover .nav-icon svg circle, 
+  .nav-item:hover .nav-icon svg rect,
+  .nav-item:hover .nav-icon svg polygon,
+  .nav-item:focus .nav-icon svg path, 
+  .nav-item:focus .nav-icon svg circle, 
+  .nav-item:focus .nav-icon svg rect,
+  .nav-item:focus .nav-icon svg polygon {
+    stroke: #000;
+  }
+  
+  .nav-item.active .nav-icon svg path, 
+  .nav-item.active .nav-icon svg circle, 
+  .nav-item.active .nav-icon svg rect,
+  .nav-item.active .nav-icon svg polygon {
+    stroke: #1857B0; 
+  }
+
+  .nav-text {
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 8px; 
+    opacity: 0; 
+    transition: opacity 0.2s ease 0.1s, color 0.3s ease; 
+  }
+
+  .nav-item:hover .nav-text, 
+  .nav-item:focus .nav-text,
+  .nav-item.active .nav-text {
+    opacity: 1;
+  }
+  
+  .nav-item.active .nav-text {
+    color: #1857B0; 
+    font-weight: 600;
+  }
+
+  .item-0h { top: 0; left: 50%; }
+  .item-3h { top: 50%; left: 100%; }
+  .item-6h { top: 100%; left: 50%; }
+  .item-9h { top: 50%; left: 0; }
+
+  /* --- ÁREA DE EXIBIÇÃO DE CONTEÚDO (Iframe) --- */
+  .content-display {
+    flex-grow: 1;
+    height: 100%;
+    border: 1px solid #D8DED6;
+    border-radius: 14px;
+    overflow: hidden;
+    background-color: #F1F3EF;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+  .content-display iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  /* --- DOCK MENU FLUTUANTE --- */
+  .dock-menu {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #3b3b3b;
+    padding: 8px;
+    border-radius: 999px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+  }
+
+  .dock-menu a {
+    text-decoration: none;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .dock-menu a:focus-visible {
+    outline: 2px solid #1e1e1e;
+    outline-offset: 4px;
+  }
+
+  .dock-logo {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.25rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+  }
+
+  .dock-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .dock-item {
+    color: #e0e0e0;
+    font-size: 0.875rem;
+    padding: 0 16px;
+    height: 48px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .dock-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+  }
+
+  .dock-item.active {
+    border: 1px solid #ffffff;
+    color: #ffffff;
+  }
+
+  .dock-cta {
+    background-color: #eaeaea;
+    color: #1e1e1e;
+    font-weight: 500;
+    font-size: 0.875rem;
+    padding: 0 24px;
+    height: 48px;
+    border-radius: 12px;
+  }
+
+  .dock-cta:hover {
+    background-color: #ffffff;
+  }
+</style>
+</head>
+<body>
+
+<!-- Menu Circular Lateral -->
+<nav class="radial-nav-container" aria-label="Menu Circular Guias">
+  <div class="radial-nav">
+    <div class="center-cursor" id="cursor" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M12 2L19 21L12 17L5 21L12 2Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+
+    <!-- Guia TalkBack Android -->
+    <a href="talkback-android-guia.html" class="nav-item item-0h" aria-label="Guia TalkBack Android" data-angle="0">
+      <div class="nav-icon">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><path d="M14 3L21 10H14V3Z"/><circle cx="17.5" cy="17.5" r="3.5"/></svg>
+      </div>
+      <span class="nav-text">TalkBack Android</span>
+    </a>
+
+    <!-- Guia VoiceOver iOS -->
+    <a href="voiceover-ios-guia.html" class="nav-item item-3h" aria-label="Guia VoiceOver iOS" data-angle="90">
+      <div class="nav-icon">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><circle cx="12" cy="10" r="3"/><path d="M7 20C7 16 17 16 17 20"/></svg>
+      </div>
+      <span class="nav-text">VoiceOver iOS</span>
+    </a>
+
+    <!-- Guia NVDA Windows -->
+    <a href="nvda-windows-guia.html" class="nav-item item-6h" aria-label="Guia NVDA Windows" data-angle="180">
+      <div class="nav-icon">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="4" r="2"/><path d="M12 7V13"/><path d="M16 10L12 7L8 10"/><path d="M9 20L12 13L15 20"/></svg>
+      </div>
+      <span class="nav-text">Guia NVDA</span>
+    </a>
+
+    <!-- Acessibilidade Digital (Flexbox) -->
+    <a href="2-Flexbox-gemini-code-1787235389262.html" class="nav-item item-9h" aria-label="Acessibilidade Digital" data-angle="270">
+      <div class="nav-icon">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+      </div>
+      <span class="nav-text">Acessibilidade Digital</span>
+    </a>
+  </div>
+</nav>
+
+<!-- Área do Iframe Central -->
+<main class="content-display">
+  <iframe id="content-frame" srcdoc="<body style='font-family: sans-serif; display:flex; justify-content:center; align-items:center; height:100vh; margin:0; color:#666; text-align:center; padding: 20px;'><h2>Navegue pelo menu para visualizar os conteúdos.</h2></body>" title="Área de exibição de conteúdo"></iframe>
+</main>
+
+<!-- Dock Menu Flutuante -->
+<nav class="dock-menu" aria-label="Navegação inferior">
+  <a href="#" class="dock-logo" aria-label="Página inicial">W.</a>
+  <div class="dock-links">
+    <!-- Guia Audiovisual posicionado no menu flutuante -->
+    <a href="spa_acessibilidade_audiovisual.html" class="dock-item active" aria-current="page">Guia Audiovisual</a>
+    <a href="Cursos-Acessibilidade-gemini-code-1787251334731.html" class="dock-item">Cursos</a>
+    <a href="#" class="dock-item">Atualizações</a>
+    <a href="#" class="dock-item">IA com Acessibilidade</a>
+    <a href="#" class="dock-item">Curiosidades</a>
+  </div>
+</nav>
+
+<script>
+  // Variáveis Globais
+  const contentFrame = document.getElementById('content-frame');
+
+  // Lógica do Menu Circular
+  const cursor = document.getElementById('cursor');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  navItems.forEach(item => {
+    item.addEventListener('mouseenter', () => {
+      const angle = item.getAttribute('data-angle');
+      cursor.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+      cursor.querySelector('svg path').style.stroke = '#000';
+    });
+    
+    item.addEventListener('focus', () => {
+      const angle = item.getAttribute('data-angle');
+      cursor.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+      cursor.querySelector('svg path').style.stroke = '#000';
+    });
+
+    item.addEventListener('mouseleave', () => {
+      cursor.querySelector('svg path').style.stroke = '#aaa';
+    });
+    
+    item.addEventListener('blur', () => {
+      cursor.querySelector('svg path').style.stroke = '#aaa';
+    });
+
+    item.addEventListener('click', function(e) {
+      e.preventDefault(); 
+      
+      navItems.forEach(nav => nav.classList.remove('active'));
+      this.classList.add('active');
+      
+      const url = this.getAttribute('href');
+      
+      if (url && url !== '#') {
+        contentFrame.removeAttribute('srcdoc'); 
+        contentFrame.src = url;
+      } else {
+        const text = this.querySelector('.nav-text').innerText;
+        contentFrame.removeAttribute('src');
+        contentFrame.srcdoc = `<body style="font-family: sans-serif; display:flex; justify-content:center; align-items:center; height:100vh; margin:0; color:#666; text-align:center; padding: 20px;"><h2>O conteúdo de "${text}" não está disponível no momento.</h2></body>`;
+      }
+    });
+  });
+  
+  // Lógica do Dock Flutuante (Atualizada para abrir links no iframe)
+  const dockItems = document.querySelectorAll('.dock-item');
+  dockItems.forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      dockItems.forEach(nav => nav.classList.remove('active'));
+      this.classList.add('active');
+
+      const url = this.getAttribute('href');
+      
+      if (url && url !== '#') {
+        contentFrame.removeAttribute('srcdoc'); 
+        contentFrame.src = url;
+      } else {
+        const text = this.innerText;
+        contentFrame.removeAttribute('src');
+        contentFrame.srcdoc = `<body style="font-family: sans-serif; display:flex; justify-content:center; align-items:center; height:100vh; margin:0; color:#666; text-align:center; padding: 20px;"><h2>O conteúdo de "${text}" não está disponível no momento.</h2></body>`;
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
