@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QA Acessibilidade - Roteiros de Teste</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #fafafa;
+            --bg-secondary: #ffffff;
+            --text: #1a1a1a;
+            --text-secondary: #666;
+            --text-tertiary: #999;
+            --border: #e5e5e5;
+            --accent: #3b82f6;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--accent);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 280px;
+            padding: 60px 40px;
+            background: var(--bg);
+            border-right: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            margin-bottom: 80px;
+        }
+
+        .site-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .site-subtitle {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-section {
+            margin-bottom: 50px;
+        }
+
+        .nav-section-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+            border-left: 2px solid transparent;
+            padding-left: 0;
+        }
+
+        .nav-link:hover {
+            color: var(--text);
+            padding-left: 8px;
+            border-left-color: var(--accent);
+        }
+
+        .nav-link.active {
+            color: var(--accent);
+            font-weight: 600;
+            border-left-color: var(--accent);
+            padding-left: 8px;
+        }
+
+        .nav-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+        }
+
+        .nav-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1;
+            padding: 60px 80px;
+            background: var(--bg-secondary);
+            overflow-y: auto;
+        }
+
+        .content-header {
+            margin-bottom: 60px;
+            animation: fadeInDown 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .page-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+
+        .page-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        .content-wrapper {
+            display: none;
+            animation: fadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .content-wrapper.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Content styling */
+        .content-wrapper h1,
+        .content-wrapper h2,
+        .content-wrapper h3 {
+            margin-top: 32px;
+            margin-bottom: 16px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .content-wrapper h1 {
+            font-size: 32px;
+            margin-top: 0;
+        }
+
+        .content-wrapper h2 {
+            font-size: 24px;
+        }
+
+        .content-wrapper h3 {
+            font-size: 18px;
+        }
+
+        .content-wrapper p {
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .content-wrapper ul,
+        .content-wrapper ol {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .content-wrapper li {
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .content-wrapper a {
+            color: var(--accent);
+            text-decoration: underline;
+            text-decoration-color: rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .content-wrapper a:hover {
+            text-decoration-color: var(--accent);
+        }
+
+        .content-wrapper code {
+            background: var(--bg);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            color: var(--text);
+        }
+
+        .content-wrapper pre {
+            background: var(--bg);
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 16px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .content-wrapper pre code {
+            background: none;
+            padding: 0;
+            color: var(--text);
+        }
+
+        .content-wrapper blockquote {
+            border-left: 3px solid var(--accent);
+            padding-left: 16px;
+            margin: 24px 0;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-tertiary);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .main-content {
+                padding: 40px 60px;
+            }
+
+            .page-title {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 40px 20px;
+                position: relative;
+                sticky: none;
+            }
+
+            .sidebar-header {
+                margin-bottom: 40px;
+            }
+
+            .site-title {
+                font-size: 24px;
+            }
+
+            .nav-section {
+                display: inline-block;
+                margin-right: 40px;
+                margin-bottom: 0;
+            }
+
+            .main-content {
+                padding: 40px 20px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .page-description {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                padding: 30px 16px;
+            }
+
+            .main-content {
+                padding: 30px 16px;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+
+            .nav-section {
+                margin-right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="site-title">QA</div>
+                <div class="site-subtitle">Acessibilidade</div>
+            </div>
+
+            <nav class="nav-section">
+                <div class="nav-section-title">Leitores de Tela</div>
+                
+                <a class="nav-link active" data-reader="nvda">
+                    <span class="nav-icon">📖</span>
+                    <span>NVDA</span>
+                </a>
+
+                <a class="nav-link" data-reader="voiceover">
+                    <span class="nav-icon">📖</span>
+                    <span>VoiceOver</span>
+                </a>
+
+                <a class="nav-link" data-reader="talkback">
+                    <span class="nav-icon">📖</span>
+                    <span>TalkBack</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <div class="content-header">
+                <h1 class="page-title" id="pageTitle">NVDA</h1>
+                <p class="page-description" id="pageDescription">
+                    Leitor de tela para Windows
+                </p>
+            </div>
+
+            <!-- NVDA Content -->
+            <div class="content-wrapper active" data-reader="nvda" id="content-nvda"></div>
+
+            <!-- VoiceOver Content -->
+            <div class="content-wrapper" data-reader="voiceover" id="content-voiceover"></div>
+
+            <!-- TalkBack Content -->
+            <div class="content-wrapper" data-reader="talkback" id="content-talkback"></div>
+        </main>
+    </div>
+
+    <script>
+        const navLinks = document.querySelectorAll('.nav-link');
+        const contentWrappers = document.querySelectorAll('.content-wrapper');
+        const pageTitle = document.getElementById('pageTitle');
+        const pageDescription = document.getElementById('pageDescription');
+
+        const readerInfo = {
+            nvda: {
+                title: 'NVDA',
+                description: 'NonVisual Desktop Access - Leitor de tela gratuito para Windows'
+            },
+            voiceover: {
+                title: 'VoiceOver',
+                description: 'Leitor de tela integrado dos dispositivos Apple'
+            },
+            talkback: {
+                title: 'TalkBack',
+                description: 'Leitor de tela integrado do Android'
+            }
+        };
+
+        function switchContent(reader) {
+            // Remove active class from all nav links
+            navLinks.forEach(link => link.classList.remove('active'));
+
+            // Hide all content
+            contentWrappers.forEach(wrapper => wrapper.classList.remove('active'));
+
+            // Find and activate the clicked link
+            const activeLink = document.querySelector(`[data-reader="${reader}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+
+            // Find and show the corresponding content
+            const activeContent = document.querySelector(`.content-wrapper[data-reader="${reader}"]`);
+            if (activeContent) {
+                activeContent.classList.add('active');
+            }
+
+            // Update header
+            pageTitle.textContent = readerInfo[reader].title;
+            pageDescription.textContent = readerInfo[reader].description;
+
+            // Scroll to top
+            document.querySelector('.main-content').scrollTop = 0;
+        }
+
+        // Add click listeners to navigation links
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const reader = link.getAttribute('data-reader');
+                switchContent(reader);
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const readers = ['nvda', 'voiceover', 'talkback'];
+            const currentActive = document.querySelector('.nav-link.active');
+            const currentReader = currentActive?.getAttribute('data-reader');
+            const currentIndex = readers.indexOf(currentReader);
+
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                const nextIndex = (currentIndex + 1) % readers.length;
+                switchContent(readers[nextIndex]);
+                e.preventDefault();
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                const prevIndex = (currentIndex - 1 + readers.length) % readers.length;
+                switchContent(readers[prevIndex]);
+                e.preventDefault();
+            }
+        });
+
+        // Load HTML content from files
+        async function loadContent(reader, filename) {
+            try {
+                const response = await fetch(filename);
+                const html = await response.text();
+                
+                // Extract body content
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const bodyContent = doc.body.innerHTML;
+                
+                // Insert into container
+                const container = document.getElementById(`content-${reader}`);
+                if (container) {
+                    container.innerHTML = bodyContent;
+                    
+                    // Copy styles from the loaded document
+                    const styleElements = doc.querySelectorAll('style');
+                    styleElements.forEach(style => {
+                        document.head.appendChild(style.cloneNode(true));
+                    });
+                }
+            } catch (error) {
+                console.error(`Erro ao carregar ${filename}:`, error);
+                document.getElementById(`content-${reader}`).innerHTML = 
+                    `<p style="color: var(--text-secondary);">Erro ao carregar conteúdo. Certifique-se de que o arquivo <strong>${filename}</strong> existe na mesma pasta.</p>`;
+            }
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            loadContent('nvda', 'nvda-windows-guia.html');
+            loadContent('voiceover', 'voiceover-ios-guia.html');
+            loadContent('talkback', 'talkback-android-guia.html');
+        });
+    </script>
+</body>
+</html>

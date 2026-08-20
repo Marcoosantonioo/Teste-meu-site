@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia de Referência Rápida — NVDA para Windows</title>
+<style>
+  :root {
+    --bg: #EFF0F3;
+    --surface: #FFFFFF;
+    --ink: #171A26;
+    --ink-soft: #4E5266;
+    --line: #DBDEE6;
+    --accent: #3B4FA0;
+    --accent-soft: #E6E9F7;
+    --focus: #1857B0;
+    --radius: 14px;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --sans: "Inter", system-ui, -apple-system, sans-serif;
+    --display: "Space Grotesk", var(--sans);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.5;
+  }
+
+  a { color: var(--accent); }
+
+  .sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  .site-header {
+    background: linear-gradient(135deg, #1B2359, var(--accent) 65%);
+    color: #ECEEFB;
+    padding: 2.5rem 1.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .site-header::after {
+    content: "";
+    position: absolute; right: -60px; top: -60px;
+    width: 260px; height: 260px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.10), transparent 70%);
+  }
+
+  .header-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+
+  .eyebrow {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-family: var(--mono); font-size: 0.78rem;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: #C4CBF2; margin-bottom: 0.9rem;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+    margin: 0 0 0.5rem; letter-spacing: -0.01em;
+  }
+
+  .header-sub { color: #DBDEF7; max-width: 62ch; margin: 0 0 1.4rem; }
+
+  .header-meta {
+    display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem;
+    font-size: 0.85rem; color: #C4CBF2;
+  }
+
+  .header-meta strong { color: #fff; }
+
+  .layout {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 220px 1fr;
+    gap: 2.2rem; padding: 2rem 1.5rem 5rem; align-items: start;
+  }
+
+  @media (max-width: 820px) { .layout { grid-template-columns: 1fr; } }
+
+  .sidebar {
+    position: sticky; top: 1.2rem;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 1.2rem;
+  }
+
+  @media (max-width: 820px) { .sidebar { position: static; } }
+
+  .sidebar h2 {
+    font-family: var(--mono); font-size: 0.72rem;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-soft); margin: 0 0 0.7rem;
+  }
+
+  .nav-link {
+    display: block; padding: 0.45rem 0.6rem; border-radius: 8px;
+    text-decoration: none; color: var(--ink); font-size: 0.92rem;
+    margin-bottom: 0.1rem;
+  }
+
+  .nav-link:hover { background: var(--accent-soft); }
+
+  .layout-note {
+    margin-top: 1.3rem; padding-top: 1.1rem;
+    border-top: 1px dashed var(--line);
+    font-size: 0.8rem; color: var(--ink-soft);
+  }
+
+  .layout-note strong { color: var(--ink); display: block; margin-bottom: 0.3rem; }
+
+  .intro-card {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 1.4rem 1.6rem; margin-bottom: 2rem;
+  }
+
+  .intro-card h2 {
+    font-family: var(--display);
+    display: flex; align-items: center; gap: 0.5rem; margin-top: 0;
+  }
+
+  .intro-card p { color: var(--ink-soft); margin: 0.6rem 0; }
+  .intro-card p strong { color: var(--ink); }
+
+  .intro-card .footnote {
+    font-size: 0.85rem; color: var(--ink-soft);
+    border-top: 1px solid var(--line);
+    padding-top: 0.7rem; margin-top: 0.9rem;
+  }
+
+  .gesture-section {
+    margin-bottom: 2.2rem;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 0.4rem 1.4rem 1rem;
+    scroll-margin-top: 1rem;
+  }
+
+  .gesture-section h2 {
+    font-family: var(--display); font-size: 1.25rem;
+    padding-top: 0.9rem; border-bottom: 2px solid var(--accent-soft);
+    padding-bottom: 0.6rem; margin-top: 0.5rem;
+  }
+
+  .section-note { font-size: 0.85rem; color: var(--ink-soft); margin: 0.7rem 0 0; }
+
+  .gesture-table { width: 100%; border-collapse: collapse; margin-top: 0.4rem; }
+
+  .gesture-table thead th {
+    text-align: left; font-family: var(--mono); font-size: 0.72rem;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--ink-soft); padding: 0.5rem 0.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .gesture-table td {
+    padding: 0.65rem 0.5rem; border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+  }
+
+  .gesture-table tbody tr:last-child td { border-bottom: none; }
+  .gesture-table tbody tr:hover { background: #FAFAFC; }
+
+  .col-task { color: var(--ink); font-size: 0.94rem; width: 58%; }
+  .col-command { font-size: 0.9rem; }
+
+  .cmd {
+    font-family: var(--mono); background: var(--accent-soft);
+    color: #1B2359; padding: 0.2rem 0.5rem; border-radius: 6px;
+    display: inline-block;
+  }
+
+  footer.site-footer {
+    max-width: 1100px; margin: 0 auto; padding: 0 1.5rem 3rem;
+    color: var(--ink-soft); font-size: 0.85rem;
+  }
+
+  footer.site-footer a { color: var(--accent); }
+
+  @media print {
+    .sidebar { display: none; }
+    .layout { grid-template-columns: 1fr; }
+    .site-header { background: none; color: var(--ink); }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="eyebrow">Quick Reference Guide · Deque Systems</div>
+    <h1>NVDA para Windows — Guia de Referência Rápida</h1>
+    <p class="header-sub">Atalhos de teclado do NVDA (NonVisual Desktop Access), o leitor de tela gratuito e de código aberto para Windows, reunidos em uma única tela em português.</p>
+    <div class="header-meta">
+      <span><strong>Navegadores recomendados:</strong> Firefox, Chrome ou Edge</span>
+      <span><strong>Como instalar:</strong> <a href="https://www.nvaccess.org/download/" style="color:#ECEEFB; text-decoration-color:#9AA3E8;">nvaccess.org/download</a></span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" aria-label="Seções do guia">
+    <h2>Seções</h2>
+    <a href="#basics" class="nav-link">O básico</a>
+<a href="#reading" class="nav-link">Leitura de texto</a>
+<a href="#tables" class="nav-link">Tabelas</a>
+<a href="#forms" class="nav-link">Formulários</a>
+<a href="#other" class="nav-link">Outros comandos</a>
+    <div class="layout-note">
+      <strong>Layout de teclado</strong>
+      Estes atalhos seguem o layout de teclado padrão ("desktop") do NVDA. Alguns comandos mudam no layout "notebook" — por exemplo, Insert + A para leitura contínua.
+    </div>
+  </nav>
+
+  <main id="conteudo">
+    <div class="intro-card">
+      <h2>Como começar</h2>
+      <p>O <strong>NVDA</strong> (NonVisual Desktop Access) é um leitor de tela gratuito, de código aberto, totalmente funcional e portátil — pode ser instalado no PC ou rodar direto de um pendrive.</p>
+      <p><strong>Tecla NVDA:</strong> por padrão, tanto a tecla <span class="cmd">Insert</span> do teclado numérico quanto a <span class="cmd">Insert</span> estendida funcionam como tecla modificadora do NVDA. É possível configurar <span class="cmd">Caps Lock</span> como tecla modificadora adicional.</p>
+      <p><strong>Modo de navegação (Browse Mode):</strong> usado para ler documentos e páginas web.</p>
+      <p><strong>Modo de foco (Focus Mode):</strong> usado ao preencher formulários ou campos que exigem entrada do usuário. O NVDA alterna automaticamente entre os modos, mas dá para alternar manualmente com <span class="cmd">Insert + Barra de espaço</span>.</p>
+      <p><strong>Visualizador de Fala (Speech Viewer):</strong> abre uma janela mostrando tudo o que o NVDA está narrando — útil para pessoas videntes que estão aprendendo a testar com o NVDA. Ative em Ferramentas, no menu do NVDA.</p>
+      <p class="footnote">Guia revisado em agosto de 2026 (NVDA 2025.3): os atalhos de teclado abaixo continuam os mesmos desde 2023 — as versões recentes trouxeram principalmente melhorias de compatibilidade com o Windows 11, suporte a novos displays em braile e ajustes internos, sem alterar os comandos padrão.</p>
+      <p class="footnote">
+        A lista completa de comandos do NVDA está disponível no <a href="https://www.nvaccess.org/files/nvda/documentation/userGuide.html">Guia do Usuário oficial (NV Access)</a>.
+      </p>
+    </div>
+
+    
+    <section class="gesture-section" id="basics" aria-labelledby="h-basics">
+      <h2 id="h-basics">O básico</h2>
+      <table class="gesture-table">
+        <thead>
+          <tr>
+            <th scope="col" class="col-task">Ação</th>
+            <th scope="col" class="col-command">Atalho de teclado</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="col-task">Ativar o NVDA</td>
+          <td class="col-command"><span class="cmd">Ctrl + Alt + N</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Desativar o NVDA</td>
+          <td class="col-command"><span class="cmd">Insert + Q</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Parar a leitura</td>
+          <td class="col-command"><span class="cmd">Ctrl</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Começar a ler continuamente a partir daqui</td>
+          <td class="col-command"><span class="cmd">Insert + Seta para baixo (ou Numpad +)</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ler o próximo item</td>
+          <td class="col-command"><span class="cmd">Seta para baixo</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ir para o próximo item focável (link, botão etc.)</td>
+          <td class="col-command"><span class="cmd">Tab</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ativar link</td>
+          <td class="col-command"><span class="cmd">Enter</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ativar botão</td>
+          <td class="col-command"><span class="cmd">Enter ou Barra de espaço</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ir para o próximo título (heading)</td>
+          <td class="col-command"><span class="cmd">H</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ir para o próximo título de nível 1 a 6</td>
+          <td class="col-command"><span class="cmd">1 – 6</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Listar todos os títulos</td>
+          <td class="col-command"><span class="cmd">Insert + F7</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ir para o próximo marco/região (landmark)</td>
+          <td class="col-command"><span class="cmd">D</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ver lista de links, títulos, campos de formulário, botões e marcos</td>
+          <td class="col-command"><span class="cmd">Insert + F7</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ir para a próxima tabela</td>
+          <td class="col-command"><span class="cmd">T</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Navegar pelas células da tabela</td>
+          <td class="col-command"><span class="cmd">Ctrl + Alt + Setas</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ir para a próxima lista</td>
+          <td class="col-command"><span class="cmd">L</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ir para o próximo item de lista</td>
+          <td class="col-command"><span class="cmd">I</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ir para a próxima imagem</td>
+          <td class="col-command"><span class="cmd">G</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Listar todos os links</td>
+          <td class="col-command"><span class="cmd">Insert + F7</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ir para o próximo link</td>
+          <td class="col-command"><span class="cmd">K</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ir para o próximo link não visitado</td>
+          <td class="col-command"><span class="cmd">U</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ir para o próximo link visitado</td>
+          <td class="col-command"><span class="cmd">V</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Alternar entre botões de rádio, itens de lista, abas, itens de árvore e itens de menu (ARIA)</td>
+          <td class="col-command"><span class="cmd">Setas</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Voltar ao título, marco, tabela ou item focável anterior</td>
+          <td class="col-command"><span class="cmd">Shift + [H, D, T, Tab etc.]</span></td>
+        </tr>
+        </tbody>
+      </table>
+      
+    </section>
+
+    <section class="gesture-section" id="reading" aria-labelledby="h-reading">
+      <h2 id="h-reading">Leitura de texto</h2>
+      <table class="gesture-table">
+        <thead>
+          <tr>
+            <th scope="col" class="col-task">Ação</th>
+            <th scope="col" class="col-command">Atalho de teclado</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="col-task">Dizer linha anterior</td>
+          <td class="col-command"><span class="cmd">Seta para cima ou Numpad 7</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Dizer próxima linha</td>
+          <td class="col-command"><span class="cmd">Seta para baixo ou Numpad 9</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Dizer linha atual</td>
+          <td class="col-command"><span class="cmd">Insert + Seta para cima ou Numpad 8</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Início da linha</td>
+          <td class="col-command"><span class="cmd">Shift + Numpad 1</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Fim da linha</td>
+          <td class="col-command"><span class="cmd">Shift + Numpad 3</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Primeira linha da tela</td>
+          <td class="col-command"><span class="cmd">Shift + Numpad 7</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Última linha da tela</td>
+          <td class="col-command"><span class="cmd">Shift + Numpad 9</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Dizer caractere anterior</td>
+          <td class="col-command"><span class="cmd">Seta para esquerda ou Numpad 1</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Dizer próximo caractere</td>
+          <td class="col-command"><span class="cmd">Seta para direita ou Numpad 3</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Dizer caractere atual</td>
+          <td class="col-command"><span class="cmd">Numpad 2</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Dizer caractere foneticamente</td>
+          <td class="col-command"><span class="cmd">Numpad 2 duas vezes rapidamente</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Dizer palavra anterior</td>
+          <td class="col-command"><span class="cmd">Ctrl + Seta para esquerda ou Numpad 4</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Dizer próxima palavra</td>
+          <td class="col-command"><span class="cmd">Ctrl + Seta para direita ou Numpad 6</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Dizer palavra atual</td>
+          <td class="col-command"><span class="cmd">Numpad 5</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Dizer frase anterior</td>
+          <td class="col-command"><span class="cmd">Alt + Seta para cima</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Dizer próxima frase</td>
+          <td class="col-command"><span class="cmd">Alt + Seta para baixo</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Dizer frase atual</td>
+          <td class="col-command"><span class="cmd">Alt + Numpad 5</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Dizer parágrafo anterior</td>
+          <td class="col-command"><span class="cmd">Ctrl + Seta para cima</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Dizer próximo parágrafo</td>
+          <td class="col-command"><span class="cmd">Ctrl + Seta para baixo</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Soletrar palavra</td>
+          <td class="col-command"><span class="cmd">Numpad 5 duas vezes rapidamente</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Soletrar palavra foneticamente</td>
+          <td class="col-command"><span class="cmd">Numpad 5 três vezes rapidamente</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Soletrar linha atual</td>
+          <td class="col-command"><span class="cmd">Insert + Seta para cima, duas vezes rapidamente</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Soletrar linha atual foneticamente</td>
+          <td class="col-command"><span class="cmd">Insert + Seta para cima, três vezes rapidamente</span></td>
+        </tr>
+        </tbody>
+      </table>
+      
+    </section>
+
+    <section class="gesture-section" id="tables" aria-labelledby="h-tables">
+      <h2 id="h-tables">Tabelas</h2>
+      <table class="gesture-table">
+        <thead>
+          <tr>
+            <th scope="col" class="col-task">Ação</th>
+            <th scope="col" class="col-command">Atalho de teclado</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="col-task">Ir para a próxima (anterior) tabela</td>
+          <td class="col-command"><span class="cmd">T (Shift + T)</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Célula à direita</td>
+          <td class="col-command"><span class="cmd">Ctrl + Alt + Seta para direita</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Célula à esquerda</td>
+          <td class="col-command"><span class="cmd">Ctrl + Alt + Seta para esquerda</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Célula abaixo</td>
+          <td class="col-command"><span class="cmd">Ctrl + Alt + Seta para baixo</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Célula acima</td>
+          <td class="col-command"><span class="cmd">Ctrl + Alt + Seta para cima</span></td>
+        </tr>
+        </tbody>
+      </table>
+      
+    </section>
+
+    <section class="gesture-section" id="forms" aria-labelledby="h-forms">
+      <h2 id="h-forms">Formulários</h2>
+      <table class="gesture-table">
+        <thead>
+          <tr>
+            <th scope="col" class="col-task">Ação</th>
+            <th scope="col" class="col-command">Atalho de teclado</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="col-task">Listar todos os elementos de formulário</td>
+          <td class="col-command"><span class="cmd">Insert + F7</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Próximo campo de formulário</td>
+          <td class="col-command"><span class="cmd">F</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Próximo item focável</td>
+          <td class="col-command"><span class="cmd">Tab</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Próximo botão</td>
+          <td class="col-command"><span class="cmd">B</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Selecionar e desmarcar caixas de seleção</td>
+          <td class="col-command"><span class="cmd">Barra de espaço</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Próxima caixa de seleção</td>
+          <td class="col-command"><span class="cmd">X</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Abrir caixa de combinação (combo box)</td>
+          <td class="col-command"><span class="cmd">Alt + Seta para baixo</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Navegar/selecionar opções</td>
+          <td class="col-command"><span class="cmd">Seta para baixo ou primeira letra</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Selecionar múltiplas opções</td>
+          <td class="col-command"><span class="cmd">Shift + Seta para baixo (ou para cima)</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Próxima caixa de combinação</td>
+          <td class="col-command"><span class="cmd">C</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Alternar seleção de botão de rádio</td>
+          <td class="col-command"><span class="cmd">Seta para cima/baixo</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Próximo botão de rádio</td>
+          <td class="col-command"><span class="cmd">R</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Alternar entre modo de foco e modo de navegação*</td>
+          <td class="col-command"><span class="cmd">Insert + Barra de espaço</span></td>
+        </tr>
+        </tbody>
+      </table>
+      <p class="section-note">* O “modo de foco” permite digitar em campos de formulário. O “modo de navegação” permite navegar pela página usando os atalhos padrão do leitor de tela (títulos, marcos, links etc.).</p>
+    </section>
+
+    <section class="gesture-section" id="other" aria-labelledby="h-other">
+      <h2 id="h-other">Outros comandos</h2>
+      <table class="gesture-table">
+        <thead>
+          <tr>
+            <th scope="col" class="col-task">Ação</th>
+            <th scope="col" class="col-command">Atalho de teclado</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="col-task">Pesquisar uma palavra ou frase</td>
+          <td class="col-command"><span class="cmd">Insert + Ctrl + F</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ajuda de teclado</td>
+          <td class="col-command"><span class="cmd">Insert + 1</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ir para a próxima citação em bloco (blockquote)</td>
+          <td class="col-command"><span class="cmd">Q</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ignorar o próximo atalho do NVDA (repassar a tecla normalmente)</td>
+          <td class="col-command"><span class="cmd">Insert + F2</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Falar os caracteres digitados</td>
+          <td class="col-command"><span class="cmd">Insert + 2</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Falar as palavras digitadas</td>
+          <td class="col-command"><span class="cmd">Insert + 3</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Ler toda a janela em primeiro plano (ex.: caixas de diálogo)</td>
+          <td class="col-command"><span class="cmd">Insert + B</span></td>
+        </tr>
+        <tr>
+          <td class="col-task">Anunciar o título da janela em primeiro plano</td>
+          <td class="col-command"><span class="cmd">Insert + T</span></td>
+        </tr>
+        </tbody>
+      </table>
+      
+    </section>
+  </main>
+</div>
+
+<footer class="site-footer">
+  <p>Conteúdo adaptado do guia <em>NVDA Keyboard Shortcuts</em>, Deque Systems, Inc. — <a href="https://dequeuniversity.com/screenreaders/nvda-keyboard-shortcuts">dequeuniversity.com/screenreaders/nvda-keyboard-shortcuts</a>. Todos os direitos reservados aos respectivos autores. Revisado em agosto de 2026 contra o NVDA 2025.3.</p>
+</footer>
+
+</body>
+</html>

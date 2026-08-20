@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referências em Acessibilidade Digital</title>
+    <style>
+        /* Variáveis de cor para garantir alto contraste */
+        :root {
+            --bg-color: #f4f6f8;
+            --text-main: #202124;
+            --text-muted: #5f6368;
+            --link-color: #0b5394;
+            --link-hover: #073763;
+            --card-bg: #ffffff;
+            --border-color: #dadce0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-main);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            padding: 2rem 1rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* Estilos do Menu Lateral Baseado no Print */
+        .sidebar {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 2rem;
+        }
+
+        .sidebar-header {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 1.25rem;
+        }
+
+        .sidebar-nav a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 1.05rem;
+            display: block;
+        }
+
+        .sidebar-nav a:hover, .sidebar-nav a:focus {
+            text-decoration: underline;
+            color: var(--link-hover);
+        }
+        
+        .sidebar-nav a:focus-visible {
+            outline: 2px solid var(--link-color);
+            outline-offset: 4px;
+        }
+
+        .sidebar-divider {
+            border-top: 1px dashed #cccccc;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+        }
+
+        /* Estilos do Conteúdo Principal */
+        section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        section h2 {
+            margin-top: 0;
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .resource-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .resource-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .resource-item h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.25rem;
+        }
+
+        .resource-item a {
+            color: var(--link-color);
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .resource-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                position: static;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Cursos e Leituras em Acessibilidade</h1>
+        <p>Materiais de referência para capacitação e validação de qualidade digital.</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- Menu Lateral (Referência: image_cf3dc7.png) -->
+        <nav class="sidebar" aria-label="Navegação das Seções">
+            <div class="sidebar-header" aria-hidden="true">SEÇÕES</div>
+            <ul class="sidebar-nav">
+                <li><a href="#cursos">Cursos</a></li>
+                <li><a href="#leitura">Leitura de texto</a></li>
+                <li><a href="#palestras">Palestras e vídeos</a></li>
+            </ul>
+            <div class="sidebar-divider"></div>
+        </nav>
+
+        <!-- Conteúdo Principal -->
+        <main>
+            
+            <section id="cursos" aria-labelledby="heading-cursos">
+                <h2 id="heading-cursos">Cursos</h2>
+                
+                <div class="resource-item">
+                    <h3><a href="https://dequeuniversity.com/" target="_blank" rel="noopener noreferrer">Deque University</a></h3>
+                    <p>Plataforma de extrema profundidade técnica. Essencial para entender os bastidores da automação de testes (como a engine do axe-core) e dominar as nuances das diretrizes WCAG para cenários complexos.</p>
+                </div>
+
+                <div class="resource-item">
+                    <h3><a href="https://web.dev/learn/accessibility" target="_blank" rel="noopener noreferrer">Learn Accessibility (Google)</a></h3>
+                    <p>Curso estruturado pelo Google com foco em semântica HTML, ARIA e foco de teclado. Excelente para auditar aplicações front-end e entender como leitores de tela interpretam a árvore de acessibilidade do navegador.</p>
+                </div>
+
+                <div class="resource-item">
+                    <h3><a href="https://learn.microsoft.com/pt-br/training/paths/accessibility-fundamental/" target="_blank" rel="noopener noreferrer">Fundamentos de Acessibilidade (Microsoft)</a></h3>
+                    <p>Trilha da Microsoft focada nos princípios de design inclusivo. Ótimo material para consolidar a base teórica e entender como a acessibilidade se integra ao ecossistema de produtos desde a concepção.</p>
+                </div>
+
+                <div class="resource-item">
+                    <h3><a href="https://www.alura.com.br/" target="_blank" rel="noopener noreferrer">Alura</a></h3>
+                    <p>Plataforma nacional que conta com formações específicas em acessibilidade web. Útil para nivelamento rápido da equipe e compreensão do cenário de desenvolvimento front-end em português.</p>
+                </div>
+            </section>
+
+            <section id="leitura" aria-labelledby="heading-leitura">
+                <h2 id="heading-leitura">Leitura de texto</h2>
+                
+                <div class="resource-item">
+                    <h3><a href="https://www.a11yproject.com/" target="_blank" rel="noopener noreferrer">The A11Y Project</a></h3>
+                    <p>Um recurso orientado pela comunidade que fornece padrões, mitos desmistificados e, o mais importante, uma <strong>checklist de acessibilidade</strong> fantástica para validar entregas antes de irem para produção.</p>
+                </div>
+
+                <div class="resource-item">
+                    <h3><a href="https://medium.com/tag/acessibilidade" target="_blank" rel="noopener noreferrer">Artigos no Medium (Tag: Acessibilidade)</a></h3>
+                    <p>Leitura dinâmica para acompanhar estudos de caso, reflexões de outros profissionais da área e soluções de problemas específicos do dia a dia da qualidade e desenvolvimento.</p>
+                </div>
+
+                <div class="resource-item">
+                    <h3><a href="https://www.apple.com/education-initiative/" target="_blank" rel="noopener noreferrer">Apple Education Initiative</a></h3>
+                    <p>Materiais de leitura e documentação focados na forma como a Apple aplica acessibilidade nativamente em seus sistemas. Fundamental para testar interfaces mobile e entender os padrões do VoiceOver.</p>
+                </div>
+            </section>
+
+            <section id="palestras" aria-labelledby="heading-palestras">
+                <h2 id="heading-palestras">Palestras / Vídeos</h2>
+                
+                <div class="resource-item">
+                    <p><em>(Espaço reservado para curadoria de vídeos)</em></p>
+                    <p>Embora as referências acima sejam majoritariamente focadas em trilhas interativas e textos, recomenda-se acompanhar canais no YouTube que documentem testes com leitores de tela na prática (como NVDA e JAWS) para complementar as simulações de cenários de uso.</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+</body>
+</html>
