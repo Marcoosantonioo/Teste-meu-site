@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia Interativo de Acessibilidade Audiovisual</title>
+<style>
+  :root {
+    --bg: #EFF0F3;
+    --surface: #FFFFFF;
+    --ink: #171A26;
+    --ink-soft: #4E5266;
+    --line: #DBDEE6;
+    --accent: #3B4FA0;
+    --accent-soft: #E6E9F7;
+    --focus: #1857B0;
+    --radius: 14px;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --sans: "Inter", system-ui, -apple-system, sans-serif;
+    --display: "Space Grotesk", var(--sans);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.5;
+  }
+
+  a { color: var(--accent); }
+
+  .sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  .site-header {
+    background: linear-gradient(135deg, #1B2359, var(--accent) 65%);
+    color: #ECEEFB;
+    padding: 2.5rem 1.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .site-header::after {
+    content: "";
+    position: absolute; right: -60px; top: -60px;
+    width: 260px; height: 260px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.10), transparent 70%);
+  }
+
+  .header-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+
+  .eyebrow {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-family: var(--mono); font-size: 0.78rem;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: #C4CBF2; margin-bottom: 0.9rem;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+    margin: 0 0 0.5rem; letter-spacing: -0.01em;
+  }
+
+  .header-sub { color: #DBDEF7; max-width: 62ch; margin: 0 0 1.4rem; }
+
+  .layout {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 220px 1fr;
+    gap: 2.2rem; padding: 2rem 1.5rem 5rem; align-items: start;
+  }
+
+  @media (max-width: 820px) { .layout { grid-template-columns: 1fr; } }
+
+  .sidebar {
+    position: sticky; top: 1.2rem;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 1.2rem;
+  }
+
+  @media (max-width: 820px) { .sidebar { position: static; } }
+
+  .sidebar h2 {
+    font-family: var(--mono); font-size: 0.72rem;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-soft); margin: 0 0 0.7rem;
+  }
+
+  .nav-link {
+    display: block; padding: 0.45rem 0.6rem; border-radius: 8px;
+    text-decoration: none; color: var(--ink); font-size: 0.92rem;
+    margin-bottom: 0.1rem; width: 100%; text-align: left;
+    background: none; border: none; font-family: var(--sans);
+    cursor: pointer; transition: background 0.2s;
+  }
+
+  .nav-link:hover { background: var(--accent-soft); }
+  .nav-link.active { background: var(--accent-soft); color: var(--focus); font-weight: 600; }
+
+  .intro-card, .gesture-section {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 1.4rem 1.6rem; margin-bottom: 2rem;
+  }
+
+  .gesture-section { padding: 0.4rem 1.4rem 1.4rem; }
+
+  .intro-card h2, .gesture-section h2 {
+    font-family: var(--display);
+    display: flex; align-items: center; gap: 0.5rem; margin-top: 0;
+  }
+
+  .gesture-section h2 {
+    font-size: 1.4rem; padding-top: 0.9rem;
+    border-bottom: 2px solid var(--accent-soft);
+    padding-bottom: 0.6rem; margin-top: 0.5rem;
+  }
+  
+  .gesture-section h3 {
+    font-family: var(--display);
+    font-size: 1.15rem; color: var(--focus);
+    margin-top: 1.5rem; margin-bottom: 0.5rem;
+  }
+
+  p { color: var(--ink-soft); margin: 0.6rem 0; }
+  p strong { color: var(--ink); }
+
+  ul { color: var(--ink-soft); padding-left: 1.2rem; margin-top: 0.5rem; }
+  li { margin-bottom: 0.4rem; }
+  li strong { color: var(--ink); }
+
+  .content-section { display: none; }
+  .content-section.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  .grid-2 {
+    display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 1rem 0;
+  }
+  @media (min-width: 600px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+  
+  .card-inner {
+    background: #FAFAFC; border: 1px solid var(--line);
+    padding: 1rem; border-radius: 8px;
+  }
+  .card-inner h4 { margin: 0 0 0.5rem; color: var(--focus); font-family: var(--sans); }
+
+  .highlight-box {
+    background: var(--accent-soft); border-left: 4px solid var(--accent);
+    padding: 0.8rem 1rem; border-radius: 0 8px 8px 0; margin-bottom: 0.8rem; font-size: 0.9rem;
+  }
+
+  /* Estilos específicos para a Tabela do Guia e seus badges */
+  .gesture-table { width: 100%; border-collapse: collapse; margin-top: 0.4rem; }
+
+  .gesture-table thead th {
+    text-align: left; font-family: var(--mono); font-size: 0.72rem;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--ink-soft); padding: 0.5rem 0.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .gesture-table td {
+    padding: 0.65rem 0.5rem; border-bottom: 1px solid var(--line);
+    vertical-align: middle; color: var(--ink-soft); font-size: 0.9rem;
+  }
+
+  .gesture-table tbody tr:last-child td { border-bottom: none; }
+  .gesture-table tbody tr:hover { background: #FAFAFC; }
+  
+  .highlight-indispensavel {
+    background-color: #ffe4e6; color: #be123c;
+    padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-weight: 500; font-size: 0.8rem;
+    display: inline-block; margin-bottom: 0.2rem;
+  }
+  .highlight-aconselhado {
+    background-color: #fef9c3; color: #a16207;
+    padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-weight: 500; font-size: 0.8rem;
+    display: inline-block; margin-bottom: 0.2rem;
+  }
+  .highlight-extraordinario {
+    background-color: #dcfce7; color: #15803d;
+    padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-weight: 500; font-size: 0.8rem;
+    display: inline-block; margin-bottom: 0.2rem;
+  }
+
+  .filter-container {
+    background: #FAFAFC; padding: 1rem; border-radius: 8px;
+    border: 1px solid var(--line); margin-bottom: 1.5rem;
+  }
+  .filter-container label {
+    display: block; font-size: 0.85rem; font-weight: 600; color: var(--ink); margin-bottom: 0.4rem;
+  }
+  .filter-container select {
+    width: 100%; max-width: 400px; padding: 0.5rem; border: 1px solid var(--line);
+    border-radius: 6px; font-family: var(--sans); font-size: 0.95rem; background: var(--surface);
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="eyebrow">Guia Interativo · SPA</div>
+    <h1>Acessibilidade Audiovisual</h1>
+    <p class="header-sub">Explore as diretrizes e melhores práticas para tornar seu conteúdo acessível a todos. </p>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" aria-label="Seções do guia">
+    <h2>Seções</h2>
+    <button class="nav-link" onclick="showSection('visaoGeral', this)">Visão geral</button>
+    <button class="nav-link" onclick="showSection('tabelaConformidade', this)">Tabela de Conformidade</button>
+    <button class="nav-link" onclick="showSection('legendas', this)">Legendas</button>
+    <button class="nav-link" onclick="showSection('transcricoes', this)">Transcrições</button>
+    <button class="nav-link" onclick="showSection('descricoesAudio', this)">Descrição de áudio</button>
+    <button class="nav-link" onclick="showSection('linguagemSinais', this)">Linguagem de sinais</button>
+  </nav>
+
+  <main id="conteudo">
+    <!-- VISÃO GERAL -->
+    <section id="visaoGeral" class="content-section">
+      <div class="intro-card">
+        <h2>Resumo Geral: Tornando o Audiovisual Acessível</h2>
+        <p>Esta seção apresenta os conceitos fundamentais e os principais métodos para garantir que o conteúdo audiovisual seja acessível a públicos com diversas deficiências sensoriais. </p>
+        <p>A acessibilidade em conteúdo audiovisual é fundamental para incluir públicos com deficiências sensoriais (surdos ou com deficiência auditiva, cegos ou com baixa visão, e surdocegos). Existem quatro métodos principais para alcançar essa inclusão: </p>
+        <ul>
+          <li><strong>Legendas:</strong> Texto sincronizado com a mídia, essencial para pessoas que não conseguem ouvir as palavras faladas. </li>
+          <li><strong>Transcrições:</strong> O texto completo das palavras faladas e informações visuais importantes do arquivo de mídia, servindo como uma alternativa para consumir o conteúdo. </li>
+          <li><strong>Descrições de Áudio (AD):</strong> Uma narração adicional que explica informações visuais importantes (como ações e eventos não falados) para pessoas que não podem ver o que está acontecendo. </li>
+          <li><strong>Interpretação em Linguagem de Sinais:</strong> Vídeo de um intérprete, sincronizado com o arquivo de mídia (ou no mesmo quadro do vídeo), para beneficiar pessoas que conhecem a linguagem de sinais. </li>
+        </ul>
+      </div>
+
+      <div class="gesture-section">
+        <h2>Níveis de Conformidade WCAG</h2>
+        <p>As Diretrizes de Acessibilidade de Conteúdo da Web (WCAG) definem três níveis de conformidade: </p>
+        <ul>
+          <li><strong>Indispensável:</strong> Obrigatório para o nível de conformidade WCAG, Seção 508 ou requisitos CVAA (se aplicável). </li>
+          <li><strong>Aconselhado:</strong> Altamente recomendado, embora não obrigatório, para beneficiar a mais ampla gama de consumidores, incluindo pessoas com múltiplas deficiências (ex: surdocegueira). </li>
+          <li><strong>Extraordinário:</strong> Vai "além do esperado" e pode estar fora do alcance de muitas organizações. </li>
+        </ul>
+
+        <h3>Categorias de Mídia Baseada em Tempo</h3>
+        <p>A mídia baseada em tempo pode ser dividida em três categorias principais: </p>
+        <ul>
+          <li><strong>Somente Áudio:</strong> Conteúdo que consiste apenas em áudio, como podcasts, gravações de conferências de imprensa ou retransmissões de rádio. </li>
+          <li><strong>Somente Vídeo:</strong> Conteúdo que consiste apenas em vídeo, como um tour em vídeo de uma propriedade, vídeos de instruções sem narração ou filmes mudos. </li>
+          <li><strong>Multimídia (Áudio e Vídeo Sincronizados):</strong> Conteúdo que combina áudio e vídeo sincronizados, como filmes, programas de televisão, comerciais ou vídeos de instruções com narração. </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TABELA DE CONFORMIDADE -->
+    <section id="tabelaConformidade" class="content-section">
+      <div class="gesture-section">
+        <h2>Tabela de Conformidade Interativa</h2>
+        <p>Utilize o filtro abaixo para explorar os requisitos de conformidade WCAG para diferentes tipos de mídia e recursos de acessibilidade. As palavras-chave "Indispensável", "Aconselhado" e "Extraordinário" são destacadas para facilitar a identificação. </p>
+        
+        <div class="filter-container">
+            <label for="mediaTypeFilter">Filtrar por Tipo de Mídia: </label>
+            <select id="mediaTypeFilter">
+                <option value="all">Todos os Tipos </option>
+                <option value="Multimídia Pré-gravada">Multimídia Pré-gravada </option>
+                <option value="Somente Vídeo Pré-gravado">Somente Vídeo Pré-gravado </option>
+                <option value="Somente Áudio Pré-gravado">Somente Áudio Pré-gravado </option>
+                <option value="Multimídia ao Vivo">Multimídia ao Vivo </option>
+                <option value="Somente Vídeo ao Vivo">Somente Vídeo ao Vivo </option>
+                <option value="Somente Áudio ao Vivo">Somente Áudio ao Vivo </option>
+            </select>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table id="complianceTable" class="gesture-table" style="min-width: 800px;">
+                <thead>
+                    <tr>
+                        <th scope="col">Tipo de Mídia </th>
+                        <th scope="col">Legendas </th>
+                        <th scope="col">Transcrição </th>
+                        <th scope="col">Descrições de Áudio (AD) </th>
+                        <th scope="col">Linguagem de Sinais </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-media-type="Multimídia Pré-gravada">
+                        <td><strong>Multimídia Pré-gravada</strong> </td>
+                        <td>A: <span class="highlight-indispensavel">Indispensável</span><br>AA: <span class="highlight-indispensavel">Indispensável</span><br>AAA: <span class="highlight-indispensavel">Indispensável</span> </td>
+                        <td>A: <span class="highlight-aconselhado">Aconselhado</span><br>AA: <span class="highlight-aconselhado">Aconselhado</span><br>AAA: <span class="highlight-indispensavel">Indispensável</span> </td>
+                        <td>A: <span class="highlight-indispensavel">Indispensável</span><br>AA: <span class="highlight-indispensavel">Indispensável</span><br>AAA: <span class="highlight-indispensavel">Indispensável</span> </td>
+                        <td>A: <span class="highlight-extraordinario">Extraordinário</span><br>AA: <span class="highlight-extraordinario">Extraordinário</span><br>AAA: <span class="highlight-indispensavel">Indispensável</span> </td>
+                    </tr>
+                    <tr data-media-type="Somente Vídeo Pré-gravado">
+                        <td><strong>Somente Vídeo Pré-gravado</strong> </td>
+                        <td>n/a </td>
+                        <td>A: <span class="highlight-indispensavel">Indispensável</span>*<br>AA: <span class="highlight-aconselhado">Aconselhado</span><br>AAA: <span class="highlight-indispensavel">Indispensável</span><br>* A: Transcrição OU Descrições de Áudio </td>
+                        <td>A: <span class="highlight-indispensavel">Indispensável</span>*<br>AA: <span class="highlight-indispensavel">Indispensável</span><br>AAA: <span class="highlight-indispensavel">Indispensável</span><br>* A: Transcrição OU Descrições de Áudio </td>
+                        <td>n/a </td>
+                    </tr>
+                    <tr data-media-type="Somente Áudio Pré-gravado">
+                        <td><strong>Somente Áudio Pré-gravado</strong> </td>
+                        <td>n/a </td>
+                        <td>A: <span class="highlight-indispensavel">Indispensável</span><br>AA: <span class="highlight-indispensavel">Indispensável</span><br>AAA: <span class="highlight-indispensavel">Indispensável</span> </td>
+                        <td>n/a </td>
+                        <td>A: <span class="highlight-extraordinario">Extraordinário</span><br>AA: <span class="highlight-extraordinario">Extraordinário</span><br>AAA: <span class="highlight-extraordinario">Extraordinário</span> </td>
+                    </tr>
+                    <tr data-media-type="Multimídia ao Vivo">
+                        <td><strong>Multimídia ao Vivo</strong> </td>
+                        <td>A: <span class="highlight-aconselhado">Aconselhado</span><br>AA: <span class="highlight-indispensavel">Indispensável</span><br>AAA: <span class="highlight-indispensavel">Indispensável</span> </td>
+                        <td>n/a </td>
+                        <td>A: <span class="highlight-extraordinario">Extraordinário</span><br>AA: <span class="highlight-extraordinario">Extraordinário</span><br>AAA: <span class="highlight-extraordinario">Extraordinário</span> </td>
+                        <td>A: <span class="highlight-extraordinario">Extraordinário</span><br>AA: <span class="highlight-extraordinario">Extraordinário</span><br>AAA: <span class="highlight-extraordinario">Extraordinário</span> </td>
+                    </tr>
+                    <tr data-media-type="Somente Vídeo ao Vivo">
+                        <td><strong>Somente Vídeo ao Vivo</strong> </td>
+                        <td>n/a </td>
+                        <td>A: <span class="highlight-extraordinario">Extraordinário</span><br>AA: <span class="highlight-extraordinario">Extraordinário</span><br>AAA: <span class="highlight-extraordinario">Extraordinário</span> </td>
+                        <td>A: <span class="highlight-extraordinario">Extraordinario</span><br>AA: <span class="highlight-extraordinario">Extraordinário</span><br>AAA: <span class="highlight-extraordinario">Extraordinário</span> </td>
+                        <td>n/a </td>
+                    </tr>
+                    <tr data-media-type="Somente Áudio ao Vivo">
+                        <td><strong>Somente Áudio ao Vivo</strong> </td>
+                        <td>A: <span class="highlight-extraordinario">Extraordinário</span><br>AA: <span class="highlight-extraordinario">Extraordinário</span><br>AAA: <span class="highlight-indispensavel">Indispensável</span>*<br>* AAA: Legendas OU Transcrição </td>
+                        <td>A: <span class="highlight-extraordinario">Extraordinário</span><br>AA: <span class="highlight-extraordinario">Extraordinário</span><br>AAA: <span class="highlight-indispensavel">Indispensável</span>*<br>* AAA: Legendas OU Transcrição </td>
+                        <td>n/a </td>
+                        <td>A: <span class="highlight-extraordinario">Extraordinário</span><br>AA: <span class="highlight-extraordinario">Extraordinário</span><br>AAA: <span class="highlight-extraordinario">Extraordinário</span> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEGENDAS -->
+    <section id="legendas" class="content-section">
+      <div class="gesture-section">
+        <h2>Legendas em Detalhes</h2>
+        <p>Esta seção explora os tipos de legendas e as diretrizes essenciais para criar legendas eficazes e acessíveis. </p>
+        
+        <h3>Legendas Abertas vs. Legendas Ocultas</h3>
+        <p>Existem dois tipos de legendas com aplicações distintas: </p>
+        <div class="grid-2">
+          <div class="card-inner">
+            <h4>Legendas Ocultas (Closed Captions)</h4>
+            <p style="font-size: 0.9rem;">São arquivos de texto com marcação de tempo (.srt, .sami, .xml) que são carregados em um media player e podem ser ativados ou desativados pelo usuário. </p>
+            <p style="font-size: 0.9rem;"><strong>Benefício:</strong> Flexibilidade para o usuário. </p>
+            <p style="font-size: 0.9rem;"><strong>Ideal para:</strong> Vídeos online (com player compatível). </p>
+          </div>
+          <div class="card-inner">
+            <h4>Legendas Abertas (Open Captions)</h4>
+            <p style="font-size: 0.9rem;">São "gravadas" diretamente na camada de vídeo durante a produção, estando sempre visíveis. </p>
+            <p style="font-size: 0.9rem;"><strong>Benefício:</strong> Garantia de presença, independente do player. </p>
+            <p style="font-size: 0.9rem;"><strong>Ideal para:</strong> Exibição em conferências. </p>
+          </div>
+        </div>
+        <p style="font-size: 0.9rem; margin-bottom: 1.5rem;">Ao mostrar um vídeo em uma conferência, legendas abertas são sempre recomendadas. Para vídeos online, um arquivo de legenda oculta funciona bem, desde que o player de vídeo do site permita legendas. </p>
+
+        <h3>Diretrizes para Legendas Eficazes</h3>
+        <p>Para garantir a legibilidade e a não obstrução do conteúdo visual, as legendas devem seguir as seguintes diretrizes: </p>
+        <div class="highlight-box"><strong>Número de Linhas:</strong> NÃO DEVEM exceder três linhas na tela por vez. </div>
+        <div class="highlight-box"><strong>Caracteres por Linha:</strong> NÃO DEVE exceder 32 caracteres. </div>
+        <div class="highlight-box"><strong>Duração na Tela:</strong> DEVEM permanecer por no mínimo 1 segundo. Considerar 0,3 segundos por palavra para legendas longas. </div>
+        <div class="highlight-box"><strong>Posicionamento:</strong> DEVEM ser posicionadas para não obscurecer informações visuais importantes. Geralmente na parte inferior centralizada; mover se necessário, alinhando ao centro ou à esquerda em novo quadro. </div>
+        <div class="highlight-box"><strong>Combinação de Cores Padrão:</strong> DEVE ser texto branco em fundo preto. </div>
+        <div class="highlight-box"><strong>Taxa de Contraste Padrão:</strong> DEVE ser no mínimo 3:1 (para fonte de 18pt ou maior). </div>
+        <div class="highlight-box"><strong>Tamanho da Fonte Padrão:</strong> DEVE ser de pelo menos 22pt (usar fontes sans-serif). </div>
+        <div class="highlight-box"><strong>Peso da Fonte Padrão:</strong> DEVE ser normal (não negrito). </div>
+        <div class="highlight-box"><strong>Uso de Cores:</strong> NÃO DEVEM ser usadas como a única maneira de transmitir significado. </div>
+        <div class="highlight-box"><strong>Remoção em Silêncio:</strong> O último quadro de legenda DEVE ser removido da tela durante longos intervalos de silêncio. Descrições de música de fundo remover após 4-5 segundos. </div>
+      </div>
+    </section>
+
+    <!-- TRANSCRIÇÕES -->
+    <section id="transcricoes" class="content-section">
+      <div class="gesture-section">
+        <h2>Transcrições em Detalhes</h2>
+        <p>Uma transcrição é uma alternativa de texto para o conteúdo de áudio, essencial para acessibilidade e usabilidade. Esta seção explica a sua importância e as melhores práticas. </p>
+        <p>Uma transcrição completa fornece o texto de todo o conteúdo de áudio do seu vídeo ou podcast. Para ser totalmente acessível, a transcrição deve incluir não apenas o diálogo, mas também descrições de sons importantes que ajudem a dar contexto à cena ou à informação. </p>
+        <p>Para vídeos, uma transcrição deve incluir também uma descrição das informações visuais relevantes que não são transmitidas através do áudio. Isso torna o conteúdo acessível a pessoas cegas e a usuários que preferem ler a assistir ou ouvir o material. </p>
+        
+        <h3>Por que Transcrições são Importantes?</h3>
+        <ul>
+          <li><strong>Para Acessibilidade:</strong> Permite que pessoas surdas ou com deficiência auditiva consumam conteúdo somente de áudio. Também auxilia usuários cegos ou com baixa visão a acessar informações visuais importantes em vídeos. </li>
+          <li><strong>Para Usabilidade:</strong> Usuários podem rapidamente escanear uma transcrição para encontrar informações específicas sem precisar assistir ao vídeo ou ouvir o áudio inteiro. </li>
+          <li><strong>Para SEO:</strong> O texto de uma transcrição pode ser indexado por mecanismos de busca, o que aumenta a visibilidade e o tráfego do seu conteúdo. </li>
+        </ul>
+        
+        <h3>Boas Práticas para Transcrições</h3>
+        <div class="highlight-box"><strong>Seja Completo:</strong> Inclua todo o diálogo, identificação do locutor e descrições de sons ambientais importantes (ex: [música dramática], [aplausos]). </div>
+        <div class="highlight-box"><strong>Estrutura:</strong> Formate a transcrição com parágrafos claros, títulos e listas para facilitar a leitura. </div>
+        <div class="highlight-box"><strong>Disponibilidade:</strong> Disponibilize a transcrição em uma seção facilmente acessível da página, logo abaixo da mídia, para que os usuários possam encontrá-la e utilizá-la como alternativa. </div>
+      </div>
+    </section>
+
+    <!-- DESCRIÇÕES DE ÁUDIO -->
+    <section id="descricoesAudio" class="content-section">
+      <div class="gesture-section">
+        <h2>Descrições de Áudio (AD)</h2>
+        <p>As descrições de áudio são fundamentais para enriquecer a experiência de pessoas cegas ou com baixa visão ao consumir conteúdo audiovisual. Esta seção detalha sua importância e funcionamento. </p>
+        <p>Descrições de áudio em um vídeo aumentam a experiência que uma pessoa cega terá ao consumir o conteúdo. Muitas coisas acontecem em filmes que são completamente visuais, sem nenhum componente auditivo. Por exemplo, uma pessoa pode fazer uma expressão facial, mas não dizer nenhuma palavra. A câmera pode mostrar uma cena de montanha, mas ninguém no filme diz: "esta é uma cena de montanha". Há muitas informações visuais que são importantes para um vídeo que podem não ser facilmente compreendidas por alguém que não vê a tela. Descrições de áudio são a solução para tornar as informações visuais em filmes acessíveis a pessoas cegas. </p>
+        <p>Descrições de áudio são uma gravação de uma pessoa explicando os aspectos visuais do vídeo que não estão no diálogo ou narração original do vídeo. O narrador fala quando há lacunas no diálogo e outros sons do filme, fornecendo comentários suficientes para dar às pessoas cegas o contexto de que precisam para entender a história. </p>
+        <p>A audiodescrição funciona melhor quando os usuários podem ativá-la ou desativá-la, ou quando há uma versão separada do vídeo com audiodescrições para usuários cegos, além da versão original sem audiodescrições. </p>
+      </div>
+    </section>
+
+    <!-- LINGUAGEM DE SINAIS -->
+    <section id="linguagemSinais" class="content-section">
+      <div class="gesture-section">
+        <h2>Linguagem de Sinais</h2>
+        <p>A interpretação em linguagem de sinais fornece acesso direto ao conteúdo para a comunidade surda que usa esta forma de comunicação como sua primeira língua. </p>
+        <p>A interpretação em linguagem de sinais envolve um vídeo de um intérprete que traduz o conteúdo de áudio do vídeo em uma língua de sinais (como a Libras no Brasil ou ASL nos EUA). Para muitos usuários surdos, a linguagem de sinais é a forma de comunicação preferida e mais fluente, tornando a interpretação um componente crucial para a acessibilidade plena. </p>
+        
+        <h3>Integração da Linguagem de Sinais</h3>
+        <p>Existem duas abordagens principais para integrar a linguagem de sinais em seu conteúdo: </p>
+        <ul>
+          <li><strong>Superposição (Overlay):</strong> O vídeo do intérprete é exibido em um canto da tela, sincronizado com o vídeo principal. </li>
+          <li><strong>Vídeo Separado:</strong> Uma versão do vídeo é fornecida com o intérprete em um quadro maior, ou um vídeo separado apenas da interpretação de sinais é disponibilizado. </li>
+        </ul>
+        
+        <h3>Considerações Importantes</h3>
+        <div class="highlight-box"><strong>Qualidade:</strong> A interpretação deve ser feita por um intérprete profissional e experiente para garantir precisão e fluidez. </div>
+        <div class="highlight-box"><strong>Sincronização:</strong> A interpretação deve estar perfeitamente sincronizada com o áudio e as ações visuais para que os usuários possam seguir o conteúdo sem atrasos. </div>
+        <div class="highlight-box"><strong>Visibilidade:</strong> O intérprete deve estar em um local visível e com um fundo que forneça contraste suficiente para que os sinais sejam facilmente discernidos. </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // Controle de Abas
+  function showSection(sectionId, clickedElement) {
+    const sections = document.querySelectorAll('.content-section');
+    sections.forEach(section => {
+      section.classList.remove('active');
+    });
+    document.getElementById(sectionId).classList.add('active');
+
+    const links = document.querySelectorAll('.nav-link');
+    links.forEach(link => {
+      link.classList.remove('active');
+    });
+
+    if (clickedElement) {
+      clickedElement.classList.add('active');
+    } else {
+      const initialLink = document.querySelector(`button[onclick*="${sectionId}"]`);
+      if (initialLink) initialLink.classList.add('active');
+    }
+  }
+
+  // Lógica do Filtro Interativo da Tabela de Conformidade
+  function filterTable() {
+    const mediaTypeFilter = document.getElementById('mediaTypeFilter').value;
+    const tableRows = document.querySelectorAll('#complianceTable tbody tr');
+
+    tableRows.forEach(row => {
+      const mediaType = row.getAttribute('data-media-type');
+      const mediaTypeMatch = (mediaTypeFilter === 'all' || mediaType === mediaTypeFilter);
+
+      if (mediaTypeMatch) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  // Inicialização 
+  document.addEventListener('DOMContentLoaded', () => {
+    // Escuta mudanças no filtro da tabela
+    const filterElement = document.getElementById('mediaTypeFilter');
+    if(filterElement) {
+       filterElement.addEventListener('change', filterTable);
+    }
+    
+    // Inicia na aba Visão Geral
+    showSection('visaoGeral');
+  });
+</script>
+
+</body>
+</html>
