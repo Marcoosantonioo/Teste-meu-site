@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clone Layout Aresluna - Blocos Clicáveis</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Reset básico */
+    body {
+      margin: 0;
+      padding: 40px 20px;
+      background-color: #ffffff;
+      font-family: Georgia, serif; 
+    }
+
+    /* Seção do Título Principal */
+    .cabecalho-principal {
+      max-width: 900px;
+      margin: 0 auto 50px auto;
+      padding-right: 110px; 
+    }
+
+    .cabecalho-principal h1 {
+      font-size: 2.8rem;
+      color: #111111;
+      margin: 0 0 10px 0;
+      line-height: 1.2;
+    }
+
+    .cabecalho-principal p {
+      font-family: Arial, sans-serif;
+      font-size: 1.1rem;
+      color: #666666;
+      margin: 0;
+    }
+
+    /* Lista de Postagens */
+    .lista-postagens {
+      list-style: none; 
+      padding: 0;
+      margin: 0 auto;
+      max-width: 900px; 
+    }
+
+    .postagem-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px; 
+      margin-bottom: 30px; 
+    }
+
+    /* O quadro transformado em Link/Botão */
+    .postagem-conteudo-clicavel {
+      flex: 1; 
+      display: block; /* Necessário para a tag <a> se comportar como um bloco */
+      text-decoration: none; /* Remove o sublinhado padrão dos links */
+      border: 1px solid #e0e0e0; 
+      padding: 24px;
+      background-color: #ffffff;
+      color: #111111;
+      line-height: 1.6;
+      font-size: 1.15rem;
+      transition: all 0.2s ease-in-out; /* Transição suave para o hover */
+      cursor: pointer;
+    }
+
+    /* Efeitos de Interação (Mouse e Teclado) */
+    .postagem-conteudo-clicavel:hover,
+    .postagem-conteudo-clicavel:focus {
+      border-color: #a0a0a0;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08); /* Sombra suave para destacar */
+      transform: translateY(-2px); /* Leve movimento para cima */
+      outline: none; /* Remove o outline padrão se substituído pelo box-shadow, mas o ideal para acessibilidade é manter um indicador claro */
+    }
+    
+    /* Indicador de foco específico para navegação por teclado */
+    .postagem-conteudo-clicavel:focus-visible {
+      outline: 3px solid #005fcc;
+      outline-offset: 2px;
+    }
+
+    /* Ajustes internos do bloco */
+    .postagem-conteudo-clicavel p {
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+    
+    .postagem-conteudo-clicavel p:last-child {
+      margin-bottom: 0; 
+    }
+
+    /* Estilização para imagens e vídeos dentro do resumo */
+    .midia-resumo {
+      width: 100%;
+      height: auto;
+      max-height: 300px;
+      object-fit: cover;
+      margin-top: 15px;
+      border: 1px solid #f0f0f0;
+    }
+
+    /* O rodapé com a data */
+    .postagem-rodape {
+      font-family: Arial, sans-serif;
+      font-size: 0.85rem;
+      color: #999999; 
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 25px; 
+    }
+
+    /* A numeração grande */
+    .postagem-numero {
+      font-family: 'VT323', monospace; 
+      font-size: 4.5rem;
+      color: #dcdcdc; 
+      line-height: 0.8;
+      padding-top: 5px;
+      width: 70px; 
+      text-align: right;
+      user-select: none; 
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .cabecalho-principal {
+        padding-right: 0;
+      }
+      .cabecalho-principal h1 {
+        font-size: 2.2rem;
+      }
+      .postagem-item {
+        flex-direction: column-reverse; 
+        gap: 15px;
+      }
+      .postagem-numero {
+        text-align: left;
+        font-size: 3.5rem;
+        padding-top: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="cabecalho-principal">
+    <h1>Designing Selection Colors</h1>
+    <p>Um mergulho nos detalhes da interface de usuário</p>
+  </header>
+
+  <ol class="lista-postagens">
+    
+    <!-- Bloco 37 -->
+    <li class="postagem-item">
+      <!-- Tag <a> envolvendo o <article> transforma o bloco num link clicável -->
+      <a href="#ler-mais-37" class="postagem-conteudo-clicavel" aria-label="Acessar conteúdo completo do tópico 37">
+        <article>
+          <p>Decidimos implementar o Selection Colors de verdade alguns meses depois, motivados em parte pelo... Auto Layout. Estávamos planejando adicionar preenchimentos aos frames, o que inviabilizou um recurso existente que permitia colorir um ícone facilmente, apenas selecionando o frame pai.</p>
+          
+          <footer class="postagem-rodape">
+            <span aria-hidden="true">♡</span> 
+            <time datetime="2020-04-14T13:38">3/14 de abril de 2020 / 13:38</time>
+          </footer>
+        </article>
+      </a>
+      <div class="postagem-numero" aria-hidden="true">37</div>
+    </li>
+
+    <!-- Bloco 38 -->
+    <li class="postagem-item">
+      <a href="#ler-mais-38" class="postagem-conteudo-clicavel" aria-label="Acessar conteúdo completo do tópico 38">
+        <article>
+          <p>Eu não tinha mais nada a ver com código, exceto por uma correção ocasional na interface do usuário ou uma troca de ícones. O trabalho de verdade era feito pelos engenheiros da nossa equipe – @jessieteaa, @thejoannachen, @kenrickrilee.</p>
+          
+          <footer class="postagem-rodape">
+            <span aria-hidden="true">♡</span> 
+            <time datetime="2020-04-14T13:39">4/14 de abril de 2020 / 13:39</time>
+          </footer>
+        </article>
+      </a>
+      <div class="postagem-numero" aria-hidden="true">38</div>
+    </li>
+
+    <!-- Bloco 39 (Exemplo com Imagem no Resumo) -->
+    <li class="postagem-item">
+      <a href="#ler-mais-39" class="postagem-conteudo-clicavel" aria-label="Acessar conteúdo completo do tópico 39">
+        <article>
+          <p>Imediatamente, eles encontraram mais alguns problemas da vida real, um deles relacionado ao desempenho.</p>
+          <p>(Resumindo: se você fizer uma seleção muito grande, não mostramos o SC por padrão, porque a lista pode ficar muito extensa e as interações...)</p>
+          
+          <!-- Exemplo de como uma imagem de resumo ficaria dentro do bloco clicável -->
+          <img src="https://via.placeholder.com/600x300.png?text=Exemplo+de+Imagem+ou+Video" alt="Captura de tela demonstrando o problema de desempenho" class="midia-resumo">
+        </article>
+      </a>
+      <div class="postagem-numero" aria-hidden="true">39</div>
+    </li>
+
+  </ol>
+
+</body>
+</html>
