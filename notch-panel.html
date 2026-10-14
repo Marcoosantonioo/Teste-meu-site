@@ -889,7 +889,10 @@ function todoUnqueue(t){if(!t||!t.mid)return;let q=[];try{q=JSON.parse(ls.get('t
 function todoSoon(){if(!todoOn()||!S.todo)return;S.todo.dirty=true;clearTimeout(S.tdT);S.tdT=setTimeout(()=>todoSync(),4000)}
 const toDo=t=>({title:unesc(t.t),status:t.d?'completed':'notStarted',dueDateTime:t.due?{dateTime:t.due+'T00:00:00.0000000',timeZone:'UTC'}:null});
 async function todoSync(manual){
- const Z=S.todo;if(Z.busy||!todoOn()||!msOn())return;if(!manual&&!Z.dirty&&Date.now()-Z.at<270000)return;
+ if(!S.todo) S.todo = { busy: false, at: 0 };
+ const Z=S.todo;
+ if(Z.busy||!msOn())return;
+ if(!manual&&!Z.dirty&&Date.now()-Z.at<270000)return;
  Z.busy=true;Z.err='';Z.dirty=false;
  try{
   if(!await msEnsure())throw {k:'auth'};
