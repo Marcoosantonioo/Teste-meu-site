@@ -342,7 +342,7 @@ async function spCmd(a){const m=S.m;
 const MS_CLIENT_ID='bd2c1b18-f896-40ac-9b79-8513f9935546';
 const MS_TENANT='';
 const MS_AUTH='https://login.microsoftonline.com/'+(MS_TENANT||'common')+'/oauth2/v2.0';
-const MS_SCOPES='openid offline_access User.Read Calendars.Read';
+const MS_SCOPES='openid offline_access User.Read Calendars.Read Tasks.ReadWrite';
 /* Tarefas e OneDrive pedem permissão só quando você ativa o recurso (consentimento incremental) */
 function msScopes(){let w={};try{w=JSON.parse(ls.get('ms_want')||'{}')}catch(_){}
  const drv=w.drv||ls.get('ms_drv')||'';
