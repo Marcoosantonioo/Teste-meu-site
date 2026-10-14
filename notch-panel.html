@@ -339,7 +339,7 @@ async function spCmd(a){const m=S.m;
    3. Permissões delegadas do Microsoft Graph: Calendars.Read e User.Read (offline_access vem no pedido de login).
    4. Cole o ID do aplicativo (cliente) em MS_CLIENT_ID. Se o app aceitar só o seu diretório (conta de trabalho),
       cole também o ID do diretório (locatário) em MS_TENANT. Vazio, ele usa "common". */
-const MS_CLIENT_ID='';
+const MS_CLIENT_ID='bd2c1b18-f896-40ac-9b79-8513f9935546';
 const MS_TENANT='';
 const MS_AUTH='https://login.microsoftonline.com/'+(MS_TENANT||'common')+'/oauth2/v2.0';
 const MS_SCOPES='openid offline_access User.Read Calendars.Read';
