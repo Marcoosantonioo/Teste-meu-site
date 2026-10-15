@@ -230,7 +230,7 @@ label.opt select#oalert{width:auto;flex:0 1 auto;margin:0;min-width:0;max-width:
   <div class="sr" role="status" aria-live="polite" id="live"></div>
 </main>
 <script>
-const I={dev:'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/>',chl:'<path d="m15 18-6-6 6-6"/>',chr:'<path d="m9 18 6-6-6-6"/>',heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>',heartf:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z" fill="currentColor"/>',tup:...
+const I={dev:'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/>',chl:'<path d="m15 18-6-6 6-6"/>',chr:'<path d="m9 18 6-6-6-6"/>',heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>',heartf:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z" fill="currentColor"/>',tup:'<path d="m18 15-6-6-6 6"/>',tdn:'<path d="m6 9 6 6 6-6"/>',play:'<polygon points="6 4 20 12 6 20 6 4"/>',pause:'<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>',next:'<polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/>',prev:'<polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/>',shuf:'<path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/>',rep:'<path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',check:'<path d="M20 6 9 17l-5-5"/>',x:'<path d="M18 6 6 18M6 6l12 12"/>',pin:'<path d="M12 17v5"/><path d="M9 3h6l-1 7 3 3H7l3-3z"/>',eye:'<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',grip:'<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>',edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',reset:'<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',video:'<rect x="2" y="6" width="14" height="12" rx="2"/><path d="M22 8l-6 4 6 4z"/>',cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',clip:'<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',timer:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4"/>',sl:'<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',radio:'<circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4M7.8 16.2a6 6 0 0 1 0-8.4"/><path d="M19.1 4.9a10 10 0 0 1 0 14.2M4.9 19.1a10 10 0 0 1 0-14.2"/>',music:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'};
 const ic=(n,f)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`;
 const $=s=>document.querySelector(s), fmt=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
 const TABS=[['cal','Agenda','cal'],['tasks','Tarefas','check'],['clip','Copiados','clip'],['pomo','Pomodoro','timer'],['set','Ajustes','sl'],['radio','Rádio','radio'],['music','Música','music']];
@@ -249,8 +249,6 @@ if(S.tab==='music')v.innerHTML=`<section class="now np" aria-label="Reprodução
  <div class="prog"><span id="mpos">${fmt(m.pos)}</span><input class="seek" id="mseek" type="range" min="0" max="${tr.d}" step="1" value="${m.pos}" aria-label="Posição da faixa" aria-valuetext="${fmt(m.pos)} de ${fmt(tr.d)}" style="--p:${(m.pos/tr.d*100).toFixed(1)}%"><span>${fmt(tr.d)}</span></div>
  <div class="ctrl"><button class="ib" data-a="shuf" aria-pressed="${m.shuf}" aria-label="Aleatório">${ic('shuf')}</button><button class="ib" data-a="prev" aria-label="Faixa anterior">${ic('prev')}</button><button class="ib big" data-a="play" aria-label="${m.play?'Pausar':'Tocar'}">${ic(m.play?'pause':'play')}</button><button class="ib" data-a="next" aria-label="Próxima faixa">${ic('next')}</button><button class="ib" data-a="rep" aria-pressed="${m.rep}" aria-label="Repetir">${ic('rep')}</button></div>
  ${spDev()}${plsSection()}${spBox()}</section>`;
- <div class="prog"><span id="mpos">${fmt(m.pos)}</span><input class="seek" id="mseek" type="range" min="0" max="${tr.d}" step="1" value="${m.pos}" aria-label="Posição da faixa" aria-valuetext="${fmt(m.pos)} de ${fmt(tr.d)}" style="--p:${(m.pos/tr.d*100).toFixed(1)}%"><span>${fmt(tr.d)}</span></div>
- <div class="ctrl"><button class="ib" data-a="shuf" aria-pressed="${m.shuf}" aria-label="Aleatório">${ic('shuf')}</button><button class="ib" data-a="prev" aria-label="Faixa anterior">${ic('prev')}</button><button class="ib big" data-a="play" aria-label="${m.play?'Pausar':'Tocar'}">${ic(m.play?'pause':'play')}</button><button class="ib" data-a="next" aria-label="Próxima faixa">${ic('next')}</button><button class="ib" data-a="rep" aria-pressed="${m.rep}" aria-label="Repetir">${ic('rep')}</button></div>${spVol()}${spDev()}${spBox()}`;
  if(S.tab==='cal')v.innerHTML=calView();
  if(S.tab==='tasks')v.innerHTML=taskView();
  if(S.tab==='radio')v.innerHTML=radioView();
@@ -589,6 +587,7 @@ S.rd={list:[],draft:[],i:-1,cur:0,tok:0,hls:null,hlsP:null,st:'',on:false,edit:f
 try{const r=JSON.parse(ls.get('radios')||'null');if(Array.isArray(r))S.rd.list=r.slice(0,200).map(x=>({n:String(x.n||'').slice(0,40),u:String(x.u||''),g:String(x.g||'').slice(0,30)}))}catch(_){}
 if(!ls.get('radios_v4')){S.rd.list=rdSort(rdMerge(S.rd.list));ls.set('radios',JSON.stringify(S.rd.list));ls.set('radios_v2','1');ls.set('radios_v3','1');ls.set('radios_v4','1');ls.del('rd_cur')}
 S.rd.cur=Math.min(Math.max(0,+ls.get('rd_cur')||0),Math.max(0,S.rd.list.length-1));
+S.rd.favs=(()=>{try{const f=JSON.parse(ls.get('rd_favs')||'[]');return Array.isArray(f)?f.filter(x=>typeof x==='string').slice(0,200):[]}catch(_){return[]}})();
 const RA=new Audio();RA.preload='none';
 const rdName=k=>{const x=S.rd.list[k===undefined?S.rd.cur:k];return (x&&x.n)||'Emissora '+((k===undefined?S.rd.cur:k)+1)};
 const rdPlaying=()=>S.rd.i>=0&&['load','live','wait'].includes(S.rd.st);
@@ -622,6 +621,12 @@ function rdStep(d){const L=S.rd.list,n=L.length;let k=S.rd.cur;
   if(was)rdPlay(k);else{S.rd.cur=k;ls.set('rd_cur',k);S.rd.i=-1;S.rd.st='';rdRender();const pl=L.map((x,i)=>x.u?i:-1).filter(i=>i>=0);say(rdName(k)+', emissora '+(pl.indexOf(k)+1)+' de '+pl.length)}
   return true}}
  say('Nenhuma emissora com link. Adicione em Editar emissoras');return false}
+const isFav=u=>!!u&&S.rd.favs.includes(u);
+function toggleFav(i){const u=S.rd.list[i]&&S.rd.list[i].u;if(!u){say('Adicione o link desta emissora antes de favoritar');return}
+ const k=S.rd.favs.indexOf(u);if(k>=0){S.rd.favs.splice(k,1);say('Removida dos favoritos')}else{if(S.rd.favs.length>=200)S.rd.favs.shift();S.rd.favs.push(u);say('Adicionada aos favoritos')}
+ ls.set('rd_favs',JSON.stringify(S.rd.favs))}
+function rdRand(){const pl=S.rd.list.map((x,i)=>x.u?i:-1).filter(i=>i>=0);if(!pl.length){say('Nenhuma emissora com link. Adicione em Editar emissoras');return}
+ let k=pl[Math.floor(Math.random()*pl.length)];if(pl.length>1&&k===S.rd.cur)k=pl[(pl.indexOf(k)+1)%pl.length];rdPlay(k)}
 RA.addEventListener('playing',()=>{if(S.rd.i<0)return;S.rd.st='live';S.rd.on=true;rdRender();rdMedia();say('Tocando '+rdName(S.rd.i))});
 RA.addEventListener('waiting',()=>{if(S.rd.i>=0&&S.rd.st==='live'){S.rd.st='wait';S.rd.on=false;rdRender()}});
 RA.addEventListener('error',()=>{if(S.rd.i>=0)rdFail()});
@@ -633,6 +638,7 @@ function radioView(){const R=S.rd;
  return `<h2>Rádio</h2><div class="now"><span class="art" aria-hidden="true" style="background:linear-gradient(135deg,#ff9a2e,#ff5a8a)"></span><div><b>${esc(L.length?rdName(k):'Sem emissoras')}</b><span>${stt}</span></div></div>
  <p class="sub" style="margin:0 0 10px">${s.g?esc(s.g)+' · ':''}${pos?'Emissora '+pos+' de '+pl.length:pl.length+(pl.length===1?' emissora com link':' emissoras com link')}</p>
  <div class="ctrl"><button class="ib" data-a="rprev" aria-label="Emissora anterior">${ic('prev')}</button><button class="ib big" data-a="rplay" aria-pressed="${on}" aria-label="Ouvir rádio">${ic(on?'pause':'play')}</button><button class="ib" data-a="rnext" aria-label="Próxima emissora">${ic('next')}</button></div>
+ <div class="redact" style="justify-content:center;margin:0 0 10px"><button type="button" class="chip" data-a="rfav" aria-pressed="${isFav(s.u)}">${ic(isFav(s.u)?'heartf':'heart')}${isFav(s.u)?'Favorita':'Favoritar'}</button><button type="button" class="chip" data-a="rrand">${ic('shuf')}Aleatória</button></div>
  <div class="rvol"><label for="rvol" class="sub">Volume</label><input id="rvol" type="range" min="0" max="1" step="0.05" value="${R.vol}"><button class="chip" data-a="redit">Editar emissoras</button></div>${sleepRow()}${rsBox()}`}
 function radioAct(a,i){const R=S.rd;
  if(a==='redit'){R.draft=R.list.map(x=>({n:x.n,u:x.u,g:x.g||''}));if(!R.draft.length)R.draft.push({n:'',u:'',g:''});R.edit=true;view();const n=$('#rn0');if(n)n.focus();return true}
@@ -645,6 +651,8 @@ function radioAct(a,i){const R=S.rd;
  if(a==='rimp'){$('#rimpf').click();return true}
  if(a==='rnext'){rdStep(1);return true}
  if(a==='rprev'){rdStep(-1);return true}
+ if(a==='rfav'){toggleFav(R.cur);view();const b=$('#view [data-a="rfav"]');if(b)b.focus();return true}
+ if(a==='rrand'){rdRand();return true}
  return false}
 $('#view').addEventListener('input',e=>{if(e.target.id==='rvol'){S.rd.vol=+e.target.value;RA.volume=S.rd.vol;ls.set('rd_vol',S.rd.vol)}});
 
@@ -788,7 +796,7 @@ $('#view').addEventListener('change',e=>{const t=e.target;
  if(t.id==='impf'){bkImport(t.files[0]);t.value=''}});
 
 /* Backup: exportar e importar (sem tokens de login) */
-const BK_KEYS=['tasks','radios','radios_v4','rd_cur','rd_vol','theme','opt_snd','opt_ntf','pomo_f','pomo_r','pomo_l'];
+const BK_KEYS=['tasks','radios','radios_v4','rd_cur','rd_vol','rd_favs','theme','opt_snd','opt_ntf','pomo_f','pomo_r','pomo_l'];
 function bkExport(){const data={};BK_KEYS.forEach(k=>{const v=ls.get(k);if(v!==null)data[k]=v});
  const nome='painel-notch-backup-'+new Date().toISOString().slice(0,10)+'.json',a=document.createElement('a');
  a.href=URL.createObjectURL(new Blob([JSON.stringify({app:'notch-panel',v:1,em:new Date().toISOString(),data},null,1)],{type:'application/json'}));a.download=nome;document.body.appendChild(a);a.click();
