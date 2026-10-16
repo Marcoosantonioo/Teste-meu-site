@@ -1129,6 +1129,29 @@ if(!ls.get('radios_v6')){const L=S.rd.list;RD_V6.forEach(d=>{const k=L.findIndex
 paintClock();paintWx();wxLoad();
 setInterval(paintClock,1000);
 setInterval(()=>{if(Date.now()-WX.at>30*60000)wxLoad()},60000);
+/* Histórico de copiados na versão web: captura copiar/recortar feitos dentro da página */
+const CLIP_MAX=50;
+const clipSens=t=>/(\d[ -]?){13,19}/.test(t);
+function clipAdd(text){
+ if(ls.get('opt_clip')==='0')return;
+ const t=String(text||'').replace(/\s+$/,'');
+ if(!t.trim())return;
+ const firstFree=S.clip.findIndex(c=>!c.pin);
+ if(firstFree>=0&&S.clip[firstFree].t===t)return;
+ const sens=clipSens(t);
+ const item={id:'w'+Date.now()+Math.random().toString(36).slice(2,6),a:sens?'!':'T',c:sens?'#b45309':'#52525b',t:t.slice(0,2000),h:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),pin:false,sens,hide:sens};
+ S.clip.splice(firstFree<0?S.clip.length:firstFree,0,item);
+ let n=0;S.clip=S.clip.filter(c=>c.pin||++n<=CLIP_MAX);
+ if(S.tab==='clip'&&S.open)keepFocus(drawClip);
+}
+if(!window.notchApp){
+ const grabClip=()=>{const el=document.activeElement;let t='';
+  if(el&&(el.tagName==='INPUT'||el.tagName==='TEXTAREA')&&el.type!=='password'&&typeof el.selectionStart==='number')t=el.value.slice(el.selectionStart,el.selectionEnd);
+  if(!t){const sel=window.getSelection();t=sel?sel.toString():''}
+  clipAdd(t)};
+ document.addEventListener('copy',grabClip);
+ document.addEventListener('cut',grabClip);
+}
 
 /* Aparelho (lista), playlists sugeridas e ações dos novos controles. */
 $('#view').addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
