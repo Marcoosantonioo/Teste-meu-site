@@ -92,7 +92,7 @@ input::placeholder{color:var(--mute)}
 .rest .go{background:rgba(48,209,88,.22);color:var(--green)}
 .cyc{margin-left:auto;display:flex;gap:10px}
 .cyc i{width:44px;height:44px;border-radius:50%;border:2px solid #7a7a82;display:grid;place-items:center;color:#000}
-.cyc i.on{background:var(--orange);border-color:var(--orange)}
+.cyc i:not(.on){background:linear-gradient(to top,var(--orange) var(--f,0%),transparent var(--f,0%))}
 .sp-box{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
 .hint{text-align:center;margin:36px 16px 0}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -210,7 +210,13 @@ label.opt select#oalert{width:auto;flex:0 1 auto;margin:0;min-width:0;max-width:
 .devbtn{display:block;width:100%;min-height:44px;text-align:left;padding:0 12px;border-radius:10px;font-weight:600}
 .devbtn:hover{background:var(--chip)}
 .devbtn[aria-pressed="true"]{color:var(--green)}
+/* contraste do campo de data (texto e segmentos vazios) */
+input[type=date]{color:var(--ink);background:var(--row)}
+input[type=date]::-webkit-datetime-edit,input[type=date]::-webkit-datetime-edit-fields-wrapper,input[type=date]::-webkit-datetime-edit-text,input[type=date]::-webkit-datetime-edit-month-field,input[type=date]::-webkit-datetime-edit-day-field,input[type=date]::-webkit-datetime-edit-year-field{color:var(--ink)}
+input[type=date]::-webkit-calendar-picker-indicator{opacity:1;filter:invert(1);cursor:pointer}
+input[type=date]::-webkit-datetime-edit-month-field:focus,input[type=date]::-webkit-datetime-edit-day-field:focus,input[type=date]::-webkit-datetime-edit-year-field:focus{background:var(--blue);color:#fff;border-radius:4px}
 </style>
+<script src="https://sdk.scdn.co/spotify-player.js"></script>
 </head>
 <body>
 <main>
@@ -255,7 +261,7 @@ if(S.tab==='music')v.innerHTML=`<section class="now np" aria-label="Reprodução
  if(S.tab==='clip')drawClip();
  if(S.tab==='pomo'){const p=S.p;v.innerHTML=taskSel()+`<div class="pomo ${p.mode!=='focus'?'rest':''}" id="pm"><div class="big"><span class="time" id="ptime" role="timer">${fmt(p.left)}</span><span class="mode">${pnome(p.mode)}</span></div>
   <div class="pr"><button class="ib go" data-a="pgo" aria-label="${p.run?'Pausar':'Iniciar'}">${ic(p.run?'pause':'play')}</button><button class="ib" data-a="prs" aria-label="Reiniciar">${ic('reset')}</button><button class="ib" data-a="psk" aria-label="Pular etapa">${ic('next')}</button>
-  <div class="cyc" role="img" aria-label="${p.done} de 4 ciclos de foco concluídos">${[0,1,2,3].map(i=>`<i class="${i<p.done?'on':''}">${i<p.done?ic('check').replace('<svg','<svg width="20" height="20"'):''}</i>`).join('')}</div></div></div>`+pform(p)}
+  <div class="cyc" role="img" aria-label="${p.done} de 4 ciclos de foco concluídos">${[0,1,2,3].map(i=>`<i class="${i<p.done?'on':''}" style="--f:${i<p.done?100:(i===p.done&&p.mode==='focus')?(100*(1-p.left/(S.p.f||1))).toFixed(1):0}%">${i<p.done?ic('check').replace('<svg','<svg width="20" height="20"'):''}</i>`).join('')}</div></div></div>`+pform(p)}
  if(S.tab==='set')v.innerHTML=setView();tick(true)}
 function drawClip(){const v=$('#view');const f=S.clip.filter(c=>!q||(c.t+c.a).toLowerCase().includes(q));
  v.innerHTML=`<div class="add" style="display:flex;gap:8px;margin-bottom:10px"><input id="cq" type="search" aria-label="Buscar na área de transferência" placeholder="Buscar" value="${esc(q)}"><button class="chip" data-a="cclr" style="height:44px;border-radius:22px;padding:0 18px">Limpar</button></div>`+
@@ -266,7 +272,7 @@ function tick(paintOnly){const m=S.m,tr=m.list[m.i];
   if(m.play){m.pos++;if(m.pos>=tr.d){if(m.rep)m.pos=0;else go(1)}}
   const p=S.p;if(p.run){p.left--;if(p.left<=0){if(p.mode==='focus'){p.done=Math.min(4,p.done+1);pdSave();bump();p.mode=p.done>=4?'long':'rest'}else{if(p.mode==='long'){p.done=0;pdSave()}p.mode='focus'}p.left=pdur(p.mode);if(S.tab==='pomo')view();say(pmsg(p.mode));alarm()}}}
  pTitle();rdSleepTick();pillPaint();alertTick();const mp=$('#mpos');if(mp&&!S.seeking){const sk=$('#mseek'),dd=m.list[m.i].d;if(!sk||document.activeElement!==sk){mp.textContent=fmt(m.pos);if(sk){sk.max=dd;sk.value=m.pos;sk.style.setProperty('--p',(m.pos/dd*100)+'%');sk.setAttribute('aria-valuetext',fmt(m.pos)+' de '+fmt(dd))}}}
- const pt=$('#ptime');if(pt)pt.textContent=fmt(S.p.left);
+const pt=$('#ptime');if(pt)pt.textContent=fmt(S.p.left);cycPaint();
  $('#notch').classList.toggle('playing',m.play||!!(S.rd&&S.rd.on))}
 function go(d){const m=S.m;m.i=m.shuf?Math.floor(Math.random()*m.list.length):(m.i+d+m.list.length)%m.list.length;m.pos=0;if(S.tab==='music')view()}
 function setOpen(o,q){S.open=o;setTimeout(pillPaint,0);if(window.notchApp)notchApp.setOpen(o,q);$('#notch').dataset.open=o;$('#pill').setAttribute('aria-expanded',o);$('#pill').setAttribute('aria-label',o?'Fechar painel de utilidades':'Abrir painel de utilidades');if(o){renderTabs();view();if(!q)setTimeout(()=>$('#t-'+S.tab).focus(),200)}else $('#pill').focus()}
@@ -305,7 +311,7 @@ setInterval(()=>tick(),1000);tick(true);
    3. Rode a página fora do Claude (ex.: http://127.0.0.1:8888/notch-panel.html). */
 const SPOTIFY_CLIENT_ID='e13cde702b164cd4bfe2684e0f3de4d7';
 const SPOTIFY_REDIRECT=location.origin+location.pathname;
-const SP_SCOPES='user-read-playback-state user-modify-playback-state user-library-read user-library-modify user-read-recently-played';
+const SP_SCOPES='user-read-playback-state user-modify-playback-state user-library-read user-library-modify user-read-recently-played streaming';
 const SECRETS=new Set(['sp_at','sp_rt','ms_rt']);
 const VAULT=window.notchApp&&typeof notchApp.secretGet==='function'?notchApp:null;
 const ls0={get:k=>{try{return localStorage.getItem(k)}catch(_){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(_){}},del:k=>{try{localStorage.removeItem(k)}catch(_){}}};
@@ -342,8 +348,20 @@ async function spSync(){
  if(m.uri&&m.uri!==m.likeFor){m.likeFor=m.uri;m.liked=false;spLikeCheck(m.uri)}
  if(key!==m.key){m.key=key;if(S.tab==='music'&&S.open){const f=document.activeElement&&document.activeElement.dataset&&document.activeElement.dataset.a;view();if(f){const n=$('#view [data-a="'+f+'"]');if(n)n.focus()}}}
  $('#notch').classList.toggle('playing',m.play||!!(S.rd&&S.rd.on))}
-async function spCmd(a){const m=S.m;
- const c={play:['PUT',m.play?'/me/player/pause':'/me/player/play'],next:['POST','/me/player/next'],prev:['POST','/me/player/previous'],shuf:['PUT','/me/player/shuffle?state='+!m.shuf],rep:['PUT','/me/player/repeat?state='+(m.rep?'off':'context')]}[a];
+let spPlayer=null,spDeviceId=null,spBlocked=false;
+window.onSpotifyWebPlaybackSDKReady=()=>spInitPlayer();
+function spInitPlayer(){
+ if(spPlayer||spBlocked||!S.tok||!window.Spotify)return;
+ spPlayer=new Spotify.Player({name:'Painel de utilidades',getOAuthToken:cb=>cb(S.tok),volume:.8});
+ spPlayer.addListener('ready',({device_id})=>{spDeviceId=device_id});
+ spPlayer.addListener('not_ready',()=>{spDeviceId=null});
+ spPlayer.addListener('initialization_error',()=>{spBlocked=true;say('Este navegador não suporta reproduzir pelo Spotify')});
+ spPlayer.addListener('account_error',()=>{spBlocked=true;say('Reproduzir neste navegador exige Spotify Premium')});
+ spPlayer.connect();
+}
+setInterval(spInitPlayer,3000);
+ async function spCmd(a){const m=S.m;
+ const c={play:['PUT',m.play?'/me/player/pause':'/me/player/play'+(spDeviceId?'?device_id='+spDeviceId:'')],next:['POST','/me/player/next'],prev:['POST','/me/player/previous'],shuf:['PUT','/me/player/shuffle?state='+!m.shuf],rep:['PUT','/me/player/repeat?state='+(m.rep?'off':'context')]}[a];
  await spApi(c[1],{method:c[0]});
  if(S.err)say(S.err===403?'Controlar a reprodução exige Spotify Premium':S.err===404?'Nenhum dispositivo ativo. Abra o Spotify e toque uma faixa':'Não foi possível controlar o Spotify');
  setTimeout(spSync,500)}
@@ -476,6 +494,7 @@ setInterval(()=>{if(msOn())msSync()},60000);
 const unesc=t=>{const d=document.createElement('textarea');d.innerHTML=t;return d.value};
 S.p.f=+ls.get('pomo_f')||1500;S.p.r=+ls.get('pomo_r')||300;S.p.l=+ls.get('pomo_l')||900;S.p.left=S.p.f;
 const pdur=m=>m==='focus'?S.p.f:m==='long'?S.p.l:S.p.r;
+function cycPaint(){const p=S.p,t=(p.mode==='focus'?p.f:p.mode==='long'?p.l:p.r)||1;document.querySelectorAll('.cyc i').forEach((x,i)=>{const f=i<p.done?100:(i===p.done&&p.mode==='focus')?100*(1-p.left/t):0;x.style.setProperty('--f',Math.min(100,Math.max(0,f)).toFixed(1)+'%')})}
 const pmsg=m=>m==='focus'?'Hora de focar':m==='long'?'Hora da pausa longa':'Hora da pausa';
 const pnome=m=>m==='focus'?'Foco':m==='long'?'Pausa longa':'Pausa';
 function pTitle(){const p=S.p;document.title=p.run?fmt(p.left)+' · '+pnome(p.mode)+' | Painel do notch':'Painel do notch'}
