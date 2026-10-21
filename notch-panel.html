@@ -110,8 +110,7 @@ select{width:100%;height:44px;border-radius:22px;border:0;background:var(--row);
  .tab[aria-selected="true"]{background:Highlight;color:HighlightText;border-width:3px}
  .ib[aria-pressed="true"]{border-width:3px}
  .chk[aria-checked="true"],.cyc i.on{background:Highlight;color:HighlightText}
- .bar,.tkb i{background:Highlight}
- .tkb{border:1px solid CanvasText}
+ .bar{background:Highlight}
  .dot,.bars i,.pill::after{background:CanvasText}
  :focus-visible{outline:2px solid Highlight}
 }
@@ -225,22 +224,83 @@ input[type=date]{color:var(--ink);background:var(--row)}
 input[type=date]::-webkit-datetime-edit,input[type=date]::-webkit-datetime-edit-fields-wrapper,input[type=date]::-webkit-datetime-edit-text,input[type=date]::-webkit-datetime-edit-month-field,input[type=date]::-webkit-datetime-edit-day-field,input[type=date]::-webkit-datetime-edit-year-field{color:var(--ink)}
 input[type=date]::-webkit-calendar-picker-indicator{opacity:1;filter:invert(1) brightness(1.8);cursor:pointer}
 input[type=date]::-webkit-datetime-edit-month-field:focus,input[type=date]::-webkit-datetime-edit-day-field:focus,input[type=date]::-webkit-datetime-edit-year-field:focus{background:var(--blue);color:#fff;border-radius:4px}
-.tkg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:10px}
-.tkc{background:var(--row);border-radius:14px;padding:10px 14px;min-width:0;margin-bottom:10px}.tkg .tkc{margin:0}
-.tkc .k{display:block;color:var(--mute);font-size:13px}
-.tkc .v{display:block;font:700 30px/1.1 "Barlow Condensed",Impact,sans-serif;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-.tkl{display:flex;justify-content:space-between;gap:4px 8px;flex-wrap:wrap;font-size:14px}
-.tkb{position:relative;height:8px;border-radius:4px;background:#2c2c31;margin:8px 0 6px}
-.tkb i{display:block;height:100%;border-radius:4px;background:var(--blue)}.tkb i.warn{background:var(--orange)}
-.tkb.bud::after{content:"";position:absolute;left:80%;top:-3px;bottom:-3px;width:2px;background:var(--mute)}
-form.tkf input:not([type=date]){flex:1 1 110px}
 .tkh{font:700 20px/1.1 "Barlow Condensed",Impact,sans-serif;text-transform:uppercase;margin:14px 0 6px}
+.tvbox{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000;margin-bottom:10px}
+.tvbox iframe,.tvbox video{position:absolute;inset:0;width:100%;height:100%;border:0}
+.tvbox .sub{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:12px;margin:0}
+
+/* ===== Layout CarPlay: barra lateral à esquerda + conteúdo à direita, sempre visível ===== */
+html,body{height:100%;margin:0;background:#000}
+main{max-width:none!important;padding:0!important;margin:0!important;height:100%}
+.notch{position:fixed!important;inset:0;width:100%!important;height:100vh;max-width:none!important;margin:0!important;border-radius:0!important;box-shadow:none!important;background:#000!important;display:flex;flex-direction:column;transition:none!important}
+.notch[data-open="true"]{width:100%!important}
+.alertbar{position:absolute;top:0;left:0;right:0;z-index:5}
+.pill{display:none!important}
+.wrap{flex:1;min-height:0;display:grid!important;grid-template-rows:1fr!important;transition:none!important}
+.panel{visibility:visible!important;min-height:0;height:100%;transition:none!important}
+.inner{display:grid!important;grid-template-columns:180px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);gap:0 18px;height:100%;max-height:none!important;padding:16px 18px 18px 16px!important;box-sizing:border-box;overflow:hidden!important}
+.hdr{grid-area:1/1;display:block;margin:0 0 12px}
+.hclk{background:none!important;padding:0!important;text-align:left!important;flex:none!important}
+#hwx{grid-area:1/2;min-width:0;margin:0 0 12px;background:var(--row);border-radius:18px;padding:10px 14px}
+.tabs{grid-area:2/1;display:flex!important;flex-direction:column;align-items:stretch;gap:8px;overflow-y:auto;overflow-x:hidden;margin:0!important;padding:0 2px 0 0;scrollbar-width:none;min-height:0}
+.tabs .sp{display:none}
+.tab{height:auto!important;flex-direction:column;justify-content:center;align-items:center;gap:6px;padding:12px 6px!important;border-radius:16px;background:var(--row);color:var(--mute);font-size:13px!important;font-weight:600;white-space:normal!important;text-align:center}
+.tab svg{width:30px;height:30px}
+.tab[aria-selected="true"]{background:#3a3a41;color:var(--ink)}
+#view{grid-area:2/2;min-height:0;overflow-y:auto;padding:0 6px 0 4px}
+
+/* ===== Ajuste CarPlay: barra estreita com ícones coloridos e reprodução em duas colunas ===== */
+.inner{grid-template-columns:104px minmax(0,1fr)!important;gap:0 16px!important;padding:14px 14px 14px 12px!important}
+.hdr{margin:0 0 14px!important}
+.hdr .sr,.hdr #hdate{display:none!important}
+.hclk{display:inline-block!important;font-size:0!important}
+.hclk .hbig{font:700 15px/1 -apple-system,"SF Pro Text",system-ui,sans-serif!important;color:#111;background:#ff9500;border-radius:10px;padding:6px 9px;font-variant-numeric:tabular-nums}
+.tabs{gap:10px!important;align-items:center!important}
+.tab{width:68px!important;height:68px!important;min-height:68px;padding:0!important;border-radius:16px!important;background:var(--tc)!important;color:#fff!important;font-size:0!important;gap:0!important;justify-content:center!important;flex:none}
+.tab span{display:none}
+.tab svg{width:30px!important;height:30px!important;color:#fff}
+.tab[aria-selected="true"]{outline:2px solid #fff;outline-offset:2px}
+#hwx{display:none!important}
+.tp{display:flex;flex-direction:column;gap:12px;color:var(--ink);padding-bottom:20px}
+.tp-head{text-align:center;padding:6px 0 4px}
+.tp-city{font-size:20px;font-weight:600}
+.tp-temp{font:200 92px/1 -apple-system,"SF Pro Display",system-ui,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-3px}
+.tp-cond{font-size:18px;font-weight:500}
+.tp-hl{font-size:15px;color:var(--mute)}
+.tp-card{background:var(--row);border-radius:16px;padding:12px 14px}
+.tp-card h3{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute);font-weight:600}
+.tp-hours{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;font-size:14px;font-variant-numeric:tabular-nums}
+.tp-hours>div{display:flex;flex-direction:column;align-items:center;gap:6px;flex:none;min-width:40px}
+.tp-hours svg{width:26px;height:26px;color:#ffd166}
+.tp-days>div{display:grid;grid-template-columns:52px 28px 40px 1fr 40px;align-items:center;gap:8px;height:38px;font-size:15px;font-variant-numeric:tabular-nums;border-top:1px solid rgba(255,255,255,.08)}
+.tp-days>div:first-child{border-top:0}
+.tp-days svg{width:24px;height:24px;color:#ffd166}
+.tp-days .mn{color:var(--mute);text-align:right}
+.tp-days .mx{text-align:right}
+.tp-days .pp{font-size:11px;color:#64d2ff;margin-left:2px}
+.tp-bar{position:relative;height:5px;border-radius:3px;background:rgba(255,255,255,.14)}
+.tp-bar i{position:absolute;top:0;bottom:0;border-radius:3px;background:linear-gradient(to right,#64d2ff,#ffd54a,#ff9a2e)}
+.tp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.tp-grid .tp-card{min-height:96px}
+.tp-k{font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.tp-v{font-size:28px;font-weight:500;margin-top:4px;font-variant-numeric:tabular-nums}
+.tp-s{font-size:13px;color:var(--mute);margin-top:2px}
+.tp-src{font-size:11px;color:var(--mute);text-align:center}
+.notch[data-tab="cal"] .inner{grid-template-rows:auto minmax(0,1fr)}
+.notch[data-tab="music"] #view{padding:24px 10px 0 18px}
+.notch[data-tab="music"] .np{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,42%);gap:18px 28px;align-items:center;max-width:none}
+.notch[data-tab="music"] .np-top{display:contents}
+.notch[data-tab="music"] .np-art{grid-column:2;grid-row:1/span 4;width:100%;height:auto;aspect-ratio:1;border-radius:18px}
+.notch[data-tab="music"] .np-meta{grid-column:1;grid-row:1;text-align:center}
+.notch[data-tab="music"] .np-title b{font-size:26px}
+.notch[data-tab="music"] .np-title{justify-content:center}
+.notch[data-tab="music"] .np-state{display:none}
 </style>
 </head>
 <body>
 <main>
   <h1 class="sr">Painel do notch</h1>
-  <div class="notch" id="notch" data-open="false">
+  <div class="notch" id="notch" data-open="true">
     <button class="pill" id="pill" aria-expanded="false" aria-controls="panel" aria-label="Abrir painel de utilidades">
       <span class="art" aria-hidden="true"></span><span class="pt" id="pst" aria-hidden="true"></span><span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
     </button>
@@ -255,10 +315,10 @@ form.tkf input:not([type=date]){flex:1 1 110px}
   <div class="sr" role="status" aria-live="polite" id="live"></div>
 </main>
 <script>
-const I={tok:'<path d="M18 20V10M12 20V4M6 20v-6"/>',dev:'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/>',chl:'<path d="m15 18-6-6 6-6"/>',chr:'<path d="m9 18 6-6-6-6"/>',heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>',heartf:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z" fill="currentColor"/>',tup:'<path d="m18 15-6-6-6 6"/>',tdn:'<path d="m6 9 6 6 6-6"/>',play:'<polygon points="6 4 20 12 6 20 6 4"/>',pause:'<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>',next:'<polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/>',prev:'<polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/>',shuf:'<path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/>',rep:'<path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',check:'<path d="M20 6 9 17l-5-5"/>',x:'<path d="M18 6 6 18M6 6l12 12"/>',pin:'<path d="M12 17v5"/><path d="M9 3h6l-1 7 3 3H7l3-3z"/>',eye:'<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',grip:'<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>',edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',reset:'<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',video:'<rect x="2" y="6" width="14" height="12" rx="2"/><path d="M22 8l-6 4 6 4z"/>',cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',clip:'<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',timer:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4"/>',sl:'<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',radio:'<circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4M7.8 16.2a6 6 0 0 1 0-8.4"/><path d="M19.1 4.9a10 10 0 0 1 0 14.2M4.9 19.1a10 10 0 0 1 0-14.2"/>',music:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'};
+const I={sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',dev:'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/>',chl:'<path d="m15 18-6-6 6-6"/>',chr:'<path d="m9 18 6-6-6-6"/>',heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>',heartf:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z" fill="currentColor"/>',tup:'<path d="m18 15-6-6-6 6"/>',tdn:'<path d="m6 9 6 6 6-6"/>',play:'<polygon points="6 4 20 12 6 20 6 4"/>',pause:'<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>',next:'<polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/>',prev:'<polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/>',shuf:'<path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/>',rep:'<path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',check:'<path d="M20 6 9 17l-5-5"/>',x:'<path d="M18 6 6 18M6 6l12 12"/>',pin:'<path d="M12 17v5"/><path d="M9 3h6l-1 7 3 3H7l3-3z"/>',eye:'<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',grip:'<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>',edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',reset:'<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',video:'<rect x="2" y="6" width="14" height="12" rx="2"/><path d="M22 8l-6 4 6 4z"/>',cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',clip:'<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',timer:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4"/>',sl:'<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',radio:'<circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4M7.8 16.2a6 6 0 0 1 0-8.4"/><path d="M19.1 4.9a10 10 0 0 1 0 14.2M4.9 19.1a10 10 0 0 1 0-14.2"/>',music:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'};
 const ic=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`;
 const $=s=>document.querySelector(s), fmt=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
-const TABS=[['cal','Agenda','cal'],['tasks','Tarefas','check'],['clip','Copiados','clip'],['pomo','Pomodoro','timer'],['tokens','Tokens','tok'],['set','Ajustes','sl'],['radio','Rádio','radio'],['music','Música','music']];
+const TABS=[['cal','Agenda','cal'],['tasks','Tarefas','check'],['clip','Copiados','clip'],['pomo','Pomodoro','timer'],['set','Ajustes','sl'],['radio','Rádio','radio'],['tv','TV','radio'],['tempo','Tempo','sun'],['music','Música','music']];
 const S={open:false,tab:'music',
  m:{i:0,pos:0,play:true,shuf:false,rep:false,list:[{t:'Maré baixa',a:'Estúdio Cinco',d:212},{t:'Linha do horizonte',a:'Coro Vazio',d:187},{t:'Luz de neon',a:'Vera Lacerda',d:243}]},
  tasks:[{t:'Escrever as notas de versão da 0.2.22',w:'2h',d:false},{t:'Perguntar à Ana sobre o texto do onboarding',w:'5h',d:false},{t:'Responder a avaliação na App Store',w:'1d',d:false},{t:'Enviar a fatura de agosto',w:'3d',d:false},{t:'Reservar os voos de outubro',w:'8h',d:true}],
@@ -266,7 +326,8 @@ const S={open:false,tab:'music',
  p:{mode:'focus',left:1500,run:false,done:0}};
 let q='';
 function say(x){$('#live').textContent='';setTimeout(()=>$('#live').textContent=x,30)}
-function renderTabs(){$('#tabs').innerHTML=TABS.map(([id,l,i])=>(id==='radio'?'<span class="sp"></span>':'')+`<button class="tab" role="tab" id="t-${id}" aria-selected="${S.tab===id}" aria-controls="view" tabindex="${S.tab===id?0:-1}" aria-label="${l}" title="${l}" data-tab="${id}">${ic(i)}<span>${l}</span></button>`).join('')}
+const TAB_COL={cal:'#ff3b30',tasks:'#0a84ff',clip:'#8e8e93',pomo:'#ff9500',set:'#636366',radio:'#ff2d55',tv:'#5e5ce6',music:'#fc3c44',tempo:'#32ade6'};
+function renderTabs(){$('#notch').dataset.tab=S.tab;$('#tabs').innerHTML=TABS.map(([id,l,i])=>(id==='radio'?'<span class="sp"></span>':'')+`<button class="tab" style="--tc:${TAB_COL[id]||'#636366'}" role="tab" id="t-${id}" aria-selected="${S.tab===id}" aria-controls="view" tabindex="${S.tab===id?0:-1}" aria-label="${l}" title="${l}" data-tab="${id}">${ic(i)}<span>${l}</span></button>`).join('')}
 function view(){
  const v=$('#view');v.setAttribute('aria-labelledby','t-'+S.tab);
  const m=S.m,tr=m.list[m.i];
@@ -281,7 +342,9 @@ if(S.tab==='music')v.innerHTML=`<section class="np" aria-label="Reprodução do 
  if(S.tab==='pomo'){const p=S.p;v.innerHTML=taskSel()+`<div class="pomo ${p.mode!=='focus'?'rest':''}" id="pm"><div class="big"><span class="time" id="ptime" role="timer">${fmt(p.left)}</span><span class="mode">${pnome(p.mode)}</span></div>
   <div class="pr"><button class="ib go" data-a="pgo" aria-label="${p.run?'Pausar':'Iniciar'}">${ic(p.run?'pause':'play')}</button><button class="ib" data-a="prs" aria-label="Reiniciar">${ic('reset')}</button><button class="ib" data-a="psk" aria-label="Pular etapa">${ic('next')}</button>
   <div class="cyc" role="img" aria-label="${p.done} de 4 ciclos de foco concluídos">${[0,1,2,3].map(i=>`<i class="${i<p.done?'on':''}" style="--f:${i<p.done?100:(i===p.done&&p.mode==='focus')?(100*(1-p.left/(S.p.f||1))).toFixed(1):0}%">${i<p.done?ic('check').replace('<svg','<svg width="20" height="20"'):''}</i>`).join('')}</div></div></div>`+pform(p)}
- if(S.tab==='tokens')v.innerHTML=tokView();
+ 
+ if(S.tab==='tv'){v.innerHTML=tvView();tvAfter()}
+ if(S.tab==='tempo'){v.innerHTML=tempoView();if(!WX.data&&!WX.busy)wxLoad()}
  if(S.tab==='set')v.innerHTML=setView();tick(true)}
 function drawClip(){const v=$('#view');const f=S.clip.filter(c=>!q||(c.t+c.a).toLowerCase().includes(q));
  v.innerHTML=`<div class="add" style="display:flex;gap:8px;margin-bottom:10px"><input id="cq" type="search" aria-label="Buscar na área de transferência" placeholder="Buscar" value="${esc(q)}"><button class="chip" data-a="cclr" style="height:44px;border-radius:22px;padding:0 18px">Limpar</button></div>`+
@@ -297,7 +360,7 @@ function tick(paintOnly){const m=S.m,tr=m.list[m.i];let dt=0;
 const pt=$('#ptime');if(pt)pt.textContent=fmt(S.p.left);cycPaint();
  $('#notch').classList.toggle('playing',m.play||!!(S.rd&&S.rd.on))}
 function go(d){const m=S.m;m.i=m.shuf?Math.floor(Math.random()*m.list.length):(m.i+d+m.list.length)%m.list.length;m.pos=0;if(S.tab==='music')view()}
-function setOpen(o,q){S.open=o;setTimeout(pillPaint,0);if(window.notchApp)notchApp.setOpen(o,q);$('#notch').dataset.open=o;$('#pill').setAttribute('aria-expanded',o);$('#pill').setAttribute('aria-label',o?'Fechar painel de utilidades':'Abrir painel de utilidades');if(o){renderTabs();view();if(!q)setTimeout(()=>$('#t-'+S.tab).focus(),200)}else $('#pill').focus()}
+function setOpen(o,q){if(S.open&&$('#tabs').children.length)return;S.open=true;$('#notch').dataset.open='true';renderTabs();view()}
 function pick(id){if(id!=='tasks')S.undo=null;S.tab=id;renderTabs();view();$('#t-'+id).focus();if(id==='cal'&&msOn()&&Date.now()-(S.msAt||0)>30000)msSync();if(id==='music'&&S.tok)spDevs()}
 $('#pill').onclick=()=>setOpen(!S.open);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&S.open)setOpen(false)});
@@ -309,7 +372,7 @@ $('#view').addEventListener('click',e=>{
  const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,m=S.m,i=+b.dataset.i,p=S.p;
  if(a==='sconn')return spLogin();if(a==='sdis')return spOut();
  if(a==='mconn')return mAuth();if(a==='mdis'){S.ms=null;S.msExp=0;S.ev=null;S.evg=null;S.td=null;alertHide();ls.del('ms_rt');view();$('#view').focus();return}
- if(taskAct(a,i)||radioAct(a,i)||miscAct(a,b)||tkAct(a,b))return;
+ if(taskAct(a,i)||radioAct(a,i)||miscAct(a,b)||tvAct(a,b))return;
  if(S.tok&&a==='like')return spLike();
  if(S.tok&&['play','next','prev','shuf','rep'].includes(a))return spCmd(a);
  if(a==='play'){m.play=!m.play;view();$('#view').querySelector('[data-a=play]').focus()}
@@ -446,7 +509,7 @@ function setView(){const th=ls.get('theme')||'auto',on=k=>ls.get(k)==='1'?' chec
  <span class="redact" style="margin:0"><button type="button" class="chip" data-a="wdef">Usar São Bernardo do Campo</button></span></fieldset>
  <fieldset class="fs"><legend>Endereço para os logins</legend><p class="sub" style="margin:0 0 6px">Use este endereço como URI de redirecionamento no Spotify e na Microsoft:</p><p><code id="ruri">${esc(location.origin+location.pathname)}</code> <button class="chip" data-a="cuib">Copiar</button></p><p class="sub" style="margin:6px 0 0">${addrHint()}</p></fieldset>
  ${msFieldset()}
- <fieldset class="fs"><legend>Backup dos dados</legend><p class="sub" style="margin:0 0 8px">Salva tarefas, rádios, tempos do Pomodoro, registros de tokens e ajustes em um arquivo. Os logins do Spotify e da Microsoft não entram no arquivo.</p><span class="redact" style="margin:0"><button class="chip" data-a="expb">Exportar dados</button><button class="chip" data-a="impb">Importar dados</button></span><input type="file" id="impf" accept="application/json,.json" class="sr" tabindex="-1" aria-hidden="true"><p class="err" id="bkerr" role="alert"></p></fieldset>
+ <fieldset class="fs"><legend>Backup dos dados</legend><p class="sub" style="margin:0 0 8px">Salva tarefas, rádios, tempos do Pomodoro, ajustes em um arquivo. Os logins do Spotify e da Microsoft não entram no arquivo.</p><span class="redact" style="margin:0"><button class="chip" data-a="expb">Exportar dados</button><button class="chip" data-a="impb">Importar dados</button></span><input type="file" id="impf" accept="application/json,.json" class="sr" tabindex="-1" aria-hidden="true"><p class="err" id="bkerr" role="alert"></p></fieldset>
  <p class="sub">${window.notchApp?'Atalho global, que funciona com qualquer app em foco: Ctrl+Shift+Espaço.':'Atalho para abrir e fechar o painel: Ctrl+Shift+Espaço, com esta página em foco.'}</p>${window.notchApp?'<button class="chip" data-a="appquit">Sair do aplicativo</button>':''}`}
 function applyTheme(){const t=ls.get('theme'),r=document.documentElement;if(t==='light'||t==='dark')r.dataset.theme=t;else r.removeAttribute('data-theme')}
 applyTheme();
@@ -654,7 +717,7 @@ function rdPlay(i){const st=S.rd.list[i];if(!st||!st.u)return;
  S.rd.st='load';rdRender();RA.volume=S.rd.vol;
  const falha=()=>{if(tok===S.rd.tok&&S.rd.i===i)rdFail()},tocar=()=>{const pr=RA.play();if(pr&&pr.catch)pr.catch(e=>{if(e&&e.name!=='AbortError')falha()})};
  if(!isHls(st.u)||RA.canPlayType('application/vnd.apple.mpegurl')){RA.src=st.u;tocar();return}
- loadHls().then(Hls=>{if(tok!==S.rd.tok)return;if(!Hls.isSupported()){falha();return}
+ loadHls().then(Hls=>{if(tok!==S.rd.tok)return;if(!window.Hls.isSupported()){falha();return}
   const h=new Hls({lowLatencyMode:false});S.rd.hls=h;
   h.on(Hls.Events.ERROR,(_e,d)=>{if(d&&d.fatal)falha()});h.on(Hls.Events.MANIFEST_PARSED,tocar);
   h.loadSource(st.u);h.attachMedia(RA)}).catch(falha)}
@@ -705,8 +768,7 @@ $('#view').addEventListener('input',e=>{if(e.target.id==='rvol'){S.rd.vol=+e.tar
 function subExtra(e){const f=e.target;
  if(f.id==='qform'){spSearch();return true}
  if(f.id==='rsform'){rsRun();return true}
- if(f.id==='tkform'){tkAdd();return true}
- if(f.id==='tkbform'){tkBudget();return true}
+   if(f.id==='tvform'){tvAdd();return true}
  if(f.id==='pform'){const a=parseT($('#pfoc').value),b=parseT($('#pbrk').value),c=parseT($('#plng').value);
   if(a==null||b==null||c==null){const bad=a==null?$('#pfoc'):b==null?$('#pbrk'):$('#plng');$('#perr').textContent='Tempo inválido em '+(a==null?'Foco':b==null?'Pausa':'Pausa longa')+'. Use minutos ou min:seg, de 0:05 a 180:00. Exemplos: 25, 2:40, 3:10.';bad.setAttribute('aria-invalid','true');bad.focus();return true}
   S.p.f=a;S.p.r=b;S.p.l=c;ls.set('pomo_f',a);ls.set('pomo_r',b);ls.set('pomo_l',c);const run=S.p.run;if(!run)S.p.left=pdur(S.p.mode);view();
@@ -843,7 +905,7 @@ $('#view').addEventListener('change',e=>{const t=e.target;
  if(t.id==='impf'){bkImport(t.files[0]);t.value=''}});
 
 /* Backup: exportar e importar (sem tokens de login) */
-const BK_KEYS=['tasks','radios','radios_v4','rd_cur','rd_vol','rd_favs','theme','opt_snd','opt_ntf','pomo_f','pomo_r','pomo_l','tk_data','tk_budget'];
+const BK_KEYS=['tasks','radios','radios_v4','rd_cur','rd_vol','rd_favs','theme','opt_snd','opt_ntf','pomo_f','pomo_r','pomo_l'];
 function bkExport(){const data={};BK_KEYS.forEach(k=>{const v=ls.get(k);if(v!==null)data[k]=v});
  const nome='painel-notch-backup-'+new Date().toISOString().slice(0,10)+'.json',a=document.createElement('a');
  a.href=URL.createObjectURL(new Blob([JSON.stringify({app:'notch-panel',v:1,em:new Date().toISOString(),data},null,1)],{type:'application/json'}));a.download=nome;document.body.appendChild(a);a.click();
@@ -854,9 +916,7 @@ function bkClean(raw,keepMid){const d={},num=(v,a,b)=>Math.min(b,Math.max(a,Math
  const Rd=J('radios');if(Array.isArray(Rd)){d.radios=JSON.stringify(Rd.slice(0,200).map(x=>({n:String((x&&x.n)||'').slice(0,40),u:/^https?:\/\/\S+$/i.test(String((x&&x.u)||''))?String(x.u):'',g:String((x&&x.g)||'').slice(0,30)})));d.radios_v4='1'}
  if(raw.rd_cur!==undefined)d.rd_cur=String(num(raw.rd_cur,0,199));
  const Fv=J('rd_favs');if(Array.isArray(Fv))d.rd_favs=JSON.stringify(Fv.filter(x=>typeof x==='string'&&/^https?:\/\/\S+$/i.test(x)).slice(0,200));
- const Tk=J('tk_data');if(Array.isArray(Tk))d.tk_data=JSON.stringify(tkClean(Tk));
- if(raw.tk_budget!==undefined)d.tk_budget=String(Math.min(1e7,Math.max(0,+raw.tk_budget||0)));
- if(raw.rd_vol!==undefined)d.rd_vol=String(Math.min(1,Math.max(0,+raw.rd_vol||0)));
+  if(raw.rd_vol!==undefined)d.rd_vol=String(Math.min(1,Math.max(0,+raw.rd_vol||0)));
  if(['auto','light','dark'].includes(raw.theme))d.theme=raw.theme;
  ['opt_snd','opt_ntf'].forEach(k=>{if(raw[k]==='0'||raw[k]==='1')d[k]=raw[k]});
  ['pomo_f','pomo_r','pomo_l'].forEach(k=>{if(raw[k]!==undefined)d[k]=String(num(raw[k],5,10800))});
@@ -1127,25 +1187,34 @@ const WXI={sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l
  storm:'<path d="M7 14h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.5 3.5 0 0 0 7 14z"/><path d="M12 14l-2 4h3l-2 4"/>',
  fog:'<path d="M3 8h18M5 12h14M3 16h18"/>'};
 const wIcon=n=>'<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+WXI[n]+'</svg>';
-const AW_LOC='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L4.5 20.3 12 17l7.5 3.3z"/></svg>';
-const AW_WARN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3L2 21h20L12 3z"/><path d="M12 10v5M12 18h.01"/></svg>';
-function wxHtml(){const w=WX.data;
- if(!w)return WX.busy?'<span class="sub">Carregando o clima…</span>':'<span class="sub">Clima indisponível agora. Confira a conexão com a internet.</span>';
- const c=w.current,d=w.daily,cur=wmo(c.weather_code),tmax=Math.round(d.temperature_2m_max[0]),tmin=Math.round(d.temperature_2m_min[0]);
- const dayLbl=k=>new Date(d.time[k]+'T12:00:00-03:00');
- const strip=[0,1,2,3,4,5].map(k=>'<span><span>'+dayLbl(k).toLocaleDateString('pt-BR',{timeZone:TZ,day:'numeric'})+'</span>'+wIcon(wmo(d.weather_code[k]).i)+'<span>'+Math.round(d.temperature_2m_max[k])+'°</span></span>').join('');
- const L=[0,1,2,3],gmin=Math.min(...L.map(k=>d.temperature_2m_min[k])),gmax=Math.max(...L.map(k=>d.temperature_2m_max[k])),span=(gmax-gmin)||1;
- const rows=L.map(k=>{const mn=d.temperature_2m_min[k],mx=d.temperature_2m_max[k],x=wmo(d.weather_code[k]);
-  const left=(mn-gmin)/span*100,width=Math.max(4,(mx-mn)/span*100);
-  return '<div class="aw-row"><span>'+cap(fWd.format(dayLbl(k))).replace(/\.?$/,'.')+'<span class="sr">, '+x.t+'</span></span>'+wIcon(x.i)+'<span class="aw-min">'+Math.round(mn)+'°</span><span class="aw-bar"><i style="left:'+left.toFixed(1)+'%;width:'+width.toFixed(1)+'%"></i></span><span class="aw-max">'+Math.round(mx)+'°</span></div>'}).join('');
- const alerta=cur.i==='storm'?'<div class="aw-alert" role="status">'+AW_WARN+'<span>'+cur.t+'</span></div>':'';
- return '<div class="aw" aria-label="Previsão do tempo em '+esc(WX.loc.n)+'">'+
-  '<div class="aw-top"><div><div class="aw-city">'+AW_LOC+'<span>'+esc(WX.loc.n.split(',')[0])+'</span></div><div class="aw-temp" aria-label="'+Math.round(c.temperature_2m)+' graus">'+Math.round(c.temperature_2m)+'°</div></div>'+
-  '<div class="aw-r">'+wIcon(cur.i)+'<div>'+cur.t+'</div><div class="sub">Máx '+tmax+'° Mín '+tmin+'°</div></div></div>'+
-  alerta+'<div class="aw-strip">'+strip+'</div><div class="aw-list">'+rows+'</div></div>'}
-function paintWx(){const e=$('#hwx');if(e)e.innerHTML=wxHtml();const w=$('#wcur');if(w)w.textContent=WX.loc.n}
+function tpUv(v){return v<3?'Baixo':v<6?'Moderado':v<8?'Alto':v<11?'Muito alto':'Extremo'}
+function tpHM(t){return t?String(t).slice(11,16):'--:--'}
+function tempoView(){const w=WX.data;
+ if(!w)return '<div class="tp"><h2>Tempo</h2><p class="sub">'+(WX.busy?'Carregando o tempo…':'Tempo indisponível agora. Confira a conexão com a internet.')+'</p></div>';
+ const c=w.current,d=w.daily,h=w.hourly,cur=wmo(c.weather_code),N=10;
+ const idx=h&&h.time?Math.max(0,h.time.indexOf(String(c.time).slice(0,13)+':00')):0;
+ const hours=h&&h.time?[...Array(24).keys()].map(k=>idx+k).filter(k=>k<h.time.length).map(k=>'<div><span>'+(k===idx?'Agora':String(h.time[k]).slice(11,13)+'h')+'</span>'+wIcon(wmo(h.weather_code[k]).i)+'<span>'+Math.round(h.temperature_2m[k])+'°</span>'+(h.precipitation_probability&&h.precipitation_probability[k]>=20?'<span style="color:#64d2ff;font-size:11px">'+h.precipitation_probability[k]+'%</span>':'')+'</div>').join(''):'';
+ const L=[...Array(N).keys()].filter(k=>d.time[k]),gmin=Math.min(...L.map(k=>d.temperature_2m_min[k])),gmax=Math.max(...L.map(k=>d.temperature_2m_max[k])),span=(gmax-gmin)||1;
+ const days=L.map(k=>{const mn=d.temperature_2m_min[k],mx=d.temperature_2m_max[k],x=wmo(d.weather_code[k]),pp=d.precipitation_probability_max?d.precipitation_probability_max[k]:0;
+  const lbl=k===0?'Hoje':cap(fWd.format(new Date(d.time[k]+'T12:00:00-03:00'))).replace(/\.?$/,'.');
+  return '<div><span>'+lbl+'<span class="sr">, '+x.t+'</span></span>'+wIcon(x.i)+'<span class="mn">'+Math.round(mn)+'°</span><span class="tp-bar"><i style="left:'+((mn-gmin)/span*100).toFixed(1)+'%;width:'+Math.max(4,(mx-mn)/span*100).toFixed(1)+'%"></i></span><span class="mx">'+Math.round(mx)+'°'+(pp>=20?'<span class="pp">'+pp+'%</span>':'')+'</span></div>'}).join('');
+ const card=(k,v,sub)=>'<div class="tp-card"><div class="tp-k">'+k+'</div><div class="tp-v">'+v+'</div>'+(sub?'<div class="tp-s">'+sub+'</div>':'')+'</div>';
+ const uv=d.uv_index_max?d.uv_index_max[0]:null,pp0=d.precipitation_probability_max?d.precipitation_probability_max[0]:null;
+ return '<div class="tp" aria-label="Tempo em '+esc(WX.loc.n)+'">'+
+  '<div class="tp-head"><div class="tp-city">'+esc(WX.loc.n.split(',')[0])+'</div><div class="tp-temp" aria-label="'+Math.round(c.temperature_2m)+' graus">'+Math.round(c.temperature_2m)+'°</div><div class="tp-cond">'+cur.t+'</div><div class="tp-hl">Máx '+Math.round(d.temperature_2m_max[0])+'° Mín '+Math.round(d.temperature_2m_min[0])+'°</div></div>'+
+  (hours?'<section class="tp-card" aria-label="Previsão por hora"><h3>Previsão por hora</h3><div class="tp-hours">'+hours+'</div></section>':'')+
+  '<section class="tp-card" aria-label="Previsão de 10 dias"><h3>Previsão de 10 dias</h3><div class="tp-days">'+days+'</div></section>'+
+  '<div class="tp-grid">'+
+   card('Sensação térmica',Math.round(c.apparent_temperature)+'°',Math.round(c.apparent_temperature)>Math.round(c.temperature_2m)?'Mais quente que a temperatura':'Mais fria que a temperatura')+
+   card('Umidade',Math.round(c.relative_humidity_2m)+'%','')+
+   card('Vento',Math.round(c.wind_speed_10m)+' km/h','')+
+   (uv!=null?card('Índice UV',Math.round(uv),tpUv(uv)):'')+
+   (pp0!=null?card('Chance de chuva',pp0+'%','Hoje'):'')+
+   card('Nascer do sol',tpHM(d.sunrise&&d.sunrise[0]),'Pôr do sol '+tpHM(d.sunset&&d.sunset[0]))+
+  '</div><p class="tp-src">Dados: Open-Meteo</p></div>'}
+function paintWx(){if(S.tab==='tempo'&&S.open&&$('#view'))$('#view').innerHTML=tempoView();const w=$('#wcur');if(w)w.textContent=WX.loc.n}
 async function wxLoad(){if(WX.busy)return;WX.busy=true;const loc=WX.loc;
- try{const r=await fetch('https://api.open-meteo.com/v1/forecast?'+new URLSearchParams({latitude:loc.lat,longitude:loc.lon,current:'temperature_2m,weather_code',daily:'weather_code,temperature_2m_max,temperature_2m_min',timezone:'auto',forecast_days:'7'}));
+ try{const r=await fetch('https://api.open-meteo.com/v1/forecast?'+new URLSearchParams({latitude:loc.lat,longitude:loc.lon,current:'temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code',hourly:'temperature_2m,weather_code,precipitation_probability',daily:'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max,sunrise,sunset',timezone:'auto',forecast_days:'10'}));
   if(!r.ok)throw 0;const j=await r.json();if(!j.current||!j.daily)throw 0;if(loc===WX.loc){WX.data=j;WX.at=Date.now()}}
  catch(_){}
  WX.busy=false;paintWx();if(loc!==WX.loc)wxLoad()}
@@ -1183,54 +1252,47 @@ const RD_V6=[
  {n:"Hunter.FM lo-Fi",u:"https://live.hunter.fm/lofi_stream?ag=mp3",g:"Brasil · estilos e regionais"},
  {n:"Rádio Dumont FM 104.3",u:"https://8402.brasilstream.com.br/stream",g:"Brasil · estilos e regionais",alt:"Dumont FM 104.3"}];
 if(!ls.get('radios_v6')){const L=S.rd.list;RD_V6.forEach(d=>{const k=L.findIndex(x=>nrm(x.n)===nrm(d.n)||(d.alt&&nrm(x.n)===nrm(d.alt)));if(k>=0){if(!L[k].u)L[k].u=d.u;L[k].n=d.n;L[k].g=d.g}else L.push({n:d.n,u:d.u,g:d.g})});ls.set('radios',JSON.stringify(L));ls.set('radios_v6','1')}
-/* ===== Tokens: consumo de API por modelo (registro manual) ===== */
-S.tk={list:[],per:0,budget:0};
-function tkClean(l){return l.slice(0,2000).map(x=>({id:String((x&&x.id)||'').replace(/[^\w-]/g,'').slice(0,24),d:/^\d{4}-\d\d-\d\d$/.test(String((x&&x.d)||''))?x.d:'',m:String((x&&x.m)||'').slice(0,30),t:Math.min(1e12,Math.max(0,Math.round(+(x&&x.t)||0))),c:Math.min(1e7,Math.max(0,+(x&&x.c)||0))})).filter(x=>x.id&&x.d&&x.m)}
-try{const l=JSON.parse(ls.get('tk_data')||'[]');if(Array.isArray(l))S.tk.list=tkClean(l)}catch(_){}
-S.tk.budget=Math.min(1e7,Math.max(0,+ls.get('tk_budget')||0));
-const TK_COL=['#7c8cff','#30d158','#ff9a2e','#ff5a8a','#5ac8fa','#c084fc'];
-const fTok=n=>n>=1e6?(n/1e6).toFixed(1).replace('.',',')+' M':n>=1e3?(n/1e3).toFixed(1).replace('.',',')+' mil':String(Math.round(n));
-const fUsd=v=>'US$ '+v.toFixed(2).replace('.',',');
-const fDm=k=>k.slice(8)+'/'+k.slice(5,7);
-function tkFrom(per){const t=todayD();if(per===1)t.setDate(t.getDate()-6);else if(per===2)t.setDate(1);return dayKey(t)}
-function tkSum(from){const to=dayKey(new Date()),by=new Map();let t=0,c=0;
- S.tk.list.forEach(x=>{if(x.d<from||x.d>to)return;t+=x.t;c+=x.c;const r=by.get(x.m)||{m:x.m,t:0,c:0};r.t+=x.t;r.c+=x.c;by.set(x.m,r)});
- return {t,c,rows:[...by.values()].sort((a,b)=>b.t-a.t||b.c-a.c)}}
-const tkPct=c=>S.tk.budget?Math.round(c/S.tk.budget*100):0;
-const tkSave=()=>ls.set('tk_data',JSON.stringify(S.tk.list));
-const tkColor=m=>TK_COL[[...new Set(S.tk.list.map(x=>x.m))].sort().indexOf(m)%TK_COL.length];
-function tokView(){const K=S.tk,s=tkSum(tkFrom(K.per)),mo=tkSum(tkFrom(2)),pct=tkPct(mo.c),hoje=dayKey(new Date()),W=Math.min(100,pct);
- const rec=K.list.map((x,i)=>({x,i})).sort((a,b)=>b.x.d>a.x.d?1:b.x.d<a.x.d?-1:b.i-a.i).slice(0,6).map(o=>o.x);
- const models=[...new Set(K.list.map(x=>x.m))].sort();
- return `<h2>Tokens</h2>
- <div class="redact" role="group" aria-label="Período" style="margin:0 0 10px">${[['Hoje',0],['7 dias',1],['Mês',2]].map(([l,k])=>`<button type="button" class="chip" data-a="tkp" data-p="${k}" aria-pressed="${K.per===k}">${l}</button>`).join('')}</div>
- <div class="tkg"><div class="tkc"><span class="k">Total de tokens</span><span class="v">${fTok(s.t)}</span></div><div class="tkc"><span class="k">Custo estimado</span><span class="v">${fUsd(s.c)}</span></div></div>
- ${K.budget?`<div class="tkc"><div class="tkl"><span>Orçamento do mês</span><span>${fUsd(mo.c)} de ${fUsd(K.budget)} (${pct}%)</span></div><div class="tkb bud" role="progressbar" aria-label="Orçamento do mês usado" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${W}"><i class="${pct>=80?'warn':''}" style="width:${W}%"></i></div><div class="sub" role="status">${pct>=100?'Orçamento do mês estourado':pct>=80?'Acima de 80% do orçamento':'Dentro do orçamento'}</div></div>`:''}
- ${s.rows.length?s.rows.map(r=>{const p=s.t?Math.round(r.t/s.t*100):0;return `<div class="row"><div class="grow"><div class="tkl"><b>${esc(r.m)}</b><span>${fTok(r.t)} · ${fUsd(r.c)}</span></div><div class="tkb"><i style="width:${p}%;background:${tkColor(r.m)}"></i></div></div><span class="tag">${p}%</span></div>`}).join(''):'<p class="sub">Nenhum registro neste período. Adicione abaixo.</p>'}
- <h3 class="tkh">Novo registro</h3>
- <form id="tkform" class="add tkf"><label class="sr" for="tkm">Modelo</label><input id="tkm" list="tkml" placeholder="Modelo (ex.: Claude Sonnet)" maxlength="30" autocomplete="off"><datalist id="tkml">${models.map(m=>`<option value="${esc(m)}">`).join('')}</datalist><label class="sr" for="tkt">Tokens</label><input id="tkt" inputmode="numeric" placeholder="Tokens (ex.: 1.500.000)" autocomplete="off"><label class="sr" for="tkc">Custo em dólares</label><input id="tkc" inputmode="decimal" placeholder="Custo em US$ (ex.: 2,40)" autocomplete="off"><input type="date" id="tkd" aria-label="Data do consumo" value="${hoje}" max="${hoje}"><button>Adicionar</button></form>
- <p class="err" id="tkerr" role="alert"></p>
- <form id="tkbform" class="add tkf"><label class="sr" for="tkb">Orçamento do mês em dólares</label><input id="tkb" inputmode="decimal" placeholder="Orçamento do mês em US$ (vazio desliga)" value="${K.budget?String(K.budget).replace('.',','):''}" autocomplete="off"><button>Salvar orçamento</button></form>
- <p class="err" id="tkberr" role="alert"></p>
- ${rec.length?`<h3 class="tkh">Últimos registros</h3>`+rec.map(x=>`<div class="row"><span class="grow">${esc(x.m)}<br><span class="sub">${fDm(x.d)} · ${fTok(x.t)} · ${fUsd(x.c)}</span></span><button class="ib sm" data-a="tkdel" data-id="${esc(x.id)}" aria-label="Remover registro: ${esc(x.m)}, ${fDm(x.d)}, ${fTok(x.t)} tokens">${ic('x')}</button></div>`).join(''):''}
- <p class="sub" style="margin:10px 2px 0">Registro manual: copie o consumo do painel de uso de cada provedor. Os dados ficam só neste navegador e entram no backup.</p>`}
-function tkBad(id,err,msg){const e=$('#'+err),f=$('#'+id);e.textContent=msg;f.setAttribute('aria-invalid','true');f.focus()}
-function tkAdd(){const K=S.tk,m=$('#tkm').value.trim().slice(0,30),ts=$('#tkt').value.trim(),cs=$('#tkc').value.trim().replace(',','.'),d=$('#tkd').value;
- if(!m)return tkBad('tkm','tkerr','Informe o modelo.');
- if(!/^(\d+|\d{1,3}(\.\d{3})+)$/.test(ts)||!+ts.replace(/\./g,''))return tkBad('tkt','tkerr','Informe os tokens usando só números, como 1500000 ou 1.500.000.');
- if(cs&&!/^\d+(\.\d{1,4})?$/.test(cs))return tkBad('tkc','tkerr','Informe o custo em dólares, como 2,40. Deixe vazio se não souber.');
- const hoje=dayKey(new Date()),antes=tkPct(tkSum(tkFrom(2)).c);
- K.list.push({id:'k'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d:/^\d{4}-\d\d-\d\d$/.test(d)&&d<=hoje?d:hoje,m,t:Math.min(1e12,+ts.replace(/\./g,'')),c:Math.min(1e7,+cs||0)});
- if(K.list.length>2000)K.list.shift();
- tkSave();const depois=tkPct(tkSum(tkFrom(2)).c);view();$('#tkm').focus();
- say(K.budget&&depois>=100&&antes<100?'Registro adicionado. O orçamento do mês estourou':K.budget&&depois>=80&&antes<80?'Registro adicionado. Você passou de 80% do orçamento do mês':'Registro adicionado')}
-function tkBudget(){const v=$('#tkb').value.trim().replace(',','.');
- if(v&&!/^\d+(\.\d{1,2})?$/.test(v))return tkBad('tkb','tkberr','Informe o orçamento em dólares, como 40 ou 40,50. Deixe vazio para desligar.');
- const n=Math.min(1e7,+v||0);S.tk.budget=n;ls.set('tk_budget',String(n));view();$('#tkb').focus();say(n?'Orçamento do mês: '+fUsd(n):'Orçamento desligado')}
-function tkAct(a,b){const K=S.tk;
- if(a==='tkp'){K.per=+b.dataset.p;view();const n=$('#view [data-a="tkp"][data-p="'+K.per+'"]');if(n)n.focus();say('Período: '+n.textContent);return true}
- if(a==='tkdel'){const i=K.list.findIndex(x=>x.id===b.dataset.id);if(i>=0){K.list.splice(i,1);tkSave();view();const n=$('#view [data-a="tkdel"]')||$('#tkm');if(n)n.focus();say('Registro removido')}return true}
+/* ===== TV: canais ao vivo (links oficiais informados pelo usuário) ===== */
+const TV_DEF=['TV Brasil (EBC)','TV Cultura (SP)','TV Câmara','TV Senado','TV Justiça','TV Escola','TV Universitária (UFSC)','NASA TV','TV Aparecida','BandNews','TV Gazeta','Record','Globo (Globoplay)','Pluto TV','Al Jazeera English','DW','France 24','Euronews','Arte'].map(n=>({n,u:''}));
+S.tv={cur:0,list:[]};
+try{const l=JSON.parse(ls.get('tv_list')||'null');S.tv.list=Array.isArray(l)?l.slice(0,100).map(x=>({n:String((x&&x.n)||'').slice(0,40),u:String((x&&x.u)||'').slice(0,300)})).filter(x=>x.n):TV_DEF.slice()}catch(_){S.tv.list=TV_DEF.slice()}
+const tvSave=()=>ls.set('tv_list',JSON.stringify(S.tv.list));
+const tvOk=u=>!u||/^https:\/\/\S+$/i.test(u);
+const tvYT=u=>/^https:\/\/(www\.)?(youtube(-nocookie)?\.com\/embed\/|youtube\.com\/embed\/)/i.test(u);
+const tvM3u=u=>/^https:\/\/\S+\.m3u8(\?\S*)?$/i.test(u);
+function tvPlayer(c){
+ if(!c||!c.u)return '<div class="tvbox"><p class="sub">Sem link configurado para este canal. Adicione o link abaixo.</p></div>';
+ if(tvYT(c.u))return '<div class="tvbox"><iframe src="'+esc(c.u)+'" title="'+esc(c.n)+'" allow="autoplay; fullscreen; encrypted-media" allowfullscreen sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"></iframe></div>';
+ if(tvM3u(c.u))return '<div class="tvbox"><video id="tvv" controls playsinline aria-label="'+esc(c.n)+'"></video></div>';
+ return '<div class="tvbox"><p class="sub">Este link não pode ser exibido aqui. <a href="'+esc(c.u)+'" target="_blank" rel="noopener">&nbsp;Abrir em nova aba</a></p></div>'}
+let tvHlsObj=null;
+function tvHls(url){const v=$('#tvv');if(!v)return;
+ if(v.canPlayType('application/vnd.apple.mpegurl')){v.src=url;return}
+ const go=()=>{if(!window.Hls||!window.Hls.isSupported())return;if(tvHlsObj)tvHlsObj.destroy();tvHlsObj=new window.Hls();tvHlsObj.loadSource(url);tvHlsObj.attachMedia(v)};
+ if(window.Hls)return go();
+ const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.13/hls.min.js';sc.onload=go;document.head.appendChild(sc)}
+function tvAfter(){const c=S.tv.list[S.tv.cur];if(c&&tvM3u(c.u||''))tvHls(c.u)}
+function tvView(){const L=S.tv.list,c=L[S.tv.cur];
+ return `<h2>TV</h2>${tvPlayer(c)}
+ <p class="sub" role="status">${c?esc(c.n)+' · '+(S.tv.cur+1)+' de '+L.length:'Nenhum canal cadastrado'}</p>
+ <div class="ctrl"><button type="button" class="ib" data-a="tvprev" aria-label="Canal anterior">${ic('prev')}</button><button type="button" class="ib" data-a="tvnext" aria-label="Próximo canal">${ic('next')}</button></div>
+ <h3 class="tkh">Canais</h3>
+ ${L.map((x,i)=>`<div class="row"><button type="button" class="grow" data-a="tvsel" data-i="${i}" aria-current="${i===S.tv.cur?'true':'false'}" style="text-align:left;background:none;border:0;color:inherit;font:inherit;padding:6px 0">${esc(x.n)}${x.u?'':' <span class="sub">(sem link)</span>'}</button><button type="button" class="ib sm" data-a="tvdel" data-i="${i}" aria-label="Remover canal: ${esc(x.n)}">${ic('x')}</button></div>`).join('')}
+ <h3 class="tkh">Adicionar canal</h3>
+ <form id="tvform" class="add"><label class="sr" for="tvn">Nome do canal</label><input id="tvn" placeholder="Nome do canal" maxlength="40" autocomplete="off"><label class="sr" for="tvu">Link de transmissão (https)</label><input id="tvu" placeholder="Link (https://…)" maxlength="300" autocomplete="off" inputmode="url"><button>Adicionar</button></form>
+ <p class="err" id="tverr" role="alert"></p>
+ <p class="sub">Use somente transmissões oficiais e gratuitas. Links do YouTube no formato youtube.com/embed/… tocam aqui. Endereços .m3u8 também.</p>`}
+function tvAdd(){const n=$('#tvn').value.trim().slice(0,40),u=$('#tvu').value.trim();
+ if(!n){$('#tverr').textContent='Informe o nome do canal.';$('#tvn').focus();return}
+ if(!tvOk(u)){$('#tverr').textContent='O link precisa começar com https://';$('#tvu').focus();return}
+ S.tv.list.push({n,u});if(S.tv.list.length>100)S.tv.list.shift();S.tv.cur=S.tv.list.length-1;tvSave();view();$('#tvn').focus();say('Canal adicionado: '+n)}
+function tvAct(a,b){const T=S.tv,n=T.list.length;
+ if(a==='tvprev'||a==='tvnext'){if(!n)return true;T.cur=(T.cur+(a==='tvnext'?1:-1)+n)%n;view();const x=$('#view [data-a="'+a+'"]');if(x)x.focus();say(T.list[T.cur].n+', canal '+(T.cur+1)+' de '+n);return true}
+ if(a==='tvsel'){T.cur=+b.dataset.i;view();say(T.list[T.cur].n);return true}
+ if(a==='tvdel'){const i=+b.dataset.i;const nm=T.list[i]&&T.list[i].n;T.list.splice(i,1);if(T.cur>=T.list.length)T.cur=Math.max(0,T.list.length-1);tvSave();view();const x=$('#view [data-a="tvdel"]')||$('#tvn');if(x)x.focus();say('Canal removido: '+(nm||''));return true}
  return false}
+{const hw=$('#hwx'),vw=$('#view');if(hw&&vw)vw.parentNode.insertBefore(hw,vw)}
+setOpen(true,true);
 paintClock();paintWx();wxLoad();
 setInterval(paintClock,1000);
 setInterval(()=>{if(Date.now()-WX.at>30*60000)wxLoad()},60000);
