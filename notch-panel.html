@@ -295,6 +295,8 @@ main{max-width:none!important;padding:0!important;margin:0!important;height:100%
 .notch[data-tab="music"] .np-title b{font-size:26px}
 .notch[data-tab="music"] .np-title{justify-content:center}
 .notch[data-tab="music"] .np-state{display:none}
+
+/* ===== Fundo da reprodução: capa da música desfocada em toda a tela ===== */
 .notch{background:#000!important;transition:background-color .6s}
 .notch::before,.notch::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;transition:opacity .8s}
 .notch::before{background:var(--art,none) center/cover no-repeat;filter:blur(70px) saturate(1.6);transform:scale(1.4);opacity:0}
@@ -304,6 +306,111 @@ main{max-width:none!important;padding:0!important;margin:0!important;height:100%
 .notch>*{position:relative;z-index:1}
 .notch>.alertbar{z-index:5}
 
+/* ===== Navegação CarPlay: voltar, grade de apps ===== */
+.inner{position:relative}
+#back{grid-area:1/2;justify-self:start;align-self:start;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.14);color:var(--ink);margin:0 0 10px;display:flex;align-items:center;justify-content:center}
+#back svg{width:22px;height:22px}
+#back:disabled{opacity:.35}
+#grid{position:absolute;left:14px;bottom:14px;width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.12);color:var(--ink);display:flex;align-items:center;justify-content:center;z-index:2}
+#grid[aria-pressed="true"]{background:rgba(255,255,255,.32)}
+#grid svg{width:24px;height:24px}
+.tabs{padding-bottom:64px}
+.appgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:14px;margin-top:10px}
+.appbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:120px;border:0;border-radius:22px;background:var(--tc);color:#fff;font:600 15px system-ui,sans-serif;cursor:pointer}
+.appbtn svg{width:36px;height:36px}
+.appbtn:focus-visible{outline:3px solid #fff;outline-offset:3px}
+/* ===== Adaptativo: celular, tablet, computador, notch ===== */
+.inner{padding-top:calc(16px + env(safe-area-inset-top,0px))!important}
+@media (max-width:600px){
+ .inner{grid-template-columns:64px minmax(0,1fr)!important;gap:0 10px!important;padding:calc(10px + env(safe-area-inset-top,0px)) 10px calc(10px + env(safe-area-inset-bottom,0px)) calc(10px + env(safe-area-inset-left,0px))!important}
+ .tab{width:52px!important;height:52px!important;min-height:52px;border-radius:14px!important}
+ .tab svg{width:24px!important;height:24px!important}
+ .tabs{gap:8px!important}
+ .hclk .hbig{font-size:12px!important;padding:4px 6px!important}
+ .notch[data-tab="music"] .np{grid-template-columns:minmax(0,1fr)}
+ .notch[data-tab="music"] .np-art{grid-column:1;grid-row:auto;width:62%;margin:0 auto}
+ .notch[data-tab="music"] .np-meta{grid-column:1}
+ .notch[data-tab="music"] .np-title b{font-size:20px}
+ .tp-grid{grid-template-columns:1fr}
+ .tp-temp{font-size:68px}
+ #grid{width:44px;height:44px;left:10px;bottom:10px}
+}
+@media (min-width:1100px){#view{max-width:980px;margin:0 auto;width:100%}}
+@media (max-height:520px) and (orientation:landscape){.tab{width:46px!important;height:46px!important;min-height:46px}.tabs{gap:6px!important;padding-bottom:56px}}
+@media (hover:none){.tab:hover{filter:none}}
+.note{background:rgba(255,204,0,.16);border:1px solid rgba(255,204,0,.5);color:var(--ink);border-radius:14px;padding:10px 12px;margin:0 0 10px;font-size:14px;line-height:1.4}
+#tpform input{flex:1 1 180px}
+.notch{--acc:#ffffff}
+.notch[data-art="1"] .tab[aria-selected="true"]{outline-color:var(--acc)}
+.notch[data-art="1"] input[type=range]{accent-color:var(--acc)}
+.notch[data-art="1"] .like[aria-pressed="true"] svg{color:var(--acc)}
+
+/* ===== Barra de controles da música no estilo CarPlay ===== */
+.notch[data-tab="music"] .np .ctrl{display:flex;justify-content:center;align-items:center;gap:18px;margin:6px 0}
+.notch[data-tab="music"] .np .ctrl .ib{width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.14);color:var(--ink);display:flex;align-items:center;justify-content:center}
+.notch[data-tab="music"] .np .ctrl .ib svg{width:26px;height:26px}
+.notch[data-tab="music"] .np .ctrl .ib[aria-pressed="true"]{background:rgba(255,255,255,.3)}
+.notch[data-tab="music"] .np .ctrl .ib[data-a="pgo"],.notch[data-tab="music"] .np .ctrl .ib[data-a="play"]{width:72px;height:72px}
+.notch[data-tab="music"] .np .ctrl .ib[data-a="pgo"] svg,.notch[data-tab="music"] .np .ctrl .ib[data-a="play"] svg{width:30px;height:30px}
+/* ===== Botão voltar com o nome da aba anterior ===== */
+#back{width:auto!important;height:44px;border-radius:22px!important;padding:0 16px 0 10px;gap:6px;font-size:15px;font-weight:600;color:var(--ink)}
+#back span{white-space:nowrap}
+/* ===== Meta diária do Pomodoro ===== */
+.goal{margin:14px 2px 0;background:var(--row);border-radius:16px;padding:12px 14px}
+.goal .gl{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px}
+.goal .gb{position:relative;height:8px;border-radius:4px;background:rgba(255,255,255,.14);margin:8px 0 4px;overflow:hidden}
+.goal .gb i{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--acc,#30d158)}
+.goal .gb i.ok{background:#30d158}
+
+/* ===== Rádio no mesmo layout da música ===== */
+.notch[data-tab="radio"] #view{padding:24px 10px 0 18px}
+.notch[data-tab="radio"] .now{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,42%);gap:18px 28px;align-items:center}
+.notch[data-tab="radio"] .now .art{grid-column:2;grid-row:1/span 3;width:100%;height:auto;aspect-ratio:1;border-radius:18px}
+.notch[data-tab="radio"] .now>div:not(.art-wrap){grid-column:1;grid-row:1;text-align:center}
+.notch[data-tab="radio"] .ctrl{display:flex;justify-content:center;align-items:center;gap:18px;margin:6px 0}
+.notch[data-tab="radio"] .ctrl .ib{width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.14);color:var(--ink);display:flex;align-items:center;justify-content:center}
+.notch[data-tab="radio"] .ctrl .ib svg{width:26px;height:26px}
+/* ===== Música: fila, volume ===== */
+.spx{margin-top:16px;background:var(--row);border-radius:16px;padding:12px 14px}
+.spx h3{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute);font-weight:600}
+.spx ol{margin:0;padding-left:22px;font-size:14px;line-height:1.6}
+.spx input[type=range]{width:100%}
+/* ===== Pomodoro: resumo semanal ===== */
+.wk{display:flex;align-items:flex-end;gap:8px;height:90px;margin-top:10px}
+.wk div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:11px;color:var(--mute)}
+.wk i{display:block;width:100%;border-radius:6px 6px 2px 2px;background:var(--acc,#30d158);min-height:3px}
+/* ===== Tempo: alerta de temperatura ===== */
+.tpalert{margin-top:12px;background:var(--row);border-radius:16px;padding:12px 14px}
+
+/* ===== Rádio: botões no padrão visual ===== */
+.notch[data-tab="radio"] .redact .chip{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:8px 16px;border-radius:999px;border:0;background:rgba(255,255,255,.12);color:var(--ink);font-weight:600;font-size:14px}
+.notch[data-tab="radio"] .redact .chip svg{width:18px;height:18px}
+.notch[data-tab="radio"] .redact .chip[aria-pressed="true"]{background:var(--acc,#ffffff);color:#111}
+.notch[data-tab="radio"] .ctrl .ib{transition:transform .15s,background .15s}
+.notch[data-tab="radio"] .ctrl .ib:active{transform:scale(.94)}
+.notch[data-tab="radio"] .ctrl .ib:nth-child(2){width:74px;height:74px}
+.notch[data-tab="radio"] .ctrl .ib:nth-child(2) svg{width:30px;height:30px}
+.notch[data-tab="radio"] .ctrl .ib[aria-pressed="true"]{background:rgba(255,255,255,.3)}
+.tp-cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tp-cmp .tp-v{font-size:38px}
+
+/* ===== Rádio: Buscar mais rádios + Só favoritas lado a lado; lista de rádios salvas ===== */
+.rsrow{display:flex;align-items:flex-start;gap:10px}
+.rsrow>.dt{flex:1;min-width:0;margin-top:0}
+.rsfav{flex:none;margin-top:10px;display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:8px 14px;border-radius:999px;border:0;background:rgba(255,255,255,.12);color:var(--ink);font-weight:600;font-size:14px;white-space:nowrap}
+.rsfav svg{width:18px;height:18px}
+.rsfav[aria-pressed="true"]{background:var(--acc,#fff);color:#111}
+.rsv{margin-top:12px}
+.rsv summary{cursor:pointer;padding:8px 0;color:#fff;font-weight:600}
+.svlist{list-style:none;margin:0;padding:0;max-height:320px;overflow-y:auto}
+.svd{border-top:1px solid rgba(255,255,255,.08)}
+.svdbtn{width:100%;display:flex;align-items:center;text-align:left;background:none;border:0;color:inherit;font:inherit;padding:10px 4px;min-height:44px;cursor:pointer}
+.svdbtn:focus-visible{outline:2px solid var(--acc,#fff);outline-offset:-2px;border-radius:8px}
+.svd.cur .svdbtn{font-weight:700;color:var(--acc,#fff)}
+.fav{color:#ffd60a;margin-left:6px}
+
+.rsrow{flex-wrap:wrap}
+.rsrow>.dt{flex:1 1 260px}
 </style>
 </head>
 <body>
@@ -324,7 +431,7 @@ main{max-width:none!important;padding:0!important;margin:0!important;height:100%
   <div class="sr" role="status" aria-live="polite" id="live"></div>
 </main>
 <script>
-const I={sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',dev:'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/>',chl:'<path d="m15 18-6-6 6-6"/>',chr:'<path d="m9 18 6-6-6-6"/>',heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>',heartf:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z" fill="currentColor"/>',tup:'<path d="m18 15-6-6-6 6"/>',tdn:'<path d="m6 9 6 6 6-6"/>',play:'<polygon points="6 4 20 12 6 20 6 4"/>',pause:'<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>',next:'<polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/>',prev:'<polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/>',shuf:'<path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/>',rep:'<path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',check:'<path d="M20 6 9 17l-5-5"/>',x:'<path d="M18 6 6 18M6 6l12 12"/>',pin:'<path d="M12 17v5"/><path d="M9 3h6l-1 7 3 3H7l3-3z"/>',eye:'<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',grip:'<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>',edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',reset:'<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',video:'<rect x="2" y="6" width="14" height="12" rx="2"/><path d="M22 8l-6 4 6 4z"/>',cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',clip:'<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',timer:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4"/>',sl:'<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',radio:'<circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4M7.8 16.2a6 6 0 0 1 0-8.4"/><path d="M19.1 4.9a10 10 0 0 1 0 14.2M4.9 19.1a10 10 0 0 1 0-14.2"/>',music:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'};
+const I={repeat:'<path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',back:'<polyline points="15 18 9 12 15 6"/>',grid:'<rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',dev:'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/>',chl:'<path d="m15 18-6-6 6-6"/>',chr:'<path d="m9 18 6-6-6-6"/>',heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>',heartf:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z" fill="currentColor"/>',tup:'<path d="m18 15-6-6-6 6"/>',tdn:'<path d="m6 9 6 6 6-6"/>',play:'<polygon points="6 4 20 12 6 20 6 4"/>',pause:'<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>',next:'<polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/>',prev:'<polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/>',shuf:'<path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/>',rep:'<path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',check:'<path d="M20 6 9 17l-5-5"/>',x:'<path d="M18 6 6 18M6 6l12 12"/>',pin:'<path d="M12 17v5"/><path d="M9 3h6l-1 7 3 3H7l3-3z"/>',eye:'<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',grip:'<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>',edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',reset:'<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',video:'<rect x="2" y="6" width="14" height="12" rx="2"/><path d="M22 8l-6 4 6 4z"/>',cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',clip:'<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',timer:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4"/>',sl:'<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',radio:'<circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4M7.8 16.2a6 6 0 0 1 0-8.4"/><path d="M19.1 4.9a10 10 0 0 1 0 14.2M4.9 19.1a10 10 0 0 1 0-14.2"/>',music:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'};
 const ic=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`;
 const $=s=>document.querySelector(s), fmt=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
 const TABS=[['cal','Agenda','cal'],['tasks','Tarefas','check'],['clip','Copiados','clip'],['pomo','Pomodoro','timer'],['set','Ajustes','sl'],['radio','Rádio','radio'],['tv','TV','radio'],['tempo','Tempo','sun'],['music','Música','music']];
@@ -336,8 +443,9 @@ const S={open:false,tab:'music',
 let q='';
 function say(x){$('#live').textContent='';setTimeout(()=>$('#live').textContent=x,30)}
 const TAB_COL={cal:'#ff3b30',tasks:'#0a84ff',clip:'#8e8e93',pomo:'#ff9500',set:'#636366',radio:'#ff2d55',tv:'#5e5ce6',music:'#fc3c44',tempo:'#32ade6'};
-function renderTabs(){$('#notch').dataset.tab=S.tab;$('#tabs').innerHTML=TABS.map(([id,l,i])=>(id==='radio'?'<span class="sp"></span>':'')+`<button class="tab" style="--tc:${TAB_COL[id]||'#636366'}" role="tab" id="t-${id}" aria-selected="${S.tab===id}" aria-controls="view" tabindex="${S.tab===id?0:-1}" aria-label="${l}" title="${l}" data-tab="${id}">${ic(i)}<span>${l}</span></button>`).join('')}
-function view(){
+function renderTabs(){if(S.lastTab&&S.lastTab!==S.tab)S.prevTab=S.lastTab;S.lastTab=S.tab;
+ {const bk=$('#back');if(bk){const p=S.prevTab&&TABS.find(t=>t[0]===S.prevTab);bk.disabled=!p;bk.innerHTML=ic('back')+(p?'<span>'+p[1]+'</span>':'');bk.setAttribute('aria-label',p?'Voltar para '+p[1]:'Sem aba anterior')}}$('#notch').dataset.tab=S.tab;$('#tabs').innerHTML=TABS.map(([id,l,i])=>(id==='radio'?'<span class="sp"></span>':'')+`<button class="tab" style="--tc:${TAB_COL[id]||'#636366'}" role="tab" id="t-${id}" aria-selected="${S.tab===id}" aria-controls="view" tabindex="${S.tab===id?0:-1}" aria-label="${l}" title="${l}" data-tab="${id}">${ic(i)}<span>${l}</span></button>`).join('')}
+function viewInner(){
  const v=$('#view');v.setAttribute('aria-labelledby','t-'+S.tab);
  const m=S.m,tr=m.list[m.i];
 if(S.tab==='music')v.innerHTML=`<section class="np" aria-label="Reprodução do Spotify"><div class="np-top"><span class="np-art" style="${tr.img?`background-image:url('${esc(tr.img)}')`:''}" aria-hidden="true"></span><div class="np-meta"><div class="np-title"><b>${esc(tr.t)}</b>${S.tok?`<button class="ib sm like" data-a="like" aria-pressed="${!!m.liked}" aria-label="Favoritar faixa">${ic(m.liked?'heartf':'heart')}</button>`:''}</div>${tr.al?`<div class="np-sub">Álbum: <span class="np-al">${esc(tr.al)}</span></div>`:''}<div class="np-sub">${esc(tr.a)}</div><div class="np-state" role="status">${m.play?'Tocando':'Pausada'}</div></div></div>
@@ -352,7 +460,7 @@ if(S.tab==='music')v.innerHTML=`<section class="np" aria-label="Reprodução do 
   <div class="pr"><button class="ib go" data-a="pgo" aria-label="${p.run?'Pausar':'Iniciar'}">${ic(p.run?'pause':'play')}</button><button class="ib" data-a="prs" aria-label="Reiniciar">${ic('reset')}</button><button class="ib" data-a="psk" aria-label="Pular etapa">${ic('next')}</button>
   <div class="cyc" role="img" aria-label="${p.done} de 4 ciclos de foco concluídos">${[0,1,2,3].map(i=>`<i class="${i<p.done?'on':''}" style="--f:${i<p.done?100:(i===p.done&&p.mode==='focus')?(100*(1-p.left/(S.p.f||1))).toFixed(1):0}%">${i<p.done?ic('check').replace('<svg','<svg width="20" height="20"'):''}</i>`).join('')}</div></div></div>`+pform(p)}
  
- if(S.tab==='tv'){v.innerHTML=tvView();tvAfter()}
+ if(S.tab==='tv'){if(tvHlsObj){tvHlsObj.destroy();tvHlsObj=null}v.innerHTML=tvView();tvAfter()}
  if(S.tab==='tempo'){v.innerHTML=tempoView();if(!WX.data&&!WX.busy)wxLoad()}
  if(S.tab==='set')v.innerHTML=setView();tick(true)}
 function drawClip(){const v=$('#view');const f=S.clip.filter(c=>!q||(c.t+c.a).toLowerCase().includes(q));
@@ -360,11 +468,11 @@ function drawClip(){const v=$('#view');const f=S.clip.filter(c=>!q||(c.t+c.a).to
  (f.length?f.map(c=>{const k=S.clip.indexOf(c);return `<div class="row"><span class="app" style="background:${c.c}" aria-hidden="true">${esc(c.a)}</span>${c.sens&&c.hide?`<span class="grow sub"><span class="blur" aria-hidden="true">${esc(c.t)}</span> <span class="sr">Conteúdo sensível oculto</span> Número de cartão ou conta</span>`:`<button class="copy" data-a="ccopy" data-i="${k}" aria-label="Copiar: ${esc(c.t)}">${esc(c.t)}</button>`}
  <span class="acts">${c.sens?`<button class="ib sm" data-a="ceye" data-i="${k}" aria-label="${c.hide?'Mostrar':'Ocultar'} conteúdo">${ic('eye')}</button>`:''}<button class="ib sm" data-a="cpin" data-i="${k}" aria-pressed="${!!c.pin}" aria-label="Fixar">${ic('pin')}</button><button class="ib sm" data-a="cdel" data-i="${k}" aria-label="Remover">${ic('x')}</button></span><span class="tag t">${c.pin?'fixado':c.h}</span></div>`}).join(''):'<p class="sub">Nada encontrado. Copie algo em qualquer app para ele aparecer aqui.</p>')}
 let lastTick=Date.now(),tickAcc=0;
-function tick(paintOnly){const m=S.m,tr=m.list[m.i];let dt=0;
+function tickInner(paintOnly){const m=S.m,tr=m.list[m.i];let dt=0;
  if(!paintOnly){const now=Date.now();tickAcc+=now-lastTick;lastTick=now;dt=Math.floor(tickAcc/1000);tickAcc-=dt*1000}
  if(dt>0){
   if(m.play){m.pos+=dt;if(m.pos>=tr.d){if(m.rep)m.pos=0;else go(1)}}
-  const p=S.p;if(p.run){p.left-=dt;if(p.left<=0){if(p.mode==='focus'){p.done=Math.min(4,p.done+1);pdSave();bump();p.mode=p.done>=4?'long':'rest'}else{if(p.mode==='long'){p.done=0;pdSave()}p.mode='focus'}p.left=pdur(p.mode);if(S.tab==='pomo')view();say(pmsg(p.mode));alarm()}}}
+  const p=S.p;if(p.run){p.left-=dt;if(p.left<=0){if(p.mode==='focus'){p.done=Math.min(4,p.done+1);pdSave();pdHistAdd();bump();p.mode=p.done>=4?'long':'rest'}else{if(p.mode==='long'){p.done=0;pdSave()}p.mode='focus'}p.left=pdur(p.mode);if(S.tab==='pomo')view();say(pmsg(p.mode));alarm()}}}
  pTitle();rdSleepTick();pillPaint();alertTick();const mp=$('#mpos');if(mp&&!S.seeking){const sk=$('#mseek'),dd=m.list[m.i].d;if(!sk||document.activeElement!==sk){mp.textContent=fmt(m.pos);if(sk){sk.max=dd;sk.value=m.pos;sk.style.setProperty('--p',(m.pos/dd*100)+'%');sk.setAttribute('aria-valuetext',fmt(m.pos)+' de '+fmt(dd))}}}
 const pt=$('#ptime');if(pt)pt.textContent=fmt(S.p.left);cycPaint();
  $('#notch').classList.toggle('playing',m.play||!!(S.rd&&S.rd.on))}
@@ -372,12 +480,11 @@ function go(d){const m=S.m;m.i=m.shuf?Math.floor(Math.random()*m.list.length):(m
 function setOpen(o,q){if(S.open&&$('#tabs').children.length)return;S.open=true;$('#notch').dataset.open='true';renderTabs();view()}
 function pick(id){if(id!=='tasks')S.undo=null;S.tab=id;renderTabs();view();$('#t-'+id).focus();if(id==='cal'&&msOn()&&Date.now()-(S.msAt||0)>30000)msSync();if(id==='music'&&S.tok)spDevs()}
 $('#pill').onclick=()=>setOpen(!S.open);
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&S.open)setOpen(false)});
 $('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(b)pick(b.dataset.tab)});
 $('#tabs').addEventListener('keydown',e=>{const ids=TABS.map(t=>t[0]);let i=ids.indexOf(S.tab);
  if(e.key==='ArrowRight')i=(i+1)%ids.length;else if(e.key==='ArrowLeft')i=(i-1+ids.length)%ids.length;else if(e.key==='Home')i=0;else if(e.key==='End')i=ids.length-1;else return;e.preventDefault();pick(ids[i])});
 $('#view').addEventListener('click',e=>{
- const c=e.target.closest('.chk');if(c){const t=S.tasks[c.dataset.i];t.d=!t.d;t.mod=Date.now();t.dy=true;save();view();$('#view').querySelector(`[data-i="${c.dataset.i}"]`).focus();return}
+ const c=e.target.closest('.chk');if(c){const t=S.tasks[c.dataset.i];if(!t.d&&t.r){t.due=nextDue(t);say('Tarefa repetida para '+fDm(t.due))}else t.d=!t.d;t.mod=Date.now();t.dy=true;save();view();$('#view').querySelector(`[data-i="${c.dataset.i}"]`).focus();return}
  const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,m=S.m,i=+b.dataset.i,p=S.p;
  if(a==='sconn')return spLogin();if(a==='sdis')return spOut();
  if(a==='mconn')return mAuth();if(a==='mdis'){S.ms=null;S.msExp=0;S.ev=null;S.evg=null;S.td=null;alertHide();ls.del('ms_rt');view();$('#view').focus();return}
@@ -447,7 +554,7 @@ let spPlayer=null,spDeviceId=null,spBlocked=false,spSdk=false;
 window.onSpotifyWebPlaybackSDKReady=()=>spInitPlayer();
 function spInitPlayer(){
  if(spPlayer||spBlocked||!S.tok)return;
- if(!window.Spotify){if(!spSdk){spSdk=true;const sc=document.createElement('script');sc.src='https://sdk.scdn.co/spotify-player.js';sc.async=true;document.head.appendChild(sc)}return}
+ if(!window.Spotify){if(!spSdk){spSdk=true;const sc=document.createElement('script');sc.src='https://sdk.scdn.co/spotify-player.js';sc.async=true;sc.onerror=()=>say('Não foi possível carregar o player do Spotify neste navegador');document.head.appendChild(sc)}return}
  spPlayer=new Spotify.Player({name:'Painel de utilidades',getOAuthToken:cb=>cb(S.tok),volume:.8});
  spPlayer.addListener('ready',({device_id})=>{spDeviceId=device_id});
  spPlayer.addListener('not_ready',()=>{spDeviceId=null});
@@ -485,7 +592,7 @@ async function spLast(){if(Date.now()-(S.lastAt||0)<60000)return;S.lastAt=Date.n
 const MS_CLIENT_ID='bd2c1b18-f896-40ac-9b79-8513f9935546';
 const MS_TENANT='';
 const MS_AUTH='https://login.microsoftonline.com/'+(MS_TENANT||'common')+'/oauth2/v2.0';
-const MS_SCOPES='openid offline_access User.Read Calendars.Read';
+const MS_SCOPES='openid offline_access User.Read Calendars.ReadWrite';
 /* Tarefas e OneDrive pedem permissão só quando você ativa o recurso (consentimento incremental) */
 function msScopes(){let w={};try{w=JSON.parse(ls.get('ms_want')||'{}')}catch(_){}
  const drv=w.drv||ls.get('ms_drv')||'';
@@ -523,10 +630,10 @@ function setView(){const th=ls.get('theme')||'auto',on=k=>ls.get(k)==='1'?' chec
 function applyTheme(){const t=ls.get('theme'),r=document.documentElement;if(t==='light'||t==='dark')r.dataset.theme=t;else r.removeAttribute('data-theme')}
 applyTheme();
 function ac(){return S.ac||(S.ac=new (window.AudioContext||window.webkitAudioContext)())}
-function beep(){try{const c=ac(),o=c.createOscillator(),g=c.createGain();o.frequency.value=880;o.connect(g);g.connect(c.destination);g.gain.setValueAtTime(.15,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.7);o.start();o.stop(c.currentTime+.7)}catch(_){}}
+function beep(f){try{const c=ac(),o=c.createOscillator(),g=c.createGain();o.frequency.value=f||880;o.connect(g);g.connect(c.destination);g.gain.setValueAtTime(.15,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.7);o.start();o.stop(c.currentTime+.7)}catch(_){}}
 document.addEventListener('click',()=>{if(ls.get('opt_snd')==='1'){try{const c=ac();if(c.state==='suspended')c.resume()}catch(_){}}});
 function alarm(){const msg=pmsg(S.p.mode);
- if(ls.get('opt_snd')==='1')beep();
+ if(ls.get('opt_snd')==='1')beep(S.p.mode==='focus'?880:523);
  if(ls.get('opt_ntf')==='1'&&window.Notification&&Notification.permission==='granted'&&document.hidden){try{new Notification('Pomodoro',{body:msg})}catch(_){}}}
 $('#view').addEventListener('change',e=>{const t=e.target;
  if(t.id==='ptask'){S.p.task=t.value;return}
@@ -564,7 +671,7 @@ function mapEv(e,td,mp){const n=new Date(),p=x=>new Date(x.dateTime.split('.')[0
   else if(m>0&&m<360)tag='em '+(m>=60?Math.floor(m/60)+'h ':'')+(m%60?m%60+'min':'');
   else tag=s.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}
  if(mp&&s){pr=0;tag=mp.i===0?s.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+' →':mp.i===mp.n-1?'até '+f.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'dia todo'}else if(mp)tag='dia '+(mp.i+1)+' de '+mp.n;
- return [s?'#5b8cff':'#3ecf8e',esc(e.subject||'(sem título)'),lb,tag.trim(),pr,esc(u)]}
+ return [s?'#5b8cff':'#3ecf8e',esc(e.subject||'(sem título)'),lb,tag.trim(),pr,esc(u),s?s.getTime():0]}
 async function msSync(manual){if(!msOn())return;
  if(!S.ms||Date.now()>S.msExp){
   try{await msToken({grant_type:'refresh_token',refresh_token:ls.get('ms_rt')||''})}
@@ -598,12 +705,15 @@ function pform(p){return `<p class="sub" id="pleg" style="margin:10px 2px 0">Cad
 
 function taskView(){const T=S.tasks,n=T.length;
  return (S.undo?`<div class="row" style="justify-content:space-between"><span>Tarefa removida.</span><button class="chip" data-a="tundo">Desfazer</button></div>`:'')+`${todoBar()}<form class="add" id="addf"><input id="nt" aria-label="Nova tarefa" placeholder="Nova tarefa" autocomplete="off"><input type="date" id="ntd" aria-label="Vencimento (opcional)"><button>Adicionar</button></form><ul style="list-style:none;padding:0;margin:0">`+T.map((t,i)=>{const ed=S.edit===t.id,lab=t.t;
-  return `<li class="row tk${t.d?' done':''}" data-r="${i}"${ed?'':' draggable="true"'}><span class="grip" aria-hidden="true">${ic('grip')}</span><button class="chk" role="checkbox" aria-checked="${t.d}" aria-label="${lab}" data-i="${i}">${t.d?ic('check'):''}</button>`+
+  return `<li class="row tk${t.d?' done':''}" data-r="${i}" data-cr="${t.cr?dayKey(new Date(t.cr)):''}" data-due="${t.due||''}"${ed?'':' draggable="true"'}><span class="grip" aria-hidden="true">${ic('grip')}</span><button class="chk" role="checkbox" aria-checked="${t.d}" aria-label="${lab}" data-i="${i}">${t.d?ic('check'):''}</button>`+
   (ed?`<form class="ef" data-r="${i}"><input id="ted" aria-label="Editar tarefa" value="${lab}" autocomplete="off"><input type="date" id="ted-d" aria-label="Vencimento da tarefa" value="${t.due||''}"><button class="ib sm" aria-label="Salvar edição">${ic('check')}</button><button type="button" class="ib sm" data-a="tcan" data-i="${i}" aria-label="Cancelar edição">${ic('x')}</button></form>`
-  :`<span class="grow">${lab}</span><span class="tag">${dueTag(t)}${t.c?t.c+(t.c>1?' ciclos':' ciclo'):taskWhen(t)}</span><span class="acts2"><button class="ib sm" data-a="ted" data-i="${i}" aria-label="Editar: ${lab}">${ic('edit')}</button><span class="mvs"><button class="ib sm" data-a="tup" data-i="${i}" aria-disabled="${i===0}" aria-label="Mover para cima: ${lab}">${ic('tup')}</button><button class="ib sm" data-a="tdn" data-i="${i}" aria-disabled="${i===n-1}" aria-label="Mover para baixo: ${lab}">${ic('tdn')}</button></span><button class="ib sm" data-a="tdel" data-i="${i}" aria-label="Remover: ${lab}">${ic('x')}</button></span>`)+'</li>'}).join('')+'</ul>'+(T.some(x=>x.due)?'<button class="chip" data-a="tsort" style="margin-top:8px">Ordenar por vencimento</button>':'')+
+  :`<span class="grow">${lab}</span><span class="tag">${dueTag(t)}${t.c?t.c+(t.c>1?' ciclos':' ciclo'):taskWhen(t)}</span><span class="acts2"><button class="ib sm" data-a="ted" data-i="${i}" aria-label="Editar: ${lab}">${ic('edit')}</button><span class="mvs"><button class="ib sm" data-a="trep" data-i="${i}" aria-label="Repetir: ${S.tasks[i].r==='d'?'todo dia':S.tasks[i].r==='w'?'toda semana':'não repete'}. Alterar">${ic('repeat')}</button><button class="ib sm" data-a="tup" data-i="${i}" aria-disabled="${i===0}" aria-label="Mover para cima: ${lab}">${ic('tup')}</button><button class="ib sm" data-a="tdn" data-i="${i}" aria-disabled="${i===n-1}" aria-label="Mover para baixo: ${lab}">${ic('tdn')}</button></span><button class="ib sm" data-a="tdel" data-i="${i}" aria-label="Remover: ${lab}">${ic('x')}</button></span>`)+'</li>'}).join('')+'</ul>'+(T.some(x=>x.due)?'<button class="chip" data-a="tsort" style="margin-top:8px">Ordenar por vencimento</button>':'')+
   (n?'<p class="sub" style="margin:8px 2px 0">Arraste pelo ícone à esquerda ou use os botões de subir e descer.</p>':'<p class="sub">Nenhuma tarefa. Adicione a primeira acima.</p>')}
 function endEdit(i){S.edit=null;view();const b=$('#view [data-a="ted"][data-i="'+i+'"]');if(b)b.focus()}
+function nextDue(t){const b=t.due?new Date(t.due+'T12:00:00'):new Date();b.setDate(b.getDate()+(t.r==='d'?1:7));return dayKey(b)}
+function fDm(k){return k.slice(8)+'/'+k.slice(5,7)}
 function taskAct(a,i){const T=S.tasks;
+ if(a==='trep'){const t=T[i],nx={'':'d',d:'w',w:''}[t.r||''];if(nx)t.r=nx;else delete t.r;t.mod=Date.now();t.dy=true;save();view();const b=$('#view [data-a="trep"][data-i="'+i+'"]');if(b)b.focus();say(t.r==='d'?'Repete todo dia':t.r==='w'?'Repete toda semana':'Não repete');return true}
  if(a==='tsort'){const key=t=>t.d?2:t.due?0:1;const ord=T.map((t,k)=>({t,k})).sort((x,y)=>key(x.t)-key(y.t)||(key(x.t)===0?(x.t.due<y.t.due?-1:x.t.due>y.t.due?1:0):0)||x.k-y.k).map(o=>o.t);
   S.tasks=ord;save();view();const b=$('#view [data-a="tsort"]');if(b)b.focus();say('Tarefas ordenadas por vencimento');return true}
  if(a==='ted'){S.edit=T[i].id;view();const n=$('#ted');n.focus();n.select();return true}
@@ -749,13 +859,13 @@ RA.addEventListener('error',()=>{if(S.rd.i>=0)rdFail()});
 function rdCollect(){S.rd.draft=S.rd.draft.map((s,k)=>{const n=$('#rn'+k),u=$('#ru'+k);return n&&u?{n:n.value,u:u.value,g:s.g||''}:s})}
 function radioView(){const R=S.rd;
  if(R.edit)return `<h2>Emissoras</h2><form id="rform">${R.draft.map((s,k)=>`<div class="rrow"><input id="rn${k}" aria-label="Nome da emissora ${k+1}" placeholder="Nome" maxlength="40" value="${esc(s.n)}" autocomplete="off"><input id="ru${k}" type="url" inputmode="url" aria-label="Link do stream da emissora ${k+1}" placeholder="https://..." value="${esc(s.u)}" autocomplete="off"><button type="button" class="ib sm" data-a="rrm" data-i="${k}" aria-label="Remover emissora ${k+1}${s.n?': '+esc(s.n):''}">${ic('x')}</button></div>`).join('')}<div class="redact"><button type="button" class="chip" data-a="radd">Adicionar emissora</button><button type="button" class="chip" data-a="rsug">Adicionar sugeridas</button><button type="button" class="chip" data-a="rimp">Importar playlist (.m3u ou .pls)</button><input type="file" id="rimpf" accept=".m3u,.m3u8,.pls,text/plain,audio/x-mpegurl,audio/x-scpls" class="sr" tabindex="-1" aria-hidden="true"></div><p class="sub" id="rimsg" role="status" style="margin:0"></p><p class="err" id="rerr" role="alert"></p><div style="display:flex;justify-content:flex-end;gap:8px"><button type="button" class="chip" data-a="rcan">Cancelar</button><button class="chip">Salvar</button></div></form>`;
- const L=R.list,pl=L.map((x,i)=>x.u?i:-1).filter(i=>i>=0),k=R.cur,s=L[k]||{n:'',u:''},on=rdPlaying()&&R.i===k,pos=pl.indexOf(k)+1,nf=S.rd.list.filter(x=>x.u&&isFav(x.u)).length;
+ const L=R.list,pl=L.map((x,i)=>x.u?i:-1).filter(i=>i>=0),k=R.cur,s=L[k]||{n:'',u:''},on=rdPlaying()&&R.i===k,pos=pl.indexOf(k)+1;
  const stt=!L.length?'Nenhuma emissora cadastrada':!s.u?'Sem link. Edite para adicionar':R.i===k&&R.st?RT[R.st]:'Parada';
  return `<h2>Rádio</h2><div class="now"><span class="art" aria-hidden="true" style="background:linear-gradient(135deg,#ff9a2e,#ff5a8a)"></span><div><b>${esc(L.length?rdName(k):'Sem emissoras')}</b><span>${stt}</span></div></div>
- <p class="sub" style="margin:0 0 10px">${s.g?esc(s.g)+' · ':''}${pos?'Emissora '+pos+' de '+pl.length:(S.rd.onlyFav?pl.length+(pl.length===1?' favorita':' favoritas'):pl.length+(pl.length===1?' emissora com link':' emissoras com link'))}</p>\n <div class="redact" style="justify-content:center;margin:0 0 10px"><button type="button" class="chip" data-a="rfonly" aria-pressed="${!!S.rd.onlyFav}">${ic('heart')}Só favoritas (${nf})</button></div>
+ <p class="sub" style="margin:0 0 10px">${s.g?esc(s.g)+' · ':''}${pos?'Emissora '+pos+' de '+pl.length:(S.rd.onlyFav?pl.length+(pl.length===1?' favorita':' favoritas'):pl.length+(pl.length===1?' emissora com link':' emissoras com link'))}</p>\n 
  <div class="ctrl"><button class="ib" data-a="rprev" aria-label="Emissora anterior">${ic('prev')}</button><button class="ib big" data-a="rplay" aria-pressed="${on}" aria-label="Ouvir rádio">${ic(on?'pause':'play')}</button><button class="ib" data-a="rnext" aria-label="Próxima emissora">${ic('next')}</button></div>
  <div class="ctrl" style="margin:0 0 10px"><button type="button" class="ib sm like" data-a="rfav" aria-pressed="${isFav(s.u)}" aria-label="Favoritar emissora">${ic(isFav(s.u)?'heartf':'heart')}</button><button type="button" class="ib" data-a="rrand" aria-label="Aleatória">${ic('shuf')}</button></div>
- <div class="rvol"><label for="rvol" class="sub">Volume</label><input id="rvol" type="range" min="0" max="1" step="0.05" value="${R.vol}"><button class="chip" data-a="redit">Editar emissoras</button></div>${sleepRow()}${rsBox()}`}
+ <div class="rvol"><label for="rvol" class="sub">Volume</label><input id="rvol" type="range" min="0" max="1" step="0.05" value="${R.vol}"><button class="chip" data-a="redit">Editar emissoras</button></div>${sleepRow()}<div class="rsrow">${rsBox()}${favBox()}</div>${savedBox()}`}
 function radioAct(a,i){const R=S.rd;
  if(a==='redit'){R.draft=R.list.map(x=>({n:x.n,u:x.u,g:x.g||''}));if(!R.draft.length)R.draft.push({n:'',u:'',g:''});R.edit=true;view();const n=$('#rn0');if(n)n.focus();return true}
  if(a==='rcan'){R.edit=false;view();const b=$('#view [data-a="redit"]');if(b)b.focus();return true}
@@ -767,6 +877,7 @@ function radioAct(a,i){const R=S.rd;
  if(a==='rimp'){$('#rimpf').click();return true}
  if(a==='rnext'){rdStep(1);return true}
  if(a==='rprev'){rdStep(-1);return true}
+ if(a==='rpick'){const k=+i;S.rd.cur=k;ls.set('rd_cur',k);view();const n=$('#view [data-a="rpick"][data-i="'+k+'"]');if(n)n.focus();say('Selecionada: '+rdName(k));return true}
  if(a==='rfonly'){R.onlyFav=!R.onlyFav;if(R.onlyFav&&!rdPool().includes(R.cur)){const p=rdPool();if(p.length)R.cur=p[0];else{R.onlyFav=true}}view();const b=$('#view [data-a="rfonly"]');if(b)b.focus();say(R.onlyFav?'Mostrando só favoritas':'Mostrando todas as emissoras');return true}
  if(a==='rfav'){toggleFav(R.cur);view();const b=$('#view [data-a="rfav"]');if(b)b.focus();return true}
  if(a==='rrand'){rdRand();return true}
@@ -777,7 +888,11 @@ $('#view').addEventListener('input',e=>{if(e.target.id==='rvol'){S.rd.vol=+e.tar
 function subExtra(e){const f=e.target;
  if(f.id==='qform'){spSearch();return true}
  if(f.id==='rsform'){rsRun();return true}
-   if(f.id==='tvform'){tvAdd();return true}
+   if(f.id==='tpform'){const q=$('#tpcity').value.trim();if(q)wxSet(q);else $('#tpcity').focus();return true}
+ if(f.id==='evform'){evCreate();return true}
+ if(f.id==='cmpform'){const q=$('#cmpcity').value.trim();if(q)cmpSet(q);return true}
+ if(f.id==='tpafrm'){const v=$('#tpalert').value.trim().replace(',','.');if(v===''){ls.del('wx_alert');say('Alerta de temperatura desligado')}else if(/^-?\d{1,2}(\.\d)?$/.test(v)){ls.set('wx_alert',v);say('Alerta: avisar abaixo de '+v+'°')}else{say('Informe uma temperatura, como 5 ou 2,5')}view();return true}
+ if(f.id==='tvform'){tvAdd();return true}
  if(f.id==='pform'){const a=parseT($('#pfoc').value),b=parseT($('#pbrk').value),c=parseT($('#plng').value);
   if(a==null||b==null||c==null){const bad=a==null?$('#pfoc'):b==null?$('#pbrk'):$('#plng');$('#perr').textContent='Tempo inválido em '+(a==null?'Foco':b==null?'Pausa':'Pausa longa')+'. Use minutos ou min:seg, de 0:05 a 180:00. Exemplos: 25, 2:40, 3:10.';bad.setAttribute('aria-invalid','true');bad.focus();return true}
   S.p.f=a;S.p.r=b;S.p.l=c;ls.set('pomo_f',a);ls.set('pomo_r',b);ls.set('pomo_l',c);const run=S.p.run;if(!run)S.p.left=pdur(S.p.mode);view();
@@ -799,7 +914,7 @@ function subExtra(e){const f=e.target;
 function spVol(){if(!S.tok)return '';const m=S.m,v=m.vol==null?50:m.vol,off=m.volOK===false;
  return `<div class="rvol"><label for="svol" class="sub">Volume</label><input id="svol" type="range" min="0" max="100" step="5" value="${v}" aria-valuetext="${v}%"${off?' disabled aria-describedby="svolnote"':''}>${off?'<span class="sub" id="svolnote">Este aparelho não permite ajustar o volume por aqui.</span>':''}</div>`}
 function spPaint(){if(S.tab!=='music'||!S.open)return;const a=document.activeElement,f=a&&a.dataset&&a.dataset.a,id=a&&a.id;view();const n=f?$('#view [data-a="'+f+'"]'):id?$('#'+id):null;if(n)n.focus()}
-function spFail(def){say(S.err===403?'O Spotify recusou. Controlar a reprodução exige Premium; para favoritos, desconecte e conecte de novo e aceite o acesso à biblioteca':S.err===404?'Nenhum dispositivo ativo. Abra o Spotify e toque uma faixa':def)}
+function spFail(def){say(S.err===401?'A sessão do Spotify expirou. Toque em Conectar de novo na aba Música':S.err===403?'O Spotify recusou. Controlar a reprodução exige Premium; para favoritos, desconecte e conecte de novo e aceite o acesso à biblioteca':S.err===404?'Nenhum dispositivo ativo. Abra o Spotify e toque uma faixa':def)}
 async function spLikeCheck(uri){const r=await spApi('/me/library/contains?uris='+encodeURIComponent(uri));if(S.m.uri!==uri)return;if(Array.isArray(r)){S.m.liked=!!r[0];spPaint()}}
 async function spLike(){const m=S.m;if(!m.uri)return;const on=!m.liked;
  await spApi('/me/library?uris='+encodeURIComponent(m.uri),{method:on?'PUT':'DELETE'});
@@ -884,8 +999,13 @@ function spDev(){if(!S.tok)return '';if(!S.devs)setTimeout(spDevs,0);
  return `<div class="np-bottom"><button class="ib sm dev" data-a="devtoggle" aria-expanded="${!!S.devOpen}" aria-controls="sdevl" aria-label="Reproduzir em: ${esc(act?act.name:'nenhum aparelho')}">${ic('dev')}${act?'<span class="dot-on" aria-hidden="true"></span>':''}</button>${spVol()}</div>
  <div id="sdevl" class="devl" ${S.devOpen?'':'hidden'}>${devList()}</div>
  <details class="dt"><summary>Buscar e adicionar à fila</summary><form id="qform" class="add" style="margin-top:8px"><input id="qq" aria-label="Buscar faixa" placeholder="Nome da faixa ou artista" autocomplete="off"><button>Buscar</button></form><div id="qres" aria-live="polite"></div></details>`}
+function spExtra(){const q=(S.queue||[]).slice(0,5),act=(S.devs||[]).find(x=>x.is_active),vol=act&&typeof act.volume_percent==='number'?act.volume_percent:50;
+ const fila=q.length?'<ol>'+q.map(x=>'<li>'+esc(x.name)+' <span class="sub">· '+esc((x.artists||[]).map(a=>a.name).join(', '))+'</span></li>').join('')+'</ol>':'<p class="sub">Fila vazia ou indisponível. A fila aparece quando há reprodução ativa.</p>';
+ return '<div class="spx"><h3>Volume</h3><input type="range" id="spvol" min="0" max="100" value="'+vol+'" aria-label="Volume do aparelho"'+(IS_IOS?' disabled':'')+'>'+(IS_IOS?'<p class="sub">No iPhone e iPad o volume é controlado pelos botões do aparelho.</p>':'')+'</div><div class="spx"><h3>A seguir</h3>'+fila+'</div>'}
+async function spLoadQueue(){if(!S.tok||Date.now()-(S.qAt||0)<15000)return;S.qAt=Date.now();const r=await spApi('/me/player/queue');if(r&&Array.isArray(r.queue)){S.queue=r.queue;if(S.tab==='music')view()}}
 function devList(){const d=S.devs||[];if(!d.length)return '<p class="sub">Nenhum aparelho encontrado. Abra o Spotify em algum aparelho.</p>';
- return '<p class="sub" id="sdevh">Reproduzir em</p><ul class="devs" aria-labelledby="sdevh">'+d.map(x=>`<li><button class="devbtn" data-a="devpick" data-id="${esc(x.id)}" aria-pressed="${!!x.is_active}">${esc(x.name)}${x.is_active?' · tocando':''}</button></li>`).join('')+'</ul>'}
+ const sem=!d.some(x=>x.is_active);
+ return (sem?'<p class="sub" role="status">Nenhum aparelho está tocando. Escolha um abaixo ou inicie a música no app do Spotify.</p>':'')+'<p class="sub" id="sdevh">Reproduzir em</p><ul class="devs" aria-labelledby="sdevh">'+d.map(x=>`<li><button class="devbtn" data-a="devpick" data-id="${esc(x.id)}" aria-pressed="${!!x.is_active}">${esc(x.name)}${x.is_active?' · tocando':''}</button></li>`).join('')+'</ul>'}
 /* Playlists: busca no Spotify pelo artista atual (não são recomendações personalizadas) */
 function plsSection(){const a=(S.m.list[0]||{}).a||'',q=a.split(',')[0].trim();
  return `<details class="dt" id="pls"><summary>Playlists sugeridas</summary><p class="sub">Busca no Spotify por "${esc(q||'artista atual')}". Não são recomendações personalizadas do Spotify.</p><div id="plsres" aria-live="polite"></div></details>`}
@@ -914,18 +1034,19 @@ $('#view').addEventListener('change',e=>{const t=e.target;
  if(t.id==='impf'){bkImport(t.files[0]);t.value=''}});
 
 /* Backup: exportar e importar (sem tokens de login) */
-const BK_KEYS=['tasks','radios','radios_v4','rd_cur','rd_vol','rd_favs','theme','opt_snd','opt_ntf','pomo_f','pomo_r','pomo_l'];
+const BK_KEYS=['tv_list','tasks','radios','radios_v4','rd_cur','rd_vol','rd_favs','theme','opt_snd','opt_ntf','pomo_f','pomo_r','pomo_l'];
 function bkExport(){const data={};BK_KEYS.forEach(k=>{const v=ls.get(k);if(v!==null)data[k]=v});
  const nome='painel-notch-backup-'+new Date().toISOString().slice(0,10)+'.json',a=document.createElement('a');
  a.href=URL.createObjectURL(new Blob([JSON.stringify({app:'notch-panel',v:1,em:new Date().toISOString(),data},null,1)],{type:'application/json'}));a.download=nome;document.body.appendChild(a);a.click();
  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);say('Backup gerado: '+nome)}
 function bkClean(raw,keepMid){const d={},num=(v,a,b)=>Math.min(b,Math.max(a,Math.round(+v)||0));
  const J=k=>{try{return JSON.parse(raw[k])}catch(_){return null}};
- const T=J('tasks');if(Array.isArray(T))d.tasks=JSON.stringify(T.slice(0,500).map((x,i)=>({id:String((x&&x.id)??('i'+i)).replace(/[^\w-]/g,'').slice(0,20)||('i'+i),t:esc(unesc(String((x&&x.t)||'')).slice(0,300)),w:esc(String((x&&x.w)||'').slice(0,20)),c:num(x&&x.c,0,9999),cr:Number(x&&x.cr)>0?Number(x.cr):undefined,d:!!(x&&x.d),due:/^\d{4}-\d\d-\d\d$/.test(String((x&&x.due)||''))?String(x.due):undefined,mid:keepMid&&/^[\w=-]{8,200}$/.test(String((x&&x.mid)||''))?String(x.mid):undefined,tl:keepMid&&/^[\w=-]{8,200}$/.test(String((x&&x.tl)||''))?String(x.tl):undefined})).filter(x=>x.t));
+ const T=J('tasks');if(Array.isArray(T))d.tasks=JSON.stringify(T.slice(0,500).map((x,i)=>({id:String((x&&x.id)??('i'+i)).replace(/[^\w-]/g,'').slice(0,20)||('i'+i),t:esc(unesc(String((x&&x.t)||'')).slice(0,300)),w:esc(String((x&&x.w)||'').slice(0,20)),c:num(x&&x.c,0,9999),cr:Number(x&&x.cr)>0?Number(x.cr):undefined,d:!!(x&&x.d),due:/^\d{4}-\d\d-\d\d$/.test(String((x&&x.due)||''))?String(x.due):undefined,r:(x&&(x.r==='d'||x.r==='w'))?x.r:undefined,mid:keepMid&&/^[\w=-]{8,200}$/.test(String((x&&x.mid)||''))?String(x.mid):undefined,tl:keepMid&&/^[\w=-]{8,200}$/.test(String((x&&x.tl)||''))?String(x.tl):undefined})).filter(x=>x.t));
  const Rd=J('radios');if(Array.isArray(Rd)){d.radios=JSON.stringify(Rd.slice(0,200).map(x=>({n:String((x&&x.n)||'').slice(0,40),u:/^https?:\/\/\S+$/i.test(String((x&&x.u)||''))?String(x.u):'',g:String((x&&x.g)||'').slice(0,30)})));d.radios_v4='1'}
  if(raw.rd_cur!==undefined)d.rd_cur=String(num(raw.rd_cur,0,199));
  const Fv=J('rd_favs');if(Array.isArray(Fv))d.rd_favs=JSON.stringify(Fv.filter(x=>typeof x==='string'&&/^https?:\/\/\S+$/i.test(x)).slice(0,200));
-  if(raw.rd_vol!==undefined)d.rd_vol=String(Math.min(1,Math.max(0,+raw.rd_vol||0)));
+  const Tv=J('tv_list');if(Array.isArray(Tv))d.tv_list=JSON.stringify(Tv.slice(0,100).map(x=>({n:String((x&&x.n)||'').slice(0,40),u:String((x&&x.u)||'').slice(0,300)})).filter(x=>x.n&&(!x.u||/^https:\/\/\S+$/i.test(x.u))));
+ if(raw.rd_vol!==undefined)d.rd_vol=String(Math.min(1,Math.max(0,+raw.rd_vol||0)));
  if(['auto','light','dark'].includes(raw.theme))d.theme=raw.theme;
  ['opt_snd','opt_ntf'].forEach(k=>{if(raw[k]==='0'||raw[k]==='1')d[k]=raw[k]});
  ['pomo_f','pomo_r','pomo_l'].forEach(k=>{if(raw[k]!==undefined)d[k]=String(num(raw[k],5,10800))});
@@ -1157,6 +1278,12 @@ $('#view').addEventListener('change',e=>{const t=e.target;
 const RS_PRE=[{l:'Lo-fi rock',q:'lofi rock'},{l:'Lo-fi eletrônica',q:'lofi electronic'},{l:'Lo-fi foco',q:'lofi focus'},{l:'Mais ouvidas do Brasil',q:'',br:true,order:'clickcount'},{l:'Mais votadas do Brasil',q:'',br:true,order:'votes'}];
 const RB=['https://de1.api.radio-browser.info','https://fi1.api.radio-browser.info','https://at1.api.radio-browser.info'];
 async function rbFetch(par){let ult;for(const b of RB){try{const r=await fetch(b+'/json/stations/search?'+new URLSearchParams(par));if(r.ok)return await r.json()}catch(e){ult=e}}throw ult||new Error('rb')}
+function favBox(){const R=S.rd,L=R.list,fav=L.map((x,i)=>({x,i})).filter(o=>o.x.u&&isFav(o.x.u)),open=R.favOpen?' open':'';
+ const items=fav.map(o=>{const cur=o.i===R.cur;return '<li class="svd'+(cur?' cur':'')+'"><button type="button" class="svdbtn" data-a="rpick" data-i="'+o.i+'" aria-current="'+cur+'"><span class="grow">'+esc(o.x.n||('Emissora '+(o.i+1)))+'</span><span class="fav" aria-hidden="true">★</span></button></li>'}).join('');
+ return '<details class="dt rsv rsfacc" id="rsfdet"'+open+'><summary>Só favoritas ('+fav.length+')</summary>'+(fav.length?'<ul class="svlist">'+items+'</ul>':'<p class="sub">Nenhuma favorita ainda. Toque no coração de uma emissora para favoritar.</p>')+'</details>'}
+function savedBox(){const R=S.rd,L=R.list,open=R.savedOpen?' open':'';
+ const items=L.map((x,i)=>{const cur=i===R.cur;return '<li class="svd'+(cur?' cur':'')+'"><button type="button" class="svdbtn" data-a="rpick" data-i="'+i+'" aria-current="'+cur+'"><span class="grow">'+esc(x.n||('Emissora '+(i+1)))+(x.u?'':' <span class="sub">(sem link)</span>')+(x.u&&isFav(x.u)?' <span class="fav" aria-label="favorita">★</span>':'')+'</span></button></li>'}).join('');
+ return '<details class="dt rsv" id="rsvdet"'+open+'><summary>Rádios salvas ('+L.length+')</summary>'+(L.length?'<ul class="svlist">'+items+'</ul>':'<p class="sub">Nenhuma rádio salva ainda. Use Buscar mais rádios para adicionar.</p>')+'</details>'}
 function rsBox(){const R=S.rd;
  return `<details class="dt" id="rsdet"${R.rsOpen?' open':''}><summary>Buscar mais rádios</summary>
  <p class="sub" style="margin:6px 0">Pesquisa no diretório público Radio Browser (precisa de internet).</p>
@@ -1175,7 +1302,8 @@ async function rsRun(preset){const R=S.rd,out=$('#rsres'),q=($('#rsq').value||''
    return `<div class="row"><span class="grow">${esc(n)}<br><span class="sub">${esc(meta)}</span></span><button type="button" class="chip" data-a="rsadd" data-u="${esc(u)}" data-n="${esc(n)}" aria-label="Adicionar à lista: ${esc(n)}">Adicionar</button><button type="button" class="chip" data-a="rsplay" data-u="${esc(u)}" data-n="${esc(n)}" aria-label="Adicionar e ouvir: ${esc(n)}">Ouvir</button></div>`}).join(''):'Nada encontrado para essa busca.';
   out.innerHTML=R.rsHtml;say(itens.length+(itens.length===1?' rádio encontrada':' rádios encontradas'))}
  catch(_){R.rsHtml='';out.textContent='Não foi possível buscar agora. Confira a conexão com a internet.'}}
-$('#view').addEventListener('toggle',e=>{if(e.target.id==='rsdet')S.rd.rsOpen=e.target.open},true);
+$('#view').addEventListener('toggle',e=>{if(e.target.id==='rsdet')S.rd.rsOpen=e.target.open;if(e.target.id==='rsvdet')S.rd.savedOpen=e.target.open;
+ if(e.target.id==='rsfdet'){const R=S.rd;R.favOpen=e.target.open;R.onlyFav=e.target.open;if(R.onlyFav){const p=rdPool();if(p.length&&!p.includes(R.cur)){R.cur=p[0];ls.set('rd_cur',R.cur)}}view()}},true);
 $('#view').addEventListener('input',e=>{if(e.target.id==='rsq')S.rd.rsQ=e.target.value});
 
 /* ===== Relógio (horário de São Paulo), data e previsão do tempo ===== */
@@ -1209,10 +1337,10 @@ function tempoView(){const w=WX.data;
   return '<div><span>'+lbl+'<span class="sr">, '+x.t+'</span></span>'+wIcon(x.i)+'<span class="mn">'+Math.round(mn)+'°</span><span class="tp-bar"><i style="left:'+((mn-gmin)/span*100).toFixed(1)+'%;width:'+Math.max(4,(mx-mn)/span*100).toFixed(1)+'%"></i></span><span class="mx">'+Math.round(mx)+'°'+(pp>=20?'<span class="pp">'+pp+'%</span>':'')+'</span></div>'}).join('');
  const card=(k,v,sub)=>'<div class="tp-card"><div class="tp-k">'+k+'</div><div class="tp-v">'+v+'</div>'+(sub?'<div class="tp-s">'+sub+'</div>':'')+'</div>';
  const uv=d.uv_index_max?d.uv_index_max[0]:null,pp0=d.precipitation_probability_max?d.precipitation_probability_max[0]:null;
- return '<div class="tp" aria-label="Tempo em '+esc(WX.loc.n)+'">'+
+ return '<div class="tp" aria-label="Tempo em '+esc(WX.loc.n)+'"><form id="tpform" class="add" style="margin:0"><label class="sr" for="tpcity">Trocar cidade</label><input id="tpcity" placeholder="Trocar cidade (ex.: Curitiba)" maxlength="60" autocomplete="off"><button>Buscar</button></form><p class="sub" id="wmsg" role="status" style="margin:0"></p>'+tpAlertHtml()+
   '<div class="tp-head"><div class="tp-city">'+esc(WX.loc.n.split(',')[0])+'</div><div class="tp-temp" aria-label="'+Math.round(c.temperature_2m)+' graus">'+Math.round(c.temperature_2m)+'°</div><div class="tp-cond">'+cur.t+'</div><div class="tp-hl">Máx '+Math.round(d.temperature_2m_max[0])+'° Mín '+Math.round(d.temperature_2m_min[0])+'°</div></div>'+
   (hours?'<section class="tp-card" aria-label="Previsão por hora"><h3>Previsão por hora</h3><div class="tp-hours">'+hours+'</div></section>':'')+
-  '<section class="tp-card" aria-label="Previsão de 10 dias"><h3>Previsão de 10 dias</h3><div class="tp-days">'+days+'</div></section>'+
+  cmpHtml()+'<section class="tp-card" aria-label="Previsão de 10 dias"><h3>Previsão de 10 dias</h3><div class="tp-days">'+days+'</div></section>'+
   '<div class="tp-grid">'+
    card('Sensação térmica',Math.round(c.apparent_temperature)+'°',Math.round(c.apparent_temperature)>Math.round(c.temperature_2m)?'Mais quente que a temperatura':'Mais fria que a temperatura')+
    card('Umidade',Math.round(c.relative_humidity_2m)+'%','')+
@@ -1221,10 +1349,84 @@ function tempoView(){const w=WX.data;
    (pp0!=null?card('Chance de chuva',pp0+'%','Hoje'):'')+
    card('Nascer do sol',tpHM(d.sunrise&&d.sunrise[0]),'Pôr do sol '+tpHM(d.sunset&&d.sunset[0]))+
   '</div><p class="tp-src">Dados: Open-Meteo</p></div>'}
+const IS_IOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function cmpHtml(){const c=ls.get('wx_cmp');let o=null;try{o=JSON.parse(c||'null')}catch(_){}
+ const form='<form id="cmpform" class="add" style="margin:0 0 10px"><label class="sr" for="cmpcity">Comparar com outra cidade</label><input id="cmpcity" placeholder="Comparar com outra cidade" maxlength="60" autocomplete="off"><button>Comparar</button></form>';
+ if(!o||!o.n)return form;
+ const d=WX.cmp&&WX.cmp.data;
+ const card=(nome,cur,max,min,cond)=>'<div class="tp-card" style="text-align:center"><div class="tp-k">'+esc(nome)+'</div><div class="tp-v" style="font-size:38px">'+cur+'°</div><div class="tp-s">'+cond+'</div><div class="tp-s">Máx '+max+'° · Mín '+min+'°</div></div>';
+ let body='<p class="sub">Carregando '+esc(o.n)+'…</p>';
+ if(d){const diff=Math.round(d.current.temperature_2m-WX.data.current.temperature_2m);
+  body=card(WX.loc.n.split(',')[0],Math.round(WX.data.current.temperature_2m),Math.round(WX.data.daily.temperature_2m_max[0]),Math.round(WX.data.daily.temperature_2m_min[0]),wmo(WX.data.current.weather_code).t)+
+   card(o.n.split(',')[0],Math.round(d.current.temperature_2m),Math.round(d.daily.temperature_2m_max[0]),Math.round(d.daily.temperature_2m_min[0]),wmo(d.current.weather_code).t)+'</div><p class="sub" style="margin:8px 0 0;text-align:center">'+(diff===0?'Mesma temperatura agora':(Math.abs(diff)+'° '+(diff>0?'mais quente':'mais fria')+' em '+esc(o.n.split(',')[0])))+'</p>';
+  body='<div class="tp-cmp">'+body}
+ else body='<div class="tp-cmp">'+body;
+ return form+body+'<button type="button" class="chip" data-a="cmpdel" style="margin:8px 0 0">Remover comparação</button>'}
+async function cmpSet(q){const g=await wxFind(q);if(!g){say('Cidade não encontrada');return}
+ ls.set('wx_cmp',JSON.stringify({n:[g.name,g.admin1].filter(Boolean).join(', ').slice(0,60),lat:g.latitude,lon:g.longitude}));WX.cmp=null;await cmpLoad()}
+async function cmpLoad(){const c=ls.get('wx_cmp');let o=null;try{o=JSON.parse(c||'null')}catch(_){}if(!o||WX.cmpBusy)return;WX.cmpBusy=true;
+ try{const r=await fetch('https://api.open-meteo.com/v1/forecast?'+new URLSearchParams({latitude:o.lat,longitude:o.lon,current:'temperature_2m,weather_code',daily:'temperature_2m_max,temperature_2m_min,weather_code',timezone:'auto',forecast_days:'1'}));
+  if(r.ok){const j=await r.json();if(j.current&&j.daily)WX.cmp={n:o.n,data:j}}}catch(_){}
+ WX.cmpBusy=false;if(S.tab==='tempo')view()}
+function tpAlertHtml(){const t=ls.get('wx_alert');return '<form id="tpafrm" class="tpalert" style="margin-top:12px"><label for="tpalert" style="font-size:14px;display:block;margin-bottom:6px">Avisar quando a temperatura ficar abaixo de (°C)'+(t?' · atual: '+t+'°':'')+'</label><div class="add" style="margin:0"><input id="tpalert" inputmode="decimal" placeholder="Ex.: 5" maxlength="5" autocomplete="off" value=""><button>Salvar</button></div></form>'}
+function minAlert(){const t=parseFloat(ls.get('wx_alert'));if(!(t>-99)||!WX.data||!WX.data.hourly||!WX.data.hourly.time)return null;const h=WX.data.hourly,i=Math.max(0,h.time.indexOf(String(WX.data.current.time).slice(0,13)+':00'));const mn=Math.min(...h.temperature_2m.slice(i,i+24));return mn<t?{mn:Math.round(mn),t}:null}
+function evForm(){if(!msOn())return '';const hoje=dayKey(new Date());return '<form id="evform" class="tpalert" aria-label="Criar evento" style="margin-top:12px"><h3 class="tkh" style="margin:0 0 8px">Novo evento</h3><label class="sr" for="evt">Título do evento</label><input id="evt" placeholder="Título do evento" maxlength="100" autocomplete="off" style="width:100%;margin-bottom:8px"><div class="add" style="margin:0"><label class="sr" for="evd">Data</label><input type="date" id="evd" value="'+hoje+'"><label class="sr" for="evs">Início</label><input type="time" id="evs" value="09:00"><label class="sr" for="eve">Fim</label><input type="time" id="eve" value="10:00"><button>Criar</button></div><p class="err" id="everr" role="alert"></p></form>'}
+async function evCreate(){const t=$('#evt').value.trim(),d=$('#evd').value,s0=$('#evs').value,e0=$('#eve').value,err=$('#everr');
+ if(!t){err.textContent='Informe o título do evento.';$('#evt').focus();return}
+ if(!d||!s0||!e0){err.textContent='Informe data, início e fim.';return}
+ if(e0<=s0){err.textContent='O fim precisa ser depois do início.';$('#eve').focus();return}
+ const tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC';
+ if(!(await msEnsure())){err.textContent='Conecte a Microsoft em Ajustes para criar eventos.';return}
+ const r=await gj('/me/events',{method:'POST',body:JSON.stringify({subject:t,start:{dateTime:d+'T'+s0+':00',timeZone:tz},end:{dateTime:d+'T'+e0+':00',timeZone:tz}})});
+ if(r.ok){say('Evento criado: '+t);S.evg=null;S.evk='';calGo()}
+ else if(r.status===403){err.textContent='Sem permissão para criar eventos. Desconecte e conecte a Microsoft de novo em Ajustes e aceite o acesso ao calendário.'}
+ else{err.textContent='Não foi possível criar o evento agora. Tente de novo.'}}
+function notes(){const v=$('#view');if(!v)return;v.querySelectorAll('.note').forEach(n=>n.remove());
+ if(S.tab==='cal')v.insertAdjacentHTML('beforeend',evForm());
+ if(S.tab==='tempo'||S.tab==='cal'){const a=minAlert();if(a)v.insertAdjacentHTML('afterbegin','<div class="note" role="status">Previsão de '+a.mn+'° nas próximas 24 horas, abaixo do seu alerta de '+a.t+'°.</div>')}
+ if(S.tab==='music'&&S.tok)v.insertAdjacentHTML('beforeend',spExtra());
+ const add=t=>v.insertAdjacentHTML('afterbegin','<div class="note" role="status">'+t+'</div>');
+ if(S.tab==='music'&&IS_IOS&&S.tok)add('Neste iPad e iPhone o painel não toca a música pelo próprio navegador. Abra o app do Spotify, toque uma faixa e escolha o aparelho na lista de aparelhos.');
+  if(S.tab==='cal'&&WX.data&&WX.data.hourly&&WX.data.hourly.time){const h=WX.data.hourly,now=Date.now();
+  (S.ev||[]).filter(r=>r[6]&&r[6]>now&&r[6]<now+4*36e5).forEach(r=>{const d=new Date(r[6]),key=dayKey(d)+'T'+String(d.getHours()).padStart(2,'0')+':00',i=h.time.indexOf(key),p=i>=0?h.precipitation_probability[i]:0;
+   if(p>=60)add('Possível chuva forte em "'+r[1]+'" às '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+' ('+p+'%). Leve guarda-chuva.')})}
+ if(S.tab==='tasks')v.insertAdjacentHTML('afterbegin',tfHtml());
+ if(S.tab==='pomo')v.insertAdjacentHTML('beforeend',pomoHistHtml())}
+function tfHtml(){return '<div class="redact" role="group" aria-label="Filtrar tarefas" style="margin:0 0 10px">'+[['todas','Todas'],['hoje','Hoje'],['semana','Últimos 7 dias'],['semdata','Sem data']].map(([k,l])=>'<button type="button" class="chip" data-a="tfilt" data-f="'+k+'" aria-pressed="'+((S.tf||'todas')===k)+'">'+l+'</button>').join('')+'</div>'}
+function tfApply(){const f=S.tf||'todas',today=dayKey(new Date()),ago=dayKey(new Date(Date.now()-6*864e5)),ahead=dayKey(new Date(Date.now()+6*864e5));
+ const ok=(cr,due)=>f==='todas'||(f==='hoje'&&(cr===today||due===today))||(f==='semana'&&((!!cr&&cr>=ago)||(!!due&&due>=today&&due<=ahead)))||(f==='semdata'&&!cr&&!due);
+ document.querySelectorAll('#view li.tk').forEach(li=>{li.hidden=!ok(li.dataset.cr,li.dataset.due)})}
+function pdHistAdd(){const k=dayKey(new Date());let h={};try{h=JSON.parse(ls.get('pomo_hist')||'{}')||{}}catch(_){}h[k]=(h[k]||0)+1;const o={};Object.keys(h).sort().slice(-60).forEach(x=>{o[x]=h[x]});ls.set('pomo_hist',JSON.stringify(o))}
+function pomoGoal(){const g=parseInt(ls.get('pomo_goal'),10);return g>=1&&g<=12?g:4}
+function pomoHistHtml(){let h={};try{h=JSON.parse(ls.get('pomo_hist')||'{}')||{}}catch(_){}let wk=0;for(let i=0;i<7;i++)wk+=h[dayKey(new Date(Date.now()-i*864e5))]||0;
+ const hoje=h[dayKey(new Date())]||0,g=pomoGoal(),pc=Math.min(100,Math.round(hoje/g*100));
+ return '<div class="goal"><div class="gl"><span>Meta de hoje: <b>'+hoje+' de '+g+'</b> ciclos</span><span><button type="button" class="chip" data-a="pgoal" data-d="-1" aria-label="Diminuir meta">−</button> <button type="button" class="chip" data-a="pgoal" data-d="1" aria-label="Aumentar meta">+</button></span></div><div class="gb" role="progressbar" aria-label="Progresso da meta de hoje" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pc+'"><i class="'+(hoje>=g?'ok':'')+'" style="width:'+pc+'%"></i></div><p class="sub" style="margin:4px 0 0">Últimos 7 dias: '+wk+' ciclo(s)'+(hoje>=g?' · meta batida!':'')+'</p>'+pomoWeek(h)+'</div>'}
+function pomoWeek(h){const dias=[...Array(7).keys()].reverse().map(i=>new Date(Date.now()-i*864e5));const max=Math.max(1,...dias.map(d=>h[dayKey(d)]||0));
+ return '<div class="wk" role="img" aria-label="Ciclos concluídos nos últimos 7 dias: '+dias.map(d=>(h[dayKey(d)]||0)).join(', ')+'">'+dias.map(d=>{const n=h[dayKey(d)]||0;return '<div><i style="height:'+Math.round(n/max*100)+'%"></i><span>'+cap(fWd.format(d)).replace(/\.?$/,'').slice(0,3)+'</span></div>'}).join('')+'</div>'}
+function view(){if(S.tab==='tempo'&&ls.get('wx_cmp')&&!WX.cmp&&!WX.cmpBusy)cmpLoad();if(S.grid){$('#view').innerHTML=gridView();artBg();return}if(tvHlsObj&&S.tab!=='tv'){tvHlsObj.destroy();tvHlsObj=null}viewInner();if(S.tab==='tasks')tfApply();notes();if(S.tab==='music')spLoadQueue();artBg()}
+function gridView(){return '<h2>Apps</h2><div class="appgrid">'+TABS.map(([id,l,i])=>`<button type="button" class="appbtn" data-a="gridpick" data-id="${id}" style="--tc:${TAB_COL[id]||'#636366'}" aria-label="${l}">${ic(i)}<span>${l}</span></button>`).join('')+'</div>'}
+function gridPick(id){S.grid=false;$('#grid').setAttribute('aria-pressed','false');pick(id)}
+function tick(paintOnly){tickInner(paintOnly);artBg()}
+const accCache=new Map(),accPending=new Set();
+function accLift(r,g,b){const mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2/255;if(l>=.55)return [r,g,b];const k=.35;return [r+(255-r)*k,g+(255-g)*k,b+(255-b)*k]}
+function accFor(url,cb){if(accCache.has(url))return cb(accCache.get(url));if(accPending.has(url))return;accPending.add(url);
+ const im=new Image();im.crossOrigin='anonymous';
+ const done=v=>{accPending.delete(url);accCache.set(url,v);cb(v)};
+ im.onload=()=>{try{const c=document.createElement('canvas');c.width=c.height=24;const x=c.getContext('2d');if(!x)return done(null);x.drawImage(im,0,0,24,24);const p=x.getImageData(0,0,24,24).data;
+   let r=0,g=0,b=0,k=0;for(let i=0;i<p.length;i+=4){const R=p[i],G=p[i+1],B=p[i+2],mx=Math.max(R,G,B),mn=Math.min(R,G,B),l=(mx+mn)/510,sat=mx===mn?0:(mx-mn)/(255-Math.abs(mx+mn-255));
+    if(sat>.3&&l>.2&&l<.8){r+=R;g+=G;b+=B;k++}}
+   if(!k){for(let i=0;i<p.length;i+=4){r+=p[i];g+=p[i+1];b+=p[i+2];k++}}
+   const [lr,lg,lb]=accLift(r/k,g/k,b/k);done('rgb('+Math.round(lr)+','+Math.round(lg)+','+Math.round(lb)+')')}
+  catch(_){done(null)}};
+ im.onerror=()=>done(null);im.src=url}
+function artBg(){const n=$('#notch');if(!n)return;const a=S.tab==='music'&&$('#view .np-art');const bg=a?(a.style.backgroundImage||''):'';
+ if(bg&&bg!=='none'){n.style.setProperty('--art',bg);n.dataset.art='1';const m=bg.match(/url\(["']?(.*?)["']?\)/);
+  if(m&&m[1])accFor(m[1],col=>{if(col&&n.dataset.art==='1')n.style.setProperty('--acc',col)})}
+ else{n.style.removeProperty('--art');n.style.removeProperty('--acc');n.dataset.art='0'}}
 function paintWx(){if(S.tab==='tempo'&&S.open&&$('#view'))$('#view').innerHTML=tempoView();const w=$('#wcur');if(w)w.textContent=WX.loc.n}
 async function wxLoad(){if(WX.busy)return;WX.busy=true;const loc=WX.loc;
  try{const r=await fetch('https://api.open-meteo.com/v1/forecast?'+new URLSearchParams({latitude:loc.lat,longitude:loc.lon,current:'temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code',hourly:'temperature_2m,weather_code,precipitation_probability',daily:'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max,sunrise,sunset',timezone:'auto',forecast_days:'10'}));
-  if(!r.ok)throw 0;const j=await r.json();if(!j.current||!j.daily)throw 0;if(loc===WX.loc){WX.data=j;WX.at=Date.now()}}
+  if(!r.ok)throw 0;const j=await r.json();if(!j.current||!j.daily)throw 0;if(loc===WX.loc){WX.data=j;WX.at=Date.now();try{ls.set('wx_cache',JSON.stringify({loc:loc.n,at:WX.at,d:j}))}catch(_){}}}
  catch(_){}
  WX.busy=false;paintWx();if(loc!==WX.loc)wxLoad()}
 let lastMin=-1;
@@ -1279,7 +1481,7 @@ function tvHls(url){const v=$('#tvv');if(!v)return;
  if(v.canPlayType('application/vnd.apple.mpegurl')){v.src=url;return}
  const go=()=>{if(!window.Hls||!window.Hls.isSupported())return;if(tvHlsObj)tvHlsObj.destroy();tvHlsObj=new window.Hls();tvHlsObj.loadSource(url);tvHlsObj.attachMedia(v)};
  if(window.Hls)return go();
- const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.13/hls.min.js';sc.onload=go;document.head.appendChild(sc)}
+ if(window.__hlsLoading)return;window.__hlsLoading=true;const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.13/hls.min.js';sc.onload=go;sc.onerror=()=>{window.__hlsLoading=false;say('Não foi possível carregar o player de vídeo')};document.head.appendChild(sc)}
 function tvAfter(){const c=S.tv.list[S.tv.cur];if(c&&tvM3u(c.u||''))tvHls(c.u)}
 function tvView(){const L=S.tv.list,c=L[S.tv.cur];
  return `<h2>TV</h2>${tvPlayer(c)}
@@ -1301,6 +1503,14 @@ function tvAct(a,b){const T=S.tv,n=T.list.length;
  if(a==='tvdel'){const i=+b.dataset.i;const nm=T.list[i]&&T.list[i].n;T.list.splice(i,1);if(T.cur>=T.list.length)T.cur=Math.max(0,T.list.length-1);tvSave();view();const x=$('#view [data-a="tvdel"]')||$('#tvn');if(x)x.focus();say('Canal removido: '+(nm||''));return true}
  return false}
 {const hw=$('#hwx'),vw=$('#view');if(hw&&vw)vw.parentNode.insertBefore(hw,vw)}
+{const hw=$('#view'),b=document.createElement('button');b.id='back';b.type='button';b.className='ib';b.setAttribute('aria-label','Voltar para a aba anterior');b.innerHTML=ic('back');hw.parentNode.insertBefore(b,hw);
+ b.addEventListener('click',()=>{const p=S.prevTab;if(p&&TABS.some(t=>t[0]===p))pick(p)});
+ const g=document.createElement('button');g.id='grid';g.type='button';g.className='ib';g.setAttribute('aria-label','Todos os apps');g.setAttribute('aria-pressed','false');g.innerHTML=ic('grid');hw.parentNode.insertBefore(g,hw);
+ g.addEventListener('click',()=>{S.grid=!S.grid;g.setAttribute('aria-pressed',String(S.grid));view()});
+ $('#tabs').addEventListener('click',()=>{if(S.grid){S.grid=false;g.setAttribute('aria-pressed','false')}},true);
+ $('#view').addEventListener('click',e=>{const x=e.target.closest('[data-a="gridpick"]');if(x)gridPick(x.dataset.id);if(e.target.closest('[data-a="cmpdel"]')){ls.del('wx_cmp');WX.cmp=null;view();return}const pg=e.target.closest('[data-a="pgoal"]');if(pg){const g=Math.min(12,Math.max(1,pomoGoal()+(+pg.dataset.d)));ls.set('pomo_goal',String(g));view();const n=$('#view [data-a="pgoal"][data-d="'+pg.dataset.d+'"]');if(n)n.focus();say('Meta diária: '+g+' ciclos')}const f=e.target.closest('[data-a="tfilt"]');if(f){S.tf=f.dataset.f;view();const n=$('#view [data-a="tfilt"][data-f="'+S.tf+'"]');if(n)n.focus()}})}
+$('#view').addEventListener('change',e=>{if(e.target.id==='spvol')spApi('/me/player/volume?volume_percent='+e.target.value,{method:'PUT'})});
+try{const c=JSON.parse(ls.get('wx_cache')||'null');if(c&&c.d&&c.loc===WX.loc.n){WX.data=c.d;WX.at=c.at}}catch(_){}
 setOpen(true,true);
 paintClock();paintWx();wxLoad();
 setInterval(paintClock,1000);
