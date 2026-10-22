@@ -295,6 +295,15 @@ main{max-width:none!important;padding:0!important;margin:0!important;height:100%
 .notch[data-tab="music"] .np-title b{font-size:26px}
 .notch[data-tab="music"] .np-title{justify-content:center}
 .notch[data-tab="music"] .np-state{display:none}
+.notch{background:#000!important;transition:background-color .6s}
+.notch::before,.notch::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;transition:opacity .8s}
+.notch::before{background:var(--art,none) center/cover no-repeat;filter:blur(70px) saturate(1.6);transform:scale(1.4);opacity:0}
+.notch::after{background:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.6));opacity:0}
+.notch[data-art="1"]::before{opacity:.95}
+.notch[data-art="1"]::after{opacity:1}
+.notch>*{position:relative;z-index:1}
+.notch>.alertbar{z-index:5}
+
 </style>
 </head>
 <body>
