@@ -246,9 +246,9 @@ main{max-width:none!important;padding:0!important;margin:0!important;height:100%
 .hclk{display:inline-block!important;font-size:0!important}
 .hclk .hbig{font:700 15px/1 -apple-system,"SF Pro Text",system-ui,sans-serif!important;color:#111;background:#ff9500;border-radius:10px;padding:6px 9px;font-variant-numeric:tabular-nums}
 .tabs{gap:10px!important;align-items:center!important}
-.tab{width:68px!important;height:68px!important;min-height:68px;padding:0!important;border-radius:16px!important;background:var(--tc)!important;color:#fff!important;font-size:0!important;gap:0!important;justify-content:center!important;flex:none}
+.tab{width:68px!important;height:68px!important;min-height:68px;padding:0!important;border-radius:16px!important;background:var(--tc)!important;color:var(--tt,#fff)!important;font-size:0!important;gap:0!important;justify-content:center!important;flex:none}
 .tab span{display:none}
-.tab svg{width:30px!important;height:30px!important;color:#fff}
+.tab svg{width:30px!important;height:30px!important;color:var(--tt,#fff)}
 .tab[aria-selected="true"]{outline:2px solid #fff;outline-offset:2px}
 #hwx{display:none!important}
 .tp{display:flex;flex-direction:column;gap:12px;color:var(--ink);padding-bottom:20px}
@@ -298,6 +298,11 @@ main{max-width:none!important;padding:0!important;margin:0!important;height:100%
 
 /* ===== Navegação CarPlay: voltar, grade de apps ===== */
 .inner{position:relative}
+#navbtns{grid-area:1/2;display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 10px}
+#navbtns #back{grid-area:auto;justify-self:auto;margin:0}
+#fwd{display:inline-flex;align-items:center;gap:6px;height:44px;border-radius:22px;padding:0 10px 0 16px;background:rgba(255,255,255,.14);color:var(--ink);font-weight:600;font-size:15px}
+#fwd svg{width:22px;height:22px}
+#fwd:disabled{opacity:.35}
 #back{grid-area:1/2;justify-self:start;align-self:start;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.14);color:var(--ink);margin:0 0 10px;display:flex;align-items:center;justify-content:center}
 #back svg{width:22px;height:22px}
 #back:disabled{opacity:.35}
