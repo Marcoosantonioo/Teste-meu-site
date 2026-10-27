@@ -109,7 +109,7 @@ option{background:#18181b;color:#fff}
 select{color-scheme:dark}
 .tk{flex-wrap:wrap}.tk .grow{min-width:120px}
 .grip{color:#9a9aa2;cursor:grab;display:grid;place-items:center;width:16px;flex:none}.grip svg{width:16px;height:16px}
-.acts2{display:flex;align-items:center;gap:2px;margin-left:auto}
+.acts2{display:flex;flex-direction:column;align-items:flex-end;gap:2px;margin-left:auto}
 .ef{flex:1;display:flex;flex-wrap:wrap;gap:4px;align-items:center;min-width:0}
 .ef input{height:38px;background:#000;border:2px solid #7a7a82;padding:0 12px}
 .ib[aria-disabled="true"]{opacity:.35;cursor:default}
@@ -451,3 +451,58 @@ main{max-width:none!important;padding:0!important;margin:0!important;height:100%
 #apres{position:fixed;inset:0;z-index:60;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;overflow:auto}
 #apres[hidden]{display:none}
 #apres .chip{background:rgba(255,255,255,.14);color:#fff}
+
+/* ===== Botões de navegação iguais (voltar e avançar) ===== */
+#back,#fwd{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:6px!important;height:44px!important;min-width:44px!important;width:auto!important;border-radius:22px!important;padding:0 16px!important;margin:0!important;background:rgba(255,255,255,.14)!important;color:var(--ink)!important;font:600 15px system-ui,-apple-system,sans-serif!important;border:0!important;cursor:pointer}
+#back svg,#fwd svg{width:22px!important;height:22px!important;flex:none}
+#back span,#fwd span{white-space:nowrap;max-width:36vw;overflow:hidden;text-overflow:ellipsis}
+#back:disabled,#fwd:disabled{opacity:.35;cursor:default}
+#back:focus-visible,#fwd:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+/* ===== Rótulo "Onde guardar" sempre visível ===== */
+label.opt.row{display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:8px!important}
+label.opt.row>span{flex:1 1 140px!important;min-width:0!important}
+label.opt.row select{flex:1 1 200px!important;min-width:0!important;max-width:100%!important;width:auto!important}
+/* ===== Responsivo para qualquer tamanho de tela ===== */
+*,*::before,*::after{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
+img,svg,canvas,video,iframe,table{max-width:100%}
+#view,.inner>*{min-width:0}
+.add{flex-wrap:wrap}
+.add input,.add select{min-width:0;max-width:100%}
+.notch{height:100vh;height:100dvh}
+@media (max-width:480px){
+ .inner{grid-template-columns:58px minmax(0,1fr)!important;gap:0 8px!important;padding:10px!important}
+ .tab{width:48px!important;height:48px!important;min-height:48px;border-radius:13px!important}
+ .tab svg{width:22px!important;height:22px!important}
+ .tabs{gap:8px!important}
+ #back,#fwd{height:40px!important;padding:0 12px!important;font-size:14px!important}
+ #back span,#fwd span{max-width:28vw}
+ .tp-temp{font-size:64px}
+ .tp-grid{grid-template-columns:1fr!important}
+ .notch[data-tab="music"] .np{grid-template-columns:minmax(0,1fr)!important}
+ .notch[data-tab="music"] .np-art{grid-column:1!important;grid-row:auto!important;width:62%!important;margin:0 auto!important}
+ .notch[data-tab="music"] .np-meta{grid-column:1!important}
+ .notch[data-tab="radio"] .now{grid-template-columns:minmax(0,1fr)!important}
+ .notch[data-tab="radio"] .now .art{grid-column:1!important;grid-row:auto!important;width:62%!important;margin:0 auto!important}
+ #grid{width:44px;height:44px;left:10px;bottom:10px}
+}
+@media (max-width:360px){
+ .inner{grid-template-columns:48px minmax(0,1fr)!important}
+ .tab{width:42px!important;height:42px!important;min-height:42px}
+ .tab svg{width:20px!important;height:20px!important}
+ #back span,#fwd span{display:none}
+ .aw-temp,.tp-temp{font-size:52px!important}
+}
+@media (min-width:481px) and (max-width:900px){
+ .inner{grid-template-columns:120px minmax(0,1fr)!important}
+ .tp-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (min-width:1280px){
+ #view{max-width:1100px;margin:0 auto;width:100%}
+ .inner{padding-left:max(18px,calc(50% - 560px))!important;padding-right:max(18px,calc(50% - 560px))!important}
+}
+@media (max-height:420px) and (orientation:landscape){
+ .inner{padding-top:8px!important;padding-bottom:8px!important}
+ .tabs{gap:4px!important}
+ .tab{width:40px!important;height:40px!important;min-height:40px}
+}
