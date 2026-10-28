@@ -136,7 +136,7 @@ li.drag{opacity:.5}li.ins-b{box-shadow:0 -3px 0 #5b8cff}li.ins-a{box-shadow:0 3p
 .prog input.seek::-moz-range-track{background:transparent}
 @media (max-width:420px){.pomo .big{flex-wrap:wrap;column-gap:12px}.pomo .time{font-size:56px}.pomo .mode{font-size:34px}.pr{flex-wrap:wrap}.cyc{margin-left:0;width:100%;justify-content:flex-end}}
 .notch input:not([type=range]):not([type=checkbox]):not([type=radio]),.notch select{border:2px solid #7a7a82}
-.hint.sub{color:var(--txt)}
+.hint.sub{color:#b3b3b3}
 code{overflow-wrap:anywhere;color:#fff;background:#18181b;padding:2px 6px;border-radius:6px}
 html.app,html.app body{background:transparent!important}
 html.app .hint{display:none}html.app .notch{box-shadow:none}
@@ -246,10 +246,10 @@ main{max-width:none!important;padding:0!important;margin:0!important;height:100%
 .hclk{display:inline-block!important;font-size:0!important}
 .hclk .hbig{font:700 15px/1 -apple-system,"SF Pro Text",system-ui,sans-serif!important;color:#111;background:#ff9500;border-radius:10px;padding:6px 9px;font-variant-numeric:tabular-nums}
 .tabs{gap:10px!important;align-items:center!important}
-.tab{width:68px!important;height:68px!important;min-height:68px;padding:0!important;border-radius:16px!important;background:var(--tc)!important;color:var(--tt,#fff)!important;font-size:0!important;gap:0!important;justify-content:center!important;flex:none}
+.tab{width:68px!important;height:68px!important;min-height:68px;padding:0!important;border-radius:16px!important;background:#ffffff!important;color:var(--tt,#111)!important;font-size:0!important;gap:0!important;justify-content:center!important;flex:none}
 .tab span{display:none}
-.tab svg{width:30px!important;height:30px!important;color:var(--tt,#fff)}
-.tab[aria-selected="true"]{outline:2px solid #fff;outline-offset:2px}
+.tab svg{width:30px!important;height:30px!important;color:var(--tt,#111)}
+.tab[aria-selected="true"]{outline:3px solid #111;outline-offset:2px}
 #hwx{display:none!important}
 .tp{display:flex;flex-direction:column;gap:12px;color:var(--ink);padding-bottom:20px}
 .tp-head{text-align:center;padding:6px 0 4px}
@@ -506,3 +506,4 @@ img,svg,canvas,video,iframe,table{max-width:100%}
  .tabs{gap:4px!important}
  .tab{width:40px!important;height:40px!important;min-height:40px}
 }
+#view h1.tela-titulo{font-size:clamp(20px,5vw,26px);font-weight:700;margin:0 0 12px;line-height:1.2;color:var(--ink)}
