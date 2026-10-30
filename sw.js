@@ -1,4 +1,4 @@
-const VERSAO = 'painel-v2';
+const VERSAO = 'painel-v3';
 const ARQUIVOS = ['./', './notch-panel.html', './css/notch.css', './js/notch.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
