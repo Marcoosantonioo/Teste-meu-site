@@ -2,11 +2,11 @@ const I={bell:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="
 const CUSTOM_ICO={"livro": {"vb": "0 0 107 200", "inner": "<path d=\"M68 9.7 38.5 20.1c-23 8.2-28.5 10.5-30.8 13l-2.7 3 .2 70.9.3 70.8 2.5 2.7c1.3 1.4 5.7 4.2 9.7 6.2a27 27 0 0 0 13 3.7c5.6.1 7.1-.5 37.8-15.9l32-16 .7-26c.5-14.3.7-45.1.5-68.5l-.2-42.5-2.3-.3c-1.3-.2-3.6.1-5.1.8-2.8 1.1-3.1 1-16.3-4.7-2.8-1.2-3.8-2.3-3.8-4s-2.7-4.6-4.2-4.2zm1 4.2c-.8.5-13.2 5-27.5 10.1a270 270 0 0 0-27.7 10.8c-1.9 1.6-2.3 4.1-1 5.8q.4.6-1.8-1.3c-2.4-2.3-2.4-2.3-.5-4.2 1.1-1.1 9.7-4.7 19-8l28-10q16-5.8 11.5-3.2m2.7 5.7c-.1.2-9.5 3.7-20.7 7.8l-27.4 10c-3.9 1.5-7.3 2.3-7.8 1.8-1.5-1.5 1.5-3 16.8-8.6 33.7-12.2 36.9-13.3 38.2-12.3q1.1 1 .9 1.3m8.9 3.1c-.3.3-46.2 17.8-52.5 20-3.6 1.2-4.9 1.3-7 .3-3.3-1.5-5.6-.5 27.9-12.8 22.6-8.3 26.9-9.6 29.2-8.8 1.5.6 2.6 1.1 2.4 1.3m6.4 1.8c0 .6-3.8 2.2-29 12-25.9 10-25.1 9.8-28.1 8.6q-2-.9-.9-1.1c.8 0 13.2-4.5 27.5-9.9C79.8 25.2 87 22.9 87 24.5m11 66.1v65.5l-25.6 12.5c-14 6.9-25.8 12.3-26.1 12s-.5-30.8-.5-67.8V45.5l25.3-10.2c14-5.6 25.7-10.2 26.2-10.2.4-.1.7 29.4.7 65.5m-74.9-42c3.3.8 7.4 1.4 9.2 1.2l3.2-.3v137l-5.4-.2a34 34 0 0 1-18.6-7.7L9 176.1V43l4 2c2.2 1.1 6.7 2.7 10.1 3.6M43 115c0 66.9 0 67.9-2 69s-2 .8-2-67.3c0-37.6.3-68.7.7-69q.6-.7 2-.7c1.1 0 1.3 12 1.3 68\"/>"}, "musica": {"vb": "0 0 260 217", "inner": "<path d=\"M86.3 11.6a22 22 0 0 0-7.5 5.2c-2.5 2.7-4.3 3.8-6.8 3.9q-6.5.4-10.4 7.9c-2.1 4-2.1 3.8-1.6 25.8.2 11.2 2.9 15.6 9.4 15.6 2.2 0 2.6.5 2.6 2.8 0 2.6-.4 2.9-6.2 4.1a42 42 0 0 0-20.2 9.9c-10.9 10.3-21.8 35.1-20.1 45.4.9 4.9 5.4 10.3 10.1 11.8 3.5 1.2 3.5 1.3 2.9 5.4-.4 2.2-1 4.4-1.4 4.8s-5.3 1.5-11 2.4c-13.2 2.2-14.1 3-14.1 12.3 0 7.9-1.1 6.2 15.8 25.3a50 50 0 0 0 13 12.3c2.9.6 28.7-4.6 94.2-19 49-10.8 55.3-12.4 56.2-13.8.4-.7.8-3.2.8-5.7 0-3.5.3-4.1 1.2-3.2 1 1 .6 3.8-1.9 13.7-1.8 6.9-3 13.1-2.7 14 2.1 5.3 18.7 9.6 30 7.7 7.4-1.2 15-4.5 16.4-7.2.7-1.3.2-5.6-1.7-14.8l-2.7-12.9 3.2-3.4c4.7-5 9-14.3 10.8-23.4.8-4.4 2-9 2.6-10.2s.8-3.2.5-4.5c-2.1-8.6-2.9-10.5-5.1-12.5-5-4.3-13.3-6.6-25.9-7.1-16.9-.7-29.4 2.4-35 8.6-2.8 3.1-5.2 12.8-3.9 15.5 1 1.9 3.2 12.4 3.2 14.9 0 .5-2.4-.9-5.3-3.2-3-2.2-6.7-4.5-8.4-5-2.5-.9-3.1-1.8-3.6-5q-1.6-11.5-16-12.7c-8.9-.8-10.8-2.1-15.2-10.5a74 74 0 0 0-14-20.4l-2.4-1.6 3.5-5c4.5-6.7 6.2-12.8 7.4-27.8.9-11.3 1.3-12.7 3.6-15.1 3.9-4 3-8-2.4-10.6-.2 0 .2-1 .9-2.1 2.5-4.1-1.4-7.2-9.2-7.2-2.5 0-6.3-1.2-10.2-3.1a31 31 0 0 0-23.4-2.3m12.4 26.1c4.9.5 5.5.4 6-1.5.5-2 .7-2 3.4-.7 3.4 1.8 10.5 2 11.3.2.9-2.2 4.5 3.2 5.2 8 1.1 7.2-.3 21.5-2.7 27.8-5.5 14.7-20 21-33.1 14.4-2-1-3.9-2.3-4.3-2.9q-.6-.9-1.6-1c-2.4 0 1.4 4 6 6.2 3.8 2 4.7 2.8 4 4.1-1.5 2.6-7.4 4-11.2 2.8-7.7-2.6-13.2-12.7-9.3-17q1.8-2 1.4-5.6c-.3-3.5-.5-3.8-3.8-4-6.6-.5-10.3-8.8-6.4-14.3 2-2.8 6.8-2.9 9.1-.2 1 1.1 2.4 2 3.3 2 2.3 0 8.1-11.7 8.7-17.7l.6-5.2 4 2c2.2 1.2 6.4 2.3 9.4 2.6M69 81.6c0 4.3 1.2 6.8 5.3 11.2 5.7 6 13.7 6.3 19.7.8 1.5-1.5 4.3-2.6 7.3-3a33 33 0 0 0 8.8-2.6c3.7-2 4.3-2 6.4-.6 1.3.9 3.5 3.1 5 5 2.9 3.8 11.5 18.6 11.5 19.8q-.2.8-2 .8c-4.5 0-13 11.6-9.9 13.5q.8.5.9-1.1c0-3 3.9-8.1 7.6-9.9 3.3-1.5 3.7-1.5 6.1 0l2.5 1.7-3.3 1.6a15 15 0 0 0-6.9 11.5c0 2.5-.3 2.7-2.2 2.1-5-1.5-7.9-3.6-12.3-9.1-4.2-5.1-4.6-6.1-4.1-9.3 1.8-10.6 1.8-11.5.8-10.5-.6.5-2.7 9.3-4.8 19.5s-4 18.8-4.3 19.1-2.2.9-4.2 1.3c-3.5.6-3.6.5-5.3-3.8a23 23 0 0 0-11.5-11.7c-1.4-.6-5.3-1.5-8.6-2.1a51 51 0 0 1-16.5-5.5c0-.2.9-2.6 2.1-5.3s1.9-5.5 1.6-6.2-1.8 1.5-3.3 5c-3 6.7-2.7 6.6-9.6 4.6q-1.6-.4-1.8.5c0 .5 2.5 1.7 5.5 2.6 3.1.9 6.7 2 8.1 2.6l2.6.9-2.5 2c-3 2.4-6.2 10.2-5.3 12.6s-1.1 3.4-7.9 3.4q-10.3 0-14.9-6.3c-7.1-9.6 7.5-43.2 23-52.8 3-1.8 13.3-5.7 15.7-5.8.4-.1.7 1.5.7 3.5m159.4 25.9c8 2.1 12.4 4.3 14.3 7.2 1.5 2.2 1.5 2.6-.4 5.1-2.7 3.6-10.9 6.8-21.3 8.2a62 62 0 0 1-35.7-5.1c-7.7-4.8-2.9-11.6 10.8-15.3 7.3-2 24.9-2 32.3-.1m-73.7 13.4c4.4 2.1 7.3 6.2 7.3 10.6q-.2 5.6-3.3-2c-2.4-5.8-4-5.9-1.9-.2.9 2.6 1.2 5.1.8 6.3-.7 1.6-1.2 1.1-3-3.1a26 26 0 0 0-3.9-6.4c-2.2-1.8-2.2-1.5.8 4.3 4.1 8.1 2.7 13.7-1.4 5.8-2.7-5-5.8-8.8-6.6-8-.4.3.7 2.5 2.4 4.9 5.5 7.5 3.2 9.7-3 2.9-2-2.2-4.2-4-5-4q-1.1.1.9 2.3c2.4 2.5 3 6.7.9 6.7-.6 0-3.1-1.7-5.5-3.9q-4.3-4-4.2-6.5c0-3.5 2.4-8.1 5.2-10 3.2-2.3 14.2-2.1 19.5.3M124.1 134l5.7 1.6c2.3.7 1.2 2.3-2 2.8l-13.2 2.1c-5.4.9-10 1.4-10.3 1.2a133 133 0 0 1 3.3-19.6q.4-1.5 6.2 4.6c4.4 4.6 6.9 6.4 10.3 7.3m66.3-6.6c16.2 5.5 41.4 3.6 51-3.7l3.4-2.6.6 2.5c.9 3.3.5 3.8-4.7 6.2a84 84 0 0 1-54.9 1c-5.9-2.5-7.2-4-6.4-7.4l.7-2.7 2.7 2.6c1.5 1.4 4.9 3.2 7.6 4.1m-110.1 3c6.1 2.9 10.7 9.2 10.7 14.3 0 3.8-2.4 4.6-3.4 1-.7-2.7-4.5-9.1-5.1-8.5-.3.3.4 2.3 1.5 4.6 2.1 4.4 2.6 9.7 1 10.7-.5.3-2.2-2.3-3.8-5.8a30 30 0 0 0-4.1-7.1c-1.5-1-1.4-.5.9 4.5s2.7 10.3.8 9.7c-.7-.3-2.5-3-4-6a26 26 0 0 0-3.9-6.4c-1.3-.8-1.1.1 1.4 7.1.8 2.2 1.3 4.3 1 4.7-1.1 1.9-3.3.5-5.7-3.6-1.9-3.3-3.3-4.5-5.8-5-3.8-.8-7.8-4.2-7.8-6.8 0-2.4 1.6-5.6 4.4-8.7 1.9-2.1 2.6-2.3 9.4-1.8q7.4.6 12.5 3.1m103.4 1.8c.6.7 1.5 4.6 2.2 8.6a76 76 0 0 0 3.6 13.5c2.9 7.2.6 5.1-3-2.8-1.8-4-5.5-17.4-5.5-19.9 0-1.1 1.7-.6 2.7.6m60.3-.5-1.4 7.4A47 47 0 0 1 234 158l-2.2 2.5 1.4-2.5a67 67 0 0 0 5.8-19c1.1-5.9 2.1-7.9 4.3-8q.7 0 .7.7m-7.4 10.5A51 51 0 0 1 228 163q-6.2 6.4-2.9-1.5c1.1-2.4 2.7-9.4 3.6-15.4l1.7-11 3.5-.8c4.5-1.1 4.7-.5 2.7 7.9m-44.8-7.6c2.9.6 3 .7 3.6 8.4.6 6.8 1.9 13.1 4.2 21l.7 2.5-2.7-2.4a41 41 0 0 1-9.1-19.6c-2.3-11.1-2.3-11 3.3-9.9m-18.2 6.7c6.1 4.7 11.4 10.6 11.4 12.8 0 .4-1.8 1-4 1.4-3.9.7-4.3.5-11.4-5.9q-7.3-6.6-9.9-6.6c-1.3 0-3-.6-3.6-1.4-.9-1.1-.6-1.8 1.6-3.5 4.7-3.4 8.3-2.7 15.9 3.2m35.1-3.9c.2.2-3.6 27.7-4 29.1-.6 1.7-4-4.5-5.4-9.8-.7-2.9-1.6-8.7-2-13l-.6-7.8 5.9.7zm18.8 4.8c-1.5 12.7-6.5 28-7.9 23.7-.2-.8-.9-6.8-1.6-13.4a158 158 0 0 0-1.6-13.7c-.4-1.3.3-1.8 3.3-2.1 9.3-.9 8.6-1.5 7.8 5.5m-11.8 4.7c.6 5.2 1.3 11.9 1.5 15l.3 5.6-5.2.3c-6.3.4-6.1 1.3-3.7-16.5 1.8-14.2 1.9-14.5 4.1-14.1 1.5.3 2 2.1 3 9.7m-66.9-5.3c2.8-.9 7.4 1.4 6.7 3.3q-.5 1.5 5.6 7.7l6.1 6.1-4.7.8-4.8.7-6.8-6.8c-5.3-5.3-7.2-6.6-8.9-6.1-1.6.4-2.9-.3-5.2-2.9-1.7-1.9-3.5-3.4-4.1-3.4s.6 1.7 2.6 3.8c2.1 2.1 3.5 4.1 3.1 4.5-.4.3 1.6 3.2 4.4 6.4 5.2 5.9 5.6 7.3 1.9 7.3-2 0-5.6-3.5-17.7-17.3-1.8-2.1-3-4-2.8-4.3s3-.7 6-1c4.2-.4 5.8-.1 6.8 1.1q2.7 3.1 5.2-.5c1.1-1.7 1.4-1.8 2.9-.4 1 .9 2.6 1.3 3.7 1m-17.9 10.6c5 5.6 9.1 10.5 9.1 10.9 0 .6-5 1.9-7.6 1.9-.7 0-3.9-3.2-7-7-3.1-3.9-6.3-7-7.2-7-1.6 0-8.2-5.7-8.2-7.1 0-.9 3.2-1.6 8.2-1.8 3.4-.1 4.2.5 12.7 10.1M57.8 145c.9.5 3 1.5 4.5 2 5.2 1.9 2.4 3.4-9.7 5.4-6.4 1-11.9 1.7-12.2 1.4s-.2-2.4.2-4.6l.6-4.1 5.7-.4 7.4-.5c.9-.1 2.5.2 3.5.8m53.4 2.4q2.5 3.3 2.2 5.3-.6 1.9 4.6 8.1 5 6 3.7 6.2c-.9 0-2.2.2-2.9.5q-1.6.5-7.4-7a29 29 0 0 0-7.4-7.5c-.9 0-3.1-1.6-5-3.5-3.5-3.6-3.3-3.9 2-4.8 6.2-1 7.5-.7 10.2 2.7M97.8 150c1.8 2.2 2.8 4.1 2.2 4.5-1.7 1-1.2 2 4 8.5 2.8 3.4 5 6.4 5 6.6s-1.1.4-2.4.4c-1.9 0-3.8-1.7-7.8-6.9a31 31 0 0 0-8-8c-3.4-1.2-3.9-5.1-.7-5.1q2-.1 2.6-2c.7-2.8 1.3-2.5 5.1 2m-29.3 4c2 2.2 4.5 2.6 6.3.8q1-1.2 2.7.2 1.6 1.3 2.8.2 1.6-1.3 7.6-.3.2.3-.9 1.6c-1.3 1.6-1.2 2 4.7 9.7 3.4 4.5 4 5.7 2.7 6.2-3.1 1.2-4.2.4-11.3-8.5a43 43 0 0 0-7.8-8.5c-.3.3 2 3.8 5.2 7.8 7.9 9.9 7.8 9.8 7.4 10.2-.2.2-2.2.7-4.4 1l-4 .6-5-7.5c-3.6-5.4-5.6-7.4-7.2-7.5-1.2 0-3.1-1.3-4.2-2.9-2.5-3.5-2.6-3.8-.3-4.4 3.2-.9 3.9-.7 5.7 1.3m-6.7 3.3c1.2 1.7 1.8 3.3 1.2 3.5q-2.4.8 1.3 5.6l5.1 6.8 2.8 3.8h-2.5c-2.1 0-3.6-1.5-7.8-7.5-3.2-4.5-6-7.5-7-7.5-1.5 0-5.9-4.7-5.9-6.3 0-.7 3.5-1.4 7.5-1.5 2.3-.1 3.5.6 5.3 3.1m-12.1 2.2c1.3 2 1.9 3.7 1.3 4-1.6 1-1.2 2 3.6 8.5 3.5 4.8 4.3 6.5 3.2 7.1-2.2 1.4-2.5 1.2-8.3-7.1-3.6-5-6.3-8-7.5-8-1 0-2.7-1.5-3.9-3.3l-2-3.2 2.2-.7c1.2-.3 3.8-.6 5.7-.7 2.9-.1 3.9.5 5.7 3.4m137.5.4c-1.5.9-11.7 3-88.7 18.2-50 9.9-56.2 10.9-58.6 9.7a173 173 0 0 1-24.4-26.2q.2-1 2-1.4c1.6-.2 4.9 2.8 12.9 11.8 5.9 6.6 11.2 12 11.6 12 2.3 0 130-24.5 140-26.9q3.6-.9 5 .6c1.2 1.1 1.2 1.5.2 2.2M36.8 161c1.9 2.5 2 3.3 1 4.9s-.6 2.7 3 7.5c5.3 7 6 8.6 3.6 8.6-1.1 0-2.4-.4-3-.8-2-1.3-18.4-20.2-18.4-21.1q.1-1.7 8.1-2c2.8-.1 3.9.5 5.7 2.9m153 6.7c-.3 5.7-.3 5.7-3.8 6.5l-48.5 10.7C101 193 68.4 200 45.7 204.6l-2.7.6V198q0-7.2 1.3-7.4l55.7-11.1c30-5.8 61.5-12.1 70-14 21.5-4.6 20.2-4.7 19.8 2.2m-163.4 9.5c6 6.5 11.6 12 12.6 12.3 1.5.5 1.9 1.9 2.2 7.5q.3 7.1-.9 7c-.6 0-6.8-6.4-13.7-14.2L14 175.6v-5.4c0-2.9.4-5.2.8-5 .5.1 5.7 5.6 11.6 12m175-8.7a42 42 0 0 0 25.2-1c1.9-.6 2.2.1 4.4 10.3 1.2 6.1 2 12.1 1.6 13.5-1.7 6.7-24 9.8-35.4 4.8q-5.4-2.4-5.8-4.7a125 125 0 0 1 5-24.4z\"/><path d=\"M91.4 45.1c-1.9 2.2-1.9 2.2.3 1 1.2-.6 3.1-1.1 4.3-1.1q1.9-.1 1.5-1c-1-1.7-4.1-1.1-6.1 1.1m23.1-1.1q-.3.9 1.4 1c1 0 2.8.3 3.8.7q2.3 1 .4-1c-1.5-1.9-4.6-2.3-5.6-.7M67 57.7c.8.3 2.2 1.1 3 1.7q2 1.6.1-.7c-.7-.9-2.1-1.7-3-1.6q-2 0-.1.6m26.6.8c-.6 1.8.2 4.5 1.5 4.5 1.2 0 3.1-3.9 2.4-5-.9-1.5-3.2-1.2-3.9.5m21.1.2c-.4.3-.7 1.5-.7 2.5 0 2.8 3.4 1.9 3.8-1 .3-2.1-1.6-3.1-3.1-1.5m-7.3 4.7 1.2 4.1q.7 1.6-1.5 2.2c-1.1.3-2.1.9-2.1 1.4 0 1.5 3.9 1 4.8-.7 1-1.8-.7-9.4-2.1-9.4-.5 0-.6 1.1-.3 2.4M96 76c0 1.4 3.5 3 6.4 3 1.4 0 2.6-.5 2.6-1.1q-.1-1-1.8-.5c-1 .4-2.7-.1-3.8-.9q-3.3-2.6-3.4-.5m35.5 103.1q-.6 1-.2 1.5c.7.8 5.7-.7 5.7-1.7 0-1.3-4.7-1.1-5.5.2m-14.7 3c-2.4 1.3-2.3 2.9.1 2.9 2.1 0 4.5-2.3 3.4-3.3-.8-.9-1.5-.8-3.5.4m-13.8 3.4c0 2.5 1.4 3.4 2.4 1.6.8-1.2-.3-4.1-1.5-4.1q-.8.2-.9 2.5m-18.5 3.4q-.4 1 .2 1.4c1.2.8 6.3-.4 6.3-1.4 0-1.2-5.7-1.2-6.5 0m-15.5.8c-2.2.8-3.9 3.3-3.3 4.9.7 1.9 5.7 1.8 7.4-.2 2.1-2.6-.7-5.9-4.1-4.7m124.7-174c-.2.5-1 5.9-1.7 12.1-1.2 10.8-1.4 11.2-3.4 10.5-5.5-1.9-10.6.9-10.6 5.7 0 5.4 6.2 7.1 10.6 2.9 2.9-2.7 4.1-6.8 5-16.5l.7-7.1 6.3 3.1 6.4 3.1-.6 6.5c-.8 9.5-1 10-4.4 9.4-5.7-1.2-10.1 7.8-4.4 9.2 3.4.9 7.2-1 8.4-4.1 1-2.7 4.4-27.4 3.8-28a237 237 0 0 0-15.2-7.5q-.5 0-.9.7M235 47.2a54 54 0 0 1-10.4 2.5l-4.8.6.6 6.1 1.2 13.3.7 7.3h-3.5c-4.1 0-6.8 2.5-6.8 6.3 0 5.4 8.1 5.7 10.9.4 1.5-2.9 1.6-4.3.7-15.4l-.7-9.2 3.8-.6c2.1-.3 6.1-1.4 9-2.4l5.2-1.8.6 6.6 1.1 10.3c.5 3.6.5 3.7-3.2 4-6.8.6-9.7 8.9-3.6 10.5 2.9.7 4.8-.3 7.5-3.9 1.8-2.4 1.9-3.3.8-16.4-1.3-15.7-2-20.5-3-20.3z\"/>"}, "nota": {"vb": "0 0 237 233", "inner": "<path d=\"M128.8 11.9c-1.5.5-3.7 1.6-5 2.5s-3.9 1.6-5.9 1.6c-3.6 0-8.9 3.6-8.9 5.9 0 .6-1.5 1.7-3.4 2.5s-4.2 2.6-5.2 4.1c-1.8 2.8-1.9 4-.9 16 .3 4.4.5 10.5.3 13.5a99 99 0 0 0 1.4 29.2l1.6 3.7-6 2c-13.1 4.4-20.8 11.7-34.8 33a166 166 0 0 1-9 13 19 19 0 0 1-3.3-5.5c-2.4-4.8-3.1-5.5-5.4-5.2-4.8.6-5 2.8-1 11.8 2 4.5 3.7 8.7 3.7 9.4 0 .6-1.6 2-3.5 3-7 3.8-12.7 16.7-10.6 24.1.8 3.1.7 4-.4 4.9-10 7.5-20.4 16.4-20.5 17.3 0 2.5 2.4 1.2 12.6-7.2l10.5-8.6 3 2.5c4.9 4.1 13.5 5.4 17.4 2.6 1.6-1.2 8.5-2.2 8.5-1.2 0 .5-7 7.1-15.5 14.7C34.9 213.7 31 218 33.8 218l31.2 1.5c16.8.8 34.6 1.5 39.5 1.6l9 .2 8.1-11.3c4.5-6.2 8.8-11.8 9.7-12.4q1.4-1.2 20.3-.9c18.6.3 34.5-.7 41.5-2.7 2-.6 5.3-2.1 7.3-3.5 3.3-2.3 4.7-2.5 14.1-2.5 8.7 0 10.5-.3 10.5-1.5s-1.7-1.5-9.1-1.5c-8.3 0-9-.2-8.3-1.8 1.8-4 1.6-19.7-.5-29.8-6.9-33.6-15-48.5-30.5-55.8a89 89 0 0 0-22.4-6.6h-2.3l2.3-4q2.4-4.2 4.6-4c3.1 0 7.9-3.4 9.7-7 1.7-3.3 2-10.3.5-13.1-.8-1.4-.7-2.6.4-4.6.7-1.6 1.7-6.6 2.1-11.3.6-7.7.4-8.9-1.7-13a15 15 0 0 0-5.3-6c-1.7-.8-3.9-3.2-5.1-5.5-3.8-7.6-21.3-13.6-30.6-10.6M126.6 40c4 4.4 8.8 5.9 12.4 4 1.7-.9 2.5-.9 3.9.4 1 .9 2.9 1.6 4.3 1.6 2.4 0 2.7.4 3.1 4.7.7 6.5 2.2 13.6 3.1 15.1q1.6 2.7 5.5-1.3c2.6-2.8 3.4-3 6.1-1.5 6.6 3.6-1.2 19.3-8.7 17.4-1.5-.4-2.3.3-3.8 3.5-1 2.3-2.4 4.6-3.2 5.2q-3 2.4 1.3 3.9c2.2.9 2.5 1.4 1.9 4.3-3.1 15.4-25.8 22.2-32.2 9.6-1.2-2.4-1.2-2.4 4.5-3 6-.6 10.2-2.2 10.2-4q0-1-2.2-.2a43 43 0 0 1-9 .8c-5.8-.1-7.3-.5-11-3.1a26 26 0 0 1-7.3-8.4c-2.9-5.3-3-6-2.9-17.5a81 81 0 0 1 4.6-29.2c1.1-2.3 2.3-2.9 7.5-3.8 3.5-.7 6.6-1.5 7-1.8 1-1 1-1 4.9 3.3m-19.2 56.9c1.6 1.6 4.1 3.5 5.7 4.1 2.1.9 3.2 2.3 3.9 5 1.2 4.6 5.6 8.5 11 10 11.1 3 24.1-5.5 27.2-17.7 1.2-5 .9-5 14.3-.1 15.3 5.5 22.6 13.6 28.4 31.5 7.8 24.2 10.2 47.6 5.5 54-5 6.7-11.3 8.7-31.9 9.9l-11 .7v-7.6c0-6.3-.4-8-2.3-10.7-1.3-1.7-2.2-3.3-2-3.6.2-.2 6.8-1.6 14.6-3.1 10-2 14.2-3.2 14.2-4.2s-1-1.2-3.8-.8l-3.9.5-1.2-6.7c-2.4-13.5-4.5-21.1-5.8-21.1-1.7 0-1.7-.5 1.2 13.3a145 145 0 0 1 2.5 13.5c0 1.4-2.3 2.2-11.8 4.5-6.4 1.5-13 2.6-14.7 2.5a222 222 0 0 0-14.5-.3c-11.1 0-11.7.1-17.2 3.2a19 19 0 0 1-12.1 3.3h-6.4l-.6-5.8-1.8-22.7c-.6-9.4-1.3-17.6-1.5-18.3-.9-3-2.4.3-2.4 5.3s-.4 5.8-8.2 16.8l-8.2 11.5-2.3-3.4c-2.4-3.5-8.8-7.4-12.1-7.4q-1.8 0-3.9-5l-2.1-5 9.9-15c14.2-21.4 21.8-28.6 34.4-32.6 5.6-1.8 5.8-1.7 8.9 1.5m-61.6 35.8q-.4 1.7-1.3 1.8-.9-.2-1.3-1.8-.2-1.6 1.3-1.7 1.6.1 1.3 1.7m4.7 9.3A292 292 0 0 1 61 165.8c0 1.8-7.8-11.2-11.6-19.5-3.2-6.8-3.9-9.3-2.9-9.3.8 0 2.6 2.3 4 5m43 27.7.7 7.3h-2.8c-1.6 0-5.9-.3-9.6-.7l-6.8-.6v-3.8c0-3.1 1.2-5.5 6.6-13.1 10.6-14.7 9.8-14.4 10.5-4.7.3 4.6.9 11.7 1.4 15.6m-41.5-12c1.2 2.1 4.7 7 7.7 11 5.3 6.9 6.3 10.1 3.4 11.1-.8.3-4.3-2.7-8.3-6.8-3.7-4-7.1-7-7.5-6.7q-1.4 1.5 8.2 11c3.2 3.2 5.5 6 5.1 6.4-1.2 1.2-8.7-3.1-12.1-6.9q-5.3-5.6-5.5-2.9c0 .5 2.5 3.2 5.6 6 3.1 2.9 5.4 5.4 5.1 5.7-1 1-4.8-.7-8.2-3.8-5-4.3-6.9-3-2.2 1.6 3.7 3.4 3.7 3.6 1 2.5-10.6-4-12.1-17.9-2.8-27.5 5.2-5.5 7.6-5.6 10.5-.7m13.4.2c4.5 3 6.6 7 6.6 12.8 0 9.7-1.9 10.9-4.5 2.8-.9-3.1-3-7.9-4.6-10.8a31 31 0 0 1-2.9-6c0-1.3 2.4-.7 5.4 1.2m81.9 16.2c7.2 1.2 8.9 2.5 10.6 8.6 1.3 4.6.2 8.3-2.8 9.5a25 25 0 0 1-15 1.7c-4.9-.9-6.4-.8-10.9 1-6 2.4-9.6 2.7-9 .8.4-1.1 9.3-7 12.2-8 2-.8-.3-1.9-2.6-1.4-2 .5-8.8 4.7-13.4 8.2q-1.4 1-2.4-.1c-1.5-1.5 4.1-6.8 10.3-10 2.6-1.4 4.5-2.9 4.2-3.4-.9-1.4-10.4 3.6-14.7 7.8-2.9 2.8-4.1 3.3-5 2.4-1.6-1.6.7-4 8.8-9.3 3.5-2.3 6.1-4.5 5.8-5-.6-1.1-3.2.2-9.4 4.5-7 5-7.4 5.1-6.2 3 2.6-4.8 9.7-9.4 17.1-11.1a56 56 0 0 1 22.4.8m-40.5 6.4c.1.1-.5 1.6-1.5 3.3-1.7 2.9-1.7 3.2 0 6.6.9 2 2.3 3.6 3 3.6s2.2.9 3.3 2.1 2.6 1.8 3.7 1.5 2.7.2 3.5 1.1q1.5 1.4 4.3.9c2.7-.5 2.5-.1-4 9.2l-6.9 9.7-28.3-1.2-37.1-1.5c-4.9-.1-8.8-.5-8.7-.8 0-.3 6.6-6.3 14.5-13.4 13.6-12 14.6-12.7 16.3-11.2 2.7 2.4 3.1 2 3.1-3 0-8.5-.3-8.4 18.3-7.7 8.9.3 16.3.7 16.5.8M68.9 184c.5 1.6.6 3 .1 3-1.3 0-4-4.2-3.4-5.2q1.6-2.4 3.3 2.2\"/><path d=\"M110.8 50.7c-1 .2-1.8 1.1-1.8 1.8 0 1.1.8 1.3 3.3.8a17 17 0 0 0 3.7-1c.5-.4-2.1-2.3-3-2.2zm.3 11.7c-1.8 2.1-.9 5.1 1.4 5.1 2.4 0 3.2-3.6 1.2-5.3q-1.4-1.5-2.6.2m22.3 4c-.9 2.3 0 5.1 1.6 5.1q1.5 0 1.8-3.3c.2-2.4-.1-3.2-1.3-3.2-.8 0-1.8.6-2.1 1.4m-17.2 4.1q-5.1 10.7 2.8 10.4h2.5l-2.2-1.6c-2.8-1.9-2.9-3.3-.3-8.3 2.4-4.6 2.4-5 .7-5-.7 0-2.3 2-3.5 4.5m11.4 16.2c-2.6 1.3-4.2 1.4-8.5.2-2.7-.8-2.1 1.9.8 3.1 3.3 1.3 8.4.6 10.1-1.5 2-2.4.7-3.4-2.4-1.8\"/>"}, "radio-off": {"vb": "0 0 176 172", "inner": "<path d=\"M93.8 79.4a9016 9016 0 0 0-75.4 76.5c-4.4 4.9-4.6 5.3-3 6.9 1.7 1.6 5.2-1.8 62.7-59.8 78.3-79 90.1-91.3 89.3-93.4q-.6-1.5-1.8-1.5c-.6 0-32.9 32.1-71.8 71.3m-15.3-57C24.2 40.3 28.1 38.8 26.5 42c-.8 1.6-1.5 4-1.5 5.4 0 2-.6 2.7-2.7 3.1-4.4.9-8.6 3.4-10.8 6.3-1.9 2.6-2 4-1.7 42.5.3 41.4.4 43.2 4.5 46.6 1.2.9 1.8.9 3-.3 1.3-1.4 1.3-1.9-.2-5-1.6-2.9-1.9-8-2.4-40.1-.7-39.6-.6-40.8 4.6-43.7 1.6-1 13-1.4 45.7-1.8l43.5-.5.3-2.3.3-2.2H30.9l.3-3.2c.4-4-2.5-2.8 47.7-19a836 836 0 0 0 38.8-13c1.9-1.5.3-3.8-2.6-3.7-1.4 0-17.9 5.1-36.6 11.3m60.9 29.1q-1.2 3.4 3.7 3.5c4.2 0 6.6 1.5 8.6 5.3 1.4 2.7 1.8 8.3 2.5 37.9.9 38 .6 40.4-4.5 44.2-2.8 2-4.1 2.1-51.5 2.6-47.9.5-48.7.5-48.7 2.5s.7 2 49 2c47.5 0 49.1-.1 53-2.1q4-2 6.3-6.5l2.4-4.4-.7-35.5a446 446 0 0 0-1.7-39.5A15 15 0 0 0 143.5 50q-3.5 0-4.1 1.5\"/><path d=\"M131.7 66.2c-4.2 3.3-3.8 9.9.7 11.9 5.4 2.5 11.6-3.3 9.5-8.8-1.4-3.9-6.9-5.5-10.2-3.1M137 72q-.1 1.8-1.4 2c-1.8 0-2.9-1.6-2.1-3 1.1-1.8 3.5-1.1 3.5 1M30.2 74.2c-1.7 1.7-1.5 3.5.4 4.2q3.2 1.2 30.2-.1c13.8-.6 14.3-.7 14-2.7S74 73.5 53 73.2c-15.9-.2-21.9.1-22.8 1m-.8 17.3c-1.2 3.1.7 3.5 18 3.5 14 0 17.6-.3 18.6-1.5 2.5-3 0-3.5-18.1-3.5-14.8 0-18.1.3-18.5 1.5m88.2-.3c-9.6 2.6-16.3 14.7-13.7 24.6 1.4 5 6.7 11.3 11.5 13.6 9.5 4.5 21.9-.6 26.7-10.9a20 20 0 0 0-13.7-27.4c-4.9-1.3-5.5-1.3-10.8.1m14.2 7c8.6 5.2 8.8 18.7.4 24.6-9.7 7-23.2.3-23.2-11.5 0-12.7 12-19.6 22.8-13.1M30 107.5c-2.3 2.8.2 3.6 10.6 3.3 9.1-.3 9.9-.5 9.9-2.3s-.8-2-9.6-2.3c-7.8-.2-9.8 0-10.9 1.3\"/>"}, "radio-on": {"vb": "0 0 190 154", "inner": "<path d=\"M92 9c-1.1 1.1-2 2.6-2 3.3S84.3 17.8 77.3 23L50.5 42.9l-14 10.5-7.7.7C20 54.9 15.6 57 12.3 62 10 65.3 10 65.6 10 100.5s0 35.2 2.3 38.5c1.2 1.8 3.8 4.1 5.7 5.1 3.2 1.8 6.6 1.9 50.5 1.9 46.8 0 47 0 50.9-2.3 7.5-4.3 7.6-4.8 7.6-43s-.1-38.7-7.3-43.5l-4.1-2.7H79.3c-20 0-36.3-.2-36.3-.5.1-.3 10.9-8.6 24.2-18.4 14.9-11 25.5-18.2 27.6-18.7q5.2-1.2 5.2-4.7c0-1.4-3.6-5.2-5-5.2-.5 0-1.9.9-3 2m24.4 51c1.4.5 3.5 2.4 4.6 4.2 1.9 3.1 2 5.1 2 35.6 0 26.1-.3 32.9-1.5 35.8-2.6 6.4-3 6.4-53.5 6.4-49.5 0-49.4 0-52.5-6-2.2-4.3-2.2-66.7 0-71 3.1-6 2.7-5.9 52.7-6 27.3 0 46.7.4 48.2 1\"/><path d=\"M86.6 74.2q-1.5 2.4-1.6 8.5c0 8.6 1.7 9.7 13.9 9.1 5.3-.2 9.6-.9 10.5-1.7 1.2-1 1.6-3.2 1.6-8.2 0-9.4-.7-9.9-13-9.9-9.1 0-10 .2-11.4 2.2m-60.1 1.9c-1.6 2.5 2 2.9 23.1 2.7 18.7-.3 21.9-.5 21.9-1.8s-3.3-1.5-22.2-1.8c-15.4-.2-22.4.1-22.8.9m.3 11q-1 .8-.5 2.3c.6 1.4 3.4 1.6 22.7 1.6 19 0 22.1-.2 22.7-1.5q.4-1.5.1-2.1c-.8-.7-43.8-1-45-.3m-.3 12c-1.6 2.5 2 2.9 23.1 2.7 18.7-.3 21.9-.5 21.9-1.8s-3.3-1.5-22.2-1.8c-15.4-.2-22.4.1-22.8.9m65.4 6.2c-4.5 3-7.3 8.7-6.5 13.2 1.5 7.8 9.7 12.9 17 10.5 11-3.6 11.7-20.1 1-24.6-4.7-2-7.6-1.7-11.5.9m12.6 5.2a8 8 0 0 1 2.5 6c0 8-9.5 11.7-14.7 5.9a9 9 0 0 1-.2-11.8c2.8-3.6 8.9-3.7 12.4-.1m-78 .6c-1.6 2.5 2 2.9 23.1 2.7 18.7-.3 21.9-.5 21.9-1.8s-3.3-1.5-22.2-1.8c-15.4-.2-22.4.1-22.8.9m-.1 12c-1.5 2.5 2.1 2.9 23.2 2.7 19.9-.3 21.9-.5 22.2-2.1s-1.3-1.7-22.2-1.7q-22.5 0-23.2 1.1M143.7 20.7c-1.7 1.6-.3 3.3 5.1 5.9a56 56 0 0 1 20.5 20.1 68 68 0 0 1 6.7 27.2c0 11.9-5.1 26.3-12.3 34.9-3.2 3.8-4 7.2-1.6 7.2 2.9 0 11.7-13.5 14.9-23 3-9 3.8-24.2 1.6-33.4-2.3-9.7-8-20-15.1-27.1-7.5-7.7-17.9-13.8-19.8-11.8\"/><path d=\"M138.4 39.2q-.5 1.2 1 2.2A35 35 0 0 1 158 73.5q0 11.8-6.6 21.6c-3.3 5-3.9 8.5-1.1 7.7 2.1-.7 8.5-11 10.3-16.6a50 50 0 0 0-1.8-29.4 36 36 0 0 0-12.4-15.9c-4.6-3.1-6.8-3.6-8-1.7\"/><path d=\"M132.5 55c-.4.6.9 2.8 2.9 5 6 6.7 7.1 17.2 2.4 24.8-2.1 3.5-1.8 6.5.6 5.6.8-.3 2.7-2.9 4.1-5.7 4.7-9.5 2.6-22.1-4.7-28.2-3.2-2.7-4.3-3-5.3-1.5\"/>"}, "tv": {"vb": "-5.5 -0.0 285.0 285.0", "inner": "<g transform=\"translate(0.000000,285.000000) scale(0.100000,-0.100000)\"><path d=\"M1750 2650 c-19 -19 -24 -36 -21 -72 1 -10 -76 -106 -172 -215 l-174\n-198 -88 1 -88 1 -148 150 c-131 131 -149 153 -149 182 0 44 -14 67 -47 79\n-35 12 -64 1 -92 -34 -39 -50 -3 -114 64 -114 28 0 42 -11 106 -82 40 -46 103\n-113 138 -151 l65 -67 -33 -34 -32 -33 -182 -7 c-323 -13 -357 -15 -443 -36\n-83 -19 -142 -49 -177 -87 -29 -33 -68 -142 -73 -206 -22 -293 -27 -514 -16\n-721 7 -122 14 -255 16 -296 5 -87 36 -188 73 -236 29 -39 109 -80 171 -90 38\n-6 43 -10 38 -28 -24 -100 -14 -139 39 -161 41 -18 67 -19 118 -4 30 8 47 24\n90 84 l52 74 598 3 c328 2 597 0 597 -3 0 -3 8 -14 18 -25 10 -10 33 -40 50\n-67 21 -29 47 -53 70 -63 50 -21 116 -13 148 17 24 22 25 30 22 98 l-3 75 53\n13 c85 22 131 58 164 130 15 34 30 86 33 115 17 185 25 348 25 523 0 172 -4\n271 -24 580 -5 66 -41 158 -80 202 -45 52 -182 106 -256 102 -14 -1 -131 4\n-260 10 -129 6 -278 11 -331 11 -95 0 -95 0 -128 34 -18 19 -29 35 -24 37 5 2\n58 63 118 134 151 180 207 241 218 237 23 -7 70 23 82 52 15 35 3 81 -25 96\n-31 16 -79 11 -100 -10z m74 -39 c16 -17 16 -20 1 -35 -12 -12 -21 -13 -36 -6\n-23 13 -24 24 -3 44 19 20 17 20 38 -3z m-976 -83 c16 -16 15 -45 0 -51 -18\n-6 -48 11 -48 26 0 13 19 37 30 37 3 0 11 -5 18 -12z m1337 -548 c216 -31 262\n-75 290 -278 17 -124 14 -980 -4 -1057 -21 -94 -50 -137 -111 -167 -51 -25\n-69 -28 -280 -39 -302 -17 -1344 -18 -1500 -1 -157 17 -170 19 -213 48 -92 61\n-111 184 -112 729 0 498 12 601 78 673 60 65 110 74 617 106 134 8 1160 -3\n1235 -14z m34 -1657 c18 -51 5 -73 -43 -73 -33 0 -49 13 -93 77 l-23 32 23 4\nc12 3 45 4 72 3 49 -1 50 -2 64 -43z m-1519 28 c0 -5 -15 -29 -33 -53 -28 -37\n-39 -43 -74 -46 -47 -4 -54 6 -46 67 l6 41 73 0 c41 0 74 -4 74 -9z M820 1858\nc-231 -13 -303 -25 -350 -59 -52 -38 -65 -65 -84 -179 -33 -195 -30 -668 5\n-856 6 -32 12 -65 13 -72 4 -23 55 -81 86 -97 71 -37 251 -49 705 -50 563 0\n704 19 764 104 38 54 53 203 55 541 1 376 -13 514 -58 573 -53 68 -83 78 -294\n93 -205 15 -614 16 -842 2z m859 -74 c74 -8 150 -21 168 -29 41 -17 68 -61 81\n-133 17 -88 24 -457 14 -664 -14 -264 -29 -292 -172 -316 -254 -44 -882 -43\n-1159 0 -92 14 -125 39 -145 111 -19 69 -21 124 -20 517 2 450 6 463 169 494\n129 25 269 33 610 35 234 1 356 -3 454 -15z M926 1554 c-14 -13 -16 -59 -16\n-344 0 -285 2 -331 16 -344 22 -22 44 -20 86 9 20 14 41 25 45 25 5 0 18 7 28\n15 11 9 85 54 165 101 80 47 176 104 213 126 90 54 98 70 55 110 -18 17 -44\n36 -58 42 -25 11 -238 135 -312 182 -21 13 -41 24 -45 24 -5 0 -33 16 -63 35\n-59 38 -90 43 -114 19z M2176 1666 c-53 -32 -86 -89 -86 -148 0 -61 46 -125\n111 -151 38 -16 51 -17 89 -7 147 40 171 244 36 310 -55 26 -102 25 -150 -4z\nm118 -24 c6 -10 -149 -153 -158 -145 -22 23 7 99 51 132 28 20 97 29 107 13z\nm3 -89 c-14 -21 -45 -58 -70 -82 -40 -38 -48 -42 -62 -31 -14 12 -13 15 7 38\n35 38 140 124 145 118 2 -2 -7 -21 -20 -43z m73 11 c16 -48 5 -96 -29 -133\n-25 -27 -36 -31 -80 -31 -55 0 -64 11 -28 35 13 8 42 38 66 67 31 39 41 58 36\n75 -9 39 22 27 35 -13z M2195 1225 c-43 -22 -92 -81 -98 -118 -11 -75 44 -156\n120 -176 32 -9 49 -8 84 4 58 21 84 47 99 101 36 128 -92 246 -205 189z m100\n-42 c0 -18 -127 -164 -139 -160 -6 2 -12 25 -14 52 -3 44 0 51 35 87 33 34 43\n39 78 36 23 -2 40 -8 40 -15z m75 -104 c0 -65 -71 -127 -131 -114 -16 4 -31\n10 -34 15 -2 4 28 45 67 90 66 76 72 81 85 64 7 -10 13 -34 13 -55z M2103 805\nc-11 -30 12 -36 148 -33 126 3 134 4 134 23 0 19 -8 20 -138 23 -118 2 -138 0\n-144 -13z M2153 733 c-55 -4 -77 -25 -43 -43 31 -17 243 -13 266 5 19 15 19\n15 0 30 -20 15 -88 17 -223 8z M2103 639 c-6 -6 -9 -18 -6 -25 7 -20 265 -20\n282 -1 8 10 7 17 -1 25 -16 16 -260 16 -275 1z\"/></g>"}, "utilidades": {"vb": "0 0 144 177", "inner": "<path d=\"M31.2 10.6c-9.1 4.5-13.3 14.4-9.8 22.8.9 2.1 1.6 4.2 1.6 4.6s-3.2 4.7-7.1 9.6c-8.6 10.8-9.2 11.9-8.5 15 1 4 4.2 6.4 8.3 6.4 4.8-.1 5.4-.6 14.2-11.8 7-8.8 7.4-9.2 11.2-9.2C55 48 64.8 34 59.6 21.5c-.8-1.9-2.1-3.5-2.8-3.5s-3.6 2.5-6.3 5.6c-5.6 6.2-8 6.6-11.1 1.9-1.5-2.3-1.4-2.6 2.7-8 3.4-4.5 4.1-6 3.2-7.3-1.7-2.8-8.1-2.6-14.1.4m7.8 3c0 .3-1.4 2.3-3.1 4.4-2.5 3.1-3 4.5-2.5 6.6 1 3.8 5.9 8 10.3 8.8 3.6.6 4 .4 8.2-4.1l4.3-4.8-.5 5.3c-.3 4.5-1 6-4 9-3.2 3.2-4.3 3.6-10.4 4.1l-6.8.6-6.7 8.4c-9 11.3-11.1 13.3-13.1 12.5-3.9-1.5-3-4.2 5.1-14.1l8.5-10.9c.3-.6-.3-2.8-1.3-5-4.1-7.8-1.4-15.9 6.3-19.4 4.4-2.1 5.7-2.4 5.7-1.4m45.8 19.2c-4 .3-4.8.6-4.8 2.3 0 1.8.9 1.9 27.9 1.9 27.8 0 31.1-.4 28.2-3.3a403 403 0 0 0-51.3-.9m-50 47.9L19.1 96.5l-2.6 8.9a35 35 0 0 0-1.9 9.8c.9 1.4 6.7.5 13.5-2.1 4.7-1.8 7.8-4.3 20.5-17.1 8.2-8.3 15.3-15.9 15.8-17 1.4-3-.2-7.1-4.2-10.7-6.4-5.9-7.4-5.4-25.4 12.4m22.7-8.2c3 2.9 3.1 4.6.5 7-2 1.8-2.1 1.8-5.3-1.1-4.7-4.3-4.9-4.7-2.6-6.7 2.9-2.3 4.5-2.2 7.4.8m-8.6 8.9 3.4 3.5-9.4 10A134 134 0 0 1 33 105c-.3 0-2-1.9-3.9-4.1l-3.4-4.1 9.4-9.4c5.1-5.2 9.6-9.4 9.9-9.4s2.1 1.5 3.9 3.4m-22.5 23.5 2.7 2.9-3.2 1.1c-5.4 1.9-5.8 1.6-4.7-2.9.6-2.2 1.4-4 1.7-4s2 1.3 3.5 2.9m54-18.4c-1.3 3.3.6 3.5 27.5 3.5s29.7-.3 28.4-3.6c-.8-2.1-55.1-2.1-55.9.1M33.8 123c-1.1 3.2-1.7 3.3-6 1.5q-1.7-.8-4.8 2.4c-2.7 2.6-3 3.5-2.4 6.6.5 3.1.3 3.6-2 4.4-4.7 1.8-4.7 10.2-.1 12.3 2.7 1.2 3.1 2.8 1.5 5.8-1.4 2.6 5 9.6 7.7 8.5 3.4-1.4 4.7-1 6.1 1.8 1.3 2.6 1.7 2.8 6.5 2.5 4.5-.3 5.3-.6 6.5-3.1 1.2-2.4 1.7-2.6 5-2.1s4.1.2 6.6-2.5c2.7-2.8 2.8-3.3 1.7-5.8-1.2-2.5-1-2.9 1.9-5.3 2.7-2.2 3.1-3.1 2.8-6.5-.2-3.2-.8-4.2-3-5.3-3.1-1.4-3.3-2.3-1.7-5.3.8-1.7.4-2.6-2.5-5.5s-3.8-3.3-5.5-2.5c-3 1.6-3.9 1.4-5.3-1.7-1.2-2.4-2-2.7-6.6-3-5.1-.3-5.3-.2-6.4 2.8m9.2 3.4c0 2.3 3 4 7.3 4l4.2.1.1 4.2c0 4.3 1.7 7.3 4 7.3 2.1 0 1.7 3.8-.5 4.5-2.5.8-4.4 6.1-3.1 8.5 1.2 2.3-1.1 4.4-3.8 3.6-2.8-.9-7.3 1.1-7.9 3.4-.7 2.6-4.9 2.7-5.8.1-.8-2.5-6.1-4.4-8.5-3.1-2.3 1.2-4.1-.8-3.3-3.8.9-3.5-.5-7.2-3.2-8.4s-3.4-4.8-1-4.8c2.3 0 4.8-4.6 4.2-7.9-.7-3.4.9-5.4 3.4-4.1 2.3 1.3 7.7-.6 8.4-3.1.7-2.2 5.5-2.7 5.5-.5\"/><path d=\"M34 138.5a8.5 8.5 0 0 0 .5 12.2c3.7 3.3 8 3 11.7-.7 2.6-2.7 3-3.6 2.5-6.8q-1.3-7-8.6-7.2c-2.7 0-4.4.7-6.1 2.5m9 3.5c2.8 2.8 1.1 6.3-2.7 5.8s-5.2-3.2-2.9-5.7c2.4-2.6 3.1-2.6 5.6-.1m37.4.5c-1.3 3.3.6 3.5 27.5 3.5s29.7-.3 28.4-3.6c-.8-2.1-55.1-2.1-55.9.1\"/>"}};
 const ic=n=>CUSTOM_ICO[n]?`<svg viewBox="${CUSTOM_ICO[n].vb}" fill="currentColor" aria-hidden="true">${CUSTOM_ICO[n].inner}</svg>`:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`;
 const $=s=>document.querySelector(s), fmt=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
-const TABS=[['cal','Agenda','cal'],['tasks','Tarefas','check'],['radio','Rádio','radio-off'],['music','Música','musica'],['livros','Livros','livro'],['set','Ajustes','sl'],['tv','TV','tv'],['tempo','Tempo','sun'],['util','Utilidades','timer'],['notas','Notas','nota'],['links','Links e busca','link'],['bem','Bem-estar','heart']];
+const TABS=[['cal','Agenda','cal'],['tasks','Tarefas','check'],['radio','Rádio','radio-off'],['music','Música','musica'],['livros','Livros','livro'],['kanban','Kanban','check'],['set','Ajustes','sl'],['tv','TV','tv'],['tempo','Tempo','sun'],['util','Utilidades','timer'],['notas','Notas','nota'],['links','Links e busca','link'],['bem','Bem-estar','heart']];
 const TABS_TOPO=5;
 const S={open:false,tab:'music',
  m:{i:0,pos:0,play:true,shuf:false,rep:false,list:[{t:'Maré baixa',a:'Estúdio Cinco',d:212},{t:'Linha do horizonte',a:'Coro Vazio',d:187},{t:'Luz de neon',a:'Vera Lacerda',d:243}]},
- tasks:[{t:'Escrever as notas de versão da 0.2.22',w:'2h',d:false},{t:'Perguntar à Ana sobre o texto do onboarding',w:'5h',d:false},{t:'Responder a avaliação na App Store',w:'1d',d:false},{t:'Enviar a fatura de agosto',w:'3d',d:false},{t:'Reservar os voos de outubro',w:'8h',d:true}],
+ tasks:[{t:'Escrever as notas de versão da 0.2.22',w:'2h',d:false,demo:true},{t:'Perguntar à Ana sobre o texto do onboarding',w:'5h',d:false,demo:true},{t:'Responder a avaliação na App Store',w:'1d',d:false,demo:true},{t:'Enviar a fatura de agosto',w:'3d',d:false,demo:true},{t:'Reservar os voos de outubro',w:'8h',d:true,demo:true}],
  clip:[{a:'S',c:'#7c3aed',t:'https://zoom.us/j/9876543210',h:'',pin:true},{a:'F',c:'#e5484d',t:'#F5A623',h:'18:41'},{a:'S',c:'#7c3aed',t:'Quinta às quatro funciona para mim. Vou enviar o link.',h:'18:37'},{a:'N',c:'#c99a06',t:'Perguntar à Ana sobre o segundo monitor antes de sexta',h:'18:33'},{a:'X',c:'#1f7ae0',t:'translatesAutoresizingMaskIntoConstraints = false',h:'18:16'},{a:'W',c:'#2a9d8f',t:'4929 1234 5678 0000',h:'18:08',sens:true,hide:true}],
  p:{mode:'focus',left:1500,run:false,done:0}};
 let q='';
@@ -25,6 +25,7 @@ if(S.tab==='music')v.innerHTML=`<section class="np" aria-label="Reprodução do 
  ${spDev()}${plsSection()}${spBox()}</section>`;
  if(S.tab==='cal')v.innerHTML=calView();
  if(S.tab==='tasks')v.innerHTML=taskView();
+ if(S.tab==='kanban')v.innerHTML=kanbanView();
  if(S.tab==='radio')v.innerHTML=radioView();
  if(S.tab==='clip'){drawClip();if(!window.notchApp){const v=$('#view');if(v)v.insertAdjacentHTML('afterbegin','<button type="button" class="chip" data-a="cpaste" style="margin-bottom:0.625rem">Colar da área de transferência</button>')}}
  if(S.tab==='pomo'){const p=S.p;v.innerHTML=taskSel()+`<div class="pomo ${p.mode!=='focus'?'rest':''}" id="pm"><div class="big"><span class="time" id="ptime" role="timer">${fmt(p.left)}</span><span class="mode">${pnome(p.mode)}</span></div>
@@ -174,11 +175,12 @@ const MS_SCOPES='openid offline_access User.Read Calendars.ReadWrite';
 /* Tarefas e OneDrive pedem permissão só quando você ativa o recurso (consentimento incremental) */
 function msScopes(){let w={};try{w=JSON.parse(ls.get('ms_want')||'{}')}catch(_){}
  const drv=w.drv||ls.get('ms_drv')||'';
- return MS_SCOPES+((w.todo||ls.get('ms_todo')==='1')?' Tasks.ReadWrite':'')+(drv==='app'?' Files.ReadWrite.AppFolder':drv==='full'?' Files.ReadWrite':'')}
-function msPromote(){try{const w=JSON.parse(ls.get('ms_want')||'{}');if(w.todo)ls.set('ms_todo','1');if(w.drv)ls.set('ms_drv',w.drv)}catch(_){}}
+ return MS_SCOPES+((w.todo||ls.get('ms_todo')==='1'||w.planner||ls.get('ms_planner')==='1')?' Tasks.ReadWrite':'')+((w.notes||ls.get('ms_notes')==='1')?' Notes.ReadWrite':'')+(drv==='app'?' Files.ReadWrite.AppFolder':drv==='full'?' Files.ReadWrite':'')}
+function msPromote(){try{const w=JSON.parse(ls.get('ms_want')||'{}');if(w.todo)ls.set('ms_todo','1');if(w.notes)ls.set('ms_notes','1');if(w.planner)ls.set('ms_planner','1');if(w.drv)ls.set('ms_drv',w.drv)}catch(_){}}
 const MS_REDIRECT=location.origin+location.pathname;
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function save(){ls.set('tasks',JSON.stringify(S.tasks));todoSoon()}
+function demoLimpar(){if(!S.tasks.some(t=>t.demo))return;S.tasks=S.tasks.filter(t=>!t.demo);ls.set('tasks',JSON.stringify(S.tasks))}
 try{const t=JSON.parse(ls.get('tasks')||'null');if(Array.isArray(t))S.tasks=t}catch(_){}
 S.tasks.forEach((t,i)=>{t.id=t.id||'d'+i;t.c=t.c||0});S.p.task='';
 function bump(){const t=S.tasks.find(t=>String(t.id)===String(S.p.task));if(t){t.c=(t.c||0)+1;save()}}
@@ -563,7 +565,7 @@ function miscAct(a,b){
   return true}
  if(a==='mref'){msSync(true);return true}
  if(a==='cprev'||a==='cnext'){S.cd=stepDay(cd(),a==='cnext'?1:-1,S.cb);calGo();return true}
- if(a==='ctoday'){S.cd=null;calGo();return true}
+ if(a==='ctoday'){S.cd=null;calGo();return true}  if(a==='cday'){S.cd=dayOf(b.dataset.k);calGo();return true}
  if(a==='cmode'){S.cm=b.dataset.m==='next'?'next':'day';calGo();return true}
  if(a==='expb'){bkExport();return true}
  if(a==='impb'){$('#impf').click();return true}
@@ -615,7 +617,18 @@ function spExtra(){const q=(S.queue||[]).slice(0,5);
 async function spLoadQueue(){if(!S.tok||Date.now()-(S.qAt||0)<15000)return;S.qAt=Date.now();const r=await spApi('/me/player/queue');if(r&&Array.isArray(r.queue)){S.queue=r.queue;if(S.tab==='music')view()}}
 function devList(){const d=S.devs||[];if(!d.length)return '<p class="sub">Nenhum aparelho encontrado. Abra o Spotify em algum aparelho.</p>';
  const sem=!d.some(x=>x.is_active);
- return (sem?'<p class="sub" role="status">Nenhum aparelho está tocando. Escolha um abaixo ou inicie a música no app do Spotify.</p>':'')+'<p class="sub" id="sdevh">Reproduzir em</p><ul class="devs" aria-labelledby="sdevh">'+d.map(x=>`<li><button class="devbtn" data-a="devpick" data-id="${esc(x.id)}" aria-pressed="${!!x.is_active}">${esc(x.name)}${x.is_active?' · tocando':''}</button></li>`).join('')+'</ul>'}
+ return (sem?'<p class="sub" role="status">Nenhum aparelho está tocando. Escolha um abaixo ou inicie a música no app do Spotify.</p>':'')+'<p class="sub" id="sdevh">Reproduzir em</p><ul class="devs" aria-labelledby="sdevh">'+d.map(x=>{const v=x.volume_percent;const ok=typeof v==='number'&&!x.is_restricted;
+  return '<li style="display:flex;flex-direction:column;gap:0.35rem"><button class="devbtn" data-a="devpick" data-id="'+esc(x.id)+'" aria-pressed="'+!!x.is_active+'">'+esc(x.name)+(x.is_active?' · tocando':'')+'</button>'+
+  '<label style="display:flex;gap:0.5rem;align-items:center;font-size:0.8rem">Volume de '+esc(x.name)+' <input type="range" min="0" max="100" value="'+(ok?v:0)+'" data-a="devvol" data-id="'+esc(x.id)+'"'+(ok?'':' disabled')+' style="flex:1"><span aria-hidden="true">'+(ok?v+'%':'indisponível')+'</span></label></li>'}).join('')+'</ul>'}
+async function devVolSet(id,v){const r=await spApi('/me/player/volume?volume_percent='+v+'&device_id='+encodeURIComponent(id),{method:'PUT'});
+ if(S.err===0){const x=(S.devs||[]).find(y=>y.id===id);if(x)x.volume_percent=v;if(S.m&&S.devs.find(y=>y.id===id&&y.is_active))S.m.vol=v;}
+ else if(S.err===403)say('Controlar o volume exige Spotify Premium');else if(S.err===404)say('Aparelho indisponível. Abra o Spotify nele');else say('Não foi possível ajustar o volume');return r}
+document.addEventListener('change',e=>{if(e.target.dataset&&e.target.dataset.a==='devvol'){devVolSet(e.target.dataset.id,+e.target.value)}});
+/* Estado em tempo real: consulta leve a cada 2 s enquanto a aba Música está aberta */
+let spUltimaFaixa='';
+setInterval(async()=>{if(!S.tok||S.tab!=='music'||!S.open)return;const d=await spApi('/me/player/currently-playing');if(!d||!d.item)return;
+ const chave=d.item.id+'|'+d.is_playing;if(chave!==spUltimaFaixa){spUltimaFaixa=chave;spSync()}else if(S.m){S.m.pos=Math.round((d.progress_ms||0)/1000)}},2000);
+
 /* Playlists: busca no Spotify pelo artista atual (não são recomendações personalizadas) */
 function plsSection(){const a=(S.m.list[0]||{}).a||'',q=a.split(',')[0].trim();
  return `<details class="dt" id="pls"><summary>Playlists sugeridas</summary><p class="sub">Busca no Spotify por "${esc(q||'artista atual')}". Não são recomendações personalizadas do Spotify.</p><div id="plsres" aria-live="polite"></div></details>`}
@@ -635,7 +648,10 @@ setInterval(()=>{if(S.tok&&S.open&&S.tab==='music')spDevs()},20000);
 /* Rádio: temporizador para dormir */
 const SLEEP_OPTS=[0,15,30,45,60,90];
 const sleepTxt=()=>S.rd.sleepAt?'Para em '+Math.max(1,Math.ceil((S.rd.sleepAt-Date.now())/60000))+' min':'';
+const RS_PAISES=[['BR','Brasil'],['US','EUA'],['GB','Reino Unido'],['PT','Portugal'],['FR','França'],['DE','Alemanha'],['ES','Espanha'],['IT','Itália'],['JP','Japão'],['MX','México'],['AR','Argentina'],['CA','Canadá'],['IN','Índia'],['AU','Austrália']];
+function rsTopBoxHtml(){return '<section id="rstopBox" aria-label="Rádios mais ouvidas por país" style="margin:0.5rem 0"><div class="tp-k">Mais ouvidas por país</div><div class="redact" role="group" aria-label="Escolher país" style="margin-top:0.4rem">'+RS_PAISES.map(([c,n])=>'<button type="button" class="chip" data-a="rstop" data-cc="'+c+'">'+n+'</button>').join('')+'</div></section>'}
 function radioExtrasDom(){const v=$('#view');if(!v||S.tab!=='radio')return;
+ const rf=v.querySelector('#rsform');if(rf&&!v.querySelector('#rstopBox'))rf.insertAdjacentHTML('afterend',rsTopBoxHtml());
  v.querySelectorAll('#rtile,#rweek').forEach(n=>n.remove());
  
  const listen=(()=>{try{return JSON.parse(ls.get('listen')||'{}')||{}}catch(_){return {}}})();
@@ -761,7 +777,7 @@ const calKey=()=>S.cm+':'+dayKey(cd())+':'+(S.cb?1:0);
 function keepFocus(fn){const a=document.activeElement,ok=a&&a.closest&&a.closest('#view'),sel=ok?(a.id?'#'+a.id:a.dataset&&a.dataset.a?'[data-a="'+a.dataset.a+'"]'+(a.dataset.m?'[data-m="'+a.dataset.m+'"]':'')+(a.dataset.i!==undefined?'[data-i="'+a.dataset.i+'"]':''):''):'',ss=ok&&a.selectionStart!==undefined?[a.selectionStart,a.selectionEnd]:null;fn();if(sel){const n=$('#view '+sel);if(n){n.focus();if(ss&&n.setSelectionRange)try{n.setSelectionRange(ss[0],ss[1])}catch(_){}}}}
 const DEMO_EV=[['#3ecf8e','Aniversário da Marta','','dia todo',0],['#5b8cff','Daily','','9:30',0],['#5b8cff','Revisão de design: painel do notch','Meet','18:37',0],['#5b8cff','Onboarding com a Ana','Zoom','faltam 50 min',45],['#5b8cff','Um a um','','em 2h 8min',0],['#3ecf8e','Buscar as chaves','','em 4h 8min',0]];
 const rowsHtml=(rows,vazio)=>rows.length?rows.map(e=>`<div class="row">${e[4]?`<i class="bar" style="width:${e[4]}%"></i>`:''}<i class="dot" style="background:${e[0]}"></i><span class="grow">${e[1]}</span>${e[2]?chipEl(e):''}<span class="tag">${e[3]}</span></div>`).join(''):`<p class="sub">${vazio}</p>`;
-function calView(){const c=cd(),conn=msOn(),days=S.cm==='next'?nextDays():[c],nx=S.cm==='next';
+function calViewDados(){const c=cd(),conn=msOn(),days=S.cm==='next'?nextDays():[c],nx=S.cm==='next';
  const groups=conn?(S.evk===calKey()&&S.evg?S.evg:null):days.map(d=>({k:dayKey(d),d,rows:isToday(d)?DEMO_EV:[]}));
  const nav=`<h2 id="chead">${esc(nx?'Próximos dias':dayLabel(c))}${!nx&&isToday(c)?' (hoje)':''}</h2>
  <div class="calnav" role="group" aria-label="Escolher o dia">
@@ -777,6 +793,25 @@ function calView(){const c=cd(),conn=msOn(),days=S.cm==='next'?nextDays():[c],nx
  else if(!nx)body=rowsHtml(groups[0].rows,conn?'Nenhum evento neste dia.':'Sem eventos de demonstração neste dia.');
  else body=groups.map(g=>`<h3 class="dh">${esc(dayLabel(g.d))}${isToday(g.d)?' (hoje)':''}</h3>`+rowsHtml(g.rows,conn?'Sem eventos.':'Sem eventos de demonstração.')).join('');
  return nav+body+cBox()}
+function calView(){const c=cd(),conn=msOn(),nx=S.cm==='next';
+ const days=nx?nextDays():[c];const groups=conn?(S.evk===calKey()&&S.evg?S.evg:null):days.map(d=>({k:dayKey(d),d,rows:isToday(d)?DEMO_EV:[]}));
+ const hoje=dayKey(new Date()),kc=dayKey(c);const h=new Date().getHours();const saud=h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';
+ const nEv=(!nx&&groups&&groups[0])?groups[0].rows.length:0;const tarefasDia=S.tasks.filter(t=>!t.d&&t.due===kc).length;
+ const titulo=isToday(c)?'Hoje':dayLabel(c);
+ const longa=c.toLocaleDateString('pt-BR',{year:'numeric',month:'long',day:'numeric'});
+ const semana=[...Array(12).keys()].map(i=>{const d=new Date(c.getTime());d.setDate(d.getDate()+i);return d});
+ const faixa='<div class="agnd-week" role="group" aria-label="Dias">'+semana.map(d=>{const k=dayKey(d);const sel=k===kc;return '<button type="button" class="agnd-day" data-a="cday" data-k="'+k+'" aria-pressed="'+sel+'" aria-label="'+esc(d.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'}))+'"><span class="agnd-dn">'+d.getDate()+'</span><span class="agnd-dw">'+esc(d.toLocaleDateString('pt-BR',{weekday:'short'}).replace('.',''))+'</span></button>'}).join('')+'</div>';
+ const topo='<header class="agnd-top"><div><h2 id="chead" class="agnd-h">'+esc(nx?'Próximos dias':titulo)+'</h2><p class="sub" style="margin:0.15rem 0 0">'+esc(longa)+'</p></div><div class="calnav" role="group" aria-label="Navegar pelos dias"><button class="chip" data-a="ctoday">Hoje</button><button class="ib" data-a="cprev" aria-label="'+(S.cb?'Dia útil anterior':'Dia anterior')+'">'+ic('chl')+'</button><button class="ib" data-a="cnext" aria-label="'+(S.cb?'Próximo dia útil':'Próximo dia')+'">'+ic('chr')+'</button></div></header>';
+ const resumo=nx?'':'<div class="agnd-sum" role="status">'+esc(saud)+', você tem <b>'+nEv+(nEv===1?' evento':' eventos')+'</b> e <b>'+tarefasDia+(tarefasDia===1?' tarefa':' tarefas')+'</b> '+(isToday(c)?'hoje':'neste dia')+'.</div>';
+ const ctrl='<div class="agnd-ctrl"><span role="group" aria-label="Modo de exibição" style="display:inline-flex;gap:0.375rem;flex-wrap:wrap"><button class="chip" data-a="cmode" data-m="day" aria-pressed="'+(!nx)+'">Um dia</button><button class="chip" data-a="cmode" data-m="next" aria-pressed="'+nx+'">Próximos dias</button></span><label class="cbz"><input type="checkbox" id="cbiz"'+(S.cb?' checked':'')+'> Só dias úteis</label><input type="date" id="cdate" value="'+kc+'" aria-label="Escolher uma data no calendário"></div>';
+ const lista=!groups?'<p class="sub">Carregando a agenda…</p>':(!nx?rowsHtml(groups[0].rows,conn?'Nenhum evento neste dia.':'Sem eventos de demonstração neste dia.'):groups.map(g=>'<h3 class="dh">'+esc(dayLabel(g.d))+(isToday(g.d)?' (hoje)':'')+'</h3>'+rowsHtml(g.rows,conn?'Sem eventos.':'Sem eventos de demonstração.')).join(''));
+ const main='<section class="agnd-main" aria-label="Agenda">'+topo+faixa+resumo+ctrl+'<div class="agnd-lista">'+lista+'</div>'+cBox()+'</section>';
+ const abertas=S.tasks.map((t,i)=>({t,i})).filter(x=>!x.t.d);
+ const atrasadas=abertas.filter(x=>x.t.due&&x.t.due<hoje),semData=abertas.filter(x=>!x.t.due),paraHoje=abertas.filter(x=>x.t.due===hoje);
+ const linha=x=>'<li class="agnd-task"><button class="chk" role="checkbox" aria-checked="false" aria-label="Concluir: '+esc(x.t.t)+'" data-i="'+x.i+'"></button><span class="agnd-tt">'+esc(x.t.t)+(x.t.due?'<span class="sub"> · '+esc(x.t.due)+'</span>':'')+'</span></li>';
+ const grupo=(nome,l)=>l.length?'<h3 class="agnd-gh">'+nome+' <span class="sub">('+l.length+')</span></h3><ul class="agnd-tl">'+l.map(linha).join('')+'</ul>':'';
+ const lateral='<aside class="agnd-side" aria-label="Caixa de entrada"><h2 class="agnd-h" style="font-size:1.25rem">Caixa de entrada</h2>'+grupo('Atrasadas',atrasadas)+grupo('Hoje',paraHoje)+grupo('Sem data',semData)+(!abertas.length?'<p class="sub">Nenhuma tarefa aberta.</p>':'')+'</aside>';
+ return '<div class="agnd">'+main+lateral+'</div>'}
 function calGo(){S.evg=null;S.evk='';S.msErr=false;if(msOn())S.msLoad=true;keepFocus(view);
  const nd=S.cm==='next'?nextDays():null;
  say(nd?'Próximos dias, a partir de '+dayLabel(nd[0]):'Agenda de '+dayLabel(cd()));
@@ -867,7 +902,7 @@ function todoQueueDel(t){if(!t||!t.mid||!todoOn())return;let q=[];try{q=JSON.par
 function todoUnqueue(t){if(!t||!t.mid)return;let q=[];try{q=JSON.parse(ls.get('todo_del')||'[]')}catch(_){}ls.set('todo_del',JSON.stringify(q.filter(x=>x.id!==t.mid)))}
 function todoSoon(){if(!todoOn()||!S.todo)return;S.todo.dirty=true;clearTimeout(S.tdT);S.tdT=setTimeout(()=>todoSync(),4000)}
 const toDo=t=>({title:unesc(t.t),status:t.d?'completed':'notStarted',dueDateTime:t.due?{dateTime:t.due+'T00:00:00.0000000',timeZone:'UTC'}:null});
-async function todoSync(manual){
+async function todoSync(manual){demoLimpar();
  const Z=S.todo;
  if(Z.busy||!msOn())return;
  if(!manual&&!Z.dirty&&Date.now()-Z.at<270000)return;
@@ -993,9 +1028,9 @@ function rsBox(){const R=S.rd;
  <label class="cbz"><input type="checkbox" id="rsbr"${R.rsBr?' checked':''}> Só rádios do Brasil</label>
  <div id="rsres" aria-live="polite">${R.rsHtml||''}</div></details>`}
 async function rsRun(preset){const R=S.rd,out=$('#rsres'),q=($('#rsq').value||'').trim(),br=$('#rsbr').checked,order=(preset&&preset.order)||(br&&!q?'clickcount':'votes');
- R.rsQ=q;R.rsBr=br;if(q.length<2&&!(preset&&preset.br)){out.textContent='Digite pelo menos 2 letras ou use um dos atalhos.';return}
+ R.rsQ=q;R.rsBr=br;if(q.length<2&&!(preset&&(preset.br||preset.cc))){out.textContent='Digite pelo menos 2 letras ou use um dos atalhos.';return}
  out.textContent='Buscando…';
- const base={hidebroken:'true',order,reverse:'true',limit:'30'};if(br)base.countrycode='BR';if(location.protocol==='https:')base.is_https='true';
+ const base={hidebroken:'true',order,reverse:'true',limit:'30'};if(br)base.countrycode='BR';if(preset&&preset.cc)base.countrycode=preset.cc;if(location.protocol==='https:')base.is_https='true';
  try{let lista=await rbFetch(q?{...base,name:q}:base);const pal=q.toLowerCase().split(/\s+/).filter(Boolean);
   if(q&&lista.length<8&&pal.length){const t=await rbFetch({...base,tag:pal[0]});lista=lista.concat(t.filter(x=>pal.every(w=>(String(x.name)+' '+String(x.tags)).toLowerCase().includes(w))))}
   const vis=new Set(),itens=lista.filter(x=>{const u=String(x.url_resolved||x.url||'');if(!/^https?:\/\/\S+$/i.test(u)||(location.protocol==='https:'&&!/^https:/i.test(u))||vis.has(u))return false;vis.add(u);return true}).slice(0,25);
@@ -1263,7 +1298,7 @@ function cvSetUnits(){const k=$('#cvk').value,u=CONV[k].u,de=$('#cvde'),pa=$('#c
 function notesList(){let l=[];try{l=JSON.parse(ls.get('notas_list')||'null')}catch(_){}
  if(!Array.isArray(l)||!l.length){const t=ls.get('notas')||'';l=[{id:'n1',n:'Nota 1',t,at:+(ls.get('notas_at')||Date.now())}];ls.set('notas_list',JSON.stringify(l));ls.set('notas_cur','n1')}
  return l}
-function notesSave(l){ls.set('notas_list',JSON.stringify(l));const c=notaCurItem(l);ls.set('notas',c?c.t:'');ls.set('notas_at',String(Date.now()))}
+function notesSave(l){ls.set('notas_list',JSON.stringify(l));onAgendar();const c=notaCurItem(l);ls.set('notas',c?c.t:'');ls.set('notas_at',String(Date.now()))}
 function notaCurItem(l){l=l||notesList();const id=ls.get('notas_cur');return l.find(x=>x.id===id)||l[0]}
 function notaSel(id){ls.set('notas_cur',id)}
 function notasView(){const L=notesList(),c=notaCurItem(L);
@@ -1534,19 +1569,22 @@ function apresFocoHtml(){const p=S.p;const fase={focus:'Foco',rest:'Pausa curta'
  return '<div style="text-align:center;color:#111"><div style="font-size:clamp(16px,2.6vw,22px);opacity:.75">'+fase+(p.run?'':' · pausado')+'</div><div style="font:600 clamp(64px,16vw,170px)/1 system-ui,sans-serif;font-variant-numeric:tabular-nums;margin:0.625rem 0">'+mm+':'+ss+'</div>'+(tarefa?'<div style="font-size:clamp(16px,2.6vw,24px);opacity:.9">'+esc(tarefa.t)+'</div>':'')+'</div>'}
 function apresDestaqueHtml(){const atual=(apresPref('apres_destaque','#FF9F0A')||'').toUpperCase();const ops=[['#FF9F0A','Laranja'],['#64D2FF','Ciano'],['#30D158','Verde']];
  return '<div style="background:rgba(0,0,0,.06);border-radius:1.125rem;padding:0.875rem"><div style="font-size:0.75rem;opacity:.7;margin-bottom:0.5rem">Destaque dos minutos e segundos</div><div role="group" aria-label="Cor de destaque" style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap">'+ops.map(([c,n])=>'<button type="button" class="chip" data-a="apDest" data-c="'+c+'" aria-label="Destaque '+n+'" aria-pressed="'+(atual===c)+'" style="width:2.5rem;height:2.5rem;border-radius:50%;padding:0;background:'+c+';border:0.125rem solid '+(atual===c?'#111':'rgba(0,0,0,.25)')+'"></button>').join('')+'<input type="text" id="apDestHex" data-a="apDestHex" value="'+atual+'" maxlength="7" aria-label="Código HEX da cor de destaque" style="width:6rem;border-radius:0.625rem;padding:0.5rem;border:1px solid rgba(0,0,0,.2);background:#fff;color:#111;font:inherit"></div></div>'}
+function radioTocando(){return !!(S.rd.i===S.rd.cur&&typeof RA!=='undefined'&&RA&&!RA.paused)}
 function apresCartaoMusica(){const fonte=apresFonte();const rd=S.rd.list[S.rd.cur];const tr=S.m&&S.m.list[S.m.i];
- if(fonte!=='spotify'){const tocando=!!(S.rd.on&&S.rd.i===S.rd.cur);const fav=!!(rd&&S.rd.favs&&rd.u&&S.rd.favs.includes(rd.u));const ini=(rd&&rd.n?rd.n:'R').trim().charAt(0).toUpperCase();
-  const capa=rd&&rd.img?'<img src="'+esc(rd.img)+'" alt="Capa de '+esc(rd.n||'rádio')+'" style="width:100%;height:100%;object-fit:cover">':'<div aria-hidden="true" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font:800 56px/1 system-ui,sans-serif;color:#fff;background:linear-gradient(135deg,#e8322b,#ff9f0a)">'+esc(ini)+'</div>';
+ if(fonte!=='spotify'){const tocando=radioTocando();const fav=!!(rd&&S.rd.favs&&rd.u&&S.rd.favs.includes(rd.u));const ini=(rd&&rd.n?rd.n:'R').trim().charAt(0).toUpperCase();
+  const capa=rd&&rd.img?'<img src="'+esc(rd.img)+'" alt="Capa de '+esc(rd.n||'rádio')+'" style="width:100%;height:100%;object-fit:cover">':'<div aria-hidden="true" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font:800 3.5rem/1 system-ui,sans-serif;color:#fff;background:#1d1d1f">'+esc(ini)+'</div>';
   const btn=(a,l,t)=>'<button type="button" class="chip" data-a="'+a+'" aria-label="'+l+'" style="min-width:2.75rem;min-height:2.75rem">'+t+'</button>';
-  return '<div id="apCartao" role="group" aria-label="Rádio. Arraste para trocar de estação" style="touch-action:pan-y;background:rgba(0,0,0,.06);border-radius:1.125rem;padding:0.75rem;color:#111;user-select:none">'+
-   '<div style="display:flex;justify-content:space-between;align-items:center;font-size:0.75rem;opacity:.7"><span>Rádio · arraste para trocar</span><button type="button" class="chip" data-a="apFonte" style="min-height:2rem;padding:0 10px">Trocar para Spotify</button></div>'+
-   '<div style="display:flex;gap:0.75rem;align-items:center;margin-top:0.625rem"><div style="width:5.25rem;height:5.25rem;border-radius:1rem;overflow:hidden;flex:none">'+capa+'</div><div style="min-width:0"><div style="font-weight:700;font-size:1rem;overflow-wrap:anywhere">'+esc(rd?rd.n:'Nenhuma rádio')+'</div><div style="font-size:0.8125rem;opacity:.7">'+(tocando?'Ao vivo':'Parada')+'</div></div></div>'+
-   '<div style="display:flex;gap:0.5rem;justify-content:space-between;align-items:center;margin-top:0.625rem;flex-wrap:wrap">'+btn('rFav',fav?'Remover dos favoritos':'Adicionar aos favoritos',fav?'♥':'♡')+btn('rPrev','Rádio anterior','⏮')+btn('rPlay',tocando?'Pausar':'Tocar',tocando?'❚❚':'▶')+btn('rNext','Próxima rádio','⏭')+btn('rRand','Rádio aleatória','🔀')+'</div></div>'}
- const sp=tr&&S.tok?{titulo:tr.t,sub:tr.a||'',tocando:!!S.m.play}:{titulo:'Spotify não conectado',sub:'',tocando:false};
- const x=sp;const btn=x.tocando?'❚❚':'▶';
- return '<div id="apCartao" role="group" aria-label="Spotify. Arraste para trocar de faixa" style="touch-action:pan-y;background:rgba(0,0,0,.06);border-radius:1.125rem;padding:0.875rem;color:#111;user-select:none">'+
-  '<div style="display:flex;justify-content:space-between;align-items:center;font-size:0.75rem;opacity:.7"><span>Spotify · arraste para trocar faixa</span><button type="button" class="chip" data-a="apFonte" style="min-height:2rem;padding:0 10px">Trocar para rádio</button></div><div style="font-weight:600;margin-top:0.375rem;overflow-wrap:anywhere">'+esc(x.titulo)+'</div><div style="font-size:0.8125rem;opacity:.7">'+esc(x.sub)+'</div>'+
-  '<div style="margin-top:0.625rem"><button type="button" class="chip" data-a="apMusPlay" aria-label="'+(x.tocando?'Pausar':'Tocar')+'">'+btn+'</button></div></div>'}
+  return '<div id="apCartao" role="group" aria-label="Rádio. Arraste para trocar de estação" style="touch-action:pan-y;background:rgba(0,0,0,.06);border-radius:1.1rem;padding:.75rem;color:#111;user-select:none">'+
+   '<div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;font-size:.75rem;opacity:.7"><span>Rádio · arraste para trocar</span><button type="button" class="chip" data-a="apFonte" aria-label="Trocar para Spotify" title="Trocar para Spotify" style="min-width:2.5rem;min-height:2.5rem;padding:0 .6rem;display:inline-flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M6.5 9.2c3.6-1.1 7.6-.8 10.9 1" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M7.3 12.4c3-.9 6.3-.6 8.9.9" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M8.1 15.4c2.4-.7 5-.5 7 .7" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>'+
+   '<div style="display:flex;gap:.75rem;align-items:center;margin-top:.6rem"><div style="width:5.25rem;height:5.25rem;border-radius:1rem;overflow:hidden;flex:none">'+capa+'</div><div style="min-width:0"><div style="font-weight:700;font-size:1rem;overflow-wrap:anywhere">'+esc(rd?rd.n:'Nenhuma rádio')+'</div><div style="font-size:.8rem;opacity:.7">'+(tocando?'Ao vivo':'Parada')+'</div></div></div>'+
+   '<div style="display:flex;gap:.5rem;justify-content:space-between;align-items:center;margin-top:.6rem;flex-wrap:wrap">'+btn('rFav',fav?'Remover dos favoritos':'Adicionar aos favoritos',fav?'♥':'♡')+btn('rPrev','Rádio anterior','⏮')+btn('rPlay',tocando?'Pausar':'Tocar',tocando?'❚❚':'▶')+btn('rNext','Próxima rádio','⏭')+btn('rRand','Rádio aleatória','🔀')+'</div></div>'}
+ const tocando=!!S.m.play;const logado=!!(tr&&S.tok);const titulo=logado?tr.t:'Spotify não conectado';const sub=logado?(tr.a||''):'';
+ const btn=(a,l,t,big)=>'<button type="button" class="chip" data-a="'+a+'" aria-label="'+l+'" style="min-width:'+(big?'3.25rem':'2.75rem')+';min-height:'+(big?'3.25rem':'2.75rem')+';font-size:'+(big?'1.2rem':'1rem')+'">'+t+'</button>';
+ return '<div id="apCartao" role="group" aria-label="Spotify. Arraste para trocar de faixa" style="touch-action:pan-y;background:rgba(0,0,0,.06);border-radius:1.1rem;padding:.75rem;color:#111;user-select:none">'+
+  '<div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;font-size:.75rem;opacity:.7"><span>Spotify · arraste para trocar faixa</span><button type="button" class="chip" data-a="apFonte" aria-label="Trocar para rádio" title="Trocar para rádio" style="min-width:2.5rem;min-height:2.5rem;padding:0 .6rem;display:inline-flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M7 8l10-5"/><circle cx="15" cy="14.5" r="2.5"/><path d="M6 12h3"/></svg></button></div>'+
+  '<div style="font-weight:700;margin-top:.5rem;overflow-wrap:anywhere">'+esc(titulo)+'</div><div style="font-size:.8rem;opacity:.75">'+esc(sub)+'</div>'+
+  '<div style="display:flex;gap:.5rem;justify-content:space-between;align-items:center;margin-top:.6rem">'+btn('apSpPrev','Faixa anterior','⏮',false)+btn('apMusPlay',tocando?'Pausar':'Tocar',tocando?'❚❚':'▶',true)+btn('apSpNext','Próxima faixa','⏭',false)+'</div></div>'}
+
 function apresSomHtml(){const modo=apresPref('apres_som','sistema');const sis=+apresPref('apres_master',100),mus=+apresPref('apres_musica',60);
  const seg=(v,l)=>'<button type="button" class="chip" data-a="apSom" data-v="'+v+'" aria-pressed="'+(modo===v)+'" style="flex:1">'+l+'</button>';
  const slider=(id,label,val,ev)=>'<label style="display:block;font-size:0.75rem;opacity:.8;margin-top:0.625rem">'+label+'<div style="position:relative;margin-top:0.25rem;background:rgba(0,0,0,.08);border-radius:0.875rem;height:2.25rem;overflow:hidden"><input type="range" min="0" max="100" value="'+val+'" data-a="'+ev+'" aria-label="'+label+'" style="width:100%;height:100%;margin:0"><span aria-hidden="true" style="position:absolute;right:0.75rem;top:0.5rem;pointer-events:none;font-weight:600">'+val+'%</span></div></label>';
@@ -1571,9 +1609,13 @@ function apresRender(){let el=document.getElementById('apres');if(!el){el=docume
   '<div><div style="font-size:0.75rem;opacity:.7;margin-bottom:0.375rem">Cor de fundo</div>'+apresCoresHtml()+'</div></aside>';
  const principal='<main style="flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.125rem;padding:1rem">'+
   
-  (modo==='foco'?apresFocoHtml()+apresFocoBotoesHtml():'<div id="apClock" style="width:100%;display:flex;justify-content:center">'+apresRelogioHtml()+'</div>')+
+  (modo==='cronometro'?apresCronoHtml():modo==='foco'?apresFocoHtml()+apresFocoBotoesHtml():'<div id="apClock" style="width:100%;display:flex;justify-content:center">'+apresRelogioHtml()+'</div>')+
   '</main>';
- el.innerHTML='<div style="display:flex;gap:1.125rem;width:100%;height:100%;padding:1.125rem;box-sizing:border-box;align-items:stretch">'+menu+principal+'</div>';el.style.color='#000';if(apresRelogioTipo()==='bolas'&&modo!=='foco')bolasRender();
+ el.innerHTML='<div style="display:flex;gap:1.125rem;width:100%;height:100%;padding:1.125rem;box-sizing:border-box;align-items:stretch">'+menu+principal+'</div>';
+const recolhido=ls.get('apres_menu')==='0';const asideEl=el.querySelector('aside[aria-label="Preferências da apresentação"]');
+const botaoRec=(txt,lab)=>{const b=document.createElement('button');b.type='button';b.className='chip';b.dataset.a='apRecolher';b.setAttribute('aria-expanded',String(!recolhido));b.setAttribute('aria-label',lab);b.textContent=txt;b.style.cssText='min-height:2.5rem;padding:0 0.9rem;flex:none';return b};
+if(asideEl&&asideEl.firstElementChild){const hdr=asideEl.firstElementChild;hdr.insertBefore(botaoRec('Recolher','Recolher preferências'),hdr.lastElementChild)}
+if(recolhido&&asideEl){asideEl.style.display='none';const fl=botaoRec('Preferências','Mostrar preferências');fl.setAttribute('aria-expanded','false');fl.style.cssText+=';position:absolute;top:1rem;left:1rem;z-index:2';el.appendChild(fl)}el.style.color='#000';if(apresRelogioTipo()==='bolas'&&modo!=='foco')bolasRender();
  el.hidden=false}
 /* ===== Relógio em matriz numérica (canvas) ===== */
 const MATRIZ={raf:0,cells:[],cols:0,rows:0,last:'',pulse:0,lastSec:-1,cell:14,w:0,h:0};
@@ -1606,34 +1648,63 @@ function matrizQuadro(){const cv=document.getElementById('apMatriz');if(!cv){can
 function matrizIniciar(){if(MATRIZ.raf)return;MATRIZ.cells=[];MATRIZ.raf=requestAnimationFrame(matrizQuadro)}
 function apresMatrizCheck(){if(apresRelogioTipo()==='matriz'&&!MATRIZ.raf&&document.getElementById('apMatriz')){MATRIZ.cells=[];MATRIZ.w=0;matrizIniciar()}}
 /* ===== Bolas: uma bola por segundo, empilhadas ===== */
-const BOLAS={hist:[],cols:9};
+const BOLAS={items:[],seq:0,col:0,raf:0,last:0,drag:null,W:0,H:0};
 function bolasCfg(){return {mov:ls.get('bolas_mov')||'infinito',forma:ls.get('bolas_forma')||'squircle'}}
-function bolasRender(){const box=document.getElementById('bolasBox');if(!box)return;box.innerHTML='';BOLAS.hist.forEach(b=>box.appendChild(bolasEl(b,false)))}
-function bolasEl(b,anim){const box=document.getElementById('bolasBox');const W=box.clientWidth||320,H=box.clientHeight||600;const t=Math.floor(Math.min(W/BOLAS.cols,H/10));const e=document.createElement('div');
- const cfg=bolasCfg();const raio=cfg.forma==='circulo'?'50%':'24%';
- const dcor=apresPref('apres_destaque','#FF9F0A');e.style.cssText='position:absolute;width:'+(t*0.9)+'px;height:'+(t*0.9)+'px;left:'+(b.col*(W/BOLAS.cols)+(W/BOLAS.cols-t*0.9)/2)+'px;border-radius:'+raio+';background:'+(b.kind?dcor:'#fff')+';color:'+(b.kind?'#fff':'#000')+';box-shadow:0 2px 6px rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;font:800 '+Math.round(t*0.38)+'px/1 system-ui,sans-serif;transform:rotate('+b.rot+'deg);transition:bottom .7s cubic-bezier(.3,1.4,.6,1);bottom:'+(anim?H:b.row*t*0.9)+'px';
- e.textContent=b.n;e.setAttribute('aria-hidden','true');if(anim)requestAnimationFrame(()=>requestAnimationFrame(()=>{e.style.bottom=(b.row*t*0.9)+'px'}));return e}
-function bolasTick(){const box=document.getElementById('bolasBox');if(!box){return}const a=new Date();const ss=String(a.getSeconds()).padStart(2,'0');const mm=a.getMinutes();
- const cfg=bolasCfg();const alturas=Array(BOLAS.cols).fill(0);BOLAS.hist.forEach(b=>{alturas[b.col]=Math.max(alturas[b.col],b.row+1)});
- const menores=alturas.map((h,i)=>[h,i]).sort((x,y)=>x[0]-y[0]).slice(0,3);const pick=menores[Math.floor(Math.random()*menores.length)];
- const col=pick[1],row=alturas[col];const rot=Math.round((Math.random()-0.5)*30);
- const nn=parseInt(ss,10);const b={n:ss,col,row,rot,kind:(nn===a.getHours()%24?'hora':(nn===mm?'min':null))};BOLAS.hist.push(b);
- if(cfg.mov==='60'&&BOLAS.hist.length>60)BOLAS.hist.shift();
- const H=box.clientHeight||600,t=Math.floor(Math.min((box.clientWidth||320)/BOLAS.cols,H/10));
- if(BOLAS.hist.some(x=>x.row*t*0.9>H-t)&&cfg.mov==='infinito'){BOLAS.hist=[]}
- box.appendChild(bolasEl(b,true));if(BOLAS.hist.length>60&&cfg.mov==='60'){bolasRender()}}
+function bolasGeo(box){const W=box.clientWidth||320,H=box.clientHeight||600;const cols=W>=600?10:7;const colW=W/cols;const s=Math.max(28,Math.min(colW*0.86,H/12,76));return {W,H,cols,colW,s}}
+function bolasElFor(it){const cfg=bolasCfg();const e=document.createElement('div');e.className='bola';e.dataset.bid=String(it.id);
+ const dcor=apresPref('apres_destaque','#FF9F0A');
+ e.style.cssText='position:absolute;left:0;top:0;width:'+it.s+'px;height:'+it.s+'px;border-radius:'+(cfg.forma==='circulo'?'50%':'24%')+';background:'+(it.kind?dcor:'#ffffff')+';color:#000000;border:1px solid rgba(0,0,0,.12);box-shadow:0 .15rem .4rem rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;font:800 '+Math.round(it.s*0.4)+'px/1 system-ui,sans-serif;cursor:grab;touch-action:none;user-select:none;will-change:transform';
+ if(it.kind)e.style.color='#000000';
+ e.textContent=it.n;e.setAttribute('aria-label','Bola '+it.n);e.setAttribute('role','button');e.setAttribute('tabindex','-1');it.el=e;
+ e.style.transform='translate('+it.x+'px,'+it.y+'px) rotate('+it.rot+'deg)';return e}
+function bolasRender(){const box=document.getElementById('bolasBox');if(!box)return;box.innerHTML='';box.style.touchAction='none';
+ BOLAS.items.forEach(it=>box.appendChild(bolasElFor(it)));bolasIniciar()}
+function bolasSpawn(){const box=document.getElementById('bolasBox');if(!box)return;const g=bolasGeo(box);const a=new Date();
+ const ss=a.getSeconds();const nn=ss;const kind=(nn===a.getHours()%24)?'hora':(nn===a.getMinutes()?'min':null);
+ const cfg=bolasCfg();const col=BOLAS.col%g.cols;BOLAS.col++;
+ const it={id:++BOLAS.seq,n:String(ss).padStart(2,'0'),kind,s:Math.round(g.s),x:col*g.colW+(g.colW-g.s)/2,y:-g.s-20,vy:0,rot:Math.round((Math.random()-0.5)*16)};
+ BOLAS.items.push(it);
+ const cap=cfg.mov==='60'?60:160;while(BOLAS.items.length>cap){const v=BOLAS.items.shift();if(v.el&&v.el.parentNode)v.el.parentNode.removeChild(v.el)}
+ box.appendChild(bolasElFor(it));bolasIniciar()}
+function bolasTick(){bolasSpawn()}
+function bolasFisica(dt,H){const G=H*2.6;const its=BOLAS.items;
+ for(const it of its){if(BOLAS.drag&&BOLAS.drag.it===it)continue;it.vy+=G*dt;it.y+=it.vy*dt;
+  if(it.y+it.s>H){it.y=H-it.s;it.vy=-it.vy*0.22;if(Math.abs(it.vy)<8)it.vy=0}}
+ for(let pass=0;pass<3;pass++){
+  const ord=its.slice().sort((p,q)=>q.y-p.y);
+  for(const baixo of ord){for(const cima of its){if(cima===baixo||cima.y>=baixo.y)continue;
+    if(Math.abs(cima.x-baixo.x)<baixo.s*0.9&&cima.y+cima.s>baixo.y){cima.y=baixo.y-cima.s*0.94;if(!(BOLAS.drag&&BOLAS.drag.it===cima)){cima.vy=Math.min(0,cima.vy)}}}}}}
+function bolasQuadro(t){const box=document.getElementById('bolasBox');if(!box){BOLAS.raf=0;return}
+ const dt=Math.min(0.033,BOLAS.last?(t-BOLAS.last)/1000:0.016);BOLAS.last=t;
+ const g=bolasGeo(box);BOLAS.H=g.H;bolasFisica(dt,g.H);
+ for(const it of BOLAS.items){if(it.el)it.el.style.transform='translate('+it.x.toFixed(1)+'px,'+it.y.toFixed(1)+'px) rotate('+it.rot+'deg)'}
+ BOLAS.raf=requestAnimationFrame(bolasQuadro)}
+function bolasIniciar(){if(BOLAS.raf)return;BOLAS.last=0;BOLAS.raf=requestAnimationFrame(bolasQuadro)}
+document.addEventListener('pointerdown',e=>{const el=e.target.closest&&e.target.closest('#bolasBox .bola');if(!el)return;const box=document.getElementById('bolasBox');const it=BOLAS.items.find(x=>String(x.id)===el.dataset.bid);if(!it)return;
+ const r=box.getBoundingClientRect();BOLAS.drag={it,dx:e.clientX-r.left-it.x,dy:e.clientY-r.top-it.y,hist:[]};it.vy=0;el.style.cursor='grabbing';try{el.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
+document.addEventListener('pointermove',e=>{const d=BOLAS.drag;if(!d)return;const box=document.getElementById('bolasBox');if(!box)return;const r=box.getBoundingClientRect();
+ const g=bolasGeo(box);d.it.x=Math.max(0,Math.min(g.W-d.it.s,e.clientX-r.left-d.dx));d.it.y=Math.max(-g.H,Math.min(g.H-d.it.s,e.clientY-r.top-d.dy));
+ d.hist.push({y:d.it.y,t:performance.now()});if(d.hist.length>5)d.hist.shift()});
+function bolasSoltar(){const d=BOLAS.drag;if(!d)return;BOLAS.drag=null;const h=d.hist;
+ if(h.length>1){const a=h[0],b=h[h.length-1];const dt=(b.t-a.t)/1000;d.it.vy=dt>0?Math.max(-1500,Math.min(1500,(b.y-a.y)/dt)):0}
+ if(d.it.el)d.it.el.style.cursor='grab'}
+document.addEventListener('pointerup',bolasSoltar);
+document.addEventListener('pointercancel',bolasSoltar);
 function bolasMovimentoHtml(){const c=bolasCfg();const op=(g,v,l)=>'<button type="button" class="chip" data-a="'+g+'" data-v="'+v+'" aria-pressed="'+(c[g==='bMov'?'mov':'forma']===v)+'" style="min-height:2.75rem;justify-content:flex-start;text-align:left">'+l+'</button>';
  return '<div style="background:rgba(0,0,0,.06);border-radius:1.125rem;padding:0.75rem"><div style="display:flex;gap:0.625rem;align-items:center;margin-bottom:0.625rem"><span aria-hidden="true" style="width:2.125rem;height:2.125rem;border-radius:0.5625rem;background:#e8322b;display:inline-block"></span><div><div style="font-weight:600">Movimento</div><div style="font-size:0.75rem;opacity:.7">Squircle</div></div></div>'+
   '<div role="group" aria-label="Quantidade de bolas" style="display:grid;grid-template-columns:1fr 1fr;gap:0.375rem">'+op('bMov','infinito','Infinito')+op('bMov','60','60 bolas')+'</div><div role="group" aria-label="Forma" style="margin-top:0.375rem;display:grid;grid-template-columns:1fr;gap:0.375rem">'+op('bForma','squircle','Squircle')+'</div></div>'}
 const APRES_RELOGIO_LISTA=[['digital','Digital'],['radio','Rádio'],['orbita','Órbita'],['analogico','Analógico'],['grande','Grande'],['bolas','Bolas'],['adaptativo','Adaptativo']];
 function apresModosHtml(){const modo=apresModoAtual();const b=(m,l)=>'<button type="button" class="chip" data-a="apModo" data-m="'+m+'" aria-pressed="'+(modo===m)+'" style="flex:1">'+l+'</button>';
- return '<div role="group" aria-label="Modo de tela" style="display:flex;gap:0.5rem">'+b('relogio','Relógio')+b('foco','Foco')+'</div>'}
+ return '<div role="group" aria-label="Modo de tela" style="display:flex;gap:0.5rem">'+b('relogio','Relógio')+b('foco','Foco')+b('cronometro','Cronômetro')+'</div>'}
 function apresRelCardHtml(){const aberto=ls.get('apres_rel_aberto')==='1';const atual=apresRelogioTipo();const rot=(APRES_RELOGIO_LISTA.find(x=>x[0]===atual)||APRES_RELOGIO_LISTA[0])[1];
  const ic='<span aria-hidden="true" style="width:2.75rem;height:2.75rem;border-radius:0.6875rem;background:#0a84ff;display:inline-flex;align-items:center;justify-content:center;flex:none"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>';
  const lista=aberto?'<div role="group" aria-label="Modos do relógio" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0.5rem;margin-top:0.75rem">'+APRES_RELOGIO_LISTA.map(([k,l],i)=>{const sel=atual===k;const span=(i<2)?'span 2':(k==='adaptativo'?'span 4':'span 1');return '<button type="button" class="chip" data-a="apRelogio" data-t="'+k+'" aria-pressed="'+sel+'" style="grid-column:'+span+';min-height:3.5rem;justify-content:flex-start;align-items:flex-start;flex-direction:column;gap:0.375rem;padding:0.625rem;text-align:left;background:'+(sel?'#ffffff':'#f2f2f2')+';border:'+(sel?'1px solid #000':'1px solid transparent')+'"><span aria-hidden="true" style="width:0.5rem;height:0.5rem;border-radius:50%;background:'+(sel?'#000':'#b8b8b8')+'"></span><span>'+l+'</span></button>'}).join('')+'</div>':'';
  return '<div style="background:#ffffff;border:1px solid #d0d0d0;border-radius:1.125rem;padding:0.75rem"><button type="button" data-a="apRelAberto" aria-expanded="'+aberto+'" style="display:flex;gap:0.75rem;align-items:center;width:100%;background:none;border:0;padding:0;text-align:left;cursor:pointer;color:#000"> '+ic+'<span><b style="display:block;font-size:0.9375rem">Modo Relógio</b><span style="font-size:0.8125rem">'+rot+'</span></span></button>'+lista+'</div>'}
+function apresCronoHtml(){const run=sw.run;const txt=swFmt(swMs());
+ return '<div style="text-align:center;color:#000"><div id="apSwV" aria-live="off" style="font:800 clamp(4rem,18vw,12rem)/1 system-ui,-apple-system,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-0.02em">'+txt+'</div>'+
+  '<div role="group" aria-label="Controles do cronômetro" style="display:flex;gap:0.75rem;justify-content:center;margin-top:1.25rem"><button type="button" class="chip" data-a="apSwGo" style="min-height:3rem;padding:0 1.25rem">'+(run?'Pausar':'Iniciar')+'</button><button type="button" class="chip" data-a="apSwReset" style="min-height:3rem;padding:0 1.25rem">Zerar</button></div></div>'}
 function apresFocoBotoesHtml(){const p=S.p;return '<div role="group" aria-label="Controles do Pomodoro" style="display:flex;gap:0.625rem;justify-content:center;flex-wrap:wrap;margin-top:0.5rem"><button type="button" class="chip" data-a="apPgo" style="min-height:3rem;padding:0 18px">'+(p.run?'Pausar':'Iniciar')+'</button><button type="button" class="chip" data-a="apPrs" style="min-height:3rem;padding:0 18px">Reiniciar</button></div>'}
-function apresAbrir(){S.apres=true;apresRender();apresMatrizCheck();clearInterval(S.apresT);S.apresT=setInterval(()=>{if(!S.apres)return;if(apresModoAtual()==='relogio')apresTick();else apresRender();apresMatrizCheck()},1000);const b=document.querySelector('#apres [data-a="apSair"]');if(b)b.focus()}
+function apresAbrir(){S.apres=true;apresRender();apresMatrizCheck();clearInterval(S.apresT);S.apresT=setInterval(()=>{if(!S.apres)return;if(apresModoAtual()==='relogio')apresTick();else if(apresModoAtual()==='foco')apresRender();apresMatrizCheck()},1000);const b=document.querySelector('#apres [data-a="apSair"]');if(b)b.focus()}
 function apresSair(){S.apres=false;clearInterval(S.apresT);const el=document.getElementById('apres');if(el)el.hidden=true}
 /* gestos e ações do modo apresentação */
 (function(){let x0=null;document.addEventListener('pointerdown',e=>{const c=e.target.closest&&e.target.closest('#apCartao');if(c)x0={x:e.clientX,id:c}});
@@ -1641,15 +1712,20 @@ function apresSair(){S.apres=false;clearInterval(S.apresT);const el=document.get
 function apresTrocarEstacao(d){const n=S.rd.list.length;if(!n)return;const i=((S.rd.cur+d)%n+n)%n;S.rd.cur=i;ls.set('rd_cur',i);rdPlay(i);setTimeout(apresRender,150)}
 function apresTrocarFaixa(d){if(!S.tok||!S.m)return;spApi(d>0?'/me/player/next':'/me/player/previous',{method:'POST'}).then(()=>setTimeout(apresRender,400))}
 document.addEventListener('click',e=>{const mais=e.target.closest&&e.target.closest('#tabsMore');if(mais){S.tabsAll=!S.tabsAll;renderTabs();return}const t=e.target.closest&&e.target.closest('#apres [data-a]');if(!t)return;const a=t.dataset.a;
+ if(a==='apRecolher'){ls.set('apres_menu',ls.get('apres_menu')==='0'?'1':'0');apresRender();return}
+ if(a==='apSwGo'){if(sw.run){sw.acc=swMs();sw.run=false}else{sw.t0=Date.now();sw.run=true}apresRender();return}
+ if(a==='apSwReset'){sw={run:false,acc:0,t0:0};apresRender();return}
  if(a==='apPgo'){S.p.run=!S.p.run;apresRender();return}
  if(a==='apPrs'){S.p.left=pdur(S.p.mode);S.p.run=false;apresRender();return}
  if(a==='apRelAberto'){ls.set('apres_rel_aberto',ls.get('apres_rel_aberto')==='1'?'0':'1');apresRender();return}
- if(a==='bMov'){ls.set('bolas_mov',t.dataset.v);BOLAS.hist=[];apresRender();return}
+ if(a==='bMov'){ls.set('bolas_mov',t.dataset.v);BOLAS.items=[];BOLAS.col=0;apresRender();return}
  if(a==='bForma'){ls.set('bolas_forma',t.dataset.v);apresRender();return}
  if(a==='rFav'){toggleFav(S.rd.cur);apresRender();return}
- if(a==='rPlay'){if(S.rd.on&&S.rd.i===S.rd.cur)rdStop();else rdPlay(S.rd.cur);setTimeout(apresRender,150);return}
+ if(a==='rPlay'){if(radioTocando())rdStop();else rdPlay(S.rd.cur);apresRender();return}
  if(a==='rNext'){rdPlay(((S.rd.cur+1)%S.rd.list.length+S.rd.list.length)%S.rd.list.length);setTimeout(apresRender,150);return}
  if(a==='rPrev'){rdPlay(((S.rd.cur-1)%S.rd.list.length+S.rd.list.length)%S.rd.list.length);setTimeout(apresRender,150);return}
+ if(a==='apSpPrev'){spApi('/me/player/previous',{method:'POST'}).then(()=>setTimeout(apresRender,400));return}
+ if(a==='apSpNext'){spApi('/me/player/next',{method:'POST'}).then(()=>setTimeout(apresRender,400));return}
  if(a==='rRand'){rdRand();setTimeout(apresRender,150);return}
  if(a==='apModo'){ls.set('apres_modo',t.dataset.m);apresRender();return}
  if(a==='apRelogio'){ls.set('apres_relogio',t.dataset.t);apresRender();return}
@@ -1658,7 +1734,8 @@ document.addEventListener('click',e=>{const mais=e.target.closest&&e.target.clos
  if(a==='apFonte'){ls.set('apres_fonte',apresFonte()==='radio'?'spotify':'radio');apresRender();return}
  if(a==='apDest'){ls.set('apres_destaque',t.dataset.c);apresRender();return}
  if(a==='apSair'){apresSair();return}
- if(a==='apMusPlay'){if(apresFonte()==='spotify'){spApi(S.m&&S.m.play?'/me/player/pause':'/me/player/play',{method:'PUT'}).then(()=>apresRender())}else{const c=S.rd.list[S.rd.cur];if(!c)return;if(S.rd.on&&S.rd.i===S.rd.cur)rdStop();else rdPlay(S.rd.cur);setTimeout(apresRender,150)}return}});
+ if(a==='apMusPlay'){if(apresFonte()==='spotify'){const tocando=!!S.m.play;spApi(tocando?'/me/player/pause':'/me/player/play',{method:'PUT'}).then(()=>{if(S.err===0)S.m.play=!tocando;else if(S.err===404)say('Nenhum dispositivo ativo. Abra o Spotify e toque uma faixa');else if(S.err===403)say('Controlar a reprodução exige Spotify Premium');apresRender()});S.m.play=!tocando;apresRender();return}
+  const c=S.rd.list[S.rd.cur];if(!c)return;if(radioTocando())rdStop();else rdPlay(S.rd.cur);apresRender();return}});
 document.addEventListener('change',e=>{if(e.target.dataset&&e.target.dataset.a==='apDestHex'){const v=e.target.value.trim();if(/^#[0-9a-fA-F]{6}$/.test(v)){ls.set('apres_destaque',v.toUpperCase());apresRender()}}});
 document.addEventListener('input',e=>{const a=e.target.dataset&&e.target.dataset.a;if(a==='apMaster'){ls.set('apres_master',e.target.value);apresRender();apresAplicarSom()}if(a==='apMusica'){ls.set('apres_musica',e.target.value);apresRender();apresAplicarSom()}});
 document.addEventListener('change',e=>{if(e.target.dataset&&e.target.dataset.a==='apCorLivre'){ls.set('apres_cor',e.target.value.toUpperCase());apresRender();return}if(e.target.dataset&&e.target.dataset.a==='apCorHex'){const v=e.target.value.trim();if(/^#[0-9a-fA-F]{6}$/.test(v)){ls.set('apres_cor',v.toUpperCase());apresRender()}return}
@@ -1858,7 +1935,7 @@ function slideAplicar(){const v=$('#view');if(!v||!S.slideGo)return;S.slideGo=fa
  v.addEventListener('animationend',()=>v.classList.remove('slide-in'),{once:true})}
 if(!MOVIMENTO_REDUZIDO())setInterval(()=>bgAplicar(),60000);
 /* ===== Notas com formatação ===== */
-const NOTA_TAGS={B:1,STRONG:1,I:1,EM:1,U:1,H2:1,H3:1,UL:1,OL:1,LI:1,P:1,BR:1,DIV:1,SPAN:1,BLOCKQUOTE:1};
+const NOTA_TAGS={B:1,STRONG:1,I:1,EM:1,U:1,S:1,DEL:1,STRIKE:1,H2:1,H3:1,UL:1,OL:1,LI:1,P:1,BR:1,DIV:1,SPAN:1,BLOCKQUOTE:1};
 function notaSanitizar(html){const doc=new DOMParser().parseFromString('<body>'+String(html||'')+'</body>','text/html');
  const limpa=no=>{[...no.childNodes].forEach(f=>{if(f.nodeType===3)return;if(f.nodeType!==1){f.remove();return}
   if(!NOTA_TAGS[f.tagName]){while(f.firstChild)no.insertBefore(f.firstChild,f);f.remove();return}
@@ -1883,6 +1960,197 @@ document.addEventListener('mousedown',e=>{if(e.target.closest&&e.target.closest(
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-a="nfmt"]');if(!t)return;notaFmt(t.dataset.c)});
 document.addEventListener('change',e=>{if(e.target.id==='nTam')notaTamanho(+e.target.value)});
 document.addEventListener('paste',e=>{if(e.target.id!=='notas')return;e.preventDefault();const txt=(e.clipboardData||window.clipboardData).getData('text/plain');document.execCommand('insertText',false,txt)});
+/* ===== Descrição formatada nas tarefas ===== */
+S.descOpen=S.descOpen||null;
+function tarefaDescDom(){const v=$('#view');if(!v)return;
+ v.querySelectorAll('li[data-r]').forEach(li=>{const i=+li.dataset.r,t=S.tasks[i];if(!t)return;
+  if(!li.querySelector('[data-a="tdesc"]')){const ac=li.querySelector('.acts2');if(ac){const b=document.createElement('button');b.type='button';b.className='ib sm';b.dataset.a='tdesc';b.dataset.id=String(t.id);b.setAttribute('aria-expanded',String(S.descOpen===String(t.id)));b.setAttribute('aria-label','Detalhes formatados de '+t.t);b.innerHTML='<span aria-hidden="true" style="font-weight:700;font-size:.95rem">Aa</span>';ac.insertBefore(b,ac.firstChild)}}
+  if(t.desc&&!li.querySelector('.tdescv')){const d=document.createElement('div');d.className='tdescv';d.style.cssText='font-size:.85rem;opacity:.85;width:100%;margin-top:.25rem';d.innerHTML=t.desc;li.appendChild(d)}
+ });
+ const aberta=S.descOpen&&S.tasks.find(x=>String(x.id)===String(S.descOpen));
+ if(aberta){const li=v.querySelector('li[data-r="'+S.tasks.indexOf(aberta)+'"]');
+  if(li&&!v.querySelector('#tdescBox')){const box=document.createElement('div');box.id='tdescBox';box.setAttribute('role','group');box.setAttribute('aria-label','Descrição formatada da tarefa');box.style.cssText='margin:.4rem 0 .6rem;padding:.6rem;border-radius:.9rem;background:var(--row);width:100%';
+   box.innerHTML='<div role="toolbar" aria-label="Formatação da descrição" style="display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.4rem">'+[['bold','Negrito','<b>N</b>'],['italic','Itálico','<i>I</i>'],['strikeThrough','Tachado','<s>T</s>'],['underline','Sublinhado','<u>S</u>'],['insertUnorderedList','Lista com marcadores','•'],['insertOrderedList','Lista numerada','1.'],['removeFormat','Limpar formatação','Tx']].map(([c,l,t])=>'<button type="button" class="chip" data-a="dfmt" data-c="'+c+'" aria-label="'+l+'" title="'+l+'" style="min-width:2.5rem;min-height:2.5rem">'+t+'</button>').join('')+'</div><div id="tdescEd" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Descrição da tarefa, com formatação" style="min-height:5rem;border-radius:.8rem;padding:.6rem;background:var(--bgc,#fff);color:var(--ink,#111);line-height:1.5;overflow-wrap:anywhere" data-tid="'+esc(String(aberta.id))+'">'+(aberta.desc||'')+'</div>';
+   li.insertAdjacentElement('afterend',box)}}
+}
+document.addEventListener('mousedown',e=>{if(e.target.closest&&e.target.closest('[data-a="dfmt"]'))e.preventDefault()});
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a;
+ if(a==='tdesc'){const id=String(t.dataset.id);S.descOpen=S.descOpen===id?null:id;view();if(S.descOpen){const ed=$('#tdescEd');if(ed)ed.focus()}return}
+ if(a==='dfmt'){const ed=$('#tdescEd');if(!ed)return;ed.focus();document.execCommand(t.dataset.c,false,null);tarefaDescSalvar();return}});
+function tarefaDescSalvar(){const ed=$('#tdescEd');if(!ed)return;const t=S.tasks.find(x=>String(x.id)===String(ed.dataset.tid));if(!t)return;
+ t.desc=notaSanitizar(ed.innerHTML);t.mod=Date.now();t.dy=true;save()}
+document.addEventListener('input',e=>{if(e.target&&e.target.id==='tdescEd')tarefaDescSalvar()});
+/* ===== Notas do painel → OneNote (uma via: painel envia, OneNote recebe) ===== */
+let onTimer=0;
+function onOn(){return ls.get('onenote_on')==='1'&&ls.get('ms_notes')==='1'&&msOn()}
+function onAgendar(){if(!onOn())return;clearTimeout(onTimer);onTimer=setTimeout(onSync,4000)}
+function onCorpo(n){return n.h?n.h:esc(n.t||'').replace(/\n/g,'<br>')}
+function onHtml(n){return '<!DOCTYPE html><html><head><title>'+esc(n.n||'Nota')+'</title><meta name="created" content="'+new Date(n.at||Date.now()).toISOString()+'"/></head><body>'+onCorpo(n)+'</body></html>'}
+function onenoteAjusteDom(){const v=$('#view');if(!v||v.querySelector('#oneNoteBox'))return;const box=document.createElement('details');box.id='oneNoteBox';box.className='dt';box.style.marginTop='0.75rem';
+ box.innerHTML='<summary>OneNote</summary><label class="opt row" style="margin:0.5rem 0"><input type="checkbox" id="oOneNote"'+(ls.get('onenote_on')==='1'?' checked':'')+'><span>Sincronizar notas com o OneNote (Notas do painel)</span></label><p class="sub" style="margin:0.25rem 0 0">Envio de uma via: as notas do painel vão para a seção Notas do painel no OneNote, pelo app do Office. Edições feitas no OneNote não voltam ao painel.</p>';
+ v.appendChild(box)}
+async function onSecao(){const salvo=ls.get('onenote_sec');if(salvo)return salvo;
+ const nb=await gj('/me/onenote/notebooks?$select=id,displayName');const bloco=nb.j&&nb.j.value&&nb.j.value[0];if(!bloco)return null;
+ const sec=await gj('/me/onenote/notebooks/'+bloco.id+'/sections?$select=id,displayName');
+ const achada=sec.j&&sec.j.value&&sec.j.value.find(x=>x.displayName==='Notas do painel');
+ let id=achada&&achada.id;
+ if(!id){const cria=await gj('/me/onenote/notebooks/'+bloco.id+'/sections',{method:'POST',body:JSON.stringify({displayName:'Notas do painel'})});id=cria.j&&cria.j.id}
+ if(id)ls.set('onenote_sec',id);return id||null}
+async function onSync(){if(!onOn()||S.onBusy)return;S.onBusy=true;
+ try{const sid=await onSecao();if(!sid){say('Não foi possível acessar o OneNote');return}
+  const L=notesList();let mudou=false;
+  for(const n of L){if(!n.at||(n.onAt&&n.onAt>=n.at))continue;
+   if(n.one){const r=await gj('/me/onenote/pages/'+n.one+'/content',{method:'PATCH',body:JSON.stringify([{target:'body',action:'replace',content:onCorpo(n)}])});
+    if(r.ok){n.onAt=Date.now();mudou=true;continue}if(r.status===404)n.one=null;else if(r.status===403){say('Permissão de notas não concedida. Autorize o OneNote em Ajustes');return}}
+   const r=await gj('/me/onenote/sections/'+sid+'/pages',{method:'POST',headers:{'Content-Type':'text/html'},body:onHtml(n)});
+   if(r.ok&&r.j&&r.j.id){n.one=r.j.id;n.onAt=Date.now();mudou=true}
+   else if(r.status===403){say('Permissão de notas não concedida. Autorize o OneNote em Ajustes');return}}
+  if(mudou){ls.set('notas_list',JSON.stringify(L));say('Notas sincronizadas com o OneNote')}
+ }catch(_){say('Sincronização com o OneNote falhou. Tente de novo')}finally{S.onBusy=false}}
+document.addEventListener('change',e=>{if(e.target.id!=='oOneNote')return;
+ if(!e.target.checked){ls.set('onenote_on','0');say('Sincronização com o OneNote desligada');return}
+ if(!msOn()){e.target.checked=false;say('Conecte a Microsoft primeiro (Ajustes → Microsoft)');return}
+ if(ls.get('ms_notes')!=='1'){e.target.checked=false;mAuth({notes:true});return}
+ ls.set('onenote_on','1');say('Sincronização com o OneNote ativada');onSync()});
+/* ===== Alerta de chuva: aviso antes da chuva (com o painel aberto ou em segundo plano) ===== */
+function chuvaLimite(){return +(ls.get('chuva_limite')||50)}
+function chuvaJanelaMin(){return +(ls.get('chuva_min')||60)}
+function chuvaChecar(){const d=WX.data;if(!d||!d.hourly||!d.hourly.time||!d.hourly.precipitation_probability||!d.current)return;if(ls.get('chuva_on')==='0')return;
+ const h=d.hourly;const ini=Math.max(0,h.time.indexOf(String(d.current.time).slice(0,13)+':00'));
+ const n=Math.max(1,Math.ceil(chuvaJanelaMin()/60));const janela=h.precipitation_probability.slice(ini,ini+n);if(!janela.length)return;
+ const pmax=Math.max(...janela);if(pmax<chuvaLimite())return;
+ const inicio=h.time[ini];if(ls.get('chuva_avisada')===inicio)return;ls.set('chuva_avisada',inicio);
+ const idx=ini+janela.indexOf(pmax);const hora=String(h.time[idx]).slice(11,16);
+ const msg='Chance de '+pmax+'% de chuva por volta das '+hora+' (próximos '+chuvaJanelaMin()+' min).';
+ chuvaMostrar(msg);notifyBg('Previsão de chuva',msg)}
+function chuvaMostrar(msg){say(msg);const v=$('#view');if(!v||S.tab!=='tempo')return;v.querySelectorAll('#chuvaAviso').forEach(n=>n.remove());
+ const b=document.createElement('section');b.id='chuvaAviso';b.setAttribute('role','alert');b.className='tp-card';b.style.margin='0 0 0.75rem';
+ b.innerHTML='<div style="display:flex;justify-content:space-between;gap:0.5rem;align-items:flex-start"><p style="margin:0;font-size:0.95rem">☔ '+esc(msg)+'</p><button type="button" class="chip" data-a="chuvaFechar" aria-label="Fechar aviso de chuva" style="flex:none">×</button></div>';
+ v.prepend(b)}
+function chuvaAjusteDom(){const v=$('#view');if(!v||v.querySelector('#chuvaAjuste'))return;
+ const sel=(id,ops,atual)=>'<select id="'+id+'" aria-label="'+id+'">'+ops.map(([val,t])=>'<option value="'+val+'"'+(String(atual)===String(val)?' selected':'')+'>'+t+'</option>').join('')+'</select>';
+ const box=document.createElement('details');box.id='chuvaAjuste';box.className='dt';box.style.margin='0.75rem 0';
+ box.innerHTML='<summary>Alerta de chuva</summary><label class="opt row" style="margin:0.5rem 0"><input type="checkbox" id="oChuva"'+(ls.get('chuva_on')!=='0'?' checked':'')+'><span>Avisar antes da chuva</span></label><div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center">Avisar se a chance for de '+sel('chuvaLimiteSel',[[30,'30%'],[50,'50%'],[70,'70%']],chuvaLimite())+' nos próximos '+sel('chuvaMinSel',[[30,'30 min'],[60,'1 hora'],[90,'90 min']],chuvaJanelaMin())+'</div><p class="sub" style="margin:0.25rem 0 0">Verifica a previsão a cada 15 minutos com o painel aberto. Com o painel fechado, o aviso não chega.</p>';
+ v.appendChild(box)}
+document.addEventListener('change',e=>{const t=e.target;if(t.id==='oChuva'){ls.set('chuva_on',t.checked?'1':'0');return}
+ if(t.id==='chuvaLimiteSel'){ls.set('chuva_limite',t.value);ls.set('chuva_avisada','');return}
+ if(t.id==='chuvaMinSel'){ls.set('chuva_min',t.value);ls.set('chuva_avisada','');return}});
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="chuvaFechar"]');if(!b)return;const x=$('#chuvaAviso');if(x)x.remove()});
+setInterval(async()=>{if(ls.get('chuva_on')==='0')return;try{await wxLoad()}catch(_){}chuvaChecar()},15*60*1000);
+setTimeout(()=>{try{chuvaChecar()}catch(_){}},8000);
+/* ===== Tarefas: ações reunidas em um botão ⋯ com menu ===== */
+function tarefaMenuDom(){const v=$('#view');if(!v)return;
+ v.querySelectorAll('li[data-r]').forEach(li=>{const ac=li.querySelector('.acts2');if(!ac||ac.dataset.menu==='1')return;
+  const botoes=[...ac.querySelectorAll('button')];if(!botoes.length)return;
+  const i=li.dataset.r;const menu=document.createElement('div');menu.className='tmenu';menu.hidden=true;menu.setAttribute('role','menu');menu.setAttribute('aria-label','Ações da tarefa');
+  botoes.forEach(b=>{const rot=b.getAttribute('aria-label')||b.title||b.textContent.trim()||'Ação';b.setAttribute('role','menuitem');
+   const txt=document.createElement('span');txt.textContent=rot;const ic=b.innerHTML;b.innerHTML='';b.insertAdjacentHTML('beforeend',ic);b.appendChild(txt);
+   b.classList.add('tmitem');menu.appendChild(b)});
+  const bt=document.createElement('button');bt.type='button';bt.className='chip tmore';bt.dataset.a='tmore';bt.dataset.r=i;bt.setAttribute('aria-haspopup','menu');bt.setAttribute('aria-expanded','false');bt.setAttribute('aria-label','Mais ações da tarefa');bt.textContent='⋯';
+  ac.innerHTML='';ac.appendChild(bt);ac.appendChild(menu);ac.dataset.menu='1';ac.style.position='relative'});
+}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="tmore"]');
+ if(b){const ac=b.parentElement;const m=ac.querySelector('.tmenu');const abrir=m.hidden;document.querySelectorAll('.tmenu').forEach(x=>{x.hidden=true});document.querySelectorAll('[data-a="tmore"]').forEach(x=>x.setAttribute('aria-expanded','false'));
+  m.hidden=!abrir;b.setAttribute('aria-expanded',String(abrir));if(abrir){const f=m.querySelector('button');if(f)f.focus()}return}
+ if(!(e.target.closest&&e.target.closest('.tmenu')))document.querySelectorAll('.tmenu').forEach(x=>{x.hidden=true});
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.tmenu').forEach(x=>{x.hidden=true});document.querySelectorAll('[data-a="tmore"]').forEach(x=>x.setAttribute('aria-expanded','false'))}});
+/* ===== Kanban: cartões próprios + tarefas do painel, sincronizados com o Microsoft To Do ===== */
+const KB_COLS=[['backlog','Backlog'],['todo','Todo'],['doing','In progress'],['review','In review'],['done','Done']];
+const KB_PRI=[['','Nenhuma'],['1','Baixa'],['2','Média'],['3','Alta']];
+const KB_ST={backlog:'deferred',todo:'notStarted',doing:'inProgress',review:'waitingOnOthers',done:'completed'};
+const KB_ST_INV={deferred:'backlog',notStarted:'todo',inProgress:'doing',waitingOnOthers:'review',completed:'done'};
+const KB_IMP={'1':'low','2':'normal','3':'high','':'normal'};
+const KB_IMP_INV={low:'1',normal:'2',high:'3'};
+function kbLoad(){if(S.kb)return S.kb;let d=null;try{d=JSON.parse(ls.get('kanban')||'null')}catch(_){}
+ S.kb={cards:(d&&Array.isArray(d.cards))?d.cards:[],seq:(d&&d.seq)||0,sel:null};return S.kb}
+function kbPersistir(){const K=kbLoad();ls.set('kanban',JSON.stringify({cards:K.cards,seq:K.seq}))}
+function kbSave(){kbPersistir();kbAgendar()}
+function kbDeTarefa(t){return {id:'T:'+t.id,t:t.t||'',desc:t.desc||'',col:t.d?'done':(t.kcol||'todo'),pri:t.pri||'',due:t.due||'',labels:t.tag?[t.tag]:[],ass:'',_task:t}}
+function kbTodos(){const K=kbLoad();return K.cards.concat((S.tasks||[]).map(kbDeTarefa))}
+function kbCartao(id){return kbTodos().find(c=>c.id===id)}
+function kbCommit(c){if(c._task){const t=c._task;t.t=c.t;t.desc=c.desc;t.due=c.due;t.pri=c.pri;t.tag=(c.labels&&c.labels[0])||'';t.d=c.col==='done';t.kcol=c.col;t.mod=Date.now();save()}
+ else{c.mod=Date.now();kbSave()}}
+function kbCardHtml(c,sel){const p=KB_PRI.find(x=>x[0]===c.pri);
+ return '<article class="kb-card'+(sel?' sel':'')+(c._task?' kb-tarefa':'')+'" draggable="true" role="button" tabindex="0" data-kb="'+esc(c.id)+'" data-a="kbsel" data-id="'+esc(c.id)+'" aria-label="'+esc(c.id.replace(/^T:/,'Tarefa ')+' '+c.t)+'" aria-pressed="'+!!sel+'">'+
+  '<span class="kb-cid">'+esc(c._task?'Tarefa':c.id)+(c.due?' · '+esc(c.due):'')+'</span><span class="kb-ct">'+esc(c.t||'Sem título')+'</span>'+
+  (p&&p[0]?'<span class="kb-pri kb-p'+p[0]+'">'+esc(p[1])+'</span>':'')+
+  (c.labels&&c.labels.length?'<span class="kb-labels">'+c.labels.map(l=>'<span class="kb-lbl">'+esc(l)+'</span>').join('')+'</span>':'')+
+  (c.ass?'<span class="sub kb-ass">'+esc(c.ass)+'</span>':'')+'</article>'}
+function kbSyncBarra(){const on=kbSyncOn();return '<div class="kb-sync" role="status">'+(on?'Sincronizado com o Microsoft To Do (lista Kanban). ':'Sincronização com o Microsoft To Do desligada. ')+'<button type="button" class="chip" data-a="kbsync">'+(on?'Sincronizar agora':'Ativar sincronização')+'</button></div>'}
+function kanbanView(){const K=kbLoad();const todos=kbTodos();const sel=todos.find(c=>c.id===K.sel);
+ const colunas=KB_COLS.map(([id,nome])=>{const cs=todos.filter(c=>c.col===id);
+  return '<section class="kb-col" data-col="'+id+'" aria-label="'+esc(nome)+'"><header class="kb-ch"><span>'+esc(nome)+'</span><span class="sub">'+cs.length+'</span><button type="button" class="ib sm" data-a="kbadd" data-col="'+id+'" aria-label="Novo cartão em '+esc(nome)+'">+</button></header><div class="kb-cards">'+(cs.map(c=>kbCardHtml(c,sel&&sel.id===c.id)).join('')||'<p class="sub kb-vazio">Sem cartões</p>')+'</div></section>'}).join('');
+ const det=sel?'<aside class="kb-det" aria-label="Editar '+esc(sel.c||'cartão')+'"><div class="kb-dh"><b>'+esc(sel._task?'Tarefa do painel':sel.id)+'</b><button type="button" class="chip" data-a="kbfechar">Fechar</button></div>'+
+  '<label>Título<input data-k="t" value="'+esc(sel.t)+'" autocomplete="off"></label>'+
+  '<label>Descrição<textarea data-k="desc" rows="4">'+esc(sel.desc||'')+'</textarea></label>'+
+  '<label>Coluna<select data-k="col">'+KB_COLS.map(([v,n])=>'<option value="'+v+'"'+(sel.col===v?' selected':'')+'>'+esc(n)+'</option>').join('')+'</select></label>'+
+  '<label>Prioridade<select data-k="pri">'+KB_PRI.map(([v,n])=>'<option value="'+v+'"'+(String(sel.pri||'')===v?' selected':'')+'>'+esc(n)+'</option>').join('')+'</select></label>'+
+  '<label>Prazo<input type="date" data-k="due" value="'+esc(sel.due||'')+'"></label>'+
+  '<label>Etiquetas (separe por vírgula)<input data-k="labels" value="'+esc((sel.labels||[]).join(', '))+'"></label>'+
+  (sel._task?'':'<label>Responsável<input data-k="ass" value="'+esc(sel.ass||'')+'"></label>')+
+  '<div><button type="button" class="chip" data-a="kbdel">Excluir cartão</button></div></aside>'
+  :'<aside class="kb-det kb-vazio-det" aria-label="Detalhes do cartão"><p class="sub">Toque em um cartão para editar título, descrição, coluna, prioridade, prazo e etiquetas.</p></aside>';
+ return '<h1 class="ttl">Kanban</h1><div class="kb-top"><p class="sub" style="margin:0">'+todos.length+' cartões ('+(todos.length-K.cards.length)+' do painel). Arraste ou edite para mudar de coluna.</p><button type="button" class="chip" data-a="kbadd" data-col="backlog">+ Novo cartão</button></div>'+kbSyncBarra()+
+  '<div class="kb-wrap"><div class="kb-board" role="region" aria-label="Quadro Kanban">'+colunas+'</div>'+det+'</div>'}
+/* ----- sincronização com o Microsoft To Do ----- */
+let kbTimer=0;
+function kbSyncOn(){return ls.get('kb_sync')==='1'&&ls.get('ms_todo')==='1'&&msOn()}
+function kbAgendar(){if(!kbSyncOn())return;clearTimeout(kbTimer);kbTimer=setTimeout(kbSync,3000)}
+async function kbListaId(){const salvo=ls.get('kb_list');if(salvo)return salvo;
+ const r=await gj('/me/todo/lists?$select=id,displayName');const achada=r.j&&r.j.value&&r.j.value.find(x=>x.displayName==='Kanban');
+ if(achada){ls.set('kb_list',achada.id);return achada.id}
+ const c=await gj('/me/todo/lists',{method:'POST',body:JSON.stringify({displayName:'Kanban'})});
+ if(c.j&&c.j.id){ls.set('kb_list',c.j.id);return c.j.id}return null}
+function kbParaRemoto(c){return {title:c.t||'Sem título',body:{contentType:'text',content:c.desc||''},importance:KB_IMP[c.pri||'']||'normal',status:KB_ST[c.col]||'notStarted',dueDateTime:c.due?{dateTime:c.due+'T00:00:00',timeZone:'America/Sao_Paulo'}:null,categories:c.labels||[]}}
+function kbDeRemoto(x){return {t:x.title||'',desc:(x.body&&x.body.content)||'',col:KB_ST_INV[x.status]||'todo',pri:KB_IMP_INV[x.importance]||'',due:x.dueDateTime?String(x.dueDateTime.dateTime).slice(0,10):'',labels:x.categories||[]}}
+async function kbSync(){if(!kbSyncOn()||S.kbBusy)return;S.kbBusy=true;
+ try{const lid=await kbListaId();if(!lid){say('Não foi possível acessar a lista Kanban no To Do');return}
+  const K=kbLoad();
+  // 1) envia ao To Do os cartões alterados no painel
+  for(const c of K.cards){if(!c.mod||(c.sy&&c.sy>=c.mod))continue;
+   const corpo=JSON.stringify(kbParaRemoto(c));
+   const r=c.mid?await gj('/me/todo/lists/'+lid+'/tasks/'+c.mid,{method:'PATCH',body:corpo}):await gj('/me/todo/lists/'+lid+'/tasks',{method:'POST',body:corpo});
+   if(r.ok&&r.j){if(!c.mid)c.mid=r.j.id;c.rsy=Date.parse(r.j.lastModifiedDateTime)||Date.now();c.sy=Date.now()}
+   else if(r.status===404&&c.mid){c.mid=null}
+   else if(r.status===403){say('Permissão do To Do não concedida. Autorize em Ajustes');return}}
+  // 2) apaga no To Do os cartões excluídos no painel
+  const apagados=JSON.parse(ls.get('kb_del')||'[]');const restam=[];
+  for(const mid of apagados){const r=await gj('/me/todo/lists/'+lid+'/tasks/'+mid,{method:'DELETE'});if(!r.ok&&r.status!==404)restam.push(mid)}
+  ls.set('kb_del',JSON.stringify(restam));
+  // 3) recebe do To Do as alterações feitas lá
+  const r=await gj('/me/todo/lists/'+lid+'/tasks?$top=200');
+  if(r.ok&&r.j){const remotos=r.j.value||[];const ids=new Set(remotos.map(x=>x.id));
+   for(const x of remotos){const c=K.cards.find(y=>y.mid===x.id);const rem=Date.parse(x.lastModifiedDateTime)||0;
+    if(c){const limpo=!c.mod||(c.sy&&c.sy>=c.mod);if(limpo&&rem>(c.rsy||0)+1000){Object.assign(c,kbDeRemoto(x));c.rsy=rem;c.sy=c.mod=Date.now()}}
+    else{const n=Object.assign({id:'KB-'+(K.seq=(K.seq||0)+1),mid:x.id,ass:''},kbDeRemoto(x));n.rsy=rem;n.sy=n.mod=Date.now();K.cards.push(n)}}
+   K.cards=K.cards.filter(c=>!(c.mid&&!ids.has(c.mid)&&(!c.mod||(c.sy&&c.sy>=c.mod))))}
+  kbPersistir();if(S.tab==='kanban')view();say('Kanban sincronizado com o To Do')
+ }catch(_){say('Sincronização com o To Do falhou. Tente de novo')}finally{S.kbBusy=false}}
+/* ----- eventos ----- */
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a;const K=kbLoad();
+ if(a==='kbadd'){K.seq=(K.seq||0)+1;const c={id:'KB-'+K.seq,t:'Novo cartão',desc:'',col:t.dataset.col||'backlog',pri:'',due:'',labels:[],ass:'',mod:Date.now()};K.cards.push(c);K.sel=c.id;kbSave();view();const i=$('#view input[data-k="t"]');if(i){i.focus();i.select()}return}
+ if(a==='kbsel'){K.sel=t.dataset.id;view();return}
+ if(a==='kbfechar'){K.sel=null;view();return}
+ if(a==='kbsync'){if(!msOn()){say('Conecte a Microsoft primeiro (Ajustes → Microsoft)');return}
+  if(ls.get('ms_todo')!=='1'){mAuth({todo:true});return}
+  ls.set('kb_sync','1');kbSync();view();return}
+ if(a==='kbdel'){const c=kbCartao(K.sel);if(!c)return;if(!confirm('Excluir "'+c.t+'"?'))return;
+  if(c._task){S.tasks=S.tasks.filter(x=>'T:'+x.id!==c.id);save()}
+  else{if(c.mid){const del=JSON.parse(ls.get('kb_del')||'[]');del.push(c.mid);ls.set('kb_del',JSON.stringify(del))}K.cards=K.cards.filter(x=>x.id!==c.id);kbPersistir();kbAgendar()}
+  K.sel=null;view();say('Cartão excluído');return}});
+document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('.kb-card')){e.preventDefault();e.target.click()}});
+document.addEventListener('input',e=>{const el=e.target;if(!el.dataset||!el.dataset.k||!el.closest||!el.closest('.kb-det'))return;const K=kbLoad();const c=kbCartao(K.sel);if(!c)return;
+ if(el.dataset.k==='t'){c.t=el.value;const card=document.querySelector('[data-kb="'+c.id+'"] .kb-ct');if(card)card.textContent=c.t||'Sem título';kbCommit(c)}
+ else if(el.dataset.k==='desc'){c.desc=el.value;kbCommit(c)}});
+document.addEventListener('change',e=>{const el=e.target;if(!el.dataset||!el.dataset.k||!el.closest||!el.closest('.kb-det'))return;const K=kbLoad();const c=kbCartao(K.sel);if(!c)return;
+ const k=el.dataset.k;if(k==='labels')c.labels=el.value.split(',').map(x=>x.trim()).filter(Boolean);else if(['t','desc','col','pri','due','ass'].includes(k))c[k]=el.value;
+ kbCommit(c);view()});
+let kbDrag=null;
+document.addEventListener('dragstart',e=>{const card=e.target.closest&&e.target.closest('.kb-card');if(!card)return;kbDrag=card.dataset.kb;try{e.dataTransfer.setData('text/plain',kbDrag);e.dataTransfer.effectAllowed='move'}catch(_){}});
+document.addEventListener('dragover',e=>{if(kbDrag&&e.target.closest&&e.target.closest('.kb-col'))e.preventDefault()});
+document.addEventListener('drop',e=>{const col=e.target.closest&&e.target.closest('.kb-col');if(!col||!kbDrag)return;e.preventDefault();const c=kbCartao(kbDrag);kbDrag=null;if(!c)return;c.col=col.dataset.col;kbCommit(c);view()});
+document.addEventListener('dragend',()=>{kbDrag=null});
 let tpX=null;
 $('#view').addEventListener('pointerdown',e=>{if(S.tab==='tempo')tpX=e.clientX});
 $('#view').addEventListener('pointerup',e=>{if(S.tab!=='tempo'||tpX==null)return;const dx=e.clientX-tpX;tpX=null;if(Math.abs(dx)>50)tpGo(dx<0?1:-1)});
@@ -1955,7 +2223,7 @@ function extrasDom(){const v=$('#view');if(!v)return;v.querySelectorAll('.extra'
   const hoje=new Date(),ref=cd(),ano=ref.getFullYear(),mes=ref.getMonth();const first=new Date(ano,mes,1),ndias=new Date(ano,mes+1,0).getDate();const off=(first.getDay()+6)%7;
   const cel=[];for(let i=0;i<off;i++)cel.push('<span></span>');
   for(let d=1;d<=ndias;d++){const x=new Date(ano,mes,d),k=dayKey(x),ne=(S.ev||[]).filter(r=>r[6]&&dayKey(new Date(r[6]))===k).length,nt=(S.tasks||[]).filter(t=>!t.d&&t.due===k).length;
-   cel.push('<button type="button" class="chip" data-a="mday" data-k="'+k+'" aria-label="'+x.toLocaleDateString('pt-BR',{day:'numeric',month:'long'})+(ne?', '+ne+' compromisso(s)':'')+(nt?', '+nt+' tarefa(s)':'')+'" style="padding:0.375rem 0;min-height:2.5rem;'+(k===dayKey(hoje)?'outline:0.125rem solid var(--acc,#fff);':'')+(k===dayKey(ref)?'background:var(--acc,#3a3a41);color:#fff;':'')+'">'+d+'<br><span style="font-size:0.625rem">'+(ne?'●'.repeat(Math.min(ne,3)):'')+(nt?'<span style="color:#ffd60a">'+'●'.repeat(Math.min(nt,3))+'</span>':'')+'</span></button>')}
+   cel.push('<button type="button" class="chip" data-a="mday" data-k="'+k+'" aria-pressed="'+(k===dayKey(ref))+'" aria-label="'+x.toLocaleDateString('pt-BR',{day:'numeric',month:'long'})+(ne?', '+ne+' compromisso(s)':'')+(nt?', '+nt+' tarefa(s)':'')+'" style="padding:0.375rem 0;min-height:2.5rem;'+(k===dayKey(hoje)?'outline:0.125rem solid var(--acc,#fff);':'')+''+'">'+d+'<br><span style="font-size:0.625rem">'+(ne?'●'.repeat(Math.min(ne,3)):'')+(nt?'<span style="color:#ffd60a">'+'●'.repeat(Math.min(nt,3))+'</span>':'')+'</span></button>')}
   add('<section aria-label="Visão de mês" style="margin:0.625rem 0"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem"><b>'+ref.toLocaleDateString('pt-BR',{month:'long',year:'numeric'})+'</b><span style="display:flex;gap:0.375rem"><button type="button" class="chip" data-a="mnav" data-d="-1" aria-label="Mês anterior">‹</button><button type="button" class="chip" data-a="mnav" data-d="1" aria-label="Próximo mês">›</button></span></div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:0.25rem;text-align:center;font-size:0.75rem"><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span><span>D</span>'+cel.join('')+'</div><p class="sub" style="margin:0.375rem 0 0;font-size:0.75rem">Pontos brancos: compromissos. Amarelos: tarefas com vencimento. Mostra os eventos já carregados.</p></section>');
  }
  if(S.tab==='tasks'){
@@ -2242,7 +2510,10 @@ function notes(){const v=$('#view');if(!v)return;v.querySelectorAll('.note').for
  if(S.tab==='music'&&S.tok){v.insertAdjacentHTML('beforeend',musicExtra());v.insertAdjacentHTML('beforeend',plBoxHtml()+topBoxHtml()+savedBoxHtml()+albBoxHtml()+relBoxHtml()+podBoxHtml());plListLoad();v.insertAdjacentHTML('beforeend',lyricsBox());v.insertAdjacentHTML('beforeend',histHtml());spHistLoad();v.insertAdjacentHTML('beforeend','<details class="dt" style="margin-top:0.75rem" id="plrecdet"><summary>Playlists recentes</summary><div id="plrec"><p class="sub">Carregando…</p></div></details>');plRecentLoad()}
  if(S.tab==='cal')v.insertAdjacentHTML('afterbegin',nextEvHtml());
  if(S.tab==='tasks')v.insertAdjacentHTML('afterbegin',overdueHtml()+tplHtml()+tagsHtml());
- if(S.tab==='tasks')prioDom();
+ if(S.tab==='tasks'){prioDom();tarefaDescDom();tarefaMenuDom()}
+ if(S.tab==='set'){onenoteAjusteDom();plannerAjusteDom()}
+ if(S.tab==='tasks')plannerSecaoDom();
+ if(S.tab==='tempo')chuvaAjusteDom();
  if(S.tab==='radio')v.insertAdjacentHTML('beforeend',radioHistHtml());
  if(S.tab==='cal'){if(!S.cweek)v.insertAdjacentHTML('beforeend','<button type="button" class="chip" data-a="cweek" aria-pressed="false" style="margin-top:0.5rem">Ver semana</button>');v.insertAdjacentHTML('beforeend',linksHtml());v.insertAdjacentHTML('beforeend','<button type="button" class="chip" data-a="ics" style="margin-top:0.75rem">Exportar agenda (.ics)</button>');v.insertAdjacentHTML('beforeend',evForm());v.insertAdjacentHTML('beforeend',evDelHtml())}
  if(S.tab==='set')v.insertAdjacentHTML('beforeend','<details class="dt" style="margin-top:0.75rem"><summary>Animações</summary><label class="opt row" style="margin:0.5rem 0"><input type="checkbox" id="oBgAnim"'+(ls.get('bg_anim')!=='0'?' checked':'')+'><span>Fundo que muda com a hora (no modo escuro)</span></label><label class="opt row" style="margin:0.5rem 0"><input type="checkbox" id="oSlide"'+(ls.get('slide_on')!=='0'?' checked':'')+'><span>Deslizar ao trocar de aba</span></label><p class="sub" style="margin:0.25rem 0 0">Se o sistema pedir menos movimento, as animações ficam desligadas.</p></details><details class="dt" style="margin-top:0.75rem"><summary>Lembrete de backup</summary><p class="sub" style="margin:0.375rem 0">Avisa uma vez por semana para exportar um backup em arquivo. O backup do OneDrive continua automático.</p><button type="button" class="chip" data-a="bkrem" aria-pressed="'+(ls.get('bk_lembrete')==='1')+'">'+(ls.get('bk_lembrete')==='1'?'Desligar lembrete':'Ligar lembrete semanal')+'</button></details><details class="dt" style="margin-top:0.75rem"><summary>Duração de reuniões</summary><label style="display:flex;gap:0.625rem;align-items:center;margin:0.5rem 0">Duração padrão <select id="durPadrao">'+[30,45,60].map(n=>'<option value="'+n+'"'+((parseInt(ls.get('dur_padrao'),10)||30)===n?' selected':'')+'>'+n+' min</option>').join('')+'</select></label></details><details class="dt" style="margin-top:0.75rem"><summary>Atalhos de teclado</summary><p class="sub" style="margin:0.375rem 0">Uma tecla para cada aba. Deixe vazio para não usar.</p>'+TABS.map(([id,l])=>{let at={};try{at=JSON.parse(ls.get('atalhos')||'{}')||{}}catch(_){}return '<label style="display:flex;gap:0.625rem;align-items:center;margin:0.375rem 0">'+l+' <input data-atalho="'+id+'" maxlength="1" value="'+esc(at[id]||'')+'" style="width:3rem;text-align:center" aria-label="Tecla para '+l+'"></label>'}).join('')+'</details><details class="dt" style="margin-top:0.75rem"><summary>Não perturbe</summary><p class="sub" style="margin:0.375rem 0">Silencia os avisos do painel enquanto um foco está rodando.</p><button type="button" class="chip" data-a="nop" aria-pressed="'+(ls.get('nop')==='1')+'">'+(ls.get('nop')==='1'?'Desligar não perturbe':'Ligar não perturbe')+'</button></details><details class="dt" style="margin-top:0.75rem"><summary>Pausa longa</summary><label style="display:flex;gap:0.625rem;align-items:center;margin:0.5rem 0">Após quantos ciclos <select id="plongN">'+[2,3,4,5,6,8].map(n=>'<option value="'+n+'"'+(pomoLongAfter()===n?' selected':'')+'>'+n+' ciclos</option>').join('')+'</select></label><p class="sub" style="margin:0">A pausa vira longa depois desse número de ciclos de foco.</p></details>');if(S.tab==='set'&&S.tok)v.insertAdjacentHTML('beforeend','<details class="dt" style="margin-top:0.75rem" id="spcontadet"><summary>Conta Spotify</summary><div id="contabox"><p class="sub">Abra para carregar.</p></div></details>');if(S.tab==='set')v.insertAdjacentHTML('beforeend','<details class="dt" style="margin-top:0.75rem"><summary>Sons do foco</summary><label style="display:flex;gap:0.625rem;align-items:center;margin:0.5rem 0">Início do foco <select id="sndIni">'+[[880,'Agudo'],[659,'Médio'],[784,'Alto']].map(([f,n])=>'<option value="'+f+'"'+((+ls.get('snd_ini')||880)===f?' selected':'')+'>'+n+'</option>').join('')+'</select></label><label style="display:flex;gap:0.625rem;align-items:center;margin:0.5rem 0">Fim do foco <select id="sndFim">'+[[523,'Grave'],[392,'Médio'],[659,'Agudo']].map(([f,n])=>'<option value="'+f+'"'+((+ls.get('snd_fim')||523)===f?' selected':'')+'>'+n+'</option>').join('')+'</select></label></details><details class="dt" style="margin-top:0.75rem"><summary>Tema</summary><div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin:0.5rem 0"><button type="button" class="chip" data-a="tpreset" data-k="padrao">Padrão</button><button type="button" class="chip" data-a="tpreset" data-k="azul">Noite azul</button><button type="button" class="chip" data-a="tpreset" data-k="floresta">Floresta</button><button type="button" class="chip" data-a="tpreset" data-k="roxo">Roxo</button><button type="button" class="chip" data-a="tpreset" data-k="claro">Claro</button></div><label style="display:flex;gap:0.625rem;align-items:center;margin:0.5rem 0">Fundo <input type="color" id="thBg" value="'+(temaAtual().bg||'#000000')+'"></label><label style="display:flex;gap:0.625rem;align-items:center;margin:0.5rem 0">Texto <input type="color" id="thInk" value="'+(temaAtual().ink||'#ffffff')+'"></label><label style="display:flex;gap:0.625rem;align-items:center;margin:0.5rem 0">Cartões <input type="color" id="thRow" value="'+(temaAtual().row||'#1c1c1e')+'"></label><label style="display:flex;gap:0.625rem;align-items:center;margin:0.5rem 0">Destaque <input type="color" id="thAcc" value="'+(temaAtual().acc||'#0a84ff')+'"></label><button type="button" class="chip" data-a="thReset">Tema padrão</button></details><details class="dt" style="margin-top:0.75rem"><summary>Aparência</summary><button type="button" class="chip" data-a="mono" aria-pressed="'+(ls.get('opt_mono')==='1')+'">'+(ls.get('opt_mono')==='1'?'Usar ícones coloridos':'Usar ícones monocromáticos')+'</button></details>');if(S.tab==='set')v.insertAdjacentHTML('beforeend','<details class="dt" style="margin-top:0.75rem"><summary>Registro de erros</summary><p class="sub">Guarda os 20 erros mais recentes neste aparelho. Copie e envie para análise.</p><button type="button" class="chip" data-a="errcopy">Copiar registro de erros</button></details>');
@@ -2457,4 +2728,36 @@ document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest
  if(a==='shTask'){const primeira=txt.split('\n')[0].trim().slice(0,120)||'Conteúdo recebido';S.tasks.unshift({id:'sh'+Date.now().toString(36),t:primeira,w:'',c:0,d:false,mod:Date.now(),ref:txt.length>primeira.length?txt.slice(0,500):undefined});save();S.shareIn=null;view();say('Tarefa criada a partir do conteúdo recebido');return}
  if(a==='shNote'){const L=notesList();const id='sh'+Date.now().toString(36);L.push({id,n:(txt.split('\n')[0].trim().slice(0,60))||'Conteúdo recebido',t:txt,at:Date.now()});notesSave(L);notaSel(id);S.shareIn=null;pick('notas');say('Nota criada a partir do conteúdo recebido');return}
  if(a==='shDel'){S.shareIn=null;view();say('Conteúdo descartado');return}});
-setTimeout(()=>{shareInit();if(S.shareIn)view();const hd=document.querySelector('.hdr');if(hd&&!document.getElementById('apresHdr')){const b=document.createElement('button');b.id='apresHdr';b.type='button';b.className='chip';b.dataset.a='apres';b.textContent='Apresentação';b.setAttribute('aria-label','Abrir modo apresentação');b.style.cssText='margin-top:0.375rem;align-self:flex-start';hd.appendChild(b)}},0);
+setTimeout(()=>{if(msOn())demoLimpar();shareInit();if(S.shareIn)view();const hd=document.querySelector('.hdr');if(hd&&!document.getElementById('apresHdr')){const b=document.createElement('button');b.id='apresHdr';b.type='button';b.className='chip';b.dataset.a='apres';b.textContent='Apresentação';b.setAttribute('aria-label','Abrir modo apresentação');b.style.cssText='margin-top:0.375rem;align-self:flex-start';hd.appendChild(b)}},0);
+
+;['play','pause','playing','waiting','ended'].forEach(ev=>{try{RA.addEventListener(ev,()=>{if(S.apres)apresRender()})}catch(_){}});
+
+setInterval(()=>{if(!S.apres||apresModoAtual()!=='cronometro')return;const el=document.getElementById('apSwV');if(el)el.textContent=swFmt(swMs())},100);
+
+/* ===== Rádios: atalhos de mais ouvidas por país ===== */
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="rstop"]');if(!b)return;const q=$('#rsq');if(q)q.value='';S.rd.rsQ='';const br=$('#rsbr');if(br)br.checked=false;rsRun({order:'clickcount',cc:b.dataset.cc})});
+/* ===== Equipes: tarefas do Planner (somente leitura) ===== */
+let pnrCache=null;
+function pnrOn(){return ls.get('planner_on')==='1'&&ls.get('ms_planner')==='1'&&msOn()}
+async function pnrCarregar(){if(!pnrOn())return null;
+ const r=await gj('/me/planner/tasks?$select=id,title,dueDateTime,percentComplete,planId');if(!r.ok){if(r.status===403)return {erro:'Permissão do Planner não concedida. Autorize em Ajustes'};return {erro:'Não foi possível carregar o Planner agora'}}
+ const itens=(r.j&&r.j.value)||[];const planos={};
+ for(const id of [...new Set(itens.map(x=>x.planId).filter(Boolean))].slice(0,15)){const p=await gj('/planner/plans/'+id+'?$select=title');planos[id]=(p.ok&&p.j&&p.j.title)||'Plano'}
+ pnrCache={itens,planos,em:Date.now()};return pnrCache}
+function plannerHtml(d){if(!d)return '';if(d.erro)return '<p class="sub" role="status">'+esc(d.erro)+'</p>';
+ if(!d.itens.length)return '<p class="sub">Nenhuma tarefa do Planner atribuída a você.</p>';
+ const grupos={};d.itens.forEach(x=>{const k=d.planos[x.planId]||'Plano';(grupos[k]=grupos[k]||[]).push(x)});
+ return Object.entries(grupos).map(([nome,lista])=>'<div style="margin-top:0.5rem"><b>'+esc(nome)+'</b><ul class="svlist">'+lista.map(x=>{const prazo=x.dueDateTime?new Date(x.dueDateTime).toLocaleDateString('pt-BR',{day:'2-digit',month:'short'}):'sem prazo';return '<li class="svd" style="font-size:0.9rem">'+esc(x.title||'Sem título')+' <span class="sub">· '+esc(prazo)+' · '+(x.percentComplete||0)+'%</span></li>'}).join('')+'</ul></div>').join('')}
+function plannerSecaoDom(){const v=$('#view');if(!v||S.tab!=='tasks'||v.querySelector('#plannerBox'))return;if(ls.get('planner_on')!=='1')return;
+ const box=document.createElement('details');box.id='plannerBox';box.className='dt';box.style.margin='0.6rem 0';
+ box.innerHTML='<summary>Equipes · Planner</summary><p class="sub" style="margin:0.4rem 0">Suas tarefas atribuídas nos planos das equipes. Somente leitura.</p><div id="plannerCorpo"><p class="sub">Abra para carregar.</p></div>';
+ v.insertAdjacentElement('afterbegin',box)}
+document.addEventListener('toggle',e=>{if(e.target.id!=='plannerBox'||!e.target.open)return;const c=$('#plannerCorpo');if(!c)return;c.innerHTML='<p class="sub">Carregando…</p>';pnrCarregar().then(d=>{const c2=$('#plannerCorpo');if(c2)c2.innerHTML=plannerHtml(d)})},true);
+function plannerAjusteDom(){const v=$('#view');if(!v||v.querySelector('#plannerAjuste'))return;const box=document.createElement('details');box.id='plannerAjuste';box.className='dt';box.style.marginTop='0.75rem';
+ box.innerHTML='<summary>Equipes · Planner</summary><label class="opt row" style="margin:0.5rem 0"><input type="checkbox" id="oPlanner"'+(ls.get('planner_on')==='1'?' checked':'')+'><span>Mostrar tarefas do Planner da equipe na aba Tarefas</span></label><p class="sub" style="margin:0.25rem 0 0">Somente leitura. Exige conta Microsoft de trabalho ou escola. Para contas pessoais, o Planner não está disponível.</p>';
+ v.appendChild(box)}
+document.addEventListener('change',e=>{if(e.target.id!=='oPlanner')return;
+ if(!e.target.checked){ls.set('planner_on','0');pnrCache=null;view();return}
+ if(!msOn()){e.target.checked=false;say('Conecte a Microsoft primeiro (Ajustes → Microsoft)');return}
+ if(ls.get('ms_planner')!=='1'){e.target.checked=false;mAuth({planner:true});return}
+ ls.set('planner_on','1');say('Planner ativado');view()});
