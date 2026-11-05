@@ -686,3 +686,22 @@ a{color:#0645ad}
 .tr-passos{margin:0.4rem 0 0;padding-left:1.25rem;display:flex;flex-direction:column;gap:0.4rem;font-size:0.92rem}
 .tr-det{border-top:1px solid rgba(0,0,0,.12);padding-top:0.5rem}
 .tr-det summary{cursor:pointer;padding:0.25rem 0}
+
+/* ===== Dica sobre o fundo preto (contraste) ===== */
+.hint{color:#b3b3b3!important}
+
+/* ===== Música no estilo CarPlay: fundo da cor da capa, texto branco, controles sem contorno ===== */
+.np.npc{background:var(--npbg,#c8102e);color:#fff;border-radius:1.25rem;padding:1.25rem 1.25rem 1rem;transition:background .6s ease}
+.np.npc .np-meta{text-align:left}
+.np.npc .np-title b{font-size:clamp(1.5rem,3vw,2.5rem);font-weight:700;letter-spacing:-0.01em;overflow-wrap:anywhere}
+.np.npc .np-sub,.np.npc .np-state{color:#fff;opacity:.85}
+.np.npc .prog{color:#fff}
+.np.npc .prog input.seek{accent-color:#fff;height:0.35rem}
+.np.npc .ctrl{gap:1.25rem;justify-content:center;align-items:center}
+.np.npc .ctrl .ib,.np.npc .ctrl .chip{background:transparent!important;border:0!important;color:#fff!important;box-shadow:none!important}
+.np.npc .np-art{border-radius:1rem;box-shadow:0 1rem 2.5rem rgba(0,0,0,.35)}
+.np.npc .rvol,.np.npc .vol,.np.npc label{color:#fff}
+@media (min-width:56rem){
+ .np.npc{padding:1.5rem 1.75rem}
+ .np.npc .np-art{width:100%;max-width:none}
+}
