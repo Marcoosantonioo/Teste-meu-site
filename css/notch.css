@@ -671,3 +671,18 @@ a{color:#0645ad}
  .rnp>.ctrl{grid-column:1}
  .rnp>.rvol{grid-column:1}
 }
+
+/* ===== Emissora selecionada: texto preto no tema claro e branco no escuro ===== */
+.svd.cur .svdbtn{color:#000000!important;background:rgba(0,0,0,.06)!important}
+:root[data-theme="dark"] .svd.cur .svdbtn{color:#ffffff!important;background:rgba(255,255,255,.1)!important}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .svd.cur .svdbtn{color:#ffffff!important;background:rgba(255,255,255,.1)!important}}
+:root[data-theme="light"] .svd{border-top-color:rgba(0,0,0,.1)}
+
+/* ===== Treinos: plano semanal e treino em casa ===== */
+.tr-tabwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tr-tab{width:100%;border-collapse:collapse;font-size:0.9rem;min-width:28rem}
+.tr-tab th,.tr-tab td{padding:0.55rem 0.5rem;text-align:left;vertical-align:top;border-bottom:1px solid rgba(0,0,0,.12)}
+.tr-tab tbody th{font-weight:700;white-space:nowrap}
+.tr-passos{margin:0.4rem 0 0;padding-left:1.25rem;display:flex;flex-direction:column;gap:0.4rem;font-size:0.92rem}
+.tr-det{border-top:1px solid rgba(0,0,0,.12);padding-top:0.5rem}
+.tr-det summary{cursor:pointer;padding:0.25rem 0}
