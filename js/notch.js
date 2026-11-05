@@ -15,11 +15,11 @@ const TAB_COL={cal:'#ff3b30',tasks:'#0a84ff',clip:'#8e8e93',pomo:'#ff9500',set:'
 function iconOn(h){const c=(h||'#636366').replace('#','');const l=[0,2,4].map(i=>parseInt(c.substr(i,2),16)/255).map(v=>v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4));const L=0.2126*l[0]+0.7152*l[1]+0.0722*l[2];const cb=1.05/(L+0.05);return cb>=3?'#'+c:'#111111'}
 function renderTabs(){
  $('#notch').dataset.tab=S.tab;const visiveis=S.tabsAll?TABS:TABS.slice(0,TABS_TOPO);const botaoMais=`<button class="tab" id="tabsMore" data-a="tabsMore" aria-expanded="${!!S.tabsAll}" aria-label="${S.tabsAll?'Mostrar menos botões':'Mostrar todos os botões'}" title="${S.tabsAll?'Mostrar menos':'Mostrar todos'}" style="--tc:#8e8e93;--tt:#111"><span aria-hidden="true" style="font-size:1.625rem;line-height:1">${S.tabsAll?'«':'⋯'}</span><span>${S.tabsAll?'Menos':'Mais'}</span></button>`;
- $('#tabs').innerHTML=visiveis.map(([id,l,i])=>(id==='radio'?'<span class="sp"></span>':'')+`<button class="tab" style="--tc:${TAB_COL[id]||'#636366'};--tt:${iconOn(TAB_COL[id])}" role="tab" id="t-${id}" aria-selected="${S.tab===id}" aria-controls="view" tabindex="${S.tab===id?0:-1}" aria-label="${l}" title="${l}" data-tab="${id}">${ic(id==='radio'?(S.rd&&S.rd.on?'radio-on':'radio-off'):i)}<span>${l}</span></button>`).join('')+botaoMais}
+ $('#tabs').innerHTML=visiveis.map(([id,l,i])=>(id==='radio'?'<span class="sp"></span>':'')+`<button class="tab" style="--tc:${TAB_COL[id]||'#636366'};--tt:${iconOn(TAB_COL[id])}" role="tab" id="t-${id}" aria-selected="${S.tab===id}" aria-controls="view" tabindex="${S.tab===id?0:-1}" aria-label="${l}" title="${l}" data-tab="${id}">${ic(id==='radio'?(S.rd&&S.rd.on?'radio-on':'radio-off'):i)}<span>${l}</span></button>`).join('');let mb=document.getElementById('tabsMoreBox');if(!mb){mb=document.createElement('div');mb.id='tabsMoreBox';$('#tabs').insertAdjacentElement('afterend',mb)}mb.innerHTML=botaoMais}
 function viewInner(){
  const v=$('#view');v.setAttribute('aria-labelledby','t-'+S.tab);
  const m=S.m,tr=m.list[m.i];
-if(S.tab==='music')v.innerHTML=`<section class="np" aria-label="Reprodução do Spotify"><div class="np-top"><span class="np-art" style="${tr.img?`background-image:url('${esc(tr.img)}')`:''}" aria-hidden="true"></span><div class="np-meta"><div class="np-title"><b>${esc(tr.t)}</b>${S.tok?`<button class="ib sm like" data-a="like" aria-pressed="${!!m.liked}" aria-label="Favoritar faixa">${ic(m.liked?'heartf':'heart')}</button>`:''}</div>${tr.al?`<div class="np-sub">Álbum: <span class="np-al">${esc(tr.al)}</span></div>`:''}<div class="np-sub">${esc(tr.a)}</div><div class="np-state" role="status">${m.play?'Tocando':'Pausada'}</div></div></div>
+if(S.tab==='music')v.innerHTML=`<section class="np npc" aria-label="Reprodução do Spotify" style="--npbg:${S.npCor||'#c8102e'}"><div class="np-top"><span class="np-art" style="${tr.img?`background-image:url('${esc(tr.img)}')`:''}" aria-hidden="true"></span><div class="np-meta"><div class="np-title"><b>${esc(tr.t)}</b>${S.tok?`<button class="ib sm like" data-a="like" aria-pressed="${!!m.liked}" aria-label="Favoritar faixa">${ic(m.liked?'heartf':'heart')}</button>`:''}</div>${tr.al?`<div class="np-sub">Álbum: <span class="np-al">${esc(tr.al)}</span></div>`:''}<div class="np-sub">${esc(tr.a)}</div><div class="np-state" role="status">${m.play?'Tocando':'Pausada'}</div></div></div>
  <div class="prog"><span id="mpos">${fmt(m.pos)}</span><input class="seek" id="mseek" type="range" min="0" max="${tr.d}" step="1" value="${m.pos}" aria-label="Posição da faixa" aria-valuetext="${fmt(m.pos)} de ${fmt(tr.d)}" style="--p:${(m.pos/tr.d*100).toFixed(1)}%"><span>${fmt(tr.d)}</span></div>
  <div class="ctrl"><button class="ib" data-a="shuf" aria-pressed="${m.shuf}" aria-label="Aleatório">${ic('shuf')}</button><button class="ib" data-a="prev" aria-label="Faixa anterior">${ic('prev')}</button><button class="ib big" data-a="play" aria-label="${m.play?'Pausar':'Tocar'}">${ic(m.play?'pause':'play')}</button><button class="ib" data-a="next" aria-label="Próxima faixa">${ic('next')}</button><button class="ib" data-a="rep" aria-pressed="${m.rep}" aria-label="Repetir">${ic('rep')}</button></div>
  ${spDev()}${plsSection()}${spBox()}</section>`;
@@ -656,7 +656,7 @@ function radioExtrasDom(){const v=$('#view');if(!v||S.tab!=='radio')return;
  const rf=v.querySelector('#rsform');if(rf&&!v.querySelector('#rstopBox'))rf.insertAdjacentHTML('afterend',rsTopBoxHtml());
  v.querySelectorAll('#rtile,#rweek').forEach(n=>n.remove());
  
- const listen=(()=>{try{return JSON.parse(ls.get('listen')||'{}')||{}}catch(_){return {}}})();
+ const listen=S.listenAll||(()=>{try{return JSON.parse(ls.get('listen')||'{}')||{}}catch(_){return {}}})();
  const dias=[...Array(7).keys()].reverse().map(i=>dayKey(new Date(Date.now()-i*864e5)));
  const tot={};dias.forEach(k=>{const d=listen[k];if(d&&d.r)Object.entries(d.r).forEach(([n,sec])=>{tot[n]=tot[n]||{sec:0,dia:{}};tot[n].sec+=sec;tot[n].dia[k]=(tot[n].dia[k]||0)+sec})});
  const top=Object.entries(tot).sort((a,b)=>b[1].sec-a[1].sec).slice(0,6);
@@ -2181,6 +2181,7 @@ document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest
 document.addEventListener('change',e=>{const el=e.target;if(el.dataset&&el.dataset.k==='rvmotivo'){const r=kbRev();const cur=r.itens[el.dataset.id]||{st:'adiado'};cur.motivo=el.value;r.itens[el.dataset.id]=cur;ls.set('kb_rev',JSON.stringify(r))}});
 function distracaoNotaHtml(){const L=kbDistr();const extra=L.length?' Evite: '+esc(L.join(', '))+'.':'';return '<div class="note" role="status">Guarde o celular e deixe-o longe de você durante o foco.'+extra+'</div>'}
 /* ===== Spotify: filtros de busca (artist:, album:, year:, genre:) e "Continuar ouvindo" (podcasts) ===== */
+function spDepoisPlayer(v,box){const np=v.querySelector('.np');if(np)np.insertAdjacentElement('afterend',box);else v.insertAdjacentElement('afterbegin',box)}
 function spQueryFiltro(){const t=(($('#qq')||{}).value||'').trim();const c=(($('#qcampo')||{}).value)||'todos';if(c==='todos'||!t)return t;return c+':'+(/\s/.test(t)?'"'+t+'"':t)}
 function spFiltrosDom(){const v=$('#view');if(!v||S.tab!=='music')return;const inp=$('#qq');if(!inp||$('#qcampo'))return;
  const sel=document.createElement('select');sel.id='qcampo';sel.setAttribute('aria-label','Campo da busca');sel.style.cssText='margin-bottom:0.4rem;padding:0.5rem;border-radius:0.6rem;font:inherit';
@@ -2190,7 +2191,7 @@ function spFiltrosDom(){const v=$('#view');if(!v||S.tab!=='music')return;const i
 function spContinuarDom(){const v=$('#view');if(!v||S.tab!=='music'||!S.tok||v.querySelector('#spContinuar'))return;
  const box=document.createElement('details');box.id='spContinuar';box.className='dt';box.style.margin='0 0 0.75rem';
  box.innerHTML='<summary>Continuar ouvindo (podcasts)</summary><div id="spContCorpo" style="margin-top:0.5rem"><p class="sub">Abra para carregar.</p></div>';
- v.insertAdjacentElement('afterbegin',box)}
+ spDepoisPlayer(v,box)}
 document.addEventListener('toggle',e=>{if(e.target.id!=='spContinuar'||!e.target.open)return;const c=$('#spContCorpo');if(!c)return;c.innerHTML='<p class="sub">Carregando…</p>';
  spApi('/me/episodes?limit=50&market=BR').then(r=>{const c2=$('#spContCorpo');if(!c2)return;
   const itens=((r&&r.items)||[]).filter(x=>x&&x.episode&&x.resume_point&&!x.resume_point.fully_played&&x.resume_point.resume_position_ms>0);
@@ -2240,16 +2241,16 @@ const SP_SUG=['top hits brasil','lofi para estudar','rock clássico','mpb essenc
 function spSugestoesDom(){const v=$('#view');if(!v||S.tab!=='music'||!S.tok||v.querySelector('#spSug'))return;
  const box=document.createElement('details');box.id='spSug';box.className='dt';box.style.margin='0 0 0.75rem';
  box.innerHTML='<summary>Sugestões de playlists</summary><div id="spSugCorpo" style="margin-top:0.5rem"><p class="sub">Abra para carregar.</p></div>';
- v.insertAdjacentElement('afterbegin',box)}
+ spDepoisPlayer(v,box)}
 document.addEventListener('toggle',e=>{if(e.target.id!=='spSug'||!e.target.open)return;const c=$('#spSugCorpo');if(!c)return;c.innerHTML='<p class="sub">Carregando…</p>';
  const q=SP_SUG[new Date().getDate()%SP_SUG.length];
  spApi('/search?'+new URLSearchParams({q,type:'playlist',limit:'8',market:'BR'})).then(r=>{const c2=$('#spSugCorpo');if(!c2)return;
   const itens=((r&&r.playlists&&r.playlists.items)||[]).filter(x=>x&&x.uri);
   if(!itens.length){c2.innerHTML='<p class="sub">Não foi possível carregar sugestões agora.</p>';return}
-  c2.innerHTML='<div class="sp-grid">'+itens.map(p=>{const img=(p.images&&p.images[0]&&p.images[0].url)||'';
-   return '<article class="sp-card"><button type="button" class="sp-cov" data-a="spPlay" data-uri="'+esc(p.uri)+'" aria-label="Tocar playlist '+esc(p.name||'')+'" style="'+(img?"background-image:url('"+esc(img)+"')":'')+'"></button><div class="sp-nome">'+esc(p.name||'Playlist')+'</div><div class="sub sp-dono">'+esc((p.owner&&p.owner.display_name)||'Spotify')+'</div></article>'}).join('')+'</div>'})},true);
-document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="spPlay"]');if(!b)return;
- spApi('/me/player/play',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({context_uri:b.dataset.uri})}).then(()=>{if(S.err===0)say('Tocando a playlist');else if(S.err===403)say('Tocar playlist exige Spotify Premium');else if(S.err===404)say('Nenhum aparelho ativo. Abra o Spotify em um aparelho')})});
+  c2.innerHTML='<div class="sp-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(8.5rem,1fr));gap:0.9rem">'+itens.map(p=>{const img=(p.images&&p.images[0]&&p.images[0].url)||'';
+   return '<article class="sp-card"><button type="button" class="sp-cov" data-a="spPlay" data-uri="'+esc(p.uri)+'" data-id="'+esc(p.id||'')+'" aria-label="Tocar playlist '+esc(p.name||'')+'" style="display:block;width:100%;aspect-ratio:1;border:0;border-radius:0.9rem;cursor:pointer;background:#1d1d1f center/cover no-repeat;'+(img?"background-image:url('"+esc(img)+"')":'')+'"></button><div class="sp-nome">'+esc(p.name||'Playlist')+'</div><div class="sub sp-dono">'+esc((p.owner&&p.owner.display_name)||'Spotify')+'</div></article>'}).join('')+'</div>'})},true);
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="spPlay"]');if(!b)return;const abrir=()=>{if(b.dataset.id)window.open('https://open.spotify.com/playlist/'+encodeURIComponent(b.dataset.id),'_blank','noopener')};
+ spApi('/me/player/play',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({context_uri:b.dataset.uri})}).then(()=>{if(S.err===0){say('Tocando a playlist');return}if(S.err===403){say('Tocar no aparelho exige Premium. Abrindo no Spotify');abrir();return}say('Nenhum aparelho ativo. Abrindo a playlist no Spotify');abrir()})});
 /* ===== Modo sono: saída sempre visível e pausa programada do Spotify ===== */
 function sonoBtnDom(){const n=document.getElementById('notch');if(!n)return;let b=document.getElementById('sonoSair');
  if(!S.sono){if(b)b.remove();return}
@@ -2269,6 +2270,33 @@ const TR_CASA={"titulo": "Treino em casa (silencioso, sem saltos)", "nota": "Os 
 function trPlanoHtml(){return trCartao('Plano semanal','<div class="tr-tabwrap"><table class="tr-tab"><caption class="sub" style="text-align:left;margin-bottom:0.4rem">Rotina da semana</caption><thead><tr><th scope="col">Dia</th><th scope="col">Treino</th><th scope="col">Como fazer</th></tr></thead><tbody>'+TR_PLANO.map(([d,t,c])=>'<tr><th scope="row">'+esc(d)+'</th><td>'+esc(t)+'</td><td>'+esc(c)+'</td></tr>').join('')+'</tbody></table></div>')}
 function trCasaHtml(){const lista=a=>'<ol class="tr-passos">'+a.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol>';
  return trCartao(esc(TR_CASA.titulo),'<p class="sub">'+esc(TR_CASA.nota)+'</p><details class="tr-det" open><summary><b>Treino A (corpo inteiro, terça)</b></summary>'+lista(TR_CASA.A)+'</details><details class="tr-det" open><summary><b>Treino B (corpo inteiro, quinta)</b></summary>'+lista(TR_CASA.B)+'</details><details class="tr-det"><summary><b>Cardio silencioso (substitui esteira e pular corda)</b></summary>'+lista(TR_CASA.cardio)+'</details>')}
+/* ===== Escuta entre dispositivos (OneDrive, pasta do aplicativo) ===== */
+function rdDevId(){let d=ls.get('device_id');if(!d){d=Math.random().toString(36).slice(2,10);ls.set('device_id',d)}return d}
+async function listenSync(){if(!msOn()||S.listenBusy)return;S.listenBusy=true;S.listenAt=Date.now();
+ try{if(!await msEnsure())return;
+  let own={};try{own=JSON.parse(ls.get('listen')||'{}')||{}}catch(_){}
+  const w=await gj('/me/drive/special/approot:/listen_'+rdDevId()+'.json:/content',{method:'PUT',body:JSON.stringify(own),headers:{'Content-Type':'application/json'}});
+  if(!w.ok){say(w.status===401||w.status===403?'Ative o backup OneDrive em Ajustes para sincronizar a escuta':'Não foi possível sincronizar a escuta');return}
+  const lst=await gj('/me/drive/special/approot/children?$select=name');
+  const arquivos=((lst.j&&lst.j.value)||[]).filter(x=>/^listen_.*\.json$/.test(x.name));
+  const tot={};
+  for(const f of arquivos){const r=await gj('/me/drive/special/approot:/'+f.name+':/content');if(!r.ok||!r.j||typeof r.j!=='object')continue;
+   Object.entries(r.j).forEach(([dia,v])=>{const t=tot[dia]=tot[dia]||{r:{}};Object.entries((v&&v.r)||{}).forEach(([n,sec])=>{t.r[n]=(t.r[n]||0)+sec})})}
+  S.listenAll=tot;if(S.tab==='radio')view();say('Escuta somada de '+arquivos.length+' dispositivo(s)')
+ }catch(_){say('Não foi possível sincronizar a escuta')}finally{S.listenBusy=false}}
+function listenAuto(){if(S.tab!=='radio')return;const w=document.getElementById('rweek');
+ if(w&&!document.getElementById('listSync')){const b=document.createElement('button');b.type='button';b.id='listSync';b.className='chip';b.dataset.a='listsync';b.textContent='Somar dispositivos';b.style.marginTop='0.5rem';w.appendChild(b)}
+ if(msOn()&&(!S.listenAt||Date.now()-S.listenAt>300000))listenSync()}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="listsync"]');if(!b)return;listenSync()});
+/* ===== Música: fundo com a cor média da capa (estilo CarPlay) ===== */
+function npCorDom(){const sec=document.querySelector('#view .np.npc');if(!sec)return;
+ const art=sec.querySelector('.np-art');const m=art&&(art.style.backgroundImage||'').match(/url\(['"]?([^'")]+)/);if(!m)return;const url=m[1];
+ if(S.npCorUrl===url){if(S.npCor)sec.style.setProperty('--npbg',S.npCor);return}
+ S.npCorUrl=url;const im=new Image();im.crossOrigin='anonymous';
+ im.onload=()=>{try{const c=document.createElement('canvas');c.width=c.height=8;const x=c.getContext('2d');x.drawImage(im,0,0,8,8);const d=x.getImageData(0,0,8,8).data;let r=0,g=0,b=0,n=0;for(let i=0;i<d.length;i+=4){r+=d[i];g+=d[i+1];b+=d[i+2];n++}
+   S.npCor='rgb('+[r,g,b].map(v=>Math.round(v/n*0.8)).join(',')+')'}catch(_){S.npCor='#c8102e'}
+   const s2=document.querySelector('#view .np.npc');if(s2)s2.style.setProperty('--npbg',S.npCor)};
+ im.onerror=()=>{S.npCor='#c8102e';sec.style.setProperty('--npbg',S.npCor)};im.src=url}
 let tpX=null;
 $('#view').addEventListener('pointerdown',e=>{if(S.tab==='tempo')tpX=e.clientX});
 $('#view').addEventListener('pointerup',e=>{if(S.tab!=='tempo'||tpX==null)return;const dx=e.clientX-tpX;tpX=null;if(Math.abs(dx)>50)tpGo(dx<0?1:-1)});
@@ -2631,8 +2659,10 @@ function notes(){const v=$('#view');if(!v)return;v.querySelectorAll('.note').for
  if(S.tab==='tasks'){prioDom();tarefaDescDom();tarefaMenuDom()}
  if(S.tab==='set'){onenoteAjusteDom();plannerAjusteDom()}
  if(S.tab==='kanban')plannerSecaoDom();
+ listenAuto();
  if(S.tab==='tempo')chuvaAjusteDom();
  if(S.tab==='music')spFiltrosEContinuar();
+ if(S.tab==='music')npCorDom();
  sonoBtnDom();
  if(S.tab==='cal')feriadoAvisoDom();
  if(S.tab==='radio')v.insertAdjacentHTML('beforeend',radioHistHtml());
@@ -2742,7 +2772,8 @@ const TV_DEF=[
  ['DW','https://www.dw.com/'],
  ['France 24','https://www.france24.com/en/live-news'],
  ['Euronews','https://www.euronews.com/live'],
- ['Arte','https://www.arte.tv/']
+ ['Arte','https://www.arte.tv/'],
+ ['Pluto TV','https://pluto.tv/']
 ].map(([n,u])=>({n,u}));
 S.tv={cur:0,list:[]};
 try{const l=JSON.parse(ls.get('tv_list')||'null');const cl=Array.isArray(l)?l.slice(0,100).map(x=>({n:String((x&&x.n)||'').slice(0,40),u:String((x&&x.u)||'').slice(0,300)})).filter(x=>x.n):[];S.tv.list=cl.length?cl:TV_DEF.slice()}catch(_){S.tv.list=TV_DEF.slice()}
@@ -2762,7 +2793,7 @@ function tvHls(url){const v=$('#tvv');if(!v)return;
  if(window.Hls)return go();
  if(window.__hlsLoading)return;window.__hlsLoading=true;const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.13/hls.min.js';sc.onload=go;sc.onerror=()=>{window.__hlsLoading=false;say('Não foi possível carregar o player de vídeo')};document.head.appendChild(sc)}
 function tvAfter(){const c=S.tv.list[S.tv.cur];if(c&&tvM3u(c.u||''))tvHls(c.u)}
-function tvView(){const L=S.tv.list,c=L[S.tv.cur];
+function tvView(){if(!S.tv.list.some(x=>x.n==='Pluto TV')&&!ls.get('tv_pluto_ok')){S.tv.list.push({n:'Pluto TV',u:'https://pluto.tv/'});ls.set('tv_pluto_ok','1');ls.set('tv_list',JSON.stringify(S.tv.list))}const L=S.tv.list,c=L[S.tv.cur];
  return `<h2>TV</h2>${tvPlayer(c)}
  <p class="sub" role="status">${c?esc(c.n)+' · '+(S.tv.cur+1)+' de '+L.length:'Nenhum canal cadastrado'}</p>
  <div class="ctrl"><button type="button" class="ib" data-a="tvprev" aria-label="Canal anterior">${ic('prev')}</button><button type="button" class="ib" data-a="tvnext" aria-label="Próximo canal">${ic('next')}</button></div>
