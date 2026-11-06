@@ -705,3 +705,51 @@ a{color:#0645ad}
  .np.npc{padding:1.5rem 1.75rem}
  .np.npc .np-art{width:100%;max-width:none}
 }
+
+/* ===== Dica do notch: texto claro sobre o fundo preto (axe 1.4.3) ===== */
+:root[data-theme="light"] .hint.sub,:root[data-theme="dark"] .hint.sub,:root .hint.sub,.hint.sub,.hint.sub.hint{color:#b3b3b3!important}
+/* ===== Botão Mais: reserva o espaço do botão de grade e não fica sob ele ===== */
+#tabsMoreBox{display:flex;justify-content:center;flex:none;padding:0.25rem 0 3.5rem;margin:0}
+/* ===== Música: fundo sem borda (estilo CarPlay) ===== */
+.np.npc{border-radius:0;padding:0.75rem 0;box-shadow:none}
+@media (min-width:56rem){.np.npc{padding:1rem 0}}
+
+/* ===== Música em tela inteira: a cor da capa preenche a aba (estilo CarPlay) ===== */
+.notch[data-tab="music"]{background:var(--npbg,#c8102e)!important;transition:background .6s ease}
+.notch[data-tab="music"] #view,.notch[data-tab="music"] .np.npc{background:transparent!important;box-shadow:none!important}
+.notch[data-tab="music"] .np.npc{color:#fff;min-height:100%;padding:1rem 0;border-radius:0}
+.notch[data-tab="music"] .np.npc .np-sub,.notch[data-tab="music"] .np.npc .np-state,.notch[data-tab="music"] .np.npc .prog{color:#fff}
+.notch[data-tab="music"] h2{color:#fff}
+
+/* ===== Rádio em tela inteira: cor média do logotipo da emissora ===== */
+.notch[data-tab="radio"]{background:var(--rdbg,#c8102e)!important;transition:background .6s ease}
+.notch[data-tab="radio"] #view{background:transparent!important}
+.notch[data-tab="radio"] #view h2,.notch[data-tab="radio"] #view .sub{color:#fff}
+
+/* ===== Meu dia ===== */
+.dia-lin-tl{display:flex;flex-direction:column;gap:0.25rem;background:var(--row,rgba(0,0,0,.05));border-radius:1.25rem;padding:0.75rem;margin-bottom:0.75rem}
+.dia-row{display:grid;grid-template-columns:3.6rem 2.6rem minmax(0,1fr);gap:0.6rem;align-items:start;padding:0.35rem 0}
+.dia-h input{font:inherit;width:100%;padding:0.35rem;border-radius:0.6rem;border:1px solid rgba(0,0,0,.2);background:var(--bgc,#fff);color:var(--ink,#111)}
+.dia-ico{width:2.6rem;height:2.6rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 0 0 0.2rem rgba(0,0,0,.08)}
+.dia-card{background:var(--bgc,#fff);color:var(--ink,#111);border:1px solid rgba(0,0,0,.12);border-radius:1rem;padding:0.7rem 0.8rem;display:flex;flex-direction:column;gap:0.5rem;min-width:0}
+.dia-top{display:flex;justify-content:space-between;gap:0.5rem;align-items:flex-start}
+.dia-tx{display:flex;flex-direction:column;gap:0.3rem;min-width:0;flex:1}
+.dia-tit{font:inherit;font-weight:700;font-size:1rem;padding:0.3rem 0.45rem;border-radius:0.5rem;border:1px solid transparent;background:transparent;color:inherit;min-width:0}
+.dia-tit:focus,.dia-sub:focus{border-color:rgba(0,0,0,.25);background:rgba(0,0,0,.04);outline:none}
+.dia-sub{font:inherit;font-size:0.85rem;padding:0.2rem 0.45rem;border-radius:0.5rem;border:1px solid transparent;background:transparent;color:inherit;opacity:.8;min-width:0}
+.dia-acoes{display:flex;gap:0.25rem;flex:none}
+.dia-campos{display:flex;gap:0.5rem;flex-wrap:wrap}
+.dia-campos label,.dia-treino label{display:flex;flex-direction:column;gap:0.2rem;font-size:0.78rem;font-weight:600;min-width:0;flex:1}
+.dia-campos select,.dia-treino select{font:inherit;padding:0.4rem;border-radius:0.6rem;border:1px solid rgba(0,0,0,.2);background:var(--bgc,#fff);color:var(--ink,#111);min-width:0}
+.dia-treino{display:flex;flex-direction:column;gap:0.4rem}
+.dia-lin{margin:0;padding-left:1.1rem;font-size:0.85rem;display:flex;flex-direction:column;gap:0.2rem}
+@media (max-width:30rem){.dia-row{grid-template-columns:3rem 2.2rem minmax(0,1fr)}.dia-ico{width:2.2rem;height:2.2rem}}
+
+/* ===== Meu dia: itens concluídos ===== */
+.dia-card.feito{opacity:.7}
+.dia-card.feito .dia-tit{text-decoration:line-through}
+.dia-resumo{background:var(--row,rgba(0,0,0,.05));border-radius:1.25rem;padding:0.9rem 1rem;margin-top:0.75rem;display:flex;flex-direction:column;gap:0.4rem}
+
+/* ===== Foco visível para teclado (WCAG 2.4.7) ===== */
+:focus-visible{outline:3px solid #0a84ff;outline-offset:2px}
+.kb-card:focus-visible,.dia-card:focus-visible,.sp-cov:focus-visible{outline:3px solid #0a84ff;outline-offset:3px}
