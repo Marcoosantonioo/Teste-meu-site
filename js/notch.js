@@ -719,7 +719,7 @@ function rdSortList(k){const cur=S.rd.list[S.rd.cur];const sc=(()=>{try{return J
  view();say('Lista ordenada: '+(k==='nome'?'por nome':'por última tocada'))}
 /* ===== Notificações em segundo plano ===== */
 function notifyBg(titulo,corpo){if(ls.get('opt_ntf')!=='1'||!document.hidden)return;if(!('Notification' in window)||Notification.permission!=='granted')return;
- const opts={body:corpo,icon:'icons/icon-192.png',tag:titulo};
+ const opts={body:corpo,icon:'icon-192.png',tag:titulo};
  const local=()=>{try{new Notification(titulo,opts)}catch(_){}};
  if(navigator.serviceWorker&&navigator.serviceWorker.ready){navigator.serviceWorker.ready.then(reg=>reg.showNotification(titulo,opts)).catch(local)}else local()}
 function sleepRow(){return `<div class="rvol"><label for="rsleep" class="sub">Desligar em</label><select id="rsleep">${SLEEP_OPTS.map(m=>`<option value="${m}"${(S.rd.sleepM||0)===m?' selected':''}>${m?m+' min':'Desativado'}</option>`).join('')}<option value="-1"${(S.rd.sleepM||0)&&!SLEEP_OPTS.includes(S.rd.sleepM)?' selected':''}>Personalizado</option></select><input type="number" id="rscm" min="1" max="1440" inputmode="numeric" aria-label="Minutos personalizados" placeholder="min" value="${(S.rd.sleepM&&!SLEEP_OPTS.includes(S.rd.sleepM))?S.rd.sleepM:''}" style="width:4.75rem"${(S.rd.sleepM&&!SLEEP_OPTS.includes(S.rd.sleepM))?'':' hidden'}><span class="sub" id="rslp">${sleepTxt()}</span></div>`}
