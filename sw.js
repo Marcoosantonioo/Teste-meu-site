@@ -1,5 +1,9 @@
-const VERSAO = 'painel-v52';
+const VERSAO = 'painel-v86';
 const ARQUIVOS = ['./', './notch-panel.html', './css/notch.css', './js/notch.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
+
+self.addEventListener('message', e => {
+  if (e.data === 'skip') self.skipWaiting();
+});
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSAO).then(c => c.addAll(ARQUIVOS)).then(() => self.skipWaiting()));
