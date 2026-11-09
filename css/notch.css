@@ -110,8 +110,6 @@ option{background:#18181b;color:#fff}
 select{color-scheme:dark}
 .tk{flex-wrap:wrap}.tk .grow{min-width:7.5rem}
 .grip{color:#9a9aa2;cursor:grab;display:grid;place-items:center;width:1rem;flex:none}.grip svg{width:1rem;height:1rem}
-.acts2{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:0.25rem;margin-left:auto;max-width:62%}
-.tk .acts2 .ib.sm,.tk .acts2 .chip{flex:none}
 .ef{flex:1;display:flex;flex-wrap:wrap;gap:0.25rem;align-items:center;min-width:0}
 .ef input{height:2.375rem;background:#000;border:2px solid #7a7a82;padding:0 0.75rem}
 .ib[aria-disabled="true"]{opacity:.35;cursor:default}
@@ -123,10 +121,6 @@ li.drag{opacity:.5}li.ins-b{box-shadow:0 -3px 0 #5b8cff}li.ins-a{box-shadow:0 3p
 .pfr{display:flex;flex-direction:column;gap:0.25rem;flex:1;min-width:7.5rem}.pfr label{color:#a9a9b0;font-size:0.875rem}
 .pf input{height:2.5rem;border:2px solid #7a7a82}
 .err{color:#ff8a80;margin:0.375rem 0.125rem 0}
-.mvs{display:flex;flex-direction:column}
-.mvs .ib.sm{width:2.125rem;height:1.5rem;border-radius:0;background:#2a2a2f}
-.mvs .ib.sm:first-child{border-radius:0.5rem 0.5rem 0 0}.mvs .ib.sm:last-child{border-radius:0 0 0.5rem 0.5rem}
-.mvs .ib.sm svg{width:1rem;height:1rem}
 .tk{padding-top:0.375rem;padding-bottom:0.375rem}
 .redact{display:flex;gap:0.5rem;margin:0.375rem 0;flex-wrap:wrap}.rrow .ib.sm{flex:none}
 .np .like{margin-left:auto;flex:none}.np .like svg{width:1.5rem;height:1.5rem}
@@ -463,7 +457,7 @@ img,svg,canvas,video,iframe,table{max-width:100%}
  .tab{width:2.625rem!important;height:2.625rem!important;min-height:2.625rem}
  .tab svg{width:1.25rem!important;height:1.25rem!important}
  #back span,#fwd span{display:none}
- .aw-temp,.tp-temp{font-size:3.25rem!important}
+ .tp-temp{font-size:3.25rem!important}
 }
 @media (min-width:481px) and (max-width:900px){
  .inner{grid-template-columns:7.5rem minmax(0,1fr)!important}
@@ -516,11 +510,6 @@ img,svg,canvas,video,iframe,table{max-width:100%}
 @media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .ib,:root:not([data-theme="dark"]) .pill,:root:not([data-theme="dark"]) button.ib{background:#ffffff!important;color:#000000!important;border:1px solid #000000!important}:root:not([data-theme="dark"]) label,:root:not([data-theme="dark"]) summary,:root:not([data-theme="dark"]) .opt{color:#000000!important}:root:not([data-theme="dark"]) .sub{color:#4a4a52!important}}
 
 /* ===== Ações das tarefas: sempre na horizontal, da esquerda para a direita ===== */
-.acts2{display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;align-items:center!important;justify-content:flex-end!important;gap:0.375rem!important}
-.mvs{display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;align-items:center!important;gap:0.375rem!important}
-.mvs .ib.sm,.acts2 .ib.sm{width:2.25rem!important;height:2.25rem!important;border-radius:50%!important;flex:none}
-.mvs .ib.sm:first-child,.mvs .ib.sm:last-child{border-radius:50%!important}
-.mvs .ib.sm svg{width:1rem;height:1rem}
 
 /* ===== Auditoria de contraste: links e textos da apresentação ===== */
 a{color:#0645ad}
@@ -753,3 +742,68 @@ a{color:#0645ad}
 /* ===== Foco visível para teclado (WCAG 2.4.7) ===== */
 :focus-visible{outline:3px solid #0a84ff;outline-offset:2px}
 .kb-card:focus-visible,.dia-card:focus-visible,.sp-cov:focus-visible{outline:3px solid #0a84ff;outline-offset:3px}
+
+/* ===== Meu dia: campos por tipo ===== */
+.dia-treino textarea{font:inherit;padding:0.5rem;border-radius:0.6rem;border:1px solid rgba(0,0,0,.2);background:var(--bgc,#fff);color:var(--ink,#111);width:100%;min-width:0;resize:vertical}
+.dia-treino input{font:inherit;padding:0.4rem;border-radius:0.6rem;border:1px solid rgba(0,0,0,.2);background:var(--bgc,#fff);color:var(--ink,#111);min-width:0}
+.dia-sub+.sub{font-size:0.85rem;font-weight:600}
+
+/* ===== Bateria baixa: sem animações ===== */
+html.lowbat *,html.lowbat *::before,html.lowbat *::after{animation:none!important;transition:none!important}
+
+/* ===== Casa ===== */
+.casa-card{background:var(--bgc,#fff);color:var(--ink,#111);border:1px solid rgba(0,0,0,.12);border-radius:1rem;padding:0.7rem;display:flex;flex-direction:column;gap:0.5rem;margin-bottom:0.6rem}
+.casa-top{display:flex;justify-content:space-between;gap:0.5rem;align-items:center}
+.casa-lista{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.4rem}
+.casa-lista li{display:flex;justify-content:space-between;align-items:center;gap:0.5rem}
+.casa-est{padding:0.5rem;border-radius:0.8rem;background:var(--row,rgba(0,0,0,.04))}
+.casa-est.baixo{outline:2px solid #c2410c}
+.casa-aviso{color:#c2410c;font-weight:700;font-size:0.85rem}
+.casa-q{display:flex;align-items:center;gap:0.35rem;flex-wrap:wrap}
+
+/* ===== Meu dia: dias da semana ===== */
+.dia-semana{display:flex;gap:0.4rem;flex-wrap:wrap;margin:0.5rem 0}
+.dia-semana label{display:flex;gap:0.25rem;align-items:center;font-size:0.85rem;padding:0.3rem 0.5rem;border-radius:999px;background:var(--row,rgba(0,0,0,.06))}
+/* ===== Modo foco na tela ===== */
+html.focusmode #tabs,html.focusmode #tabsMoreBox,html.focusmode #grid,html.focusmode .side{display:none!important}
+html.focusmode #view{max-width:100%!important;width:100%!important}
+
+/* ===== Apresentação e Rádio: controles sem corte ===== */
+.notch[data-tab="radio"] #view,.notch[data-tab="radio"] .rnp,.notch[data-tab="radio"] .rnp>.ctrl{overflow:visible!important;max-height:none!important;height:auto!important}
+.notch[data-tab="radio"] .rnp>.ctrl{padding-bottom:0.5rem}
+/* ===== Botão Mais: mesma largura da coluna de abas e ícone visível ===== */
+#tabsMoreBox{align-items:stretch;justify-content:stretch;padding:0.25rem 0.125rem 3.5rem}
+#tabsMore,#tabsMoreBox .chip{width:100%;min-height:2.75rem;color:#111!important;background:#fff!important;border:1px solid rgba(0,0,0,.35)!important;border-radius:0.875rem;font-size:1.25rem;line-height:1}
+
+/* ===== Sem faixa inferior: a área de conteúdo ocupa a tela toda ===== */
+html.app .panel .inner{max-height:none!important;height:100%!important;overflow-y:hidden}
+#view{padding-bottom:5.5rem!important}
+
+/* ===== Indicador de sincronização (contraste WCAG 1.4.3 e 1.4.11) ===== */
+.sync-ico{position:fixed;left:50%;transform:translateX(-50%);bottom:0.75rem;z-index:60;min-height:2.25rem;padding:0 0.875rem;border-radius:999px;border:1px solid currentColor;background:#fff;font-size:0.8125rem;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.sync-ico[data-cls="ok"]{color:#0b6b2e}
+.sync-ico[data-cls="pend"]{color:#7a4a00}
+.sync-ico[data-cls="erro"]{color:#b42318}
+.sync-ico[hidden]{display:none}
+
+/* ===== Indicador de sincronização ===== */
+.syncIco{display:inline-grid;place-items:center;width:1.75rem;height:1.75rem;border-radius:50%;border:1px solid currentColor;background:rgba(0,0,0,.25);font-size:0.9rem;font-weight:700;line-height:1;cursor:pointer;margin-left:0.5rem;vertical-align:middle;flex:none}
+.syncIco[hidden]{display:none}
+.syncPop{position:absolute;right:0.75rem;top:3.25rem;z-index:40;max-width:16rem;padding:0.5rem 0.75rem;border-radius:0.75rem;background:var(--row,#2a2a2f);color:var(--ink,#fff);font-size:0.85rem;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+
+/* ===== Aviso Desfazer ===== */
+.desfazer-box{position:fixed;left:50%;transform:translateX(-50%);bottom:5.5rem;z-index:90;display:flex;gap:0.75rem;align-items:center;padding:0.6rem 0.9rem;border-radius:999px;background:#1c1c1e;color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.35);font-size:0.9rem;max-width:calc(100vw - 2rem)}
+.desfazer-box .chip{background:#fff;color:#111;border:0;font-weight:700}
+
+/* ===== Alvos de toque com pelo menos 44 px (WCAG 2.5.5) ===== */
+.tr-mini,.syncIco,.dia-acoes .chip,.casa-q .chip,.casa-est .chip{min-width:2.75rem;min-height:2.75rem}
+
+/* ===== Dica de teclado fora do layout (sem faixa), mantida para leitores de tela ===== */
+html .hint,html.app .hint,.notch .hint{position:absolute!important;width:1px!important;height:1px!important;margin:0!important;padding:0!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
+
+/* ===== Sem faixa: elementos extras não caem numa terceira linha da grade (a área de conteúdo ocupa a altura toda) ===== */
+html .notch .inner>*:not(#view):not(.tabs):not(#hwx):not(#navbtns):not(.hdr):not(#qmenu):not(#quick):not(#undobtn):not(#grid):not(#back):not(#live){position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important}
+html .notch #view{align-self:stretch!important}
+
+/* ===== Rádio: a área de conteúdo volta a ter rolagem (sem cortar os controles) ===== */
+.notch[data-tab="radio"] #view{overflow-y:auto!important;overflow-x:hidden!important;height:auto!important;max-height:none!important;min-height:0!important;align-self:stretch!important;padding-bottom:6rem!important;-webkit-overflow-scrolling:touch}
