@@ -31,9 +31,10 @@
       <div id="view" role="tabpanel" tabindex="0"></div>
     </div></div></div>
   </div>
-  <p class="hint sub">Clique no notch para abrir. Ctrl+Shift+Espaço abre e fecha, Esc fecha e as setas trocam de aba.</p>
+  <p class="hint sub">Clique no notch para abrir. Com o foco na barra de abas, as setas trocam de aba.</p>
   <div class="sr" role="status" aria-live="polite" id="live"></div>
 </main>
+<script src="js/dados.js"></script>
 <script src="js/notch.js"></script>
 <script>
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){var recarregou=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(recarregou)return;recarregou=true;location.reload()});navigator.serviceWorker.register('sw.js').then(function(reg){function verificar(){reg.update().catch(function(){})}verificar();setInterval(verificar,600000);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')verificar()});reg.addEventListener('updatefound',function(){var w=reg.installing;if(w)w.addEventListener('statechange',function(){if(w.state==='installed'&&navigator.serviceWorker.controller)w.postMessage('skip')})})}).catch(function(){});}
