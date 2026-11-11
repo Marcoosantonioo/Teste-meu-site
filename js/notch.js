@@ -102,7 +102,7 @@ agendar(()=>tick(),1000);tick(true);
 const SPOTIFY_CLIENT_ID='e13cde702b164cd4bfe2684e0f3de4d7';
 const SPOTIFY_REDIRECT=location.origin+location.pathname;
 const SP_SCOPES='user-read-playback-state user-modify-playback-state user-library-read user-library-modify user-read-recently-played streaming playlist-read-private playlist-modify-private playlist-modify-public user-top-read user-follow-read user-follow-modify ugc-image-upload';
-const SECRETS=new Set(['sp_at','sp_rt','ms_rt']);
+const SECRETS=new Set(['sp_at','sp_rt','ms_rt','bk_auto_senha']);
 const VAULT=window.notchApp&&typeof notchApp.secretGet==='function'?notchApp:null;
 const ls0={get:k=>{try{let v=localStorage.getItem(PX+k);if(v===null){v=localStorage.getItem(k);if(v!==null)localStorage.setItem(PX+k,v)}return v}catch(_){return null}},set:(k,v)=>{try{localStorage.setItem(PX+k,v)}catch(_){if(!window.__quotaAvisado){window.__quotaAvisado=1;say('Armazenamento do navegador cheio. Exporte um backup e libere espaço')}}},del:k=>{try{localStorage.removeItem(PX+k);localStorage.removeItem(k)}catch(_){}}};
 const UNDO_KEYS=['tasks','notas_list','links','inbox'];const UNDO_STACK=[];let UNDO_BUSY=false;
@@ -465,7 +465,7 @@ function radioView(){const R=S.rd;
  if(R.edit)return `<h2>Emissoras</h2><form id="rform">${R.draft.map((s,k)=>`<div class="rrow"><input id="rn${k}" aria-label="Nome da emissora ${k+1}" placeholder="Nome" maxlength="40" value="${esc(s.n)}" autocomplete="off"><input id="ru${k}" type="url" inputmode="url" aria-label="Link do stream da emissora ${k+1}" placeholder="https://..." value="${esc(s.u)}" autocomplete="off"><button type="button" class="ib sm" data-a="rrm" data-i="${k}" aria-label="Remover emissora ${k+1}${s.n?': '+esc(s.n):''}">${ic('x')}</button></div>`).join('')}<div class="redact"><button type="button" class="chip" data-a="radd">Adicionar emissora</button><button type="button" class="chip" data-a="rsug">Adicionar sugeridas</button><button type="button" class="chip" data-a="rimp">Importar playlist (.m3u ou .pls)</button><input type="file" id="rimpf" accept=".m3u,.m3u8,.pls,text/plain,audio/x-mpegurl,audio/x-scpls" class="sr" tabindex="-1" aria-hidden="true"></div><p class="sub" id="rimsg" role="status" style="margin:0"></p><p class="err" id="rerr" role="alert"></p><div style="display:flex;justify-content:flex-end;gap:0.5rem"><button type="button" class="chip" data-a="rcan">Cancelar</button><button class="chip">Salvar</button></div></form>`;
  const L=R.list,pl=L.map((x,i)=>x.u?i:-1).filter(i=>i>=0),k=R.cur,s=L[k]||{n:'',u:''},on=rdPlaying()&&R.i===k,pos=pl.indexOf(k)+1;
  const stt=!L.length?'Nenhuma emissora cadastrada':!s.u?'Sem link. Edite para adicionar':R.i===k&&R.st?RT[R.st]:'Parada';
- return `<h2>Rádio</h2><div class="np rnp"><div class="now"><span class="art" aria-hidden="true" style="background:linear-gradient(135deg,#ff9a2e,#ff5a8a)"></span><div><b>${esc(L.length?rdName(k):'Sem emissoras')}</b><span>${stt}</span></div></div>
+ return `<h2>Rádio</h2><div class="np rnp"><div class="now"><span class="art${L[k]&&L[k].img?' com-logo':' sem-logo'}${S.rd.on?' on':''}" aria-hidden="true">${L[k]&&L[k].img?'<img src="'+esc(L[k].img)+'" alt="" loading="lazy" referrerpolicy="no-referrer">':'<span class="eq"><i></i><i></i><i></i></span>'}</span><div><b>${esc(L.length?rdName(k):'Sem emissoras')}</b><span>${stt}</span></div></div>
  <p class="sub" style="margin:0 0 10px">${s.g?esc(s.g)+' · ':''}${pos?'Emissora '+pos+' de '+pl.length:(S.rd.onlyFav?pl.length+(pl.length===1?' favorita':' favoritas'):pl.length+(pl.length===1?' emissora com link':' emissoras com link'))}</p>\n 
  <div class="ctrl"><button class="ib" data-a="rprev" aria-label="Emissora anterior">${ic('prev')}</button><button class="ib big" data-a="rplay" aria-pressed="${on}" aria-label="Ouvir rádio">${ic(on?'pause':'play')}</button><button class="ib" data-a="rnext" aria-label="Próxima emissora">${ic('next')}</button><button type="button" class="ib sm like" data-a="rfav" aria-pressed="${isFav(s.u)}" aria-label="Favoritar emissora">${ic(isFav(s.u)?'heartf':'heart')}</button><button type="button" class="ib" data-a="rrand" aria-label="Aleatória">${ic('shuf')}</button></div>
  <div class="rvol"><label for="rvol" class="sub">Volume</label><input id="rvol" type="range" min="0" max="1" step="0.05" value="${R.vol}"><button class="chip" data-a="redit">Editar emissoras</button></div></div>${sleepRow()}<div class="rsrow">${rsBox()}${favBox()}</div>${savedBox()}`}
@@ -1000,17 +1000,13 @@ $('#view').addEventListener('change',e=>{const t=e.target;
 const RS_PRE=[{l:'Lo-fi rock',q:'lofi rock'},{l:'Lo-fi eletrônica',q:'lofi electronic'},{l:'Lo-fi foco',q:'lofi focus'},{l:'Mais ouvidas do Brasil',q:'',br:true,order:'clickcount'},{l:'Mais votadas do Brasil',q:'',br:true,order:'votes'}];
 const RB=['https://de1.api.radio-browser.info','https://fi1.api.radio-browser.info','https://at1.api.radio-browser.info'];
 async function rbFetch(par){let ult;for(const b of RB){try{const r=await fetch(b+'/json/stations/search?'+new URLSearchParams(par));if(r.ok)return await r.json()}catch(e){ult=e}}throw ult||new Error('rb')}
+async function rbPorUrl(u){let ult;for(const b of RB){try{const r=await fetch(b+'/json/stations/byurl/'+encodeURIComponent(u));if(r.ok){const j=await r.json();if(Array.isArray(j))return j}}catch(e){ult=e}}return []}
 function favBox(){const R=S.rd,L=R.list,fav=L.map((x,i)=>({x,i})).filter(o=>o.x.u&&isFav(o.x.u)),open=R.favOpen?' open':'';
  const items=fav.map(o=>{const cur=o.i===R.cur;return '<li class="svd'+(cur?' cur':'')+'"><button type="button" class="svdbtn" data-a="rfplay" data-i="'+o.i+'" aria-current="'+cur+'"><span class="grow">'+esc(o.x.n||('Emissora '+(o.i+1)))+'</span><span class="fav" aria-hidden="true">★</span></button></li>'}).join('');
  return '<details class="dt rsv rsfacc" id="rsfdet"'+open+'><summary>Só favoritas ('+fav.length+')</summary>'+(fav.length?'<ul class="svlist">'+items+'</ul>':'<p class="sub">Nenhuma favorita ainda. Toque no coração de uma emissora para favoritar.</p>')+'</details>'}
-let plCache=null;
-async function spRecentPlaylists(){if(!S.tok)return [];if(plCache&&Date.now()-plCache.at<10*60000)return plCache.l;
- const r=await spApi('/me/player/recently-played?limit=50');const seen=new Map();
- ((r&&r.items)||[]).forEach(it=>{const c=it.context;if(c&&c.type==='playlist'&&c.uri&&!seen.has(c.uri))seen.set(c.uri,c)});
- const list=[];for(const [uri] of [...seen.entries()].slice(0,6)){const id=uri.split(':').pop();const p=await spApi('/playlists/'+id+'?fields=name');list.push({uri,id,name:(p&&p.name)||'Playlist'})}
- plCache={at:Date.now(),l:list};return list}
-async function plRecentLoad(){const box=$('#plrec');if(!box)return;const l=await spRecentPlaylists();
- box.innerHTML=l.length?'<ul class="svlist">'+l.map(p=>'<li class="svd"><a class="svdbtn" href="https://open.spotify.com/playlist/'+esc(p.id)+'" target="_blank" rel="noopener"><span class="grow">'+esc(p.name)+'</span></a></li>').join('')+'</ul>':'<p class="sub">Nenhuma playlist recente. Toque uma playlist no Spotify e ela aparece aqui.</p>'}
+
+
+
 function savedBox(){const R=S.rd,L=R.list,open=R.savedOpen?' open':'';
  const items=L.map((x,i)=>{const cur=i===R.cur;return '<li class="svd'+(cur?' cur':'')+'"><button type="button" class="svdbtn" data-a="rpick" data-i="'+i+'" aria-current="'+cur+'"><span class="grow">'+esc(x.n||('Emissora '+(i+1)))+(x.u?'':' <span class="sub">(sem link)</span>')+(x.u&&isFav(x.u)?' <span class="fav" aria-label="favorita">★</span>':'')+'</span></button></li>'}).join('');
  return '<details class="dt rsv" id="rsvdet"'+open+'><summary>Rádios salvas ('+L.length+')</summary>'+(L.length?'<ul class="svlist">'+items+'</ul>':'<p class="sub">Nenhuma rádio salva ainda. Use Buscar mais rádios para adicionar.</p>')+'</details>'}
@@ -1033,7 +1029,7 @@ async function rsRun(preset){const R=S.rd,out=$('#rsres'),q=($('#rsq').value||''
   out.innerHTML=R.rsHtml;say(itens.length+(itens.length===1?' rádio encontrada':' rádios encontradas'))}
  catch(_){R.rsHtml='';out.textContent='Não foi possível buscar agora. Confira a conexão com a internet.'}}
 $('#view').addEventListener('toggle',e=>{if(e.target.id==='rsdet')S.rd.rsOpen=e.target.open;if(e.target.id==='rsvdet')S.rd.savedOpen=e.target.open;
- if(e.target.id==='rsfdet'){const R=S.rd;R.favOpen=e.target.open;R.onlyFav=e.target.open;if(R.onlyFav){const p=rdPool();if(p.length&&!p.includes(R.cur)){R.cur=p[0];ls.set('rd_cur',R.cur)}}view()}},true);
+ if(e.target.id==='rsfdet'){const R=S.rd;const abriu=e.target.open;if(R.favOpen===abriu)return;R.favOpen=abriu;R.onlyFav=abriu;if(R.onlyFav){const p=rdPool();if(p.length&&!p.includes(R.cur)){R.cur=p[0];ls.set('rd_cur',R.cur)}}view()}},true);
 $('#view').addEventListener('input',e=>{if(e.target.id==='rsq')S.rd.rsQ=e.target.value});
 
 /* ===== Relógio (horário de São Paulo), data e previsão do tempo ===== */
@@ -1123,7 +1119,7 @@ function bussola(g){if(g==null||isNaN(g))return '';const n=['N','NE','L','SE','S
 function chanceHtml(data){const h=data&&data.hourly;if(!h||!h.time||!h.precipitation_probability)return '';
  const i=Math.max(0,h.time.indexOf(String(data.current.time).slice(0,13)+':00'));const p=h.precipitation_probability.slice(i,i+24),tm=h.time.slice(i,i+24);if(!p.length)return '';
  return '<section class="tp-card" aria-label="Chance de chuva por hora" style="margin:0 0 10px"><div class="tp-k">Chance de chuva nas próximas 24 horas</div><div style="display:flex;align-items:flex-end;gap:0.1875rem;height:4.375rem;margin-top:0.5rem" role="img" aria-label="Chance de chuva por hora: '+p.map((v,k)=>tm[k].slice(11,13)+'h '+v+'%').join(', ')+'">'+p.map(v=>'<i style="flex:1;display:block;min-height:0.125rem;height:'+Math.max(2,v)+'%;background:#64d2ff;border-radius:0.1875rem 3px 1px 1px"></i>').join('')+'</div><div class="sub" style="display:flex;justify-content:space-between;font-size:0.75rem;margin-top:0.25rem"><span>'+(tm[0]||'').slice(11,13)+'h</span><span>'+(tm[23]||'').slice(11,13)+'h</span></div></section>'}
-function tpMapCard(){return '<section class="tp-card" aria-label="Mapa da região" style="margin:0 0 10px"><div style="display:flex;justify-content:space-between;align-items:center"><div class="tp-k">Mapa da região</div><button type="button" class="chip" data-a="radar" aria-pressed="'+(ls.get('radar')==='1')+'">'+(ls.get('radar')==='1'?'Ocultar radar':'Radar de chuva')+'</button></div><div id="tpmap" role="img" aria-label="Mapa com a temperatura em pontos ao redor da cidade" style="height:15rem;border-radius:0.75rem;overflow:hidden;margin-top:0.375rem"></div><ul id="tpmapl" class="svlist" aria-label="Temperaturas na região" style="margin-top:0.5rem"><li class="sub">Carregando região…</li></ul></section>'}
+
 function tpCurLoc(){const P=tpPages();return P[Math.min(WX.pg||0,P.length-1)]}
 function tpGridPts(loc){const pts=[];for(const dy of [-0.3,0,0.3])for(const dx of [-0.3,0,0.3])pts.push({lat:+(loc.lat+dy).toFixed(3),lon:+(loc.lon+dx).toFixed(3),dy,dx});return pts}
 async function tpGridLoad(loc){WX.grid=WX.grid||{};const k=loc.lat+','+loc.lon,c=WX.grid[k];if(c&&Date.now()-c.at<30*60000)return c.d;
@@ -1985,11 +1981,7 @@ function chuvaMostrar(msg){say(msg);const v=$('#view');if(!v||S.tab!=='tempo')re
  const b=document.createElement('section');b.id='chuvaAviso';b.setAttribute('role','alert');b.className='tp-card';b.style.margin='0 0 0.75rem';
  b.innerHTML='<div style="display:flex;justify-content:space-between;gap:0.5rem;align-items:flex-start"><p style="margin:0;font-size:0.95rem">☔ '+esc(msg)+'</p><button type="button" class="chip" data-a="chuvaFechar" aria-label="Fechar aviso de chuva" style="flex:none">×</button></div>';
  v.prepend(b)}
-function chuvaAjusteDom(){const v=$('#view');if(!v||v.querySelector('#chuvaAjuste'))return;
- const sel=(id,ops,atual)=>'<select id="'+id+'" aria-label="'+id+'">'+ops.map(([val,t])=>'<option value="'+val+'"'+(String(atual)===String(val)?' selected':'')+'>'+t+'</option>').join('')+'</select>';
- const box=document.createElement('details');box.id='chuvaAjuste';box.className='dt';box.style.margin='0.75rem 0';
- box.innerHTML='<summary>Alerta de chuva</summary><label class="opt row" style="margin:0.5rem 0"><input type="checkbox" id="oChuva"'+(ls.get('chuva_on')!=='0'?' checked':'')+'><span>Avisar antes da chuva</span></label><div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center">Avisar se a chance for de '+sel('chuvaLimiteSel',[[30,'30%'],[50,'50%'],[70,'70%']],chuvaLimite())+' nos próximos '+sel('chuvaMinSel',[[30,'30 min'],[60,'1 hora'],[90,'90 min']],chuvaJanelaMin())+'</div><p class="sub" style="margin:0.25rem 0 0">Verifica a previsão a cada 15 minutos com o painel aberto. Com o painel fechado, o aviso não chega.</p>';
- v.appendChild(box)}
+
 document.addEventListener('change',e=>{const t=e.target;if(t.id==='oChuva'){ls.set('chuva_on',t.checked?'1':'0');return}
  if(t.id==='chuvaLimiteSel'){ls.set('chuva_limite',t.value);ls.set('chuva_avisada','');return}
  if(t.id==='chuvaMinSel'){ls.set('chuva_min',t.value);ls.set('chuva_avisada','');return}});
@@ -2168,10 +2160,7 @@ function spFiltrosDom(){const v=$('#view');if(!v||S.tab!=='music')return;const i
  sel.innerHTML=[['todos','Tudo'],['artist','Artista'],['album','Álbum'],['year','Ano'],['genre','Gênero']].map(([v,n])=>'<option value="'+v+'">'+n+'</option>').join('');
  inp.insertAdjacentElement('beforebegin',sel);
  const ajuda=document.createElement('p');ajuda.className='sub';ajuda.style.margin='0.25rem 0';ajuda.textContent='Ex.: escolha "Artista" e digite Legião Urbana, ou "Ano" e digite 1985.';sel.insertAdjacentElement('afterend',ajuda)}
-function spContinuarDom(){const v=$('#view');if(!v||S.tab!=='music'||!S.tok||v.querySelector('#spContinuar'))return;
- const box=document.createElement('details');box.id='spContinuar';box.className='dt';box.style.margin='0 0 0.75rem';
- box.innerHTML='<summary>Continuar ouvindo (podcasts)</summary><div id="spContCorpo" style="margin-top:0.5rem"><p class="sub">Abra para carregar.</p></div>';
- spDepoisPlayer(v,box)}
+
 document.addEventListener('toggle',e=>{if(e.target.id!=='spContinuar'||!e.target.open)return;const c=$('#spContCorpo');if(!c)return;c.innerHTML='<p class="sub">Carregando…</p>';
  spApi('/me/episodes?limit=50&market=BR').then(r=>{const c2=$('#spContCorpo');if(!c2)return;
   const itens=((r&&r.items)||[]).filter(x=>x&&x.episode&&x.resume_point&&!x.resume_point.fully_played&&x.resume_point.resume_position_ms>0);
@@ -2204,7 +2193,7 @@ function treinoView(){const ex=trEx(),a=trAtual(),h=trHist();
  const biblioteca=trCartao('Meus exercícios','<div class="tr-form"><label>Novo exercício<input id="trNovoEx" placeholder="Ex.: Supino reto" autocomplete="off"></label></div><div class="tr-acoes"><button type="button" class="chip" data-a="trexadd">Adicionar exercício</button></div><ul class="tr-lista">'+(ex.map((e,i)=>'<li><span>'+esc(e)+'</span><button type="button" class="chip tr-mini" data-a="trexdel" data-i="'+i+'" aria-label="Remover '+esc(e)+'">×</button></li>').join('')||'<li class="sub">Nenhum exercício cadastrado.</li>')+'</ul>');
  const prog=trCartao('Evolução de carga','<div class="tr-form"><label>Exercício<select id="trProgEx" data-a="trprogsel">'+ex.map(e=>'<option value="'+esc(e)+'"'+(e===(S.trProg||ex[0])?' selected':'')+'>'+esc(e)+'</option>').join('')+'</select></label></div>'+trProgressoHtml());
  const hist=trCartao('Histórico',(h.length?'<ul class="tr-lista">'+h.slice(0,30).map((s,i)=>'<li><div><b>'+esc(s.nome||'Treino')+'</b><div class="sub" style="font-size:0.8rem">'+esc(s.data)+' · '+s.series.length+' séries · '+Math.round(trVolume(s.series))+' kg</div></div><button type="button" class="chip tr-mini" data-a="trsessdel" data-i="'+i+'" aria-label="Apagar treino de '+esc(s.data)+'">×</button></li>').join('')+'</ul>':'<p class="sub">Nenhum treino salvo ainda. Adicione séries em Treino de hoje e toque em Salvar treino.</p>'));
- return '<h1 class="ttl">Treinos</h1><p class="sub tr-intro">Registre exercícios, repetições e peso. Seus dados ficam salvos no aparelho.</p><div class="tr-grid">'+trSyncHtml()+novo+pesoHtml()+cardioHtml()+trMetasHtml()+biblioteca+prog+trPlanoHtml()+trCasaHtml()+hist+'</div>'}
+ return '<h1 class="ttl">Treinos</h1><p class="sub tr-intro">Registre exercícios, repetições e peso. Seus dados ficam salvos no aparelho.</p><div class="tr-grid">'+trSyncHtml()+guiaHtml()+novo+pesoHtml()+cardioHtml()+trMetasHtml()+biblioteca+prog+trPlanoHtml()+trCasaHtml()+hist+'</div>'}
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-a]');if(!t)return;const a=t.dataset.a;
  if(a==='cardioMais'){S.cardioLim=(S.cardioLim||5)+5;view();return}
  if(a==='cardioMenos'){S.cardioLim=5;view();return}
@@ -2216,6 +2205,16 @@ document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest
   if(it)avisoDesfazer('Sessão de cardio apagada',()=>{const o=trDelLista();delete o[id];ls.set('treino_del',JSON.stringify(o));const l=cardioLista();if(!l.some(x=>String(x.id)===id))l.push(it);cardioSalvar(l);view()});return}
  if(a==='irAjustes'){pick('set');return}
  if(a==='metasSalvar'){const m={};TR_MUSC_ALL.forEach((ex,i)=>{const s=parseInt(($('#mtS'+i)||{}).value,10),r=(($('#mtR'+i)||{}).value||'').trim(),k=parseFloat(($('#mtK'+i)||{}).value);const o={};if(s>0)o.s=Math.min(10,s);if(r)o.r=r.slice(0,20);if(isFinite(k)&&k>0)o.kg=k;if(Object.keys(o).length)m[ex]=o});ls.set('treino_metas',JSON.stringify(m));view();say('Metas salvas');return}
+ if(a==='guiaIniciar'){S.guiado={ativo:true,dia:t.dataset.dia,i:0,feitas:0};view();return}
+ if(a==='guiaSair'){S.guiado=null;view();return}
+ if(a==='guiaFeita'){const g=S.guiado;if(!g||!g.ativo)return;const lista=TR_MUSC[g.dia]||[];const ex=lista[g.i];if(!ex)return;const sets=(trMetas()[ex]||{}).s||3;
+  const reps=parseInt(($('#guiaReps')||{}).value,10),kg=parseFloat(($('#guiaKg')||{}).value);
+  if(!(reps>=0)){say('Informe as repetições feitas');return}
+  const at=trAtual();at.series.push({ex,reps,kg:isFinite(kg)?kg:0});trSalvarAtual(at);
+  g.feitas++;if(g.feitas>=sets){g.i++;g.feitas=0;say(g.i<lista.length?'Próximo exercício':'Treino guiado concluído')}else say('Série registrada');
+  view();return}
+ if(a==='autoSalvar'){const on=!!(($('#auOn')||{}).checked);const senha=(($('#auSenha')||{}).value||'');if(senha)ls.set('bk_auto_senha',senha);const c=bkAutoCfg();c.on=on;bkAutoSalvarCfg(c);say(on?'Backup automático ativado':'Backup automático desativado');view();return}
+ if(a==='autoAgora'){if(!ls.get('bk_auto_senha')){say('Salve uma senha do backup primeiro');return}bkAutoEnviar().then(ok=>say(ok?'Cópia enviada ao OneDrive':'Não foi possível enviar. Confira o backup OneDrive em Ajustes')).catch(e=>logErr('autoAgora: '+(e&&e.message)));return}
  if(a==='trsync'){trSyncNuvem();return}
  if(a==='trexadd'){const v=(($('#trNovoEx')||{}).value||'').trim();if(!v){say('Digite o nome do exercício');return}const L=trEx();if(L.some(x=>x.toLowerCase()===v.toLowerCase())){say('Esse exercício já existe');return}L.push(v);trExDesmarcar(v);ls.set('treino_ex',JSON.stringify(L));say('Exercício adicionado');view();return}
  if(a==='trexdel'){const L=trEx();const nome=L[+t.dataset.i];if(!confirm('Remover "'+nome+'" da lista? Os registros antigos são mantidos.'))return;L.splice(+t.dataset.i,1);trExDelMarcar(nome);ls.set('treino_ex',JSON.stringify(L));if(S.trProg===nome)S.trProg=null;view();return}
@@ -2301,6 +2300,44 @@ function cardioImportar(){if(ls.get('treino_cardio_imp1')==='1')return;
  cardioSalvar(l);ls.set('treino_cardio_imp1','1')}
 cardioImportar();
 
+/* ===== Treino guiado, sugestão de carga, leitura confortável e backup semanal ===== */
+const GUIA_PASSO=2.5;
+function trTopoReps(r){const n=(String(r||'').match(/\d+/g)||[]).map(Number);return n.length?Math.max(...n):12}
+function trSugestaoCarga(ex,hist){hist=hist||trHist();const m=trMetas()[ex]||{};const sets=m.s||3,topo=trTopoReps(m.r);const ult=hist.find(s=>Array.isArray(s.series)&&s.series.some(x=>x.ex===ex));if(!ult)return null;const ser=ult.series.filter(x=>x.ex===ex);const kg=Math.max(...ser.map(x=>+x.kg||0));const ok=ser.length>=sets&&ser.slice(0,sets).every(x=>(+x.reps||0)>=topo);return {kg,topo,sets,sugerido:ok?Math.round((kg+GUIA_PASSO)*10)/10:null}}
+function guiaHtml(){const g=S.guiado;const dias=Object.keys(TR_MUSC);
+ if(!g||!g.ativo){return trCartao('Treino guiado','<p class="sub" style="margin:0 0 0.5rem">Mostra um exercício de cada vez e avança quando você marca a série como feita.</p><div class="tr-acoes" style="margin:0">'+dias.map(d=>'<button type="button" class="chip" data-a="guiaIniciar" data-dia="'+esc(d)+'">'+esc(d.replace(/ \(.*\)/,''))+'</button>').join('')+'</div>')}
+ const lista=TR_MUSC[g.dia]||[];
+ if(g.i>=lista.length){return trCartao('Treino guiado','<p class="sub">Treino concluído. As séries estão em Treino de hoje; toque em Salvar treino para guardar.</p><div class="tr-acoes" style="margin:0"><button type="button" class="chip" data-a="guiaSair">Fechar</button></div>')}
+ const ex=lista[g.i];const m=trMetas()[ex]||{};const sets=m.s||3,topo=trTopoReps(m.r);const sug=trSugestaoCarga(ex);
+ const kg=m.kg!=null?m.kg:(sug?sug.kg:0);
+ const sugTxt=sug?(sug.sugerido?'Sugestão: subir para '+sug.sugerido+' kg (todas as séries completas na última vez).':'Mantenha '+sug.kg+' kg até completar todas as repetições.'):'Sem histórico deste exercício ainda.';
+ return trCartao('Treino guiado · '+esc(g.dia.replace(/ \(.*\)/,'')),
+  '<p class="sub" style="margin:0 0 0.25rem">Exercício '+(g.i+1)+' de '+lista.length+'</p>'+
+  '<h3 class="tr-h" style="margin:0 0 0.25rem">'+esc(ex)+'</h3>'+
+  '<p class="sub" style="margin:0 0 0.5rem">Meta: '+sets+' séries · '+esc(m.r||'6 a 12')+' repetições'+(m.kg?' · '+m.kg+' kg':'')+'</p>'+
+  '<p class="sub" style="margin:0 0 0.5rem">'+esc(sugTxt)+'</p>'+
+  '<div class="tr-form"><label>Repetições feitas<input id="guiaReps" type="number" inputmode="numeric" min="0" value="'+topo+'"></label><label>Carga (kg)<input id="guiaKg" type="number" inputmode="decimal" min="0" step="0.5" value="'+kg+'"></label></div>'+
+  '<p class="sub" style="margin:0.5rem 0">Série '+(g.feitas+1)+' de '+sets+'</p>'+
+  '<div class="tr-acoes" style="margin:0"><button type="button" class="chip" data-a="guiaFeita">Série feita</button><button type="button" class="chip" data-a="guiaSair">Sair do modo guiado</button></div>')}
+function leitGet(){try{const o=JSON.parse(ls.get('leit')||'{}');return o&&typeof o==='object'?o:{}}catch(_){return {}}}
+function leitAplicar(){const o=leitGet(),r=document.documentElement;r.toggleAttribute('data-leit-fonte',!!o.fonte);r.toggleAttribute('data-leit-espaco',!!o.espaco);r.toggleAttribute('data-leit-contraste',!!o.contraste)}
+function leitAjusteDom(){const v=$('#view');if(!v||v.querySelector('#leitdet'))return;const o=leitGet();v.insertAdjacentHTML('beforeend','<details class="dt" id="leitdet" style="margin-top:0.75rem"><summary>Leitura confortável</summary><div class="tr-form"><label><input type="checkbox" id="lfFonte"'+(o.fonte?' checked':'')+'> Fonte maior</label><label><input type="checkbox" id="lfEspaco"'+(o.espaco?' checked':'')+'> Espaçamento maior</label><label><input type="checkbox" id="lfContraste"'+(o.contraste?' checked':'')+'> Alto contraste</label></div><p class="sub" style="margin:0.25rem 0 0">Salvo neste aparelho.</p></details>')}
+document.addEventListener('change',e=>{const id=e.target&&e.target.id;const chave={lfFonte:'fonte',lfEspaco:'espaco',lfContraste:'contraste'}[id];if(!chave)return;const o=leitGet();o[chave]=e.target.checked;ls.set('leit',JSON.stringify(o));leitAplicar()});
+function bkAutoCfg(){try{const o=JSON.parse(ls.get('bk_auto')||'{}');return o&&typeof o==='object'?o:{}}catch(_){return {}}}
+function bkAutoSalvarCfg(o){ls.set('bk_auto',JSON.stringify(o))}
+function bkRotacionar(nomes,manter){return [...nomes].sort().reverse().slice(manter)}
+async function bkAutoEnviar(){const cfg=bkAutoCfg();const senha=ls.get('bk_auto_senha');if(!senha||!msOn())return false;if(!await msEnsure())return false;
+ const txt=await bkCifrarTxt(bkSnapshot(),senha);const nome='notch-'+feriadoChave(new Date())+'.bk';
+ const w=await gj('/me/drive/special/approot:/backups/'+nome+':/content',{method:'PUT',body:txt,headers:{'Content-Type':'application/json'}});
+ if(!w.ok)return false;
+ const lst=await gj('/me/drive/special/approot:/backups:/children?$select=name');
+ const nomes=((lst.ok&&lst.j&&lst.j.value)||[]).map(x=>x.name).filter(n=>/^notch-\d{4}-\d{2}-\d{2}\.bk$/.test(n));
+ for(const n of bkRotacionar(nomes,4)){await gj('/me/drive/special/approot:/backups/'+n,{method:'DELETE'})}
+ bkAutoSalvarCfg(Object.assign(cfg,{ultima:Date.now()}));return true}
+async function bkAutoVerificar(){const cfg=bkAutoCfg();if(!cfg.on)return;if(cfg.ultima&&Date.now()-cfg.ultima<7*86400000)return;try{if(await bkAutoEnviar())say('Cópia semanal enviada ao OneDrive')}catch(e){logErr('bkAuto: '+(e&&e.message))}}
+function autoAjusteDom(){const v=$('#view');if(!v||v.querySelector('#autodet'))return;const c=bkAutoCfg();v.insertAdjacentHTML('beforeend','<details class="dt" id="autodet" style="margin-top:0.75rem"><summary>Backup automático semanal (OneDrive)</summary><div class="tr-form"><label><input type="checkbox" id="auOn"'+(c.on?' checked':'')+'> Ativar cópia criptografada semanal</label><label>Senha do backup<input id="auSenha" type="password" autocomplete="new-password" placeholder="Guarde esta senha"></label></div><div class="tr-acoes"><button type="button" class="chip" data-a="autoSalvar">Salvar</button><button type="button" class="chip" data-a="autoAgora">Enviar agora</button></div><p class="sub">'+(c.ultima?'Última cópia: '+hm(c.ultima):'Nenhuma cópia automática ainda.')+' Mantém as últimas 4 cópias na pasta do app no OneDrive. No site, a senha fica no navegador; no app, fica no cofre seguro.</p></details>')}
+
+leitAplicar();agendar(bkAutoVerificar,3600000);
 /* ===== Treinos: sincronização entre aparelhos (OneDrive, pasta do aplicativo) ===== */
 function trDelLista(){try{const o=JSON.parse(ls.get('treino_del')||'{}');return o&&typeof o==='object'?o:{}}catch(_){return {}}}
 function trExDelLista(){try{const o=JSON.parse(ls.get('treino_ex_del')||'{}');return o&&typeof o==='object'?o:{}}catch(_){return {}}}
@@ -2611,14 +2648,7 @@ function noturnoAplicar(){const ini=ls.get('noturno_ini'),fim=ls.get('noturno_fi
  if(dentro&&!S.noturnoOn){S.noturnoAnt=ls.get('theme')||'auto';document.documentElement.setAttribute('data-theme','dark');S.noturnoOn=true}
  else if(!dentro&&S.noturnoOn){document.documentElement.setAttribute('data-theme',S.noturnoAnt||'light');S.noturnoOn=false}}
 agendar(()=>{wakeAtualizar();noturnoAplicar()},30000);
-function ajusteExtraDom(){const v=$('#view');if(!v||v.querySelector('#ajusteExtra'))return;const apiBox=document.createElement('details');apiBox.id='apiAjuste';apiBox.className='dt';apiBox.style.marginTop='0.75rem';apiBox.innerHTML='<summary>Serviços com chave (opcional)</summary><p class="sub" style="margin:0.4rem 0">As chaves ficam só neste aparelho e não entram no backup.</p><label class="sub" style="display:flex;flex-direction:column;gap:0.25rem;margin:0.4rem 0">Chave Last.fm<input id="oLfmKey" value="'+esc(ls.get('lfm_key')||'')+'" autocomplete="off"></label><label class="sub" style="display:flex;flex-direction:column;gap:0.25rem;margin:0.4rem 0">Usuário Last.fm<input id="oLfmUser" value="'+esc(ls.get('lfm_user')||'')+'" autocomplete="off"></label><label class="sub" style="display:flex;flex-direction:column;gap:0.25rem;margin:0.4rem 0">Chave IQAir<input id="oIqair" value="'+esc(ls.get('iqair_key')||'')+'" autocomplete="off"></label>';v.appendChild(apiBox);const bl=ls.get('bat_lim')||'20';
- const box=document.createElement('details');box.id='ajusteExtra';box.className='dt';box.style.marginTop='0.75rem';
- box.innerHTML='<summary>Aparelho</summary><label class="opt row" style="margin:0.5rem 0"><input type="checkbox" id="oFoco"'+(ls.get('foco_tela')==='1'?' checked':'')+'><span>Modo foco na tela (só a aba atual, Ctrl+Shift+F)</span></label><label class="opt row" style="margin:0.5rem 0"><input type="checkbox" id="oWake"'+(ls.get('wake_on')==='1'?' checked':'')+'><span>Manter a tela acesa durante o Pomodoro</span></label>'+
-  '<label class="opt" style="margin:0.5rem 0;display:flex;gap:0.5rem;align-items:center">Modo bateria baixa abaixo de <select id="oBat" aria-label="Limite da bateria">'+[10,15,20,30].map(x=>'<option value="'+x+'"'+(bl==String(x)?' selected':'')+'>'+x+'%</option>').join('')+'</select></label>'+
-  '<p class="sub" style="margin:0.25rem 0 0.75rem">No modo bateria baixa, o painel desliga animações e as atualizações automáticas.</p>'+
-  '<label class="opt" style="margin:0.5rem 0;display:flex;gap:0.5rem;align-items:center">Tema escuro das <input type="time" id="oNoiteIni" value="'+(ls.get('noturno_ini')!==null&&ls.get('noturno_ini')!==''?String(ls.get('noturno_ini')).padStart(2,'0')+':00':'')+'" aria-label="Início do modo noturno"> até <input type="time" id="oNoiteFim" value="'+(ls.get('noturno_fim')!==null&&ls.get('noturno_fim')!==''?String(ls.get('noturno_fim')).padStart(2,'0')+':00':'')+'" aria-label="Fim do modo noturno"></label>'+
-  '<p class="sub" style="margin:0.25rem 0 0">Deixe em branco para não agendar.</p>';
- v.appendChild(box)}
+
 document.addEventListener('change',e=>{const t=e.target;if(t.id==='oLfmKey'){ls.set('lfm_key',t.value.trim());return}if(t.id==='oLfmUser'){ls.set('lfm_user',t.value.trim());return}if(t.id==='oIqair'){ls.set('iqair_key',t.value.trim());return}
  if(t.id==='oWake'){ls.set('wake_on',t.checked?'1':'0');wakeAtualizar();return}
  if(t.id==='oBat'){ls.set('bat_lim',t.value);batIniciar();return}
@@ -2856,11 +2886,13 @@ agendar(syncAtualizar,5000);
 setTimeout(syncDom,800);
 /* ===== Logotipos das emissoras já salvas: busca no catálogo pelo nome (com limite de tentativas) ===== */
 function rdLogoTent(){try{return JSON.parse(ls.get('rd_logo_tent')||'{}')||{}}catch(_){return {}}}
-async function rdLogosBuscar(){if(S.rdLogoBusy)return;S.rdLogoBusy=true;const tent=rdLogoTent();let n=0;
+async function rdLogosBuscar(){if(S.rdLogoBusy)return;S.rdLogoBusy=true;let tent=rdLogoTent();let n=0;if(ls.get('rd_logo_v')!=='2'){tent={};ls.del('rd_logo_tent');ls.set('rd_logo_v','2')}
  try{const pend=S.rd.list.filter(x=>x&&x.u&&!x.img&&(tent[x.u]||0)<2).slice(0,15);
   if(!pend.length){say('Todas as emissoras já têm logotipo ou já foram tentadas');return}
   say('Buscando logotipos… '+pend.length+' emissora(s)');
   for(const x of pend){tent[x.u]=(tent[x.u]||0)+1;
+   const porUrl=await rbPorUrl(x.u);const fv=(porUrl||[]).find(c=>c&&c.favicon&&/^https?:\/\/\S+$/i.test(String(c.favicon)));
+   if(fv){x.img=String(fv.favicon).replace(/^http:/i,'https:');n++;await new Promise(res=>setTimeout(res,600));continue}
    let r=[];try{r=await rbFetch({name:String(x.n||''),limit:'10',hidebroken:'true'})}catch(_){r=[]}
    const nome=String(x.n||'').trim().toLowerCase();
    const cand=(Array.isArray(r)?r:[]).filter(c=>c&&c.favicon&&String(c.name||'').trim().toLowerCase()===nome&&/^https?:\/\/\S+$/i.test(String(c.favicon)));
@@ -3191,7 +3223,7 @@ async function lyricsLoad(){const box=$('#lyr');if(!box)return;const tr=S.m&&S.m
   if(r.ok){const j=await r.json();txt=(j&&(j.plainLyrics||'').trim())||null}
   LYR_CACHE.set(key,txt);const cur=S.m&&S.m.list[S.m.i];if(cur&&cur.t+'|'+cur.a===key){const b=$('#lyr');if(b)b.textContent=txt||'Letra não encontrada para esta faixa.'}}
  catch(_){box.innerHTML='<p class="sub">Não foi possível buscar a letra agora.</p>'}}
-async function spPlaylistsList(){const r=await spApi('/me/playlists?limit=20');return (r&&r.items)||[]}
+
 async function spPlAddCurrent(pid){const tr=S.m&&S.m.list[S.m.i];if(!tr||!tr.uri){say('Nenhuma faixa tocando');return}
  const r=await spApi('/playlists/'+encodeURIComponent(pid)+'/tracks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uris:[tr.uri]})});
  if(r!==null&&S.err===0){say('Faixa adicionada à playlist')}else if(S.err===403){say('Reconecte o Spotify em Ajustes para liberar as playlists')}else{say('Não foi possível adicionar a faixa')}}
@@ -3208,14 +3240,14 @@ async function spTopLoad(){const box=$('#spTopBox');if(!box)return;box.innerHTML
  const li=(arr,f)=>(arr||[]).map((x,i)=>'<li class="svd">'+(i+1)+'. '+esc(f(x))+'</li>').join('');
  box.innerHTML=(a&&a.items&&a.items.length?'<p class="sub" style="margin:0.375rem 0 2px">Artistas (últimas 4 semanas)</p><ol class="svlist">'+li(a.items,x=>x.name)+'</ol>':'')+
   (t&&t.items&&t.items.length?'<p class="sub" style="margin:0.5rem 0 2px">Faixas (últimas 4 semanas)</p><ol class="svlist">'+li(t.items,x=>x.name+' · '+((x.artists||[])[0]||{}).name)+'</ol>':'')||'<p class="sub">Sem dados ainda. Ouça músicas pelo Spotify para ver seu ranking.</p>'}
-function plBoxHtml(){return '<details class="dt" style="margin-top:0.75rem" id="pldet"><summary>Playlists</summary><div id="plbox"><p class="sub">Carregando…</p></div><form id="plnew" class="add" style="margin:0.625rem 0 0"><label class="sr" for="plnewn">Nome da nova playlist</label><input id="plnewn" placeholder="Nova playlist" maxlength="100" autocomplete="off"><button>Criar</button></form></details>'}
+
 let albCache={uri:'',info:null};
 async function releasesLoad(){const box=$('#relbox');if(!box)return;box.innerHTML='<p class="sub">Carregando…</p>';
  const f=await spApi('/me/following?type=artist&limit=5');const arts=(f&&f.artists&&f.artists.items)||[];if(!arts.length){box.innerHTML='<p class="sub">Você ainda não segue artistas.</p>';return}
  const lista=[];for(const a of arts){const r=await spApi('/artists/'+a.id+'/albums?include_groups=album,single&limit=3');((r&&r.items)||[]).forEach(al=>lista.push({artist:a.name,name:al.name,date:al.release_date||''}))}
  lista.sort((x,y)=>(y.date||'').localeCompare(x.date||''));
  box.innerHTML=lista.length?'<ul class="svlist">'+lista.slice(0,15).map(x=>'<li class="svd">'+esc(x.name)+' <span class="sub">· '+esc(x.artist)+' · '+esc(x.date)+'</span></li>').join('')+'</ul>':'<p class="sub">Nenhum lançamento recente encontrado.</p>'}
-function relBoxHtml(){return '<details class="dt" style="margin-top:0.75rem" id="reldet"><summary>Lançamentos dos artistas que você segue</summary><div id="relbox"><p class="sub">Abra para carregar.</p></div></details>'}
+
 async function albInfo(){const tr=S.m&&S.m.list[S.m.i];if(!tr||!tr.uri)return null;if(albCache.uri===tr.uri&&albCache.info)return albCache.info;
  const id=tr.uri.split(':').pop();const t=await spApi('/tracks/'+id);if(!t||!t.album)return null;
  const c=await spApi('/me/albums/contains?ids='+t.album.id);const info={id:t.album.id,name:t.album.name,date:t.album.release_date||'',total:t.album.total_tracks,artist:((t.artists||[])[0]||{}).name||'',saved:!!(c&&c[0])};
@@ -3229,8 +3261,8 @@ async function albToggle(){const i=await albInfo();if(!i){say('Álbum não ident
  if(S.err===0){albCache={uri:'',info:null};say(i.saved?'Álbum removido da biblioteca':'Álbum salvo na biblioteca');view()}else if(S.err===403)say('Reconecte o Spotify em Ajustes para salvar álbuns');else say('Não foi possível atualizar o álbum')}
 async function albLoad(){const box=$('#albbox');if(!box)return;box.innerHTML='<p class="sub">Carregando…</p>';const i=await albInfo();
  box.innerHTML=i?'<div class="tp-card" style="margin:0"><div class="tp-k">Álbum</div><div class="tp-v" style="font-size:1.25rem">'+esc(i.name)+'</div><div class="tp-s" style="font-size:0.875rem;color:var(--ink)">'+esc(i.artist)+(i.date?' · lançado em '+esc(i.date):'')+(i.total?' · '+i.total+' faixas':'')+'</div></div>':'<p class="sub">Álbum não encontrado.</p>'}
-function albBoxHtml(){return '<details class="dt" style="margin-top:0.75rem" id="albdet"><summary>Álbum atual</summary><div id="albbox"><p class="sub">Abra para carregar.</p></div></details>'}
-function podBoxHtml(){return '<details class="dt" style="margin-top:0.75rem" id="poddet"><summary>Podcasts salvos</summary><div id="podbox"><p class="sub">Abra para carregar.</p></div></details>'}
+
+
 async function podLoad(){const box=$('#podbox');if(!box)return;box.innerHTML='<p class="sub">Carregando…</p>';const r=await spApi('/me/shows?limit=20');const items=(r&&r.items)||[];
  box.innerHTML=items.length?'<ul class="svlist">'+items.map(x=>x.show).filter(Boolean).map(p=>'<li class="svd">'+esc(p.name)+' <span class="sub">· '+esc(p.publisher||'')+'</span></li>').join('')+'</ul>':'<p class="sub">Nenhum podcast salvo.</p>'}
 function savedBoxHtml(){return '<details class="dt" style="margin-top:0.75rem" id="saveddet"><summary>Faixas salvas</summary><div id="savedbox"><p class="sub">Abra para carregar.</p></div></details>'}
@@ -3272,8 +3304,7 @@ async function contaLoad(){const box=$('#contabox');if(!box)return;box.innerHTML
  if(!u||!u.id){box.innerHTML='<p class="sub">Conecte o Spotify para ver a conta.</p>';return}
  const plano={premium:'Premium',free:'Gratuito',open:'Gratuito'}[u.product]||(u.product||'—');
  const mk=await spApi('/markets');const nm=(mk&&mk.markets)?mk.markets.length:0;box.innerHTML='<div class="tp-card" style="margin:0"><div class="tp-k">Conta</div><div class="tp-v" style="font-size:1.25rem">'+esc(u.display_name||u.id)+'</div><div class="tp-s" style="font-size:0.875rem;color:var(--ink)">Plano: '+plano+(u.country?' · País: '+esc(u.country):'')+'</div><div class="tp-s" style="font-size:0.875rem;color:var(--ink)">Mercados disponíveis: '+nm+'</div></div>'}
-async function plListLoad(){const box=$('#plbox');if(!box)return;const l=await spPlaylistsList();const cur=S.m&&S.m.list[S.m.i];
- box.innerHTML=l.length?'<ul class="svlist">'+l.map(p=>'<li class="svd" style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap"><span class="grow">'+esc(p.name)+'</span><button type="button" class="chip" data-a="plView" data-id="'+esc(p.id)+'">Ver faixas</button><button type="button" class="chip" data-a="plRen" data-id="'+esc(p.id)+'" data-name="'+esc(p.name)+'">Renomear</button><button type="button" class="chip" data-a="plDesc" data-id="'+esc(p.id)+'">Descrição</button><button type="button" class="chip" data-a="plFol" data-id="'+esc(p.id)+'">Seguir</button><button type="button" class="chip" data-a="plUnf" data-id="'+esc(p.id)+'">Deixar de seguir</button>'+(cur&&cur.uri?'<button type="button" class="chip" data-a="plAdd" data-id="'+esc(p.id)+'">Adicionar faixa atual</button>':'')+'</li>').join('')+'</ul>':'<p class="sub">Nenhuma playlist encontrada.</p>';if(S.plShow){box.insertAdjacentHTML('beforeend','<div id="pltracks" style="margin-top:0.625rem"></div>');plTracksLoad(S.plShow)}}
+
 function musicPlusDom(){const v=$('#view');const n=$('#notch');if(!v||!n)return;
  document.querySelectorAll('#filaatalho,#moremenu').forEach(x=>x.remove());
  if(S.tab!=='music')return;
@@ -3380,7 +3411,7 @@ function notes(){const v=$('#view');if(!v)return;v.querySelectorAll('.note').for
  if(S.tab==='music'&&S.tok){v.insertAdjacentHTML('beforeend',musicExtra());v.insertAdjacentHTML('beforeend',topBoxHtml()+savedBoxHtml());v.insertAdjacentHTML('beforeend',lyricsBox());v.insertAdjacentHTML('beforeend',histHtml());spHistLoad();}
  if(S.tab==='cal')v.insertAdjacentHTML('afterbegin',nextEvHtml());
  if(S.tab==='tasks')v.insertAdjacentHTML('afterbegin',overdueHtml()+tplHtml()+tagsHtml());
- if(S.tab==='set'){onenoteAjusteDom();plannerAjusteDom()}
+ if(S.tab==='set'){onenoteAjusteDom();plannerAjusteDom();leitAjusteDom();autoAjusteDom()}
  if(S.tab==='util'){utilExtraDom();lixeiraDom()}
  if(S.tab==='kanban')plannerSecaoDom();
  listenAuto();
