@@ -842,3 +842,57 @@ html .notch #view{align-self:stretch!important}
 .inner>.hdr{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:flex-end!important;gap:0.5rem;margin:0 0 0.75rem!important}
 #hwx{margin-right:auto}
 #apresHdr{align-self:center!important;margin-top:0!important}
+
+/* ===== Rádio: bloco de arte compacto (logotipo ou equalizador) e espaçamento reduzido ===== */
+.notch[data-tab="radio"] .rnp .now{display:flex!important;align-items:center;gap:0.875rem;margin:0 0 0.25rem!important}
+.notch[data-tab="radio"] .rnp .art{width:5.5rem!important;height:5.5rem!important;aspect-ratio:auto!important;margin:0!important;flex:none;grid-row:auto!important;grid-column:auto!important;border-radius:1rem;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#3b4bff,#ff5a8a 60%,#ffb35a)}
+.notch[data-tab="radio"] .rnp .art img{width:100%;height:100%;object-fit:cover;display:block}
+.notch[data-tab="radio"] .rnp .art.sem-logo{background:var(--chip)!important}
+.rnp .eq{display:flex;align-items:flex-end;gap:0.2rem;height:2rem}
+.rnp .eq i{display:block;width:0.3rem;height:0.5rem;border-radius:0.15rem;background:var(--mute);opacity:.7}
+.rnp .art.on .eq i{background:var(--ink);opacity:.9;animation:eqSobe 1s ease-in-out infinite}
+.rnp .art.on .eq i:nth-child(2){animation-delay:.25s}
+.rnp .art.on .eq i:nth-child(3){animation-delay:.5s}
+@keyframes eqSobe{0%,100%{height:0.4rem}50%{height:1.9rem}}
+@media (prefers-reduced-motion:reduce){.rnp .art.on .eq i{animation:none;height:1.2rem}}
+.notch[data-tab="radio"] .rnp{gap:0.5rem!important;row-gap:0.5rem!important}
+.notch[data-tab="radio"] .rnp>.ctrl{margin:0.25rem 0!important}
+.notch[data-tab="radio"] .rnp .rvol,.notch[data-tab="radio"] .rnp .prog{margin:0!important}
+.notch[data-tab="radio"] .rnp>p.sub{margin:0!important}
+/* Barra lateral: nome visível embaixo do ícone e item ativo com destaque inverso */
+.tab span{display:block!important;font-size:0.625rem!important;font-weight:600;line-height:1;text-align:center;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.tab svg{color:#111}
+.tab[aria-selected="true"]{background:#111!important;color:#fff!important;box-shadow:0 0 0 2px #fff,0 0 0 4px #111;outline:none!important}
+.tab[aria-selected="true"] svg{color:#fff!important}
+.tab[aria-selected="true"] span{color:#fff!important}
+.tab span{color:#111!important}
+.tab[aria-selected="true"] span{color:#fff!important}
+
+/* ===== Música: capa inteira na tela, informações junto da barra de progresso e controles logo abaixo ===== */
+.notch[data-tab="music"] .np{row-gap:0.5rem!important;align-content:start!important}
+.notch[data-tab="music"] .np .np-art{grid-column:2!important;grid-row:1/span 4!important;justify-self:end;align-self:start;width:min(100%,26rem,max(12rem,calc(100vh - 27rem)))!important;max-width:max(12rem,calc(100vh - 27rem))!important;height:auto!important;aspect-ratio:1!important;margin:0!important}
+.notch[data-tab="music"] .np .np-meta{grid-column:1;align-self:end;margin:0}
+.notch[data-tab="music"] .np .np-title{justify-content:flex-start;text-align:left;margin:0}
+.notch[data-tab="music"] .np .np-title .like{margin-left:0.25rem;flex:none}
+.notch[data-tab="music"] .np .np-sub,.notch[data-tab="music"] .np .np-al{margin:0.125rem 0 0}
+.notch[data-tab="music"] .np .prog{grid-column:1;margin:0.25rem 0 0!important}
+.notch[data-tab="music"] .np .ctrl{grid-column:1;margin:0.25rem 0 0!important;justify-content:flex-start}
+@media (max-width:720px){
+  .notch[data-tab="music"] .np .np-art{grid-column:1!important;grid-row:auto!important;order:-1;justify-self:center;width:min(78vw,22rem)!important;max-width:none!important}
+  .notch[data-tab="music"] .np .np-meta,.notch[data-tab="music"] .np .prog,.notch[data-tab="music"] .np .ctrl{grid-column:1}
+  .notch[data-tab="music"] .np .ctrl{justify-content:center;margin:0.25rem 0 0!important}
+  .notch[data-tab="music"] .np .np-title{justify-content:center;text-align:center}
+  .notch[data-tab="music"] .np{display:flex!important;flex-direction:column;justify-content:flex-start!important;gap:0.5rem;min-height:0!important}
+  .notch[data-tab="music"] .np .np-art{order:0!important}
+  .notch[data-tab="music"] .np .np-meta{order:1!important}
+  .notch[data-tab="music"] .np .prog{order:2!important}
+  .notch[data-tab="music"] .np .ctrl{order:3!important}
+  .notch[data-tab="music"] .np>details,.notch[data-tab="music"] .np>.sp-box{order:4!important}
+}
+
+/* ===== Leitura confortável (por aparelho): fonte maior, espaçamento e alto contraste ===== */
+html[data-leit-fonte]{font-size:19px}
+html[data-leit-espaco] .notch{line-height:1.75}
+html[data-leit-espaco] .notch .chip{min-height:2.75rem}
+html[data-leit-contraste] .notch{--mute:#ffffff!important;--line:#ffffff!important}
+html[data-leit-contraste] .chip,html[data-leit-contraste] .tr-card,html[data-leit-contraste] input,html[data-leit-contraste] select{border:2px solid #ffffff!important}
