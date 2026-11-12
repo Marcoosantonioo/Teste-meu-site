@@ -27,9 +27,9 @@ function renderTabs(){
 function viewInner(){
  const v=$('#view');v.setAttribute('aria-labelledby','t-'+S.tab);
  const m=S.m,tr=m.list[m.i];
-if(S.tab==='music')v.innerHTML=`<section class="np npc" aria-label="Reprodução do Spotify" style="--npbg:${S.npCor||'#c8102e'}"><div class="np-top"><span class="np-art" style="${tr.img?`background-image:url('${esc(tr.img)}')`:''}" aria-hidden="true"></span><div class="np-meta"><div class="np-title"><b>${esc(tr.t)}</b>${S.tok?`<button class="ib sm like" data-a="like" aria-pressed="${!!m.liked}" aria-label="Favoritar faixa">${ic(m.liked?'heartf':'heart')}</button>`:''}</div>${tr.al?`<div class="np-sub">Álbum: <span class="np-al">${esc(tr.al)}</span></div>`:''}<div class="np-sub">${esc(tr.a)}</div><div class="np-state" role="status">${m.play?'Tocando':'Pausada'}</div></div></div>
- <div class="prog"><span id="mpos">${fmt(m.pos)}</span><input class="seek" id="mseek" type="range" min="0" max="${tr.d}" step="1" value="${m.pos}" aria-label="Posição da faixa" aria-valuetext="${fmt(m.pos)} de ${fmt(tr.d)}" style="--p:${(m.pos/tr.d*100).toFixed(1)}%"><span>${fmt(tr.d)}</span></div>
- <div class="ctrl"><button class="ib" data-a="shuf" aria-pressed="${m.shuf}" aria-label="Aleatório">${ic('shuf')}</button><button class="ib" data-a="prev" aria-label="Faixa anterior">${ic('prev')}</button><button class="ib big" data-a="play" aria-label="${m.play?'Pausar':'Tocar'}">${ic(m.play?'pause':'play')}</button><button class="ib" data-a="next" aria-label="Próxima faixa">${ic('next')}</button><button class="ib" data-a="rep" aria-pressed="${m.rep}" aria-label="Repetir">${ic('rep')}</button></div>
+if(S.tab==='music')v.innerHTML=`<section class="np npc" aria-label="Reprodução do Spotify" style="--npbg:${S.npCor||'#c8102e'}"><div class="np-top"><span class="np-art" style="${tr.img?`background-image:url('${esc(tr.img)}')`:''}" aria-hidden="true"></span><div class="np-meta"><div class="np-title"><b>${esc(tr.t)}</b>${S.tok?`<button class="ib sm like" data-a="like" aria-pressed="${!!m.liked}" aria-label="Favoritar faixa">${ic(m.liked?'heartf':'heart')}</button>`:''}</div>${tr.al?`<div class="np-sub">Álbum: <span class="np-al">${esc(tr.al)}</span></div>`:''}<div class="np-sub">${esc(tr.a)}</div><div class="np-state" role="status">${!S.tok?'Simulação em andamento':m.play?'Tocando':((S.devs||[]).some(x=>x.is_active)?(m.pos>0?'Pausada':'Última música ouvida'):'Nenhuma reprodução ativa')}</div></div></div>
+ ${S.tok?'':'<div class="sp-box" role="note" style="margin:0 0 0.6rem"><b>Modo de demonstração</b><p class="sub" style="margin:0.25rem 0">Os controles abaixo simulam a interface. Conecte o Spotify para ouvir e controlar suas músicas. Para controlar a reprodução, conecte sua conta e selecione um aparelho disponível. Algumas funções podem exigir Spotify Premium.</p></div>'}<div class="prog"><span id="mpos">${fmt(m.pos)}</span><input class="seek" id="mseek" type="range" min="0" max="${tr.d}" step="1" value="${m.pos}" aria-label="Posição da faixa" aria-valuetext="${fmt(m.pos)} de ${fmt(tr.d)}" style="--p:${(m.pos/tr.d*100).toFixed(1)}%"><span>${fmt(tr.d)}</span></div>
+ <div class="ctrl"><button class="ib" data-a="shuf" aria-pressed="${m.shuf}" aria-label="Aleatório">${ic('shuf')}</button><button class="ib" data-a="prev" aria-label="Faixa anterior">${ic('prev')}</button><button class="ib big" data-a="play" aria-label="${m.play?'Pausar':'Tocar'}">${ic(m.play?'pause':'play')}</button><button class="ib" data-a="next" aria-label="Próxima faixa">${ic('next')}</button><button class="ib" data-a="rep" aria-pressed="${m.rep}" aria-label="${!m.rep?'Repetição desligada':(m.repState==='track'?'Repetir faixa':'Repetir lista')}">${ic('rep')}</button></div>
  ${spDev()}${plsSection()}${spBox()}</section>`;
  if(S.tab==='cal')v.innerHTML=calView();
  
@@ -134,7 +134,7 @@ async function spSync(){
  if(!S.tok)return;const d=await spApi('/me/player');if(!d||!d.item){await spLast();return}
  const m=S.m,it=d.item,key=[it.id,d.is_playing,d.shuffle_state,d.repeat_state].join();
  m.list=[{t:it.name,a:(it.artists||[]).map(a=>a.name).join(', '),al:(it.album&&it.album.name)||'',d:Math.round(it.duration_ms/1000),img:it.album&&it.album.images&&(it.album.images[0]||{}).url}];
- m.i=0;m.pos=Math.round(d.progress_ms/1000);m.play=d.is_playing;m.shuf=d.shuffle_state;m.rep=d.repeat_state!=='off';
+ m.i=0;m.pos=Math.round(d.progress_ms/1000);m.play=d.is_playing;m.shuf=d.shuffle_state;m.rep=d.repeat_state!=='off';m.repState=d.repeat_state;
  m.uri=it.uri;m.vol=d.device?d.device.volume_percent:m.vol;m.volOK=d.device?d.device.supports_volume!==false:m.volOK;
  const sv=$('#svol');if(sv&&document.activeElement!==sv&&m.vol!=null){sv.value=m.vol;sv.setAttribute('aria-valuetext',m.vol+'%')}
  if(m.uri&&m.uri!==m.likeFor){m.likeFor=m.uri;m.liked=false;spLikeCheck(m.uri)}
@@ -337,7 +337,7 @@ $('#view').addEventListener('dragend',()=>{dragR=-1;clr()});
 $('#view').addEventListener('keydown',e=>{if(e.key==='Escape'&&e.target.id==='ted'){e.stopPropagation();endEdit(S.tasks.findIndex(t=>t.id===S.edit))}});
 
 /* Rádio online: um player com emissora anterior/próxima (a lista fica só no modo de edição) */
-const RT={load:'Conectando…',live:'Ao vivo',wait:'Reconectando…',err:'Não foi possível tocar. Confira o link do stream (em páginas https, o stream também precisa ser https).'};
+const RT={load:'Conectando…',live:'Ao vivo',wait:'Reconectando…',err:'Não foi possível iniciar esta rádio. Verifique sua conexão ou tente outra emissora.'};
 const RD_DEF=[
  {n:'Lofi Café Chilling',u:'https://radio.loficafe.net/listen/chilling/radio.mp3',g:'Lo-fi · beats'},
  {n:'LoFi Radio',u:'https://live.lofiradio.ru/lofi_mp3_128',g:'Lo-fi · beats'},
@@ -467,21 +467,21 @@ function radioView(){const R=S.rd;
  const stt=!L.length?'Nenhuma emissora cadastrada':!s.u?'Sem link. Edite para adicionar':R.i===k&&R.st?RT[R.st]:'Parada';
  return `<h2>Rádio</h2><div class="np rnp"><div class="now"><span class="art${L[k]&&L[k].img?' com-logo':' sem-logo'}${S.rd.on?' on':''}" aria-hidden="true">${L[k]&&L[k].img?'<img src="'+esc(L[k].img)+'" alt="" loading="lazy" referrerpolicy="no-referrer">':'<span class="eq"><i></i><i></i><i></i></span>'}</span><div><b>${esc(L.length?rdName(k):'Sem emissoras')}</b><span>${stt}</span></div></div>
  <p class="sub" style="margin:0 0 10px">${s.g?esc(s.g)+' · ':''}${pos?'Emissora '+pos+' de '+pl.length:(S.rd.onlyFav?pl.length+(pl.length===1?' favorita':' favoritas'):pl.length+(pl.length===1?' emissora com link':' emissoras com link'))}</p>\n 
- <div class="ctrl"><button class="ib" data-a="rprev" aria-label="Emissora anterior">${ic('prev')}</button><button class="ib big" data-a="rplay" aria-pressed="${on}" aria-label="Ouvir rádio">${ic(on?'pause':'play')}</button><button class="ib" data-a="rnext" aria-label="Próxima emissora">${ic('next')}</button><button type="button" class="ib sm like" data-a="rfav" aria-pressed="${isFav(s.u)}" aria-label="Favoritar emissora">${ic(isFav(s.u)?'heartf':'heart')}</button><button type="button" class="ib" data-a="rrand" aria-label="Aleatória">${ic('shuf')}</button></div>
- <div class="rvol"><label for="rvol" class="sub">Volume</label><input id="rvol" type="range" min="0" max="1" step="0.05" value="${R.vol}"><button class="chip" data-a="redit">Editar emissoras</button></div></div>${sleepRow()}<div class="rsrow">${rsBox()}${favBox()}</div>${savedBox()}`}
+ ${S.rd.i>=0&&S.rd.i!==S.rd.cur&&S.rd.st?'<p class="sub" style="margin:0 0 8px">Tocando agora: <b>'+esc(rdName(S.rd.i))+'</b></p>':''}<div class="rvol" style="margin:0 0 8px"><button type="button" class="chip" data-a="rfonly" aria-pressed="${S.rd.onlyFav?'true':'false'}">Navegar só entre favoritas: ${S.rd.onlyFav?'ligado':'desligado'}</button></div>${S.rd.st==='err'&&s.u?'<div class="rvol" style="margin:0 0 8px"><button type="button" class="chip" data-a="rplay">Tentar novamente</button><button type="button" class="chip" data-a="rnext">Escolher outra rádio</button></div><details class="dt" style="margin:0 0 8px"><summary>Mais informações</summary><p class="sub">Endereço da transmissão: '+esc(s.u)+'</p></details>':''}<div class="ctrl"><button class="ib" data-a="rprev" aria-label="Emissora anterior">${ic('prev')}</button><button class="ib big" data-a="rplay" aria-pressed="${on}" aria-label="${on?'Parar rádio':'Ouvir rádio'}">${ic(on?'pause':'play')}</button><button class="ib" data-a="rnext" aria-label="Próxima emissora">${ic('next')}</button></div><div class="ctrl ctrl2"><button type="button" class="ib sm like" data-a="rfav" aria-pressed="${isFav(s.u)}" aria-label="${isFav(s.u)?'Remover dos favoritos':'Adicionar aos favoritos'}">${ic(isFav(s.u)?'heartf':'heart')}</button><button type="button" class="ib" data-a="rrand" aria-label="Ouvir rádio aleatória">${ic('shuf')}</button></div>
+ <div class="rvol"><label for="rvol" class="sub">Volume</label><input id="rvol" type="range" min="0" max="1" step="0.05" value="${R.vol}"></div></div><details class="dt" style="margin:0.5rem 0"><summary>Mais opções</summary><div class="rvol"><button class="chip" data-a="redit">Editar emissoras</button></div>${sleepRow()}</details><section aria-label="Descobrir"><h3 class="tr-h" style="margin:0.5rem 0 0.25rem">Descobrir</h3>${rsBox()}</section><section aria-label="Minhas rádios"><h3 class="tr-h" style="margin:0.75rem 0 0.25rem">Minhas rádios</h3>${favBox()}${savedBox()}</section>`}
 function radioAct(a,i){const R=S.rd;
  if(a==='redit'){R.draft=R.list.map(x=>({n:x.n,u:x.u,g:x.g||''}));if(!R.draft.length)R.draft.push({n:'',u:'',g:''});R.edit=true;view();const n=$('#rn0');if(n)n.focus();return true}
  if(a==='rcan'){R.edit=false;view();const b=$('#view [data-a="redit"]');if(b)b.focus();return true}
  if(a==='radd'){if(R.draft.length>=200){say('Limite de 200 emissoras');return true}rdCollect();R.draft.push({n:'',u:''});view();const n=$('#rn'+(R.draft.length-1));if(n)n.focus();return true}
  if(a==='rrm'){rdCollect();R.draft.splice(i,1);view();const b=$('#view [data-a="rrm"][data-i="'+Math.min(i,R.draft.length-1)+'"]')||$('#view [data-a="radd"]');if(b)b.focus();say('Emissora removida');return true}
  if(a==='rsug'){rdCollect();const before=R.draft.filter(x=>x.n||x.u).length;R.draft=rdMerge(R.draft);view();say((R.draft.length-before)+' emissoras sugeridas adicionadas');return true}
- if(a==='rplay'){const s=R.list[R.cur];if(!s||!s.u){say('Adicione o link desta emissora em Editar emissoras');return true}
+ if(a==='rplay'){const s=R.list[R.cur];if(!s||!s.u){say('Esta rádio ainda não tem endereço de transmissão. Adicione em Editar emissoras ou escolha outra rádio');return true}
   if(rdPlaying()&&R.i===R.cur){rdStop();say('Rádio parada')}else rdPlay(R.cur);return true}
  if(a==='rimp'){$('#rimpf').click();return true}
  if(a==='rnext'){rdStep(1);return true}
  if(a==='rprev'){rdStep(-1);return true}
  if(a==='rfplay'){const k=+i;S.rd.cur=k;ls.set('rd_cur',k);rdPlay(k);view();const n=$('#view [data-a="rfplay"][data-i="'+k+'"]');if(n)n.focus();return true}
-  if(a==='rpick'){const k=+i;S.rd.cur=k;ls.set('rd_cur',k);view();const n=$('#view [data-a="rpick"][data-i="'+k+'"]');if(n)n.focus();say('Selecionada: '+rdName(k));return true}
+  if(a==='rpick'){const k=+i;S.rd.cur=k;ls.set('rd_cur',k);if(S.rd.list[k]&&S.rd.list[k].u){rdPlay(k)}else{say('Esta rádio ainda não tem endereço de transmissão. Adicione em Editar emissoras')}view();const n=$('#view [data-a="rpick"][data-i="'+k+'"]');if(n)n.focus();return true}
  if(a==='rfonly'){R.onlyFav=!R.onlyFav;if(R.onlyFav&&!rdPool().includes(R.cur)){const p=rdPool();if(p.length)R.cur=p[0];else{R.onlyFav=true}}view();const b=$('#view [data-a="rfonly"]');if(b)b.focus();say(R.onlyFav?'Mostrando só favoritas':'Mostrando todas as emissoras');return true}
  if(a==='rfav'){toggleFav(R.cur);view();const b=$('#view [data-a="rfav"]');if(b)b.focus();return true}
  if(a==='rrand'){rdRand();return true}
@@ -612,7 +612,7 @@ function devPaint(){const l=$('#sdevl');if(!l)return;if(!l.contains(document.act
  if(act&&!d)b.insertAdjacentHTML('beforeend','<span class="dot-on" aria-hidden="true"></span>');else if(!act&&d)d.remove()}
 function spDev(){if(!S.tok)return '';if(!S.devs)setTimeout(spDevs,0);
  const act=(S.devs||[]).find(x=>x.is_active);
- return `<div class="np-bottom"><button class="ib sm dev" data-a="devtoggle" aria-expanded="${!!S.devOpen}" aria-controls="sdevl" aria-label="Reproduzir em: ${esc(act?act.name:'nenhum aparelho')}">${ic('dev')}${act?'<span class="dot-on" aria-hidden="true"></span>':''}</button>${spVol()}</div>
+ return `<p class="sub" style="margin:0 0 0.4rem">${act?'Reproduzindo em: <b>'+esc(act.name)+'</b>':'Nenhum aparelho ativo · <button type="button" class="chip" data-a="devtoggle">Escolher aparelho</button>'}</p><div class="np-bottom"><button class="ib sm dev" data-a="devtoggle" aria-expanded="${!!S.devOpen}" aria-controls="sdevl" aria-label="Reproduzir em: ${esc(act?act.name:'nenhum aparelho')}">${ic('dev')}${act?'<span class="dot-on" aria-hidden="true"></span>':''}</button>${spVol()}</div>
  <div id="sdevl" class="devl" ${S.devOpen?'':'hidden'}>${devList()}</div>
  <details class="dt"><summary>Buscar e adicionar à fila</summary><form id="qform" class="add" style="margin-top:0.5rem"><input id="qq" aria-label="Buscar faixa" placeholder="Nome da faixa ou artista" autocomplete="off"><button>Buscar</button></form><div id="qres" aria-live="polite"></div></details>`}
 function spExtra(){const q=(S.queue||[]).slice(0,5);
@@ -653,7 +653,9 @@ agendar(()=>{if(S.tok&&S.open&&S.tab==='music')spDevs()},20000);
 const SLEEP_OPTS=[0,15,30,45,60,90];
 const sleepTxt=()=>S.rd.sleepAt?'Para em '+Math.max(1,Math.ceil((S.rd.sleepAt-Date.now())/60000))+' min':'';
 const RS_PAISES=[['BR','Brasil'],['US','EUA'],['GB','Reino Unido'],['PT','Portugal'],['FR','França'],['DE','Alemanha'],['ES','Espanha'],['IT','Itália'],['JP','Japão'],['MX','México'],['AR','Argentina'],['CA','Canadá'],['IN','Índia'],['AU','Austrália']];
-function rsTopBoxHtml(){return '<section id="rstopBox" aria-label="Rádios mais ouvidas por país" style="margin:0.5rem 0"><div class="tp-k">Mais ouvidas por país</div><div class="redact" role="group" aria-label="Escolher país" style="margin-top:0.4rem">'+RS_PAISES.map(([c,n])=>'<button type="button" class="chip" data-a="rstop" data-cc="'+c+'">'+n+'</button>').join('')+'</div></section>'}
+function rsTopBoxHtml(){return '<details class="dt" id="rstopBox"'+(S.rsTopOpen?' open':'')+' style="margin:0.5rem 0"><summary>Mais ouvidas por país</summary><div class="redact" role="group" aria-label="Escolher país" style="margin-top:0.4rem">'+RS_PAISES.map(([c,n])=>'<button type="button" class="chip" data-a="rstop" data-cc="'+c+'">'+n+'</button>').join('')+'</div></details>'}
+// guarda se a seção Mais ouvidas por país está aberta, sem redesenhar a aba
+document.addEventListener('toggle',e=>{if(e.target&&e.target.id==='rstopBox')S.rsTopOpen=e.target.open},true);
 function radioExtrasDom(){const v=$('#view');if(!v||S.tab!=='radio')return;
  const rf=v.querySelector('#rsform');if(rf&&!v.querySelector('#rstopBox'))rf.insertAdjacentHTML('afterend',rsTopBoxHtml());
  v.querySelectorAll('#rtile,#rweek').forEach(n=>n.remove());
@@ -726,7 +728,7 @@ function rdSortList(k){const cur=S.rd.list[S.rd.cur];const sc=(()=>{try{return J
  if(sc&&schedSt){sc.i=S.rd.list.indexOf(schedSt);if(sc.i>=0)ls.set('rd_sched',JSON.stringify(sc))}
  view();say('Lista ordenada: '+(k==='nome'?'por nome':'por última tocada'))}
 /* ===== Notificações em segundo plano ===== */
-function notifyBg(titulo,corpo){if(ls.get('opt_ntf')!=='1'||!document.hidden)return;if(!('Notification' in window)||Notification.permission!=='granted')return;
+function notifyBg(titulo,corpo){if(document.hidden)ntfyEnviar(titulo,corpo);if(ls.get('opt_ntf')!=='1'||!document.hidden)return;if(!('Notification' in window)||Notification.permission!=='granted')return;
  const opts={body:corpo,icon:'icon-192.png',tag:titulo};
  const local=()=>{try{new Notification(titulo,opts)}catch(_){}};
  if(navigator.serviceWorker&&navigator.serviceWorker.ready){navigator.serviceWorker.ready.then(reg=>reg.showNotification(titulo,opts)).catch(local)}else local()}
@@ -1003,12 +1005,12 @@ async function rbFetch(par){let ult;for(const b of RB){try{const r=await fetch(b
 async function rbPorUrl(u){let ult;for(const b of RB){try{const r=await fetch(b+'/json/stations/byurl/'+encodeURIComponent(u));if(r.ok){const j=await r.json();if(Array.isArray(j))return j}}catch(e){ult=e}}return []}
 function favBox(){const R=S.rd,L=R.list,fav=L.map((x,i)=>({x,i})).filter(o=>o.x.u&&isFav(o.x.u)),open=R.favOpen?' open':'';
  const items=fav.map(o=>{const cur=o.i===R.cur;return '<li class="svd'+(cur?' cur':'')+'"><button type="button" class="svdbtn" data-a="rfplay" data-i="'+o.i+'" aria-current="'+cur+'"><span class="grow">'+esc(o.x.n||('Emissora '+(o.i+1)))+'</span><span class="fav" aria-hidden="true">★</span></button></li>'}).join('');
- return '<details class="dt rsv rsfacc" id="rsfdet"'+open+'><summary>Só favoritas ('+fav.length+')</summary>'+(fav.length?'<ul class="svlist">'+items+'</ul>':'<p class="sub">Nenhuma favorita ainda. Toque no coração de uma emissora para favoritar.</p>')+'</details>'}
+ return '<details class="dt rsv rsfacc" id="rsfdet"'+open+'><summary>Favoritas ('+fav.length+')</summary>'+(fav.length?'<ul class="svlist">'+items+'</ul>':'<p class="sub">Nenhuma favorita ainda. Toque no coração de uma emissora para favoritar.</p>')+'</details>'}
 
 
 
 function savedBox(){const R=S.rd,L=R.list,open=R.savedOpen?' open':'';
- const items=L.map((x,i)=>{const cur=i===R.cur;return '<li class="svd'+(cur?' cur':'')+'"><button type="button" class="svdbtn" data-a="rpick" data-i="'+i+'" aria-current="'+cur+'"><span class="grow">'+esc(x.n||('Emissora '+(i+1)))+(x.u?'':' <span class="sub">(sem link)</span>')+(x.u&&isFav(x.u)?' <span class="fav" aria-label="favorita">★</span>':'')+'</span></button></li>'}).join('');
+ const itemL=(x,i)=>{const cur=i===R.cur;return '<li class="svd'+(cur?' cur':'')+'"><button type="button" class="svdbtn" data-a="rpick" data-i="'+i+'" aria-current="'+cur+'"><span class="grow">'+esc(x.n||('Emissora '+(i+1)))+(x.u&&isFav(x.u)?' <span class="fav" aria-label="favorita">★</span>':'')+'</span></button></li>'};const comL=L.map((x,i)=>[x,i]).filter(([x])=>x.u),semL=L.map((x,i)=>[x,i]).filter(([x])=>!x.u);const items=comL.map(([x,i])=>itemL(x,i)).join('')+(semL.length?'<li class="sub" role="presentation" style="margin-top:0.5rem">Precisa de configuração</li>'+semL.map(([x,i])=>itemL(x,i)).join(''):'');
  return '<details class="dt rsv" id="rsvdet"'+open+'><summary>Rádios salvas ('+L.length+')</summary>'+(L.length?'<ul class="svlist">'+items+'</ul>':'<p class="sub">Nenhuma rádio salva ainda. Use Buscar mais rádios para adicionar.</p>')+'</details>'}
 function rsBox(){const R=S.rd;
  return `<details class="dt" id="rsdet"${R.rsOpen?' open':''}><summary>Buscar mais rádios</summary>
@@ -1024,12 +1026,12 @@ async function rsRun(preset){const R=S.rd,out=$('#rsres'),q=($('#rsq').value||''
  try{let lista=await rbFetch(q?{...base,name:q}:base);const pal=q.toLowerCase().split(/\s+/).filter(Boolean);
   if(q&&lista.length<8&&pal.length){const t=await rbFetch({...base,tag:pal[0]});lista=lista.concat(t.filter(x=>pal.every(w=>(String(x.name)+' '+String(x.tags)).toLowerCase().includes(w))))}
   const vis=new Set(),itens=lista.filter(x=>{const u=String(x.url_resolved||x.url||'');if(!/^https?:\/\/\S+$/i.test(u)||(location.protocol==='https:'&&!/^https:/i.test(u))||vis.has(u))return false;vis.add(u);return true}).slice(0,25);
-  R.rsHtml=itens.length?itens.map(x=>{const u=String(x.url_resolved||x.url),n=String(x.name||'Rádio').trim().slice(0,40),img=String(x.favicon||'').replace(/^http:/i,'https:'),meta=[x.country,(x.codec||'').toUpperCase()+(x.bitrate?' '+x.bitrate+' kbps':''),(x.votes||0)+' votos',(x.clickcount||0)+' ouvintes'].filter(Boolean).join(' · ');
-   return `<div class="row"><span class="grow">${esc(n)}<br><span class="sub">${esc(meta)}</span></span><button type="button" class="chip" data-a="rsadd" data-u="${esc(u)}" data-img="${esc(/^https:\/\/\S+$/i.test(img)?img:'')}" data-n="${esc(n)}" aria-label="Adicionar à lista: ${esc(n)}">Adicionar</button><button type="button" class="chip" data-a="rsplay" data-u="${esc(u)}" data-img="${esc(/^https:\/\/\S+$/i.test(img)?img:'')}" data-n="${esc(n)}" aria-label="Adicionar e ouvir: ${esc(n)}">Ouvir</button></div>`}).join(''):'Nada encontrado para essa busca.';
+  R.rsHtml=itens.length?itens.map(x=>{const u=String(x.url_resolved||x.url),n=String(x.name||'Rádio').trim().slice(0,40),img=String(x.favicon||'').replace(/^http:/i,'https:'),meta=[x.country,(x.codec||'').toUpperCase()+(x.bitrate?' '+x.bitrate+' kbps':''),(x.votes||0)+' votos',(x.clickcount||0)+' acessos no diretório'].filter(Boolean).join(' · ');
+   return `<div class="row"><span class="grow">${esc(n)}<br><span class="sub">${esc(meta)}</span></span><button type="button" class="chip" data-a="rsadd" data-u="${esc(u)}" data-img="${esc(/^https:\/\/\S+$/i.test(img)?img:'')}" data-n="${esc(n)}" aria-label="Adicionar à lista: ${esc(n)}">Adicionar</button><button type="button" class="chip" data-a="rsplay" data-u="${esc(u)}" data-img="${esc(/^https:\/\/\S+$/i.test(img)?img:'')}" data-n="${esc(n)}" aria-label="Adicionar e ouvir: ${esc(n)}">Ouvir e salvar</button></div>`}).join(''):'Nada encontrado para essa busca.';
   out.innerHTML=R.rsHtml;say(itens.length+(itens.length===1?' rádio encontrada':' rádios encontradas'))}
  catch(_){R.rsHtml='';out.textContent='Não foi possível buscar agora. Confira a conexão com a internet.'}}
 $('#view').addEventListener('toggle',e=>{if(e.target.id==='rsdet')S.rd.rsOpen=e.target.open;if(e.target.id==='rsvdet')S.rd.savedOpen=e.target.open;
- if(e.target.id==='rsfdet'){const R=S.rd;const abriu=e.target.open;if(R.favOpen===abriu)return;R.favOpen=abriu;R.onlyFav=abriu;if(R.onlyFav){const p=rdPool();if(p.length&&!p.includes(R.cur)){R.cur=p[0];ls.set('rd_cur',R.cur)}}view()}},true);
+ if(e.target.id==='rsfdet'){const R=S.rd;const abriu=e.target.open;if(R.favOpen===abriu)return;R.favOpen=abriu;view()}},true);
 $('#view').addEventListener('input',e=>{if(e.target.id==='rsq')S.rd.rsQ=e.target.value});
 
 /* ===== Relógio (horário de São Paulo), data e previsão do tempo ===== */
@@ -1102,7 +1104,7 @@ function tpAir(loc){WX.air=WX.air||{};const k=loc.lat+','+loc.lon,c=WX.air[k];if
  return null}
 function tpExtras(loc,data){if(!data)return '';const a=tpAir(loc);let air='';
  if(a&&a.us_aqi!=null){const cat=AQI.find(x=>a.us_aqi<=x[0])[1];air='<div class="tp-card" style="margin:0 0 10px"><div class="tp-k">Qualidade do ar</div><div class="tp-v" style="font-size:1.875rem">'+Math.round(a.us_aqi)+'</div><div class="tp-s" style="font-size:0.9375rem;color:var(--ink)">'+cat+' · PM2,5: '+(a.pm2_5!=null?a.pm2_5:'—')+' µg/m³</div></div>'}
- return bestTimeHtml(data)+luzHtml(data)+tpRain(data)+chanceHtml(data)+air+ontemHtml(loc,data)}
+ const resumo=bestTimeHtml(data)+luzHtml(data)+tpRain(data)+chanceHtml(data)+air+ontemHtml(loc,data);return resumo?'<div class="tp-resumo-grid">'+resumo+'</div>':''}
 function ontemHtml(loc,data){if(!data||!data.current)return '';const key=loc.lat+','+loc.lon+','+dayKey(new Date());
  let c=null;try{c=JSON.parse(ls.get('ontem')||'null')}catch(_){}
  if(!c||c.key!==key){if(!WX.ontemBusy){WX.ontemBusy=true;const y=new Date();y.setDate(y.getDate()-1);const yk=dayKey(y);
@@ -1371,18 +1373,16 @@ async function livroAdicionar(file){const err=$('#livErr');if(err)err.textConten
  try{const JS=await loadJSZip();const buf=await file.arrayBuffer();const id=await sha256Hex(buf);const zip=await JS.loadAsync(buf);const info=await epubLer(zip);
   if(info.drm){if(err)err.textContent='Este EPUB tem proteção (DRM) e não pode ser lido aqui.';return}
   let capa='';if(info.capaPath&&zip.file(info.capaPath)){try{const b=await zip.file(info.capaPath).async('base64');const m=info.capaPath.match(/\.(\w+)$/);capa='data:image/'+(m?m[1].replace('jpg','jpeg'):'jpeg')+';base64,'+b;if(capa.length>120000)capa=''}catch(e){logErr('sync: '+(e&&e.message))}}
-  const blobL=new Blob([buf],{type:'application/epub+zip'});await idbPut(id,blobL);livroNuvemEnviarGrande(id,blobL);
+  {const _L=livrosMeta();const _d=!_L.find(x=>x.id===id)&&livDuplicado(_L,{id,t:info.titulo,a:info.autor});if(_d){if(err)err.textContent='Já existe um livro com este título e autor: '+_d.t;return}}const blobL=new Blob([buf],{type:'application/epub+zip'});await idbPut(id,blobL);livroNuvemEnviarGrande(id,blobL);
   const L=livrosMeta();const ex=L.find(x=>x.id===id);
   if(ex){ex.n=file.name.slice(0,120);if(!ex.capa&&capa)ex.capa=capa}
   else L.unshift({id,t:info.titulo,a:info.autor,n:file.name.slice(0,120),cap:info.spine.length,cur:0,fr:0,pct:0,at:Date.now(),capa});
   livrosSave(L);view();say('Livro adicionado: '+info.titulo)}
  catch(e){if(err)err.textContent='Não foi possível abrir este EPUB: '+(e&&e.message||'erro')}}
 function livrosView(){const L=livrosMeta();
- return '<h2>Livros</h2>'+livStatsHtml()+'<div class="tr-acoes" style="margin:0 0 8px"><button type="button" class="chip" data-a="livsync">Sincronizar livros</button><button type="button" class="chip" data-a="livbaixar">Baixar cópia dos livros</button></div>'+'<div class="add" style="margin:0 0 10px"><label class="sr" for="livFile">Adicionar arquivo EPUB</label><input type="file" id="livFile" accept=".epub,.pdf,application/epub+zip,application/pdf"></div><p id="livErr" class="err" role="alert"></p>'+
-  (L.length?'<ul class="svlist">'+L.map(x=>'<li class="svd" style="display:flex;gap:0.625rem;align-items:center;padding:0.625rem 0">'+(x.capa?'<img src="'+x.capa+'" alt="" width="48" height="66" style="border-radius:0.375rem;object-fit:cover;flex:none">':'<span aria-hidden="true" style="width:3rem;height:4.125rem;border-radius:0.375rem;background:var(--row);flex:none"></span>')+
-   '<span class="grow" style="min-width:0"><b style="display:block;overflow-wrap:anywhere">'+esc(x.t)+'</b><span class="sub">'+esc(x.a)+' · '+(x.pct||0)+'% lido</span><span class="sub" id="livst'+esc(x.id.slice(0,8))+'" style="display:block;font-size:0.75rem"></span></span>'+
-   '<button type="button" class="chip" data-a="livAbrir" data-id="'+esc(x.id)+'">Continuar</button><button type="button" class="chip" data-a="livRemover" data-id="'+esc(x.id)+'" aria-label="Remover '+esc(x.t)+'">Remover</button></li>').join('')+'</ul>':'<p class="sub">Nenhum livro. Adicione um arquivo EPUB sem DRM.</p>')+
-  '<div id="livLeitor"></div>'}
+ return '<h2>Livros</h2>'+livStatsHtml()+livMetaHtml()+livLembreteHtml()+'<div class="tr-acoes" style="margin:0 0 8px"><button type="button" class="chip" data-a="livsync">Sincronizar livros</button><button type="button" class="chip" data-a="livbaixar">Baixar cópia dos livros</button></div>'+'<div class="tr-acoes" style="margin:0 0 6px"><label class="sr" for="gbQ">Buscar no Google Books</label><input id="gbQ" type="search" value="'+esc(S.gbQ||'')+'" placeholder="Título ou ISBN" style="flex:1;min-width:10rem"><button type="button" class="chip" data-a="gbBuscar">Buscar no Google Books</button></div><div id="gbRes" role="region" aria-label="Resultados do Google Books" style="margin:0 0 8px">'+gbResHtml()+'</div><div class="add" style="margin:0 0 10px"><label class="sr" for="livFile">Adicionar arquivo EPUB</label><input type="file" id="livFile" accept=".epub,.pdf,application/epub+zip,application/pdf"></div><p id="livErr" class="err" role="alert"></p>'+
+  livListaHtml(L)+
+  livDestHtml()+'<div id="livLeitor"></div>'}
 function livAtivoDom(){const id=ls.get('livro_ativo');if(!id)return;document.querySelectorAll('#view [data-a="livAbrir"][data-id="'+id+'"]').forEach(b=>{const li=b.closest('li');if(!li||li.querySelector('.livbadge'))return;li.style.borderLeft='4px solid #bf5af2';li.style.paddingLeft='10px';const sp=document.createElement('span');sp.className='livbadge sub';sp.style.fontSize='12px';sp.textContent='Último lido';li.querySelector('.grow')&&li.querySelector('.grow').appendChild(sp)})}
 /* ===== Anotações: exportar e importar (JSON) ===== */
 function anotacoesDados(){return livrosMeta().map(x=>({id:x.id,t:x.t,a:x.a||'',marks:x.marks||[],dest:x.dest||[]}))}
@@ -1429,7 +1429,7 @@ async function livroBuscar(q){const out=$('#livres');if(!out||!LIV_OPEN.zip)retu
   let p=txt.toLowerCase().indexOf(ql);let n=0;while(p>=0&&n<3&&hits.length<40){hits.push({c:i,trecho:txt.slice(Math.max(0,p-40),p+q.length+40)});n++;p=txt.toLowerCase().indexOf(ql,p+q.length)}}
  out.innerHTML=hits.length?'<ul class="svlist">'+hits.map((h,k)=>'<li class="svd"><button type="button" class="svdbtn" data-a="livIrCap" data-c="'+h.c+'"><span class="grow"><span class="sub">Capítulo '+(h.c+1)+' · </span>…'+esc(h.trecho)+'…</span></button></li>').join('')+'</ul>':'<p class="sub">Nenhum resultado para "'+esc(q)+'".</p>'}
 function livroProgresso(){if(!LIV_OPEN.id)return;const n=LIV_OPEN.spine.length||1;const pct=Math.round(((LIV_OPEN.cur+(LIV_OPEN.fr||0))/n)*100);
- const L=livrosMeta();const x=L.find(y=>y.id===LIV_OPEN.id);if(!x)return;x.cur=LIV_OPEN.cur;x.fr=Math.round((LIV_OPEN.fr||0)*1000)/1000;x.pct=Math.min(100,pct);x.at=Date.now();livrosSave(L);livAgendarSync()}
+ const L=livrosMeta();const x=L.find(y=>y.id===LIV_OPEN.id);if(!x)return;x.cur=LIV_OPEN.cur;x.fr=Math.round((LIV_OPEN.fr||0)*1000)/1000;x.pct=Math.min(100,pct);if(x.pct>=100&&!x.fim)x.fim=Date.now();x.at=Date.now();livrosSave(L);livAgendarSync()}
 /* ===== EPUB com posição exata (CFI) via epub.js ===== */
 let epubJsReady=null;
 function loadEpubJs(){if(window.ePub)return Promise.resolve(window.ePub);if(epubJsReady)return epubJsReady;epubJsReady=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/epub.js/0.3.93/epub.min.js';sc.onload=()=>res(window.ePub);sc.onerror=()=>{epubJsReady=null;rej(new Error('epubjs'))};document.head.appendChild(sc)});return epubJsReady}
@@ -1885,7 +1885,7 @@ function tempoNovosDom(){const v=$('#view');if(!v||S.tab!=='tempo')return;v.quer
  else if(j.agora)chuvaTxt='Chuva em andamento. Deve terminar por volta das '+j.fim.slice(11,13)+'h, em cerca de '+j.horas+' h.';
  else chuvaTxt='Chuva deve começar por volta das '+j.inicio.slice(11,13)+'h e durar cerca de '+j.horas+' h (termina por volta das '+j.fim.slice(11,13)+'h).';
  const chuva='<section class="tp-card" aria-label="Previsão de chuva" style="margin:0"><div class="tp-k">Sensação de chuva (próximas 24 h)</div><p style="margin:0.375rem 0 0;font-size:0.9375rem" role="status">'+esc(chuvaTxt)+'</p><p class="sub" style="font-size:0.75rem;margin:0.375rem 0 0">Considera chuva quando a probabilidade é de 50% ou mais em cada hora.</p></section>';
-  box.innerHTML=conf+chuva;const alvo=[...v.querySelectorAll('*')].find(e=>e.childElementCount===0&&/Previsão de 10 dias/i.test(e.textContent));if(alvo){let no=alvo;while(no.parentElement&&no.parentElement!==v)no=no.parentElement;no.after(box)}else v.prepend(box)}
+  box.innerHTML='<div class="tp-resumo-grid">'+conf+chuva+'</div>';const alvo=[...v.querySelectorAll('*')].find(e=>e.childElementCount===0&&/Previsão de 10 dias/i.test(e.textContent));if(alvo){let no=alvo;while(no.parentElement&&no.parentElement!==v)no=no.parentElement;no.after(box)}else v.prepend(box)}
 /* ===== Animações: fundo que muda com a hora e deslizar entre abas ===== */
 const MOVIMENTO_REDUZIDO=()=>!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
 function bgCorHora(h){const pts=[[0,[5,7,15]],[6,[42,31,61]],[12,[22,48,77]],[18,[63,35,56]],[24,[5,7,15]]];
@@ -2205,14 +2205,41 @@ document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest
   if(it)avisoDesfazer('Sessão de cardio apagada',()=>{const o=trDelLista();delete o[id];ls.set('treino_del',JSON.stringify(o));const l=cardioLista();if(!l.some(x=>String(x.id)===id))l.push(it);cardioSalvar(l);view()});return}
  if(a==='irAjustes'){pick('set');return}
  if(a==='metasSalvar'){const m={};TR_MUSC_ALL.forEach((ex,i)=>{const s=parseInt(($('#mtS'+i)||{}).value,10),r=(($('#mtR'+i)||{}).value||'').trim(),k=parseFloat(($('#mtK'+i)||{}).value);const o={};if(s>0)o.s=Math.min(10,s);if(r)o.r=r.slice(0,20);if(isFinite(k)&&k>0)o.kg=k;if(Object.keys(o).length)m[ex]=o});ls.set('treino_metas',JSON.stringify(m));view();say('Metas salvas');return}
- if(a==='guiaIniciar'){S.guiado={ativo:true,dia:t.dataset.dia,i:0,feitas:0};view();return}
+ if(a==='guiaIniciar'){S.guiado={ativo:true,dia:t.dataset.dia,i:0,prog:{},salvo:trAtual().series.length};view();return}
  if(a==='guiaSair'){S.guiado=null;view();return}
- if(a==='guiaFeita'){const g=S.guiado;if(!g||!g.ativo)return;const lista=TR_MUSC[g.dia]||[];const ex=lista[g.i];if(!ex)return;const sets=(trMetas()[ex]||{}).s||3;
+ if(a==='guiaFeita'){const g=S.guiado;if(!g||!g.ativo)return;const lista=guiaExs(g);const ex=lista[g.i];if(!ex||guiaConcluido(g,ex))return;
   const reps=parseInt(($('#guiaReps')||{}).value,10),kg=parseFloat(($('#guiaKg')||{}).value);
   if(!(reps>=0)){say('Informe as repetições feitas');return}
   const at=trAtual();at.series.push({ex,reps,kg:isFinite(kg)?kg:0});trSalvarAtual(at);
-  g.feitas++;if(g.feitas>=sets){g.i++;g.feitas=0;say(g.i<lista.length?'Próximo exercício':'Treino guiado concluído')}else say('Série registrada');
+  g.prog=g.prog||{};g.prog[ex]=guiaFeitasDe(g,ex)+1;
+  if(guiaConcluido(g,ex)){const prox=lista.findIndex((e,k)=>k>g.i&&!guiaConcluido(g,e));const pend=prox>=0?prox:lista.findIndex(e=>!guiaConcluido(g,e));
+   if(pend>=0){g.i=pend;say('Exercício concluído. Próximo: '+lista[pend])}else say('Treino guiado concluído')}
+  else say('Série registrada');
   view();return}
+ if(a==='guiaVai'){const g=S.guiado;if(!g||!g.ativo)return;const n=guiaExs(g).length;g.i=Math.min(n-1,Math.max(0,g.i+(+t.dataset.d)));view();return}
+ if(a==='guiaIr'){const g=S.guiado;if(!g||!g.ativo)return;g.i=+t.dataset.i;view();return}
+  if(a==='livMetaSalvar'){if(t.dataset.zerar){ls.set('liv_meta','{}');view();return}const n=parseInt(($('#livMetaN')||{}).value,10);if(!(n>0)){say('Informe um número de livros');return}ls.set('liv_meta',JSON.stringify({ano:new Date().getFullYear(),total:Math.min(200,n)}));say('Meta definida');view();return}
+ if(a==='livIniciar'){S.leitura={lid:t.dataset.id,ini:Date.now()};view();say('Leitura iniciada');return}
+ if(a==='livCancelar'){S.leitura=null;view();return}
+ if(a==='livParar'){const L=livrosMeta();const x=L.find(y=>y.id===t.dataset.id);if(!x||!S.leitura){S.leitura=null;view();return}
+  const inp=$('#livPag'+x.id.slice(0,8));const pag=parseInt(inp?inp.value:'',10);const min=Math.max(1,Math.round((Date.now()-S.leitura.ini)/60000));
+  const prev=x.pagAtual||0;const delta=isFinite(pag)&&pag>=prev?pag-prev:0;
+  const S2=livSessoes();S2.push({id:'s'+Date.now().toString(36),lid:x.id,min,pag:delta,data:new Date().toISOString().slice(0,10)});livSessoesSave(S2);
+  if(isFinite(pag)&&pag>0){x.pagAtual=pag;if(x.pg){x.pct=Math.min(100,Math.round(pag/x.pg*100));if(x.pct>=100&&!x.fim)x.fim=Date.now()}}
+  x.at=Date.now();livrosSave(L);S.leitura=null;view();say('Sessão salva: '+min+' min'+(delta?', '+delta+' págs':''));return}
+ if(a==='livEstFiltro'){S.livEstFiltro=t.dataset.e||'';view();return}
+ if(a==='livMd'){livMd(t.dataset.id);return}
+ if(a==='livDestSalvar'){const texto=(($('#destTexto')||{}).value||'').trim();const lid=(($('#destLivro')||{}).value||'');if(!texto){say('Escreva o trecho');return}if(!lid){say('Escolha o livro');return}
+  const pg=parseInt(($('#destPag')||{}).value,10);const D=livDest();D.push({id:'d'+Date.now().toString(36),lid,texto:texto.slice(0,600),pag:pg>0?pg:0,cor:(($('#destCor')||{}).value)||'amarelo',tag:String((($('#destTag')||{}).value)||'').trim().slice(0,30),at:Date.now()});livDestSave(D);say('Destaque salvo');view();return}
+ if(a==='livDestDel'){const D=livDest();D.splice(+t.dataset.i,1);livDestSave(D);view();return}
+ if(a==='livDestTarefa'){const D=livDest();const d=D[+t.dataset.i];if(!d)return;const li=livrosMeta().find(x=>x.id===d.lid);
+  S.tasks.push({id:'lt'+Date.now().toString(36),t:('Revisar: '+d.texto).slice(0,120)+(li?' ('+li.t+')':''),w:hm(Date.now()),d:false,c:0});save();say('Tarefa criada no Meu dia');return}
+
+ if(a==='wgerVer'){const nome=t.dataset.ex;S.wgerView={nome,estado:'carregando'};view();wgerBuscar(nome).then(d=>{S.wgerView={nome,estado:'ok',d};view()}).catch(()=>{S.wgerView={nome,estado:'erro'};view()});return}
+ if(a==='gbBuscar'){const q=(($('#gbQ')||{}).value||'').trim();S.gbQ=q;S.gbErr='';S.gbRes=null;if(!q){S.gbErr='Digite um título ou ISBN.';view();return}view();gbBuscarLivros(q).then(r=>{S.gbRes=r;if(!r.length)S.gbErr='Nada encontrado para essa busca.';view()}).catch(()=>{S.gbErr='Não foi possível consultar o Google Books agora. Verifique a conexão.';view()});return}
+ if(a==='gbAdd'){const b=(S.gbRes||[])[+t.dataset.i];if(!b)return;const L=livrosMeta();const dup=livDuplicado(L,b);if(dup){say('Já existe um livro com este título e autor: '+dup.t);return}livrosSave([...L,b]);say('Livro adicionado à lista');view();return}
+ if(a==='ntfySalvar'){const t2=(($('#nfTopico')||{}).value||'').trim().replace(/[^\w-]/g,'');if(!t2){ls.del('ntfy_topic');say('Notificações no celular desativadas')}else{ls.set('ntfy_topic',t2);say('Tópico salvo')}view();return}
+ if(a==='ntfyTeste'){ntfyEnviar('Teste do painel','Notificações no celular funcionando.').then(ok=>say(ok?'Teste enviado ao celular':'Não foi possível enviar. Confira o tópico e a conexão'));return}
  if(a==='autoSalvar'){const on=!!(($('#auOn')||{}).checked);const senha=(($('#auSenha')||{}).value||'');if(senha)ls.set('bk_auto_senha',senha);const c=bkAutoCfg();c.on=on;bkAutoSalvarCfg(c);say(on?'Backup automático ativado':'Backup automático desativado');view();return}
  if(a==='autoAgora'){if(!ls.get('bk_auto_senha')){say('Salve uma senha do backup primeiro');return}bkAutoEnviar().then(ok=>say(ok?'Cópia enviada ao OneDrive':'Não foi possível enviar. Confira o backup OneDrive em Ajustes')).catch(e=>logErr('autoAgora: '+(e&&e.message)));return}
  if(a==='trsync'){trSyncNuvem();return}
@@ -2222,7 +2249,14 @@ document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest
   if(!ex){say('Cadastre um exercício primeiro');return}if(!(reps>0)){say('Informe as repetições');return}if(!(kg>=0)){say('Informe o peso');return}
   const at=trAtual();at.nome=(($('#trNome')||{}).value||at.nome||'').trim();at.data=($('#trData')||{}).value||at.data;at.series.push({ex,reps,kg});trSalvarAtual(at);view();say('Série adicionada');return}
  if(a==='trsetdel'){const at=trAtual();at.series.splice(+t.dataset.i,1);trSalvarAtual(at);view();return}
- if(a==='trfim'){const at=trAtual();if(!at.series.length)return;const h=trHist();h.unshift({id:Date.now(),nome:(($('#trNome')||{}).value||at.nome||'Treino').trim(),data:(($('#trData')||{}).value||at.data),series:at.series});ls.set('treino_hist',JSON.stringify(h));ls.set('treino_atual','null');view();say('Treino salvo');return}
+ if(a==='trfim'){const at=trAtual();const g=S.guiado;
+  if(g&&g.ativo){const lista=guiaExs(g);const novas=at.series.slice(g.salvo||0);if(!novas.length){say('Nenhuma série nova para salvar');return}
+   const h=trHist();h.unshift({id:Date.now(),nome:(($('#trNome')||{}).value||at.nome||'Treino').trim(),data:(($('#trData')||{}).value||at.data),series:novas});ls.set('treino_hist',JSON.stringify(h));
+   g.salvo=at.series.length;
+   const pend=lista.findIndex((e,k)=>k>=g.i&&!guiaConcluido(g,e))>=0?lista.findIndex((e,k)=>k>=g.i&&!guiaConcluido(g,e)):lista.findIndex(e=>!guiaConcluido(g,e));
+   if(pend>=0){g.i=pend;say('Treino salvo. Próximo: '+lista[pend]+' ('+(pend+1)+' de '+lista.length+')')}else say('Treino guiado concluído e salvo');
+   view();return}
+  if(!at.series.length)return;const h=trHist();h.unshift({id:Date.now(),nome:(($('#trNome')||{}).value||at.nome||'Treino').trim(),data:(($('#trData')||{}).value||at.data),series:at.series});ls.set('treino_hist',JSON.stringify(h));ls.set('treino_atual','null');view();say('Treino salvo');return}
  if(a==='trsessdel'){if(!confirm('Apagar este treino do histórico?'))return;const h=trHist();const i=+t.dataset.i;const sx=h[i];if(sx&&sx.id!=null)trDelMarcar(sx.id);h.splice(i,1);ls.set('treino_hist',JSON.stringify(h));view();
   if(sx)avisoDesfazer('Treino apagado do histórico',()=>{const o=trDelLista();delete o[String(sx.id)];ls.set('treino_del',JSON.stringify(o));const hh=trHist();if(!hh.some(x=>String(x.id)===String(sx.id)))hh.splice(Math.min(i,hh.length),0,sx);ls.set('treino_hist',JSON.stringify(hh));view()});return}
 });
@@ -2248,7 +2282,7 @@ function sonoBtnDom(){const n=document.getElementById('notch');if(!n)return;let 
   b.style.cssText='position:absolute;right:1rem;bottom:1rem;z-index:70;min-height:2.75rem;box-shadow:0 0.3rem 1rem rgba(0,0,0,.35)';n.appendChild(b)}}
 document.addEventListener('change',e=>{if(e.target.id!=='spSleep')return;const m=+e.target.value;S.spSleepM=m;S.spSleepEnd=m>0?Date.now()+m*60000:0;ls.set('sp_sleep_end',String(S.spSleepEnd));say(m>0?'A música pausa em '+m+' min':'Pausa programada desativada')});
 agendar(()=>{if(!S.spSleepEnd)return;const left=S.spSleepEnd-Date.now();
- if(left<=0){S.spSleepEnd=0;S.spSleepM=0;ls.del('sp_sleep_end');if(S.tok)spApi('/me/player/pause',{method:'PUT'});say('Música pausada pelo temporizador');if(S.tab==='music')view();return}
+ if(left<=0){S.spSleepEnd=0;S.spSleepM=0;ls.del('sp_sleep_end');if(S.tok){say('Pausando música…');spApi('/me/player/pause',{method:'PUT'}).then(()=>{say(S.err===0?'Música pausada.':'Não foi possível pausar a música. Tente novamente.');if(S.err===0)ntfyEnviar('Música pausada','O temporizador pausou a música.')})}else say('Música pausada pelo temporizador');if(S.tab==='music')view();return}
  const info=$('#spSleepInfo');if(info)info.textContent='Pausa em '+Math.ceil(left/60000)+' min'},5000);
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('#sonoSair');if(!b)return;e.stopPropagation();S.sono=false;const n=$('#notch');if(n)n.dataset.sono='0';view();say('Modo sono desligado')},true);
 /* ===== Rádios favoritas: toque inicia a emissora diretamente ===== */
@@ -2304,21 +2338,35 @@ cardioImportar();
 const GUIA_PASSO=2.5;
 function trTopoReps(r){const n=(String(r||'').match(/\d+/g)||[]).map(Number);return n.length?Math.max(...n):12}
 function trSugestaoCarga(ex,hist){hist=hist||trHist();const m=trMetas()[ex]||{};const sets=m.s||3,topo=trTopoReps(m.r);const ult=hist.find(s=>Array.isArray(s.series)&&s.series.some(x=>x.ex===ex));if(!ult)return null;const ser=ult.series.filter(x=>x.ex===ex);const kg=Math.max(...ser.map(x=>+x.kg||0));const ok=ser.length>=sets&&ser.slice(0,sets).every(x=>(+x.reps||0)>=topo);return {kg,topo,sets,sugerido:ok?Math.round((kg+GUIA_PASSO)*10)/10:null}}
+function guiaExs(g){return TR_MUSC[g.dia]||[]}
+function guiaSetsDe(ex){return (trMetas()[ex]||{}).s||3}
+function guiaFeitasDe(g,ex){return (g.prog&&g.prog[ex])||0}
+function guiaConcluido(g,ex){return guiaFeitasDe(g,ex)>=guiaSetsDe(ex)}
 function guiaHtml(){const g=S.guiado;const dias=Object.keys(TR_MUSC);
- if(!g||!g.ativo){return trCartao('Treino guiado','<p class="sub" style="margin:0 0 0.5rem">Mostra um exercício de cada vez e avança quando você marca a série como feita.</p><div class="tr-acoes" style="margin:0">'+dias.map(d=>'<button type="button" class="chip" data-a="guiaIniciar" data-dia="'+esc(d)+'">'+esc(d.replace(/ \(.*\)/,''))+'</button>').join('')+'</div>')}
- const lista=TR_MUSC[g.dia]||[];
- if(g.i>=lista.length){return trCartao('Treino guiado','<p class="sub">Treino concluído. As séries estão em Treino de hoje; toque em Salvar treino para guardar.</p><div class="tr-acoes" style="margin:0"><button type="button" class="chip" data-a="guiaSair">Fechar</button></div>')}
- const ex=lista[g.i];const m=trMetas()[ex]||{};const sets=m.s||3,topo=trTopoReps(m.r);const sug=trSugestaoCarga(ex);
+ if(!g||!g.ativo){return trCartao('Treino guiado','<p class="sub" style="margin:0 0 0.5rem">Mostra um exercício de cada vez. Arraste o cartão para os lados para ver outros exercícios.</p><div class="tr-acoes" style="margin:0">'+dias.map(d=>'<button type="button" class="chip" data-a="guiaIniciar" data-dia="'+esc(d)+'">'+esc(d.replace(/ \(.*\)/,''))+'</button>').join('')+'</div>')}
+ const lista=guiaExs(g);
+ if(!lista.length||lista.every(e=>guiaConcluido(g,e))){return trCartao('Treino guiado','<p class="sub">Treino concluído. As séries estão em Treino de hoje; toque em Salvar treino para guardar.</p><div class="tr-acoes" style="margin:0"><button type="button" class="chip" data-a="guiaSair">Fechar</button></div>')}
+ const ex=lista[g.i];const m=trMetas()[ex]||{};const sets=guiaSetsDe(ex),feitas=guiaFeitasDe(g,ex),topo=trTopoReps(m.r);const sug=trSugestaoCarga(ex);
  const kg=m.kg!=null?m.kg:(sug?sug.kg:0);
  const sugTxt=sug?(sug.sugerido?'Sugestão: subir para '+sug.sugerido+' kg (todas as séries completas na última vez).':'Mantenha '+sug.kg+' kg até completar todas as repetições.'):'Sem histórico deste exercício ainda.';
+ const lista_nav=lista.map((e,k)=>'<button type="button" class="chip tr-mini" data-a="guiaIr" data-i="'+k+'"'+(k===g.i?' aria-current="step"':'')+' aria-label="Exercício '+(k+1)+': '+esc(e)+(guiaConcluido(g,e)?' (concluído)':'')+'"'+(k===g.i?' style="background:var(--blue);color:#fff;border-color:var(--blue)"':'')+'>'+(k+1)+(guiaConcluido(g,e)?' ✓':'')+'</button>').join('');
  return trCartao('Treino guiado · '+esc(g.dia.replace(/ \(.*\)/,'')),
-  '<p class="sub" style="margin:0 0 0.25rem">Exercício '+(g.i+1)+' de '+lista.length+'</p>'+
+  '<div id="guiaCard" style="touch-action:pan-y;user-select:none">'+
+  '<p class="sub" style="margin:0 0 0.25rem">Exercício '+(g.i+1)+' de '+lista.length+(guiaConcluido(g,ex)?' · concluído':'')+'</p>'+
   '<h3 class="tr-h" style="margin:0 0 0.25rem">'+esc(ex)+'</h3>'+
   '<p class="sub" style="margin:0 0 0.5rem">Meta: '+sets+' séries · '+esc(m.r||'6 a 12')+' repetições'+(m.kg?' · '+m.kg+' kg':'')+'</p>'+
-  '<p class="sub" style="margin:0 0 0.5rem">'+esc(sugTxt)+'</p>'+
+  '<p class="sub" style="margin:0 0 0.5rem">'+esc(sugTxt)+'</p>'+wgerBloco(ex)+
   '<div class="tr-form"><label>Repetições feitas<input id="guiaReps" type="number" inputmode="numeric" min="0" value="'+topo+'"></label><label>Carga (kg)<input id="guiaKg" type="number" inputmode="decimal" min="0" step="0.5" value="'+kg+'"></label></div>'+
-  '<p class="sub" style="margin:0.5rem 0">Série '+(g.feitas+1)+' de '+sets+'</p>'+
-  '<div class="tr-acoes" style="margin:0"><button type="button" class="chip" data-a="guiaFeita">Série feita</button><button type="button" class="chip" data-a="guiaSair">Sair do modo guiado</button></div>')}
+  '<p class="sub" style="margin:0.5rem 0">Série '+Math.min(feitas+1,sets)+' de '+sets+(feitas?' · '+feitas+' já registrada'+(feitas>1?'s':''):'')+'</p>'+
+  '<div class="tr-acoes" style="margin:0"><button type="button" class="chip" data-a="guiaFeita"'+(guiaConcluido(g,ex)?' disabled':'')+'>Série feita</button><button type="button" class="chip" data-a="guiaSair">Sair do modo guiado</button></div>'+
+  '<div class="tr-acoes" style="margin:0.75rem 0 0;justify-content:space-between"><button type="button" class="chip" data-a="guiaVai" data-d="-1"'+(g.i===0?' disabled':'')+' aria-label="Exercício anterior">‹ Anterior</button><button type="button" class="chip" data-a="guiaVai" data-d="1"'+(g.i>=lista.length-1?' disabled':'')+' aria-label="Próximo exercício">Próximo ›</button></div>'+
+  '<p class="sub" style="margin:0.5rem 0 0.25rem;font-size:0.8rem">Arraste o cartão para os lados para trocar de exercício. Seu progresso fica guardado em cada um.</p>'+
+  '<div class="tr-acoes" style="margin:0;flex-wrap:wrap">'+lista_nav+'</div></div>')}
+
+// Arrastar o cartão do treino guiado para os lados troca de exercício (sem mexer nos campos de digitação)
+let guiaGesto=null;
+document.addEventListener('pointerdown',e=>{const c=e.target.closest&&e.target.closest('#guiaCard');guiaGesto=(c&&!e.target.closest('input,select,textarea,button'))?{x:e.clientX,y:e.clientY}:null},{passive:true});
+document.addEventListener('pointerup',e=>{if(!guiaGesto)return;const dx=e.clientX-guiaGesto.x,dy=e.clientY-guiaGesto.y;guiaGesto=null;if(Math.abs(dx)<50||Math.abs(dx)<Math.abs(dy)*1.5)return;const g=S.guiado;if(!g||!g.ativo)return;const n=guiaExs(g).length;const novo=Math.min(n-1,Math.max(0,g.i+(dx<0?1:-1)));if(novo===g.i)return;g.i=novo;view()},{passive:true});
 function leitGet(){try{const o=JSON.parse(ls.get('leit')||'{}');return o&&typeof o==='object'?o:{}}catch(_){return {}}}
 function leitAplicar(){const o=leitGet(),r=document.documentElement;r.toggleAttribute('data-leit-fonte',!!o.fonte);r.toggleAttribute('data-leit-espaco',!!o.espaco);r.toggleAttribute('data-leit-contraste',!!o.contraste)}
 function leitAjusteDom(){const v=$('#view');if(!v||v.querySelector('#leitdet'))return;const o=leitGet();v.insertAdjacentHTML('beforeend','<details class="dt" id="leitdet" style="margin-top:0.75rem"><summary>Leitura confortável</summary><div class="tr-form"><label><input type="checkbox" id="lfFonte"'+(o.fonte?' checked':'')+'> Fonte maior</label><label><input type="checkbox" id="lfEspaco"'+(o.espaco?' checked':'')+'> Espaçamento maior</label><label><input type="checkbox" id="lfContraste"'+(o.contraste?' checked':'')+'> Alto contraste</label></div><p class="sub" style="margin:0.25rem 0 0">Salvo neste aparelho.</p></details>')}
@@ -2338,6 +2386,94 @@ async function bkAutoVerificar(){const cfg=bkAutoCfg();if(!cfg.on)return;if(cfg.
 function autoAjusteDom(){const v=$('#view');if(!v||v.querySelector('#autodet'))return;const c=bkAutoCfg();v.insertAdjacentHTML('beforeend','<details class="dt" id="autodet" style="margin-top:0.75rem"><summary>Backup automático semanal (OneDrive)</summary><div class="tr-form"><label><input type="checkbox" id="auOn"'+(c.on?' checked':'')+'> Ativar cópia criptografada semanal</label><label>Senha do backup<input id="auSenha" type="password" autocomplete="new-password" placeholder="Guarde esta senha"></label></div><div class="tr-acoes"><button type="button" class="chip" data-a="autoSalvar">Salvar</button><button type="button" class="chip" data-a="autoAgora">Enviar agora</button></div><p class="sub">'+(c.ultima?'Última cópia: '+hm(c.ultima):'Nenhuma cópia automática ainda.')+' Mantém as últimas 4 cópias na pasta do app no OneDrive. No site, a senha fica no navegador; no app, fica no cofre seguro.</p></details>')}
 
 leitAplicar();agendar(bkAutoVerificar,3600000);
+/* ===== Livros: meta anual, sessões de leitura, destaques, estantes, séries e duplicados ===== */
+function livNorm(t){return String(t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
+function livDuplicado(L,c){const isb=String(c.isbn||'').replace(/[-\s]/g,'');return L.find(x=>x.id===c.id||(isb&&x.isbn&&String(x.isbn).replace(/[-\s]/g,'')===isb)||(livNorm(x.t)&&livNorm(x.t)===livNorm(c.t)&&livNorm(x.a)===livNorm(c.a)))||null}
+function livMetaCfg(){try{const o=JSON.parse(ls.get('liv_meta')||'{}');return o&&typeof o==='object'?o:{}}catch(_){return {}}}
+function livMetaHtml(){const L=livrosMeta(),c=livMetaCfg(),ano=new Date().getFullYear();
+ if(!c.total||c.ano!==ano)return '<section class="tp-card" aria-label="Meta de leitura" style="margin:0 0 8px"><div class="tp-k">Meta de leitura de '+ano+'</div><div class="tr-acoes" style="margin:0.25rem 0 0"><label class="sr" for="livMetaN">Livros para ler em '+ano+'</label><input id="livMetaN" type="number" min="1" max="200" inputmode="numeric" placeholder="Ex.: 12" style="width:6rem"><button type="button" class="chip" data-a="livMetaSalvar">Definir meta</button></div></section>';
+ const feitos=L.filter(x=>x.pct>=100&&x.fim&&new Date(x.fim).getFullYear()===ano).length;
+ const falta=Math.max(0,c.total-feitos);const mesesRest=Math.max(1,12-new Date().getMonth());const ritmo=falta?Math.ceil(falta/mesesRest*10)/10:0;
+ return '<section class="tp-card" aria-label="Meta de leitura" style="margin:0 0 8px"><div class="tp-k">Meta de leitura de '+ano+'</div><p style="margin:0.25rem 0 0"><b>'+feitos+' de '+c.total+'</b> livros concluídos · '+(falta?'faltam '+falta+' · ritmo de '+ritmo+' por mês':'meta cumprida!')+'</p><div class="tr-acoes" style="margin:0.25rem 0 0"><button type="button" class="chip" data-a="livMetaSalvar" data-zerar="1">Alterar meta</button></div></section>'}
+function livSessoes(){try{const a=JSON.parse(ls.get('liv_sessoes')||'[]');return Array.isArray(a)?a:[]}catch(_){return []}}
+function livSessoesSave(a){ls.set('liv_sessoes',JSON.stringify(a.slice(-2000)))}
+function livLembreteHtml(){const L=livrosMeta();if(!L.length)return '';const S2=livSessoes();
+ if(!S2.length)return '<p class="sub" style="margin:0 0 8px">Toque em "Começar a ler" para registrar sessões e acompanhar o ritmo.</p>';
+ const ult=S2.map(x=>x.data).sort().pop();const dias=Math.floor((Date.now()-new Date(ult+'T00:00').getTime())/864e5);
+ return dias>=3?'<p class="sub" role="status" style="margin:0 0 8px;font-weight:600">Você não lê há '+dias+' dias.</p>':''}
+function livMediaPag(S2){const c=S2.filter(s=>s.pag>0);return c.length?c.reduce((t,s)=>t+s.pag,0)/c.length:0}
+function livEstimaTxt(x,S2){if(x.pct>=100)return '';if(!x.pg)return 'Número de páginas não informado: sem estimativa.';const media=livMediaPag(S2);if(!media)return 'Registre sessões com a página para estimar o tempo.';const falta=x.pg*(1-(x.pct||0)/100);return 'Faltam ~'+Math.round(falta)+' págs · ≈ '+Math.ceil(falta/media)+' dia(s), lendo uma sessão por dia'}
+function livDest(){try{const a=JSON.parse(ls.get('liv_destaques')||'[]');return Array.isArray(a)?a:[]}catch(_){return []}}
+function livDestSave(a){ls.set('liv_destaques',JSON.stringify(a.slice(-1000)))}
+const LIV_CORES={amarelo:'#ffd60a',verde:'#30d158',azul:'#0a84ff',rosa:'#ff375f'};
+function livEstantesBarra(L){const todas=[...new Set(L.flatMap(x=>x.estantes||[]))];if(!todas.length)return '';const f=S.livEstFiltro||'';
+ return '<div class="tr-acoes" aria-label="Estantes" style="margin:0 0 0.5rem;flex-wrap:wrap"><button type="button" class="chip" data-a="livEstFiltro" data-e="" aria-pressed="'+(!f)+'">Todas</button>'+todas.map(e=>'<button type="button" class="chip" data-a="livEstFiltro" data-e="'+esc(e)+'" aria-pressed="'+(f===e)+'">'+esc(e)+'</button>').join('')+'</div>'}
+function livItemHtml(x,S2){const lendo=S.leitura&&S.leitura.lid===x.id;const k=esc(x.id.slice(0,8));
+ const cap=x.capa?'<img src="'+x.capa+'" alt="" width="48" height="66" style="border-radius:0.375rem;object-fit:cover;flex:none">':'<span aria-hidden="true" style="width:3rem;height:4.125rem;border-radius:0.375rem;background:var(--row);flex:none"></span>';
+ const ctrl=lendo?'<div class="tr-acoes" style="margin:0.25rem 0 0"><span class="sub">Lendo desde '+hm(S.leitura.ini)+'</span><label class="sr" for="livPag'+k+'">Página em que parou</label><input id="livPag'+k+'" type="number" min="0" inputmode="numeric" placeholder="página" style="width:5.5rem"><button type="button" class="chip" data-a="livParar" data-id="'+esc(x.id)+'">Salvar sessão</button><button type="button" class="chip" data-a="livCancelar">Cancelar</button></div>':'<div class="tr-acoes" style="margin:0.25rem 0 0"><button type="button" class="chip" data-a="livIniciar" data-id="'+esc(x.id)+'">Começar a ler</button></div>';
+ const campos='<div class="tr-form" style="margin:0.25rem 0 0"><label>Série<input type="text" maxlength="60" value="'+esc(x.serie||'')+'" data-a="livSerie" data-id="'+esc(x.id)+'"></label><label>Ordem<input type="number" min="1" value="'+(x.ordem||'')+'" data-a="livOrdem" data-id="'+esc(x.id)+'" style="width:5rem"></label><label>Estantes (vírgula)<input type="text" maxlength="120" value="'+esc((x.estantes||[]).join(', '))+'" data-a="livEst" data-id="'+esc(x.id)+'"></label></div>';
+ return '<li class="svd" style="display:flex;gap:0.625rem;align-items:flex-start;padding:0.625rem 0;flex-wrap:wrap">'+cap+'<span class="grow" style="min-width:0;flex:1 1 12rem"><b style="display:block;overflow-wrap:anywhere">'+esc(x.t)+'</b><span class="sub">'+esc(x.a)+' · '+(x.pct||0)+'% lido'+(x.pg?' · '+x.pg+' págs':'')+'</span><span class="sub" style="display:block;font-size:0.8125rem">'+esc(livEstimaTxt(x,S2))+'</span><span class="sub" id="livst'+k+'" style="display:block;font-size:0.75rem"></span>'+ctrl+campos+'</span><div style="display:flex;flex-direction:column;gap:0.375rem"><button type="button" class="chip" data-a="livAbrir" data-id="'+esc(x.id)+'">Continuar</button><button type="button" class="chip" data-a="livMd" data-id="'+esc(x.id)+'">Exportar (.md)</button><button type="button" class="chip" data-a="livRemover" data-id="'+esc(x.id)+'" aria-label="Remover '+esc(x.t)+'">Remover</button></div></li>'}
+function livListaHtml(L){if(!L.length)return '<p class="sub">Nenhum livro. Adicione um arquivo EPUB sem DRM, ou busque no Google Books.</p>';
+ const S2=livSessoes();const f=S.livEstFiltro||'';
+ const ord=[...L].sort((a,b)=>String(a.serie||'').localeCompare(String(b.serie||''))||((a.ordem||0)-(b.ordem||0))||String(a.t).localeCompare(String(b.t)));
+ const vis=ord.filter(x=>!f||(x.estantes||[]).includes(f));
+ let saida='',serieAtual='';
+ vis.forEach(x=>{const sr=x.serie||'';if(sr!==serieAtual){serieAtual=sr;if(sr){const g=vis.filter(y=>(y.serie||'')===sr);saida+='<li class="sub" role="presentation" style="list-style:none;margin-top:0.5rem"><b>Série: '+esc(sr)+'</b> · '+g.filter(y=>y.pct>=100).length+' de '+g.length+' concluídos</li>'}}
+  saida+=livItemHtml(x,S2)});
+ return livEstantesBarra(L)+(saida?'<ul class="svlist">'+saida+'</ul>':'<p class="sub">Nenhum livro nesta estante.</p>')}
+function livDestHtml(){const L=livrosMeta();const D=livDest();const tags=[...new Set(D.map(d=>d.tag).filter(Boolean))];const f=S.livTagFiltro||'';const q=livNorm(S.livBuscaDest||'');
+ const lista=D.map((d,i)=>[d,i]).filter(([d])=>(!f||d.tag===f)&&(!q||livNorm(d.texto+' '+(d.tag||'')).includes(q)));
+ const opts='<option value="">Escolha o livro</option>'+L.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.t)+'</option>').join('');
+ return '<section class="tp-card" aria-label="Destaques e citações" style="margin:0.75rem 0 8px"><div class="tp-k">Destaques e citações</div>'+
+  '<div class="tr-form" style="margin:0.5rem 0"><label>Trecho<textarea id="destTexto" rows="2" maxlength="600"></textarea></label><label>Livro<select id="destLivro">'+opts+'</select></label><label>Página<input id="destPag" type="number" min="0" style="width:6rem"></label><label>Cor<select id="destCor">'+Object.keys(LIV_CORES).map(c=>'<option value="'+c+'">'+c+'</option>').join('')+'</select></label><label>Tag<input id="destTag" type="text" maxlength="30" placeholder="conceito, citar, dúvida"></label></div>'+
+  '<div class="tr-acoes" style="margin:0 0 0.5rem"><button type="button" class="chip" data-a="livDestSalvar">Salvar destaque</button></div>'+
+  '<div class="tr-form" style="margin:0 0 0.5rem"><label>Buscar nos destaques<input type="search" value="'+esc(S.livBuscaDest||'')+'" data-a="livBuscaDest"></label><label>Filtrar por tag<select data-a="livTagFiltro"><option value="">Todas</option>'+tags.map(t=>'<option value="'+esc(t)+'"'+(t===f?' selected':'')+'>'+esc(t)+'</option>').join('')+'</select></label></div>'+
+  (lista.length?'<ul class="svlist">'+lista.map(([d,i])=>{const li=L.find(x=>x.id===d.lid);return '<li style="border-left:4px solid '+(LIV_CORES[d.cor]||'#999')+';padding:0.4rem 0 0.4rem 0.6rem;margin:0.25rem 0;list-style:none"><blockquote style="margin:0;overflow-wrap:anywhere">'+esc(d.texto)+'</blockquote><p class="sub" style="margin:0.25rem 0">'+esc(li?li.t:'Livro removido')+(d.pag?' · pág. '+d.pag:'')+(d.tag?' · #'+esc(d.tag):'')+'</p><div class="tr-acoes" style="margin:0"><button type="button" class="chip" data-a="livDestTarefa" data-i="'+i+'">Virar tarefa</button><button type="button" class="chip" data-a="livDestDel" data-i="'+i+'">Remover</button></div></li>'}).join('')+'</ul>':'<p class="sub">Nenhum destaque'+(f||q?' para este filtro':' ainda')+'.</p>')+'</section>'}
+function livMd(id){const x=livrosMeta().find(y=>y.id===id);if(!x)return;const D=livDest().filter(d=>d.lid===id);
+ let md='# '+x.t+'\n\n'+(x.a?'*'+x.a+'*\n\n':'')+(D.length?'':'_Sem destaques._\n');
+ D.forEach(d=>{md+='> '+String(d.texto).replace(/\n/g,' ')+'\n\n— '+(d.pag?'p. '+d.pag+' · ':'')+(d.tag?'#'+d.tag+' · ':'')+'cor: '+d.cor+'\n\n'});
+ const blob=new Blob([md],{type:'text/markdown'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(livNorm(x.t).replace(/ /g,'-')||'livro').slice(0,60)+'.md';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);say('Arquivo Markdown gerado')}
+// campos e filtros que salvam ao mudar
+document.addEventListener('change',e=>{const t2=e.target;if(!t2||!t2.dataset)return;const a=t2.dataset.a;
+ if(a==='livSerie'||a==='livOrdem'||a==='livEst'){const L=livrosMeta();const x=L.find(y=>y.id===t2.dataset.id);if(!x)return;
+  if(a==='livSerie')x.serie=String(t2.value||'').trim().slice(0,60);
+  if(a==='livOrdem')x.ordem=Math.max(0,parseInt(t2.value,10)||0);
+  if(a==='livEst')x.estantes=String(t2.value||'').split(',').map(v=>v.trim()).filter(Boolean).slice(0,10);
+  livrosSave(L);view();return}
+ if(a==='livBuscaDest'){S.livBuscaDest=t2.value;view();return}
+ if(a==='livTagFiltro'){S.livTagFiltro=t2.value;view();return}});
+
+/* ===== Integrações: wger (instruções do treino), Google Books (cadastro de livro) e ntfy (avisos no celular) ===== */
+const WGER_TERMOS={'Agachamento':'squat','Supino':'bench press','Remada':'bent over row','Desenvolvimento':'overhead press','Prancha (segundos, 30 a 45)':'plank','Levantamento terra ou romeno':'romanian deadlift','Puxada':'lat pulldown','Afundo':'lunge','Elevação de quadril':'hip thrust','Abdômen':'crunch'};
+function htmlTexto(h){return String(h||'').replace(/<br\s*\/?>/gi,' ').replace(/<[^>]+>/g,'').replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim()}
+function wgerCache(){try{const o=JSON.parse(ls.get('wger_cache')||'{}');return o&&typeof o==='object'?o:{}}catch(_){return {}}}
+async function wgerBuscar(nome){const cache=wgerCache();if(cache[nome])return cache[nome];
+ const termo=WGER_TERMOS[nome]||nome;
+ const r=await fetch('https://wger.de/api/v2/exercise/search/?language=english&term='+encodeURIComponent(termo));
+ if(!r.ok)throw new Error('wger '+r.status);
+ const j=await r.json();const sug=(j.suggestions||[])[0];if(!sug||!sug.data||!sug.data.id)return null;
+ const r2=await fetch('https://wger.de/api/v2/exerciseinfo/'+sug.data.id+'/');if(!r2.ok)throw new Error('wger '+r2.status);
+ const info=await r2.json();const tr=(info.translations||[]).find(t=>t.language===2)||(info.translations||[])[0]||{};
+ const out={nome,descricao:htmlTexto(tr.description),musculos:(info.muscles||[]).map(m=>m.name_en||m.name).filter(Boolean)};
+ const c=wgerCache();c[nome]=out;ls.set('wger_cache',JSON.stringify(c));return out}
+function wgerBloco(ex){const v=S.wgerView;
+ if(!v||v.nome!==ex)return '<div class="tr-acoes" style="margin:0 0 0.5rem"><button type="button" class="chip" data-a="wgerVer" data-ex="'+esc(ex)+'">Ver instruções (wger)</button></div>';
+ if(v.estado==='carregando')return '<p class="sub" role="status" style="margin:0 0 0.5rem">Carregando instruções…</p>';
+ if(v.estado==='erro')return '<p class="sub" role="status" style="margin:0 0 0.5rem">Não foi possível carregar as instruções agora. Verifique a conexão.</p>';
+ const d=v.d;if(!d)return '<p class="sub" style="margin:0 0 0.5rem">Sem instruções cadastradas para este exercício no wger.</p>';
+ return '<div style="margin:0 0 0.5rem"><p class="sub" style="margin:0 0 0.25rem">'+(d.musculos.length?'Músculos: '+esc(d.musculos.join(', ')):'')+'</p><p style="margin:0;font-size:0.875rem">'+esc(d.descricao||'Sem descrição disponível.')+'</p><p class="sub" style="margin:0.25rem 0 0;font-size:0.75rem">Fonte: wger.de</p></div>'}
+function gbQuery(q){const s=String(q||'').trim();const isbn=s.replace(/[-\s]/g,'');return /^(\d{10}|\d{13})$/.test(isbn)?'isbn:'+isbn:s}
+async function gbBuscarLivros(q){const termo=gbQuery(q);if(!termo)return [];
+ const r=await fetch('https://www.googleapis.com/books/v1/volumes?maxResults=8&q='+encodeURIComponent(termo));if(!r.ok)throw new Error('gbooks '+r.status);
+ const j=await r.json();return (j.items||[]).map(it=>{const v=it.volumeInfo||{};return {id:'gb-'+it.id,t:v.title||'(sem título)',a:(v.authors||[]).join(', ')||'Autor desconhecido',capa:String((v.imageLinks&&(v.imageLinks.thumbnail||v.imageLinks.smallThumbnail))||'').replace(/^http:/,'https:'),pg:v.pageCount||0,desc:htmlTexto(v.description).slice(0,600),pct:0,origem:'gbooks',isbn:String(((v.industryIdentifiers||[]).find(i=>/ISBN/.test(i.type||''))||{}).identifier||'')}})}
+function gbResHtml(){const R=S.gbRes;if(S.gbErr)return '<p class="sub" role="status">'+esc(S.gbErr)+'</p>';if(!R)return '';
+ return '<ul class="svlist">'+R.map((b,i)=>'<li class="svd" style="display:flex;gap:0.6rem;align-items:center;padding:0.5rem 0">'+(b.capa?'<img src="'+esc(b.capa)+'" alt="" width="40" height="56" style="border-radius:0.3rem;object-fit:cover;flex:none">':'')+'<span class="grow" style="min-width:0"><b style="overflow-wrap:anywhere">'+esc(b.t)+'</b><br><span class="sub">'+esc(b.a)+(b.pg?' · '+b.pg+' páginas':'')+'</span></span><button type="button" class="chip" data-a="gbAdd" data-i="'+i+'">Adicionar</button></li>').join('')+'</ul>'}
+function ntfyEnviar(titulo,msg){const t=(ls.get('ntfy_topic')||'').trim();if(!t)return Promise.resolve(false);
+ const cab=String(titulo||'Painel').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\x20-\x7e]/g,'').slice(0,120)||'Painel';
+ return fetch('https://ntfy.sh/'+encodeURIComponent(t),{method:'POST',headers:{'Title':cab},body:String(msg||'').slice(0,500)}).then(r=>r.ok).catch(()=>false)}
+function ntfyAjusteDom(){const v=$('#view');if(!v||v.querySelector('#ntfydet'))return;const t=ls.get('ntfy_topic')||'';
+ v.insertAdjacentHTML('beforeend','<details class="dt" id="ntfydet" style="margin-top:0.75rem"><summary>Notificações no celular (ntfy)</summary><div class="tr-form"><label>Tópico do ntfy<input id="nfTopico" type="text" autocomplete="off" value="'+esc(t)+'" placeholder="um nome difícil de adivinhar"></label></div><div class="tr-acoes"><button type="button" class="chip" data-a="ntfySalvar">Salvar tópico</button><button type="button" class="chip" data-a="ntfyTeste">Enviar teste</button></div><p class="sub">Instale o app ntfy no celular e assine este tópico. Quem souber o nome do tópico pode ler as mensagens, então use um nome difícil de adivinhar. Os avisos saem enquanto o painel estiver aberto em algum navegador.</p></details>')}
+
 /* ===== Treinos: sincronização entre aparelhos (OneDrive, pasta do aplicativo) ===== */
 function trDelLista(){try{const o=JSON.parse(ls.get('treino_del')||'{}');return o&&typeof o==='object'?o:{}}catch(_){return {}}}
 function trExDelLista(){try{const o=JSON.parse(ls.get('treino_ex_del')||'{}');return o&&typeof o==='object'?o:{}}catch(_){return {}}}
@@ -2401,7 +2537,10 @@ function npCorDom(){const sec=document.querySelector('#view .np.npc');if(!sec){r
    npAplicarCor()};
  im.onerror=()=>{S.npCor='#c8102e';npAplicarCor()};im.src=url}
 /* ===== Rádio: fundo com a cor média do logotipo da emissora ===== */
-function rdAplicarCor(){const n=document.getElementById('notch');if(n)n.style.setProperty('--rdbg',S.rdCor||'#c8102e')}
+function rdAplicarCor(){const n=document.getElementById('notch');if(!n)return;const c=S.rdCor||'#c8102e';n.style.setProperty('--rdbg',c);
+ const v=c[0]==='#'?[1,3,5].map(k=>parseInt(c.substr(k,2),16)):(c.match(/\d+/g)||[200,16,46]).slice(0,3).map(Number);
+ const L=v.map(x=>{x=x/255;return x<=0.03928?x/12.92:Math.pow((x+0.055)/1.055,2.4)});const lum=0.2126*L[0]+0.7152*L[1]+0.0722*L[2];
+ n.style.setProperty('--rdfg',lum>0.18?'#111111':'#ffffff');n.style.setProperty('--rdnav',lum>0.18?'rgba(0,0,0,0.08)':'rgba(255,255,255,0.14)')}
 function rdCorDom(){const n=document.getElementById('notch');if(!n||S.tab!=='radio')return;
  const st=S.rd.list[S.rd.cur];const url=st&&st.img;if(!url){S.rdCor='#c8102e';rdAplicarCor();return}
  if(S.rdCorUrl===url){rdAplicarCor();return}
@@ -2529,15 +2668,15 @@ function spSugCarregar(q){const c=$('#spSugCorpo');if(!c||!S.tok)return;c.innerH
  spApi('/search?'+new URLSearchParams({q,type:'playlist',limit:'8',market:'BR'})).then(r=>{const c2=$('#spSugCorpo');if(!c2)return;
   const itens=((r&&r.playlists&&r.playlists.items)||[]).filter(x=>x&&x.uri);
   if(!itens.length){c2.innerHTML='<p class="sub">Sem sugestões para '+esc(q)+' agora.</p>';return}
-  c2.innerHTML='<p class="sub" style="margin:0 0 0.4rem">Gênero: '+esc(q)+'</p><div class="sp-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(8.5rem,1fr));gap:0.9rem">'+itens.map(p=>{const img=(p.images&&p.images[0]&&p.images[0].url)||'';
+  c2.innerHTML='<p class="sub" style="margin:0 0 0.4rem">Explore um gênero: '+esc(q)+' (escolhido pelo texto do título e do artista, não pelo gênero da faixa)</p><div class="sp-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(8.5rem,1fr));gap:0.9rem">'+itens.map(p=>{const img=(p.images&&p.images[0]&&p.images[0].url)||'';
    return '<article class="sp-card"><button type="button" class="sp-cov" data-a="spPlay" data-uri="'+esc(p.uri)+'" data-id="'+esc(p.id||'')+'" aria-label="Tocar playlist '+esc(p.name||'')+'" style="display:block;width:100%;aspect-ratio:1;border:0;border-radius:0.9rem;cursor:pointer;background:#1d1d1f center/cover no-repeat;'+(img?"background-image:url('"+esc(img)+"')":'')+'"></button><div class="sp-nome">'+esc(p.name||'Playlist')+'</div><div class="sub sp-dono">'+esc((p.owner&&p.owner.display_name)||'Spotify')+'</div></article>'}).join('')+'</div>'}).catch(()=>{})}
 function spSugAtualizar(){const det=$('#spSug');if(!det||!det.open||!S.tok)return;const q=spGeneroDaFaixa();if(q===spSugQ)return;spSugQ=q;spSugCarregar(q)}
 function spBuscaDom(){const v=$('#view');if(!v||S.tab!=='music'||v.querySelector('#spBusca'))return;
  const box=document.createElement('section');box.id='spBusca';box.setAttribute('aria-label','Pesquisar no Spotify');box.style.cssText='margin:0 0 0.75rem';
- box.innerHTML='<div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center"><label class="sr" for="spBuscaQ">Pesquisar música ou playlist</label><input id="spBuscaQ" type="search" placeholder="Pesquisar música ou playlist" style="flex:1;min-width:10rem;padding:0.55rem 0.7rem;border-radius:0.8rem;border:1px solid rgba(0,0,0,.25);font:inherit;background:#fff;color:#000"><label class="sr" for="spBuscaTipo">Tipo</label><select id="spBuscaTipo" style="padding:0.5rem;border-radius:0.8rem;font:inherit;background:#fff;color:#000"><option value="track">Música</option><option value="playlist">Playlist</option><option value="album">Álbum</option><option value="artist">Artista</option><option value="show">Podcast</option></select><button type="button" class="chip" data-a="spBuscar">Pesquisar</button></div><div id="spHist" style="margin-top:0.5rem"></div><div id="spBuscaRes" role="region" aria-live="polite" style="margin-top:0.5rem"></div>';
- v.insertAdjacentElement('afterbegin',box);spHistRender()}
+ box.innerHTML='<p class="sub" style="margin:0 0 0.4rem">Resultados para o mercado brasileiro (BR).</p><div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center"><label class="sr" for="spBuscaQ">Pesquisar música ou playlist</label><input id="spBuscaQ" type="search" placeholder="Pesquisar música ou playlist" style="flex:1;min-width:10rem;padding:0.55rem 0.7rem;border-radius:0.8rem;border:1px solid rgba(0,0,0,.25);font:inherit;background:#fff;color:#000"><label class="sr" for="spBuscaTipo">Tipo</label><select id="spBuscaTipo" style="padding:0.5rem;border-radius:0.8rem;font:inherit;background:#fff;color:#000"><option value="track">Música</option><option value="playlist">Playlist</option><option value="album">Álbum</option><option value="artist">Artista</option><option value="show">Podcast</option></select><button type="button" class="chip" data-a="spBuscar">Pesquisar</button></div><div id="spHist" style="margin-top:0.5rem"></div><div id="spBuscaRes" role="region" aria-live="polite" style="margin-top:0.5rem"></div>';
+ const npSec=v.querySelector('section.npc');if(npSec)npSec.insertAdjacentElement('afterend',box);else v.insertAdjacentElement('afterbegin',box);spHistRender()}
 function spBuscaRender(items,tipo){const out=$('#spBuscaRes');if(!out)return;
- if(!['track','playlist'].includes(tipo)){out.innerHTML='<ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.4rem">'+items.map(x=>{const t=tipo==='artist'?'artist':tipo==='show'?'show':'album';const nome=x.name||'Item';const sub=tipo==='artist'?'Artista':(tipo==='show'?((x.publisher)||'Podcast'):((x.artists||[]).map(a=>a.name).join(', ')));return '<li style="display:flex;gap:0.6rem;align-items:center;justify-content:space-between"><span style="min-width:0;overflow-wrap:anywhere"><b>'+esc(nome)+'</b><br><span class="sub" style="font-size:0.8rem">'+esc(sub)+'</span></span>'+(x.id?'<a class="chip" href="https://open.spotify.com/'+t+'/'+encodeURIComponent(x.id)+'" target="_blank" rel="noopener" aria-label="Abrir '+esc(nome)+' no Spotify">Abrir</a>':'')+'</li>'}).join('')+'</ul>';return}
+ if(!['track','playlist'].includes(tipo)){out.innerHTML='<ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.4rem">'+items.map(x=>{const t=tipo==='artist'?'artist':tipo==='show'?'show':'album';const nome=x.name||'Item';const sub=tipo==='artist'?'Artista':(tipo==='show'?((x.publisher)||'Podcast'):((x.artists||[]).map(a=>a.name).join(', ')));return '<li style="display:flex;gap:0.6rem;align-items:center;justify-content:space-between"><span style="min-width:0;overflow-wrap:anywhere"><b>'+esc(nome)+'</b><br><span class="sub" style="font-size:0.8rem">'+esc(sub)+'</span></span>'+(x.id?'<a class="chip" href="https://open.spotify.com/'+t+'/'+encodeURIComponent(x.id)+'" target="_blank" rel="noopener" aria-label="Abrir '+esc(nome)+' no Spotify" title="Abre em outra aba">Abrir no Spotify</a>':'')+'</li>'}).join('')+'</ul>';return}
  if(!items.length){out.innerHTML='<p class="sub">Nenhum resultado.</p>';return}
  if(tipo==='track'){out.innerHTML='<ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.4rem">'+items.map(t=>'<li style="display:flex;gap:0.6rem;align-items:center;justify-content:space-between"><span style="min-width:0;overflow-wrap:anywhere"><b>'+esc(t.name||'Faixa')+'</b><br><span class="sub" style="font-size:0.8rem">'+esc((t.artists||[]).map(a=>a.name).join(', '))+'</span></span><button type="button" class="chip" data-a="spTocar" data-uri="'+esc(t.uri)+'" aria-label="Tocar '+esc(t.name||'')+'">▶ Tocar</button></li>').join('')+'</ul>';return}
  out.innerHTML='<ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.4rem">'+items.map(p=>'<li style="display:flex;gap:0.6rem;align-items:center;justify-content:space-between"><span style="min-width:0;overflow-wrap:anywhere"><b>'+esc(p.name||'Playlist')+'</b><br><span class="sub" style="font-size:0.8rem">'+esc((p.owner&&p.owner.display_name)||'Spotify')+'</span></span><button type="button" class="chip" data-a="spPlay" data-uri="'+esc(p.uri)+'" data-id="'+esc(p.id||'')+'" aria-label="Tocar playlist '+esc(p.name||'')+'">▶ Tocar</button></li>').join('')+'</ul>'}
@@ -2700,18 +2839,37 @@ function lixeiraDom(){const v=$('#view');if(!v||S.tab!=='util'||v.querySelector(
 function pesoLista(){try{const l=JSON.parse(ls.get('peso')||'[]');return Array.isArray(l)?l:[]}catch(_){return []}}
 function pesoSalvar(p){p.sort((a,b)=>a.d<b.d?-1:1);ls.set('peso',JSON.stringify(p.slice(-365)))}
 function pesoMedia(p,dia){const ini=new Date(dia+'T00:00');ini.setDate(ini.getDate()-6);const k=feriadoChave(ini);const j=p.filter(x=>x.d>=k&&x.d<=dia);return j.length?j.reduce((a,x)=>a+x.kg,0)/j.length:null}
+function pesoFmtData(d){const [a,m,dd]=d.split('-');return dd+'/'+m+'/'+a}
+function pesoGrafico(dias,pts,regs){
+ const W=340,H=180,PL=40,PR=10,PT=10,PB=24;
+ const todos=regs.map(x=>x.kg).concat(pts.map(x=>x.media));
+ let mn=Math.floor(Math.min(...todos)-1),mx=Math.ceil(Math.max(...todos)+1);if(mx-mn<2)mx=mn+2;
+ const X=d=>{const k=Math.max(0,dias.indexOf(d));return PL+(k/Math.max(1,dias.length-1))*(W-PL-PR)};
+ const Y=v=>PT+(1-(v-mn)/(mx-mn))*(H-PT-PB);
+ const grades=[mn,(mn+mx)/2,mx].map(v=>'<line x1="'+PL+'" x2="'+(W-PR)+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'" class="pesoGrade"/><text x="'+(PL-6)+'" y="'+(Y(v)+4).toFixed(1)+'" text-anchor="end" class="pesoEixo">'+v.toFixed(1)+'</text>').join('');
+ const linhaMedia=pts.map(x=>X(x.d).toFixed(1)+','+Y(x.media).toFixed(1)).join(' ');
+ const med=new Map(pts.map(x=>[x.d,x.media]));
+ const alvos=regs.map(r=>{const m=med.has(r.d)?' · média '+med.get(r.d).toFixed(1)+' kg':'';const tip=pesoFmtData(r.d)+' · '+r.kg.toFixed(1)+' kg'+m;
+   return '<g class="pesoPt" tabindex="0" role="img" aria-label="'+esc(tip)+'" data-tip="'+esc(tip)+'"><circle cx="'+X(r.d).toFixed(1)+'" cy="'+Y(r.kg).toFixed(1)+'" r="11" class="pesoHit"/><circle cx="'+X(r.d).toFixed(1)+'" cy="'+Y(r.kg).toFixed(1)+'" r="3.5" class="dot"/></g>'}).join('');
+ const rotulos='<text x="'+PL+'" y="'+(H-6)+'" class="pesoEixo">'+pesoFmtData(dias[0]).slice(0,5)+'</text><text x="'+(W-PR)+'" y="'+(H-6)+'" text-anchor="end" class="pesoEixo">'+pesoFmtData(dias[dias.length-1]).slice(0,5)+'</text>';
+ const tabela='<table class="sr"><caption>Peso dos últimos 30 dias</caption><thead><tr><th scope="col">Data</th><th scope="col">Registro (kg)</th><th scope="col">Média 7 dias (kg)</th></tr></thead><tbody>'+regs.map(r=>'<tr><th scope="row">'+esc(pesoFmtData(r.d))+'</th><td>'+r.kg.toFixed(1)+'</td><td>'+(med.has(r.d)?med.get(r.d).toFixed(1):'—')+'</td></tr>').join('')+'</tbody></table>';
+ return '<div class="pesoWrap"><svg viewBox="0 0 '+W+' '+H+'" role="group" aria-label="Gráfico de peso dos últimos 30 dias" class="pesoSvg">'+grades+
+   '<polyline fill="none" class="pesoMedia" points="'+linhaMedia+'"/>'+alvos+rotulos+'</svg></div>'+
+   '<p id="pesoTip" class="pesoTip" aria-live="polite">Toque ou passe o mouse sobre um ponto para ver o peso do dia.</p>'+
+   '<div class="pesoLegenda"><span><i class="lgDot"></i> registro do dia</span><span><i class="lgLinha"></i> média de 7 dias</span></div>'+tabela}
 function pesoHtml(){const p=pesoLista();const hoje=feriadoChave(new Date());
  const ini=new Date();ini.setDate(ini.getDate()-29);const dias=[];for(let i=0;i<30;i++){const d=new Date(ini);d.setDate(d.getDate()+i);dias.push(feriadoChave(d))}
- const pts=dias.map(d=>({d,media:pesoMedia(p,d),kg:(p.find(x=>x.d===d)||{}).kg})).filter(x=>x.media!==null);
+ const pts=dias.map(d=>({d,media:pesoMedia(p,d)})).filter(x=>x.media!==null);
+ const regs=dias.map(d=>({d,kg:(p.find(x=>x.d===d)||{}).kg})).filter(x=>x.kg!=null);
  const ult=pts.length?pts[pts.length-1].media:null,primeiro=pts.length?pts[0].media:null;
  const tend=(ult!==null&&primeiro!==null&&pts.length>1)?(ult-primeiro):null;
- const W=300,H=90,mn=pts.length?Math.min(...pts.map(x=>x.media))-0.5:0,mx=pts.length?Math.max(...pts.map(x=>x.media))+0.5:1;
- const X=i=>(i/Math.max(1,pts.length-1))*W,Y=v=>H-((v-mn)/Math.max(0.1,mx-mn))*H;
- const linha=pts.map((x,i)=>X(i).toFixed(1)+','+Y(x.media).toFixed(1)).join(' ');
- const tabelaPeso=pts.length>1?'<table class="sr"><caption>Média móvel de peso dos últimos 30 dias</caption><thead><tr><th scope="col">Data</th><th scope="col">Média (kg)</th></tr></thead><tbody>'+pts.map(x=>'<tr><th scope="row">'+esc(x.d)+'</th><td>'+x.media.toFixed(1)+'</td></tr>').join('')+'</tbody></table>':'';
- const grafico=pts.length>1?'<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Média móvel de peso dos últimos 30 dias" style="width:100%;height:auto;max-height:8rem"><polyline fill="none" stroke="currentColor" stroke-width="2" points="'+linha+'"/></svg>'+tabelaPeso:'<p class="sub">Registre pelo menos dois dias para ver a tendência.</p>';
+ const grafico=regs.length>=2?pesoGrafico(dias,pts,regs):'<p class="sub">Registre pelo menos dois dias para ver a tendência.</p>';
  return trCartao('Peso (em jejum)','<div class="tr-form"><label>Peso (kg)<input id="pesoKg" type="number" inputmode="decimal" step="0.1" min="20" max="300" aria-label="Peso em quilos"></label><label>Data<input id="pesoDia" type="date" value="'+hoje+'" aria-label="Data do registro"></label><label style="flex-direction:row;align-items:center;gap:0.4rem"><input id="pesoJejum" type="checkbox" checked> Em jejum</label></div><div class="tr-acoes"><button type="button" class="chip" data-a="pesoSalvar">Registrar peso</button></div>'+
-  '<div class="tr-resumo"><span><b>'+(ult!==null?ult.toFixed(1):'—')+'</b> kg (média 7 dias)</span><span><b>'+(tend===null?'—':(tend>0?'+':'')+tend.toFixed(1))+'</b> kg em 30 dias</span></div>'+grafico+'<p class="sub" style="font-size:0.8rem">A linha mostra a média dos últimos 7 registros de cada dia, para reduzir a oscilação diária.</p>')}
+   '<div class="tr-resumo"><span><b>'+(ult!==null?ult.toFixed(1):'—')+'</b> kg (média 7 dias)</span><span><b>'+(tend===null?'—':(tend>0?'+':'')+tend.toFixed(1))+'</b> kg em 30 dias</span></div>'+grafico)}
+function pesoMostrar(g){document.querySelectorAll('.pesoPt.on').forEach(x=>x.classList.remove('on'));g.classList.add('on');const el=document.getElementById('pesoTip');if(el)el.textContent=g.getAttribute('data-tip')||''}
+document.addEventListener('pointerover',e=>{const g=e.target.closest&&e.target.closest('.pesoPt');if(g)pesoMostrar(g)});
+document.addEventListener('focusin',e=>{const g=e.target.closest&&e.target.closest('.pesoPt');if(g)pesoMostrar(g)});
+document.addEventListener('click',e=>{const g=e.target.closest&&e.target.closest('.pesoPt');if(g)pesoMostrar(g)});
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="pesoSalvar"]');if(!b)return;
  const kg=parseFloat(($('#pesoKg')||{}).value),d=($('#pesoDia')||{}).value||feriadoChave(new Date()),jej=!!($('#pesoJejum')||{}).checked;
  if(!(kg>=20&&kg<=300)){const pk=document.getElementById('pesoKg');if(pk){pk.setAttribute('aria-invalid','true');pk.setAttribute('aria-describedby','pesoAjuda')}say('Informe um peso entre 20 e 300 kg');return}
@@ -3363,7 +3521,9 @@ document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest
 function musicExtra(){const tr=S.m&&S.m.list[S.m.i];const sono=S.sono?'Sair do modo sono':'Modo sono';
  let h='<div class="spx" style="display:flex;gap:0.625rem;flex-wrap:wrap"><button type="button" class="chip" data-a="sono" aria-pressed="'+!!S.sono+'">'+sono+'</button><label class="sub" style="display:flex;gap:0.4rem;align-items:center">Pausar em <select id="spSleep" aria-label="Pausar música em">'+[[0,'Desativado'],[15,'15 min'],[30,'30 min'],[45,'45 min'],[60,'1 hora'],[90,'90 min']].map(([v,t])=>'<option value="'+v+'"'+((S.spSleepM||0)===v?' selected':'')+'>'+t+'</option>').join('')+'</select></label><span id="spSleepInfo" class="sub" role="status"></span>';
  if(tr&&tr.uri&&/:episode:/.test(tr.uri))h+='<button type="button" class="chip" data-a="epSave">Salvar episódio</button>';if(tr&&tr.uri&&!/:episode:/.test(tr.uri))h+='<button type="button" class="chip" data-a="albSave">Salvar álbum</button>';if(tr&&tr.uri)h+='<button type="button" class="chip" data-a="share">Compartilhar faixa</button><button type="button" class="chip" data-a="follow">Seguir artista</button>';
- return h+'</div><p class="sub" role="status" id="shmsg" style="margin:0.375rem 2px 0"></p>'}
+ return '<details class="dt" id="musMais"'+(S.musMaisOpen?' open':'')+' style="margin:0.5rem 0"><summary>Mais opções</summary>'+h+'</div><p class="sub" role="status" id="shmsg" style="margin:0.375rem 2px 0"></p></details>'}
+// lembra se "Mais opções" da Música está aberta, sem redesenhar a aba
+document.addEventListener('toggle',e=>{if(e.target&&e.target.id==='musMais')S.musMaisOpen=e.target.open},true);
 async function shareTrack(){const tr=S.m.list[S.m.i],id=(tr.uri||'').split(':').pop();if(!id){say('Nada para compartilhar');return}
  const url='https://open.spotify.com/track/'+id;
  try{if(navigator.share){await navigator.share({title:tr.t,text:tr.t+' · '+tr.a,url});return}}catch(_){}
@@ -3411,7 +3571,7 @@ function notes(){const v=$('#view');if(!v)return;v.querySelectorAll('.note').for
  if(S.tab==='music'&&S.tok){v.insertAdjacentHTML('beforeend',musicExtra());v.insertAdjacentHTML('beforeend',topBoxHtml()+savedBoxHtml());v.insertAdjacentHTML('beforeend',lyricsBox());v.insertAdjacentHTML('beforeend',histHtml());spHistLoad();}
  if(S.tab==='cal')v.insertAdjacentHTML('afterbegin',nextEvHtml());
  if(S.tab==='tasks')v.insertAdjacentHTML('afterbegin',overdueHtml()+tplHtml()+tagsHtml());
- if(S.tab==='set'){onenoteAjusteDom();plannerAjusteDom();leitAjusteDom();autoAjusteDom()}
+ if(S.tab==='set'){onenoteAjusteDom();plannerAjusteDom();leitAjusteDom();autoAjusteDom();ntfyAjusteDom()}
  if(S.tab==='util'){utilExtraDom();lixeiraDom()}
  if(S.tab==='kanban')plannerSecaoDom();
  listenAuto();
