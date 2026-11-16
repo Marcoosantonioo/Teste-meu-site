@@ -1,0 +1,23 @@
+{
+  "name": "painel-notch",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Painel de utilidades (notch) - testes automatizados",
+  "type": "module",
+  "scripts": {
+    "test": "node testes-notch-panel.mjs notch-panel.html",
+    "check": "node --check js/notch.js && node --check js/dados.js && node --check sw.js",
+    "lint": "eslint js sw.js",
+    "build": "node scripts/build.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@sparticuz/chromium": "^153.0.0",
+    "eslint": "^9.39.5",
+    "globals": "^17.14.0",
+    "jsdom": "^31.0.0",
+    "jszip": "^3.10.2",
+    "postcss": "^8.5.32",
+    "puppeteer-core": "^25.16.0"
+  }
+}
