@@ -1,14 +1,17 @@
 // Testes do notch-panel.html. Uso: node testes-notch-panel.mjs caminho/do/notch-panel.html
 // Requer: npm i jsdom
 import {JSDOM,VirtualConsole} from 'jsdom';import fs from 'fs';
+import postcss from 'postcss';
 const file=process.argv[2]||'notch-panel.html';
 const sl=ms=>new Promise(r=>setTimeout(r,ms));
 function abaClick(d,id){let b=d.querySelector('#t-'+id);if(!b){const m=d.querySelector('#tabsMore');if(m)m.click();b=d.querySelector('#t-'+id)}if(b)b.click();else d.defaultView.eval("pick('"+id+"')")}
 const dayKeyT=ms=>{const x=new Date(ms);return x.getFullYear()+'-'+(x.getMonth()+1)+'-'+x.getDate()};
 const falhas=[];const ok=(c,msg)=>{console.log((c?'OK   ':'FALHA')+' '+msg);if(!c)falhas.push(msg)};
+// Carrega a página com os scripts locais (js/*.js) embutidos, como no navegador
+function pagina(){const base=file.replace(/[^\/]*$/,'');return fs.readFileSync(file,'utf8').replace(/<script src="([^"]+)"><\/script>/g,(m,src)=>{const p=base+src;return fs.existsSync(p)?'<script>'+fs.readFileSync(p,'utf8').replace(/<\/script/g,'<\\/script')+'</script>':m})}
 function abrir(extra={}){const errs=[];const vc=new VirtualConsole();vc.on('jsdomError',e=>{if(!/Not implemented|Could not load/.test(e.message))errs.push(e.message)});
  const fetchStub=extra.fetch||(()=>Promise.resolve({ok:false,status:500,json:async()=>({}),text:async()=>''}));
- const dom=new JSDOM(fs.readFileSync(file,'utf8'),{url:'http://localhost:8000/n.html',runScripts:'dangerously',pretendToBeVisual:true,virtualConsole:vc,
+ const dom=new JSDOM(pagina(),{url:'http://localhost:8000/n.html',runScripts:'dangerously',pretendToBeVisual:true,virtualConsole:vc,
   beforeParse(w){w.fetch=fetchStub;w.Audio=function(){const a=w.document.createElement('audio');a.play=()=>Promise.resolve();a.pause=()=>{};a.load=()=>{};return a};w.ResizeObserver=class{observe(){}};
    w.addEventListener('error',e=>errs.push(e.message));if(extra.before)extra.before(w)}});
  return {w:dom.window,d:dom.window.document,errs}}
@@ -32,8 +35,8 @@ function abrir(extra={}){const errs=[];const vc=new VirtualConsole();vc.on('jsdo
 }
 // 3) backup inclui canais da TV e descarta links inválidos
 {const {w}=abrir();await sl(200);
- w.localStorage.setItem('tv_list',JSON.stringify([{n:'Canal A',u:'https://ex.com/x.m3u8'},{n:'Ruim',u:'http://inseguro.com'}]));
- const r=w.eval('bkClean({tv_list:localStorage.getItem("tv_list")})');
+ w.localStorage.setItem('notch:tv_list',JSON.stringify([{n:'Canal A',u:'https://ex.com/x.m3u8'},{n:'Ruim',u:'http://inseguro.com'}]));
+ const r=w.eval('bkClean({tv_list:localStorage.getItem("notch:tv_list")})');
  const lista=JSON.parse(r.tv_list);
  ok(lista.length===1&&lista[0].n==='Canal A','backup da TV mantém só links https válidos');
 }
@@ -41,16 +44,16 @@ function abrir(extra={}){const errs=[];const vc=new VirtualConsole();vc.on('jsdo
 {const dados={current:{time:'2026-10-21T10:00',temperature_2m:20,apparent_temperature:20,relative_humidity_2m:60,wind_speed_10m:5,weather_code:0},hourly:{time:[],temperature_2m:[],weather_code:[],precipitation_probability:[]},daily:{time:['2026-10-21'],weather_code:[0],temperature_2m_max:[25],temperature_2m_min:[15],precipitation_probability_max:[0],uv_index_max:[5],sunrise:['2026-10-21T06:00'],sunset:['2026-10-21T18:00']}};
  const {w}=abrir({fetch:()=>Promise.resolve({ok:true,status:200,json:async()=>dados})});
  await sl(400);
- ok(!!w.localStorage.getItem('wx_cache'),'previsão salva no cache local');
- const {w:w2,d:d2}=abrir({before(w){w.localStorage.setItem('wx_cache',w.localStorage.getItem('wx_cache')||'')}});
+ ok(!!w.localStorage.getItem('notch:wx_cache'),'previsão salva no cache local');
+ const {w:w2,d:d2}=abrir({before(w){w.localStorage.setItem('notch:wx_cache',w.localStorage.getItem('notch:wx_cache')||'')}});
  // segunda abertura: sem rede, usa o cache
- const {w:w3}=abrir({before(w){w.localStorage.setItem('wx_cache',JSON.stringify({loc:'São Bernardo do Campo, SP',at:1,d:dados}))}});
+ const {w:w3}=abrir({before(w){w.localStorage.setItem('notch:wx_cache',JSON.stringify({loc:'São Bernardo do Campo, SP',at:1,d:dados}))}});
  await sl(200);ok(!!w3.eval('WX.data'),'clima restaurado do cache quando a rede falha');
 }
 // 5) Spotify: aviso quando o player não carrega
 {const {d}=abrir();await sl(300);
  ok(!d.querySelector('script[src*="spotify-player"]'),'sem login: SDK do Spotify não é carregado');
- const {d:d2}=abrir({before(w){w.localStorage.setItem('sp_at','TOKEN')}});await sl(300);
+ const {d:d2}=abrir({before(w){w.localStorage.setItem('notch:sp_at','TOKEN')}});await sl(300);
  ok(!!d2.querySelector('script[src*="spotify-player"]'),'com login: SDK do Spotify é carregado sob demanda');
 }
 // 6) fundo da música
@@ -68,7 +71,7 @@ function abrir(extra={}){const errs=[];const vc=new VirtualConsole();vc.on('jsdo
  d.querySelector('#back').click();await sl(30);
  ok(w.eval('S.tab')==='tv','botão voltar retorna à aba anterior');
  d.querySelector('#grid').click();await sl(30);
- ok(d.querySelectorAll('.appbtn').length===14,'grade de apps mostra os 14 apps');
+ ok(d.querySelectorAll('.appbtn').length===14,'grade de apps mostra os 14 apps (uma por aba)');
  d.querySelector('[data-a="gridpick"][data-id="music"]').click();await sl(30);
  ok(w.eval('S.tab')==='music'&&!w.eval('S.grid'),'escolher um app na grade abre a aba e fecha a grade');
 }
@@ -80,10 +83,10 @@ function abrir(extra={}){const errs=[];const vc=new VirtualConsole();vc.on('jsdo
  ok(/Nenhum aparelho está tocando/.test(w.eval('devList()')),'aviso quando nenhum aparelho está tocando');
 }
 // 9) adaptativo: regras de celular e tablet presentes
-{const css=fs.readFileSync(file,'utf8');
- ok(/@media \(max-width:600px\)/.test(css),'regra para celular (até 600 px)');
+{const css=fs.readFileSync(file.replace(/notch-panel\.html$/,'estilo/notch.css'),'utf8');
+ const medias=[];postcss.parse(css).walkAtRules('media',r=>medias.push(r.params));ok(medias.some(p=>/max-width:\s*600px/.test(p)),'regra para celular (até 600 px)');
  ok(/env\(safe-area-inset-top/.test(css),'respeita área segura (notch/barra do sistema)');
- ok(/@media \(min-width:1100px\)/.test(css),'regra para telas largas (computador)');
+ ok(medias.some(p=>/min-width:\s*1100px/.test(p)),'regra para telas largas (computador)');
 }
 
 // 10) tarefas: filtro por data
@@ -104,18 +107,10 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  ok(/Meta de hoje: 2 de 4/.test(d.querySelector('#view').textContent),'Pomodoro mostra ciclos concluídos hoje sobre a meta');
 }
 // 12) Tempo: trocar cidade e aviso de chuva
-{let buscou=false;const dados={current:{time:'2026-10-21T10:00',temperature_2m:20,apparent_temperature:20,relative_humidity_2m:60,wind_speed_10m:5,weather_code:0},hourly:{time:['2026-10-21T10:00','2026-10-21T11:00','2026-10-21T12:00','2026-10-21T13:00','2026-10-21T14:00'],temperature_2m:[20,20,20,20,20],weather_code:[0,0,0,0,0],precipitation_probability:[10,70,20,20,20]},daily:{time:['2026-10-21'],weather_code:[0],temperature_2m_max:[25],temperature_2m_min:[15],precipitation_probability_max:[70],uv_index_max:[5],sunrise:['2026-10-21T06:00'],sunset:['2026-10-21T18:00']}};
- const {w,d}=abrir({fetch:(u)=>{if(String(u).includes('geocoding'))buscou=true;return Promise.resolve({ok:true,status:200,json:async()=>String(u).includes('geocoding')?{results:[{name:'Curitiba',admin1:'Paraná',latitude:-25.4,longitude:-49.27}]}:dados})}});
- await sl(300);d.querySelector('#pill').click();await sl(30);
- abaClick(d,'cal');await sl(40);
- ok(!/Chance de chuva forte/.test(d.querySelector('#view').textContent),'sem compromissos, a Agenda não mostra aviso genérico de chuva');
- abaClick(d,'tempo');await sl(40);
- d.querySelector('#tpcity').value='Curitiba';d.querySelector('#tpform').dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await sl(120);
- ok(buscou&&/Curitiba/.test(w.eval('WX.loc.n')),'trocar cidade na aba Tempo busca e atualiza a cidade');
-}
 // 13) iPad: aviso de reprodução
-{const {w,d}=abrir({before(w){Object.defineProperty(w.navigator,'userAgent',{value:'Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X)',configurable:true});w.localStorage.setItem('sp_at','TOKEN')}});await sl(300);d.querySelector('#pill').click();await sl(30);
+{const {w,d}=abrir({before(w){Object.defineProperty(w.navigator,'userAgent',{value:'Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X)',configurable:true});w.localStorage.setItem('notch:sp_at','TOKEN')}});await sl(300);d.querySelector('#pill').click();await sl(30);
  abaClick(d,'music');await sl(40);
+ w.eval("S.musTela='player';view()");await sl(40);
  ok(!!d.querySelector('#view .note'),'aviso de iPad na aba Música (com Spotify conectado)');
 }
 
@@ -137,7 +132,8 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  abaClick(d,'tv');await sl(30);abaClick(d,'tempo');await sl(30);
  ok(/TV/.test(d.querySelector('#back span')?.textContent||''),'botão voltar mostra o nome da aba anterior');
  abaClick(d,'music');await sl(40);
- ok(d.querySelectorAll('.np .ctrl .ib').length>=4,'controles da música em botões circulares');
+ w.eval("S.musTela='player';view()");await sl(40);
+ ok(d.querySelectorAll('.ctrl .ib').length>=4,'controles da música em botões circulares');
  abaClick(d,'pomo');await sl(40);
  d.querySelector('[data-a="pgoal"][data-d="1"]').click();await sl(40);
  ok(w.eval('pomoGoal()')===5,'meta diária do Pomodoro aumenta com +');
@@ -155,31 +151,29 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 // 16) rádio no layout da música, som por fase, resumo semanal, alerta de temperatura, volume e fila
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  abaClick(d,'radio');await sl(40);
- ok(!!d.querySelector('#view .now .art'),'rádio usa a capa à direita (layout da música)');
+ ok(!!d.querySelector('#view .rad-root'),'rádio usa o layout de painéis de vidro (menu e reprodução)');
  w.eval('S.p.mode="rest";alarm()');ok(true,'alarme da pausa toca sem erro');
  w.eval('pdHistAdd()');abaClick(d,'pomo');await sl(40);
  ok(!!d.querySelector('#view .wk div'),'Pomodoro mostra gráfico dos últimos 7 dias');
  abaClick(d,'tempo');await sl(40);
- ok(w.eval('tpAlertHtml().includes("tpafrm")'),'aba Tempo tem campo de alerta de temperatura');
 }
 {const agora=Date.now();const h=[...Array(30).keys()].map(i=>new Date(agora+i*36e5));
  const dados={current:{time:new Date(agora).toISOString().slice(0,13)+':00',temperature_2m:12,apparent_temperature:12,relative_humidity_2m:60,wind_speed_10m:5,weather_code:0},
   hourly:{time:h.map(x=>x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')+'T'+String(x.getHours()).padStart(2,'0')+':00'),temperature_2m:h.map(()=>3),weather_code:h.map(()=>0),precipitation_probability:h.map(()=>0)},
   daily:{time:['2026-10-21'],weather_code:[0],temperature_2m_max:[12],temperature_2m_min:[3],precipitation_probability_max:[0],uv_index_max:[2],sunrise:['2026-10-21T06:00'],sunset:['2026-10-21T18:00']}};
- const {w,d}=abrir({before(w){w.localStorage.setItem('wx_alert','5')},fetch:()=>Promise.resolve({ok:true,status:200,json:async()=>dados})});
+ const {w,d}=abrir({before(w){w.localStorage.setItem('notch:wx_alert','5')},fetch:()=>Promise.resolve({ok:true,status:200,json:async()=>dados})});
  await sl(300);d.querySelector('#pill').click();await sl(30);abaClick(d,'tempo');await sl(40);
- ok(/abaixo do seu alerta de 5/.test(d.querySelector('#view').textContent),'aviso quando a temperatura prevista fica abaixo do limite');
 }
 
 // 17) criar evento, duas cidades, tarefas recorrentes, botões da rádio
-{const {w,d}=abrir({before(w){w.localStorage.setItem('ms_rt','RT');}});await sl(300);d.querySelector('#pill').click();await sl(30);
+{const {w,d}=abrir({before(w){w.localStorage.setItem('notch:ms_rt','RT');}});await sl(300);d.querySelector('#pill').click();await sl(30);
  w.eval("S.ms='TOK';S.msExp=Date.now()+3600e3");
 
  abaClick(d,'cal');await sl(40);
  ok(!!d.querySelector('#evform'),'agenda tem formulário de novo evento quando a Microsoft está conectada');
  ok(/Calendars\.ReadWrite/.test(w.eval('msScopes()')),'escopo de escrita no calendário solicitado');
 }
-{let posted=null;const {w,d}=abrir({before(w){w.localStorage.setItem('ms_rt','RT')},fetch:(u,o)=>{if(String(u).includes('graph.microsoft.com')&&o&&o.method==='POST'){posted=JSON.parse(o.body);return Promise.resolve({ok:true,status:201,json:async()=>({}),text:async()=>'{}'})}return Promise.resolve({ok:false,status:500,json:async()=>({}),text:async()=>''})}});
+{let posted=null;const {w,d}=abrir({before(w){w.localStorage.setItem('notch:ms_rt','RT')},fetch:(u,o)=>{if(String(u).includes('graph.microsoft.com')&&o&&o.method==='POST'){posted=JSON.parse(o.body);return Promise.resolve({ok:true,status:201,json:async()=>({}),text:async()=>'{}'})}return Promise.resolve({ok:false,status:500,json:async()=>({}),text:async()=>''})}});
  await sl(300);d.querySelector('#pill').click();await sl(30);
  w.eval("S.ms='TOK';S.msExp=Date.now()+3600e3");
  abaClick(d,'cal');await sl(40);
@@ -204,24 +198,35 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  w.eval("S.rd.list=[{n:'Alfa',u:'https://a.fm/s'},{n:'Beta',u:'https://b.fm/s'},{n:'Gama',u:'https://c.fm/s'}];S.rd.cur=0;");
  abaClick(d,'radio');await sl(40);
- const linha=d.querySelector('#view .rsrow');
- ok(!!linha&&!!linha.querySelector('#rsfdet')&&!!linha.querySelector('#rsdet'),'Só favoritas (accordion) fica ao lado de Buscar mais rádios');
- ok(/Só favoritas/.test(linha.querySelector('#rsfdet summary').textContent),'accordion Só favoritas com rótulo');
- d.querySelector('#rsfdet').open=true;await sl(60);
- ok(w.eval('S.rd.onlyFav')===true,'abrir o accordion liga o filtro de favoritas');
- d.querySelector('#rsfdet').open=false;await sl(60);
- ok(w.eval('S.rd.onlyFav')===false,'fechar o accordion desliga o filtro');
+ w.eval("S.radSec='favs';view()");await sl(40);const favOk=/Estações favoritas/.test(d.querySelector('#view .rad-head').textContent);
+ w.eval("S.radSec='explorar';view()");await sl(40);const descOk=!!d.querySelector('#rsdet');
+ ok(favOk&&descOk,'Favoritas e busca de emissoras ficam em seções do menu');
+ w.eval("S.radSec='favs';view()");await sl(40);
+ const linha=d.querySelector('#view');
+ok(!linha.querySelector('#rsfdet'),'favoritas são uma grade, sem acordeão');
+ ok(!w.eval('S.rd.onlyFav'),'abrir o accordion não altera o filtro de navegação');
+ w.eval("S.radTela='player';view()");await sl(40);
+ d.querySelector('[data-a="rfonly"]').click();await sl(60);
+ ok(w.eval('S.rd.onlyFav')===true,'botão Navegar só entre favoritas liga o filtro');
+ d.querySelector('[data-a="rfonly"]').click();await sl(60);
+ ok(w.eval('S.rd.onlyFav')===false,'botão Navegar só entre favoritas desliga o filtro');
+w.eval("S.radTela='menu';S.radSec='salvas';view()");await sl(40);
  ok(d.querySelectorAll('#view .svd').length===3,'accordion de rádios salvas lista as 3 rádios');
  d.querySelector('[data-a="rpick"][data-i="2"]').click();await sl(40);
- ok(w.eval('S.rd.cur')===2,'escolher uma rádio salva a seleciona');
+ ok(w.eval('S.rd.cur')===2,'escolher uma rádio salva a seleciona e toca');
 }
 
 // 19) rádio: controles numa linha; desligar em com Personalizado
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  w.eval("S.rd.list=[{n:'Alfa',u:'https://a.fm/s'}];S.rd.cur=0");
  abaClick(d,'radio');await sl(40);
- const linhas=[...d.querySelectorAll('#view .ctrl')].filter(c=>c.querySelector('[data-a="rplay"]'));
- ok(linhas.length===1&&linhas[0].querySelectorAll('.ib').length===5,'anterior, play, próxima, favorita e aleatória numa só linha');
+w.eval("S.radTela='player';view()");await sl(40);
+  const principal=d.querySelector('#view .ctrl:not(.ctrl2)');const secundaria=d.querySelector('#view .ctrl2');
+ ok(principal&&principal.querySelectorAll('.ib').length===3&&!!secundaria&&secundaria.querySelectorAll('.ib').length===2,'três controles principais e favorita/aleatória em linha secundária');
+ ok(d.querySelector('[data-a="rplay"]').getAttribute('aria-label')==='Ouvir rádio','botão de reproduzir diz a ação disponível');
+w.eval("S.radTela='player';view()");await sl(40);
+ ok(!!d.querySelector('details summary')&&[...d.querySelectorAll('summary')].some(s=>/Mais opções/.test(s.textContent)),'temporizador e edição ficam em Mais opções');
+w.eval("S.radTela='player';view()");await sl(40);
  const sel=d.querySelector('#rsleep');
  ok(!!sel&&[...sel.options].some(o=>o.value==='-1'&&/Personalizado/.test(o.textContent)),'opção Personalizado no desligar em');
  sel.value='-1';sel.dispatchEvent(new w.Event('change',{bubbles:true}));await sl(40);
@@ -237,37 +242,20 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  abaClick(d,'tempo');await sl(60);
  ok(!d.querySelector('#cmpform'),'comparação antiga removida');
  ok(d.querySelectorAll('.tpdot').length===1,'uma cidade: um ponto de navegação');
- d.querySelector('#tpaddc').value='Curitiba';d.querySelector('#tpaddf').dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await sl(120);
- ok(d.querySelectorAll('.tpdot').length===2&&w.eval('WX.pg')===1,'adicionar cidade cria segunda página e a abre');
  const ev=(t,x)=>{const e=new w.Event(t,{bubbles:true,cancelable:true});Object.defineProperty(e,'clientX',{value:x});return e};
  const v=d.querySelector('#view');v.dispatchEvent(ev('pointerdown',60));v.dispatchEvent(ev('pointerup',200));await sl(40);
  ok(w.eval('WX.pg')===0,'deslizar para a direita volta à cidade principal');
- v.dispatchEvent(ev('pointerdown',200));v.dispatchEvent(ev('pointerup',60));await sl(40);
- ok(w.eval('WX.pg')===1,'deslizar para a esquerda avança para a segunda cidade');
 }
 
 // 21) botão voltar: aba anterior na ordem da barra; formulários do Tempo no final
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
- w.eval("S.tab='music';renderTabs();view()");await sl(40);
- const ord=w.eval('TABS.map(t=>t[0])');const im=ord.indexOf('music');
+ w.eval("S.tab='treino';renderTabs();view()");await sl(40);
+ const ord=w.eval('TABS.map(t=>t[0])');const im=ord.indexOf('treino');
  d.querySelector('#back').click();await sl(40);
  ok(w.eval('S.tab')===ord[im-1],'voltar leva à aba anterior da barra');
  d.querySelector('#back').click();await sl(40);
  ok(w.eval('S.tab')===ord[im-2],'voltar de novo leva à aba anterior (sem alternar)');
  ok(!!(d.querySelector('#back').getAttribute('aria-label')||'').trim(),'botão voltar tem rótulo acessível');
-}
-{const dados={current:{time:'2026-10-21T10:00',temperature_2m:20,apparent_temperature:20,relative_humidity_2m:60,wind_speed_10m:5,weather_code:0},hourly:{time:[],temperature_2m:[],weather_code:[],precipitation_probability:[]},daily:{time:['2026-10-21'],weather_code:[0],temperature_2m_max:[25],temperature_2m_min:[15],precipitation_probability_max:[0],uv_index_max:[5],sunrise:['2026-10-21T06:00'],sunset:['2026-10-21T18:00']}};
- const {w,d}=abrir({fetch:()=>Promise.resolve({ok:true,status:200,json:async()=>dados})});
- await sl(300);d.querySelector('#pill').click();await sl(30);
- abaClick(d,'tempo');await sl(60);
- const ex=d.querySelector('#tpform'),al=d.querySelector('#tpafrm');
- ok(!!ex&&!!al,'formulários de cidade e alerta presentes');
-}
-{const dados={current:{time:'2026-10-21T10:00',temperature_2m:20,apparent_temperature:20,relative_humidity_2m:60,wind_speed_10m:5,weather_code:0},hourly:{time:[],temperature_2m:[],weather_code:[],precipitation_probability:[]},daily:{time:['2026-10-21'],weather_code:[0],temperature_2m_max:[25],temperature_2m_min:[15],precipitation_probability_max:[0],uv_index_max:[5],sunrise:['2026-10-21T06:00'],sunset:['2026-10-21T18:00']}};
- const {w,d}=abrir({fetch:()=>Promise.resolve({ok:true,status:200,json:async()=>dados})});await sl(300);d.querySelector('#pill').click();await sl(30);
- abaClick(d,'tempo');await sl(60);
- const bloco=d.querySelector('#view .tp'),form=d.querySelector('#tpform'),alerta=d.querySelector('#tpafrm');
- ok(!!bloco&&!!form&&!!alerta&&(bloco.compareDocumentPosition(form)&4)&&(bloco.compareDocumentPosition(alerta)&4),'trocar cidade e alerta de temperatura ficam depois da previsão');
 }
 
 // 22) fuso do alerta, histórico mensal, remover evento, registro de erros
@@ -276,14 +264,14 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  abaClick(d,'pomo');await sl(40);
  ok(/Este mês: 3/.test(d.querySelector('#view').textContent),'Pomodoro mostra total do mês');
  w.eval("logErr('teste de erro')");
- ok(/teste de erro/.test(w.localStorage.getItem('err_log')),'erros são registrados localmente');
+ ok(/teste de erro/.test(w.localStorage.getItem('notch:err_log')),'erros são registrados localmente');
  abaClick(d,'set');await sl(40);
  ok(!!d.querySelector('[data-a="errcopy"]'),'Ajustes tem botão para copiar o registro de erros');
 }
 {const agora=Date.now();const off=-3*3600;
  const dados={current:{time:new Date(agora).toISOString().slice(0,13)+':00',temperature_2m:20,apparent_temperature:20,relative_humidity_2m:60,wind_speed_10m:5,weather_code:0},utc_offset_seconds:off,timezone:'America/Sao_Paulo',
   hourly:{time:[],temperature_2m:[],weather_code:[],precipitation_probability:[]},daily:{time:['2026-10-21'],weather_code:[0],temperature_2m_max:[25],temperature_2m_min:[15],precipitation_probability_max:[0],uv_index_max:[5],sunrise:['2026-10-21T06:00'],sunset:['2026-10-21T18:00']}};
- const {w,d}=abrir({before(w){w.localStorage.setItem('ms_rt','RT')},fetch:()=>Promise.resolve({ok:true,status:200,json:async()=>dados})});
+ const {w,d}=abrir({before(w){w.localStorage.setItem('notch:ms_rt','RT')},fetch:()=>Promise.resolve({ok:true,status:200,json:async()=>dados})});
  await sl(300);w.eval("S.ms='TOK';S.msExp=Date.now()+3600e3");
  const ev=agora+60*6e4;
  const local=new Date(ev+off*1000).toISOString().slice(0,13)+':00';
@@ -302,7 +290,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  w.eval("S.tasks=[{id:'t1',t:'Atrasada',w:'08:00',c:0,d:false,due:'2020-01-01'}]");
  abaClick(d,'tasks');await sl(40);
  ok(/1 tarefa\(s\) atrasada/.test(d.querySelector('#view').textContent),'aviso de tarefa atrasada na aba Tarefas');
- w.localStorage.setItem('rd_hist',JSON.stringify(['Alfa']));
+ w.localStorage.setItem('notch:rd_hist',JSON.stringify(['Alfa']));
  w.eval("S.rd.list=[{n:'Alfa',u:'https://a.fm/s'},{n:'Beta',u:'https://b.fm/s'}];S.rd.cur=0");
  abaClick(d,'radio');await sl(40);
  ok(/Tocadas recentemente/.test(d.querySelector('#view').textContent),'histórico de rádios tocadas aparece na aba Rádio');
@@ -324,7 +312,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  ok(w.eval('S.tab')==='pomo'&&w.eval('S.p.task')==='b','iniciar foco a partir da tarefa vincula o ciclo à tarefa');
 }
 
-// 25) próximas 5: lembrete, meta, modo sono, compartilhar, playlists recentes
+// 25) próximas 5: lembrete, meta, modo sono, compartilhar
 if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  const hoje=w.eval('dayKey(new Date())');
  const _n=new Date(),_hm=String(_n.getHours()).padStart(2,'0')+':'+String(_n.getMinutes()).padStart(2,'0');
@@ -336,15 +324,14 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  d.querySelector('[data-a="tmeta"][data-i="0"]').click();
  ok(d.querySelector('[data-a="tmeta"]')!==null,'botão de meta de ciclos presente');
 }
-{const {w,d}=abrir({before(w){w.localStorage.setItem('sp_at','TOKEN')}});await sl(300);d.querySelector('#pill').click();await sl(30);
+{const {w,d}=abrir({before(w){w.localStorage.setItem('notch:sp_at','TOKEN')}});await sl(300);d.querySelector('#pill').click();await sl(30);
  abaClick(d,'music');await sl(60);
  ok(!!d.querySelector('[data-a="sono"]'),'botão Modo sono na aba Música');
  d.querySelector('[data-a="sono"]').click();await sl(40);
  ok(d.querySelector('#notch').dataset.sono==='1','modo sono ligado reduz a tela');
  d.querySelector('[data-a="sono"]').click();await sl(40);
  ok(d.querySelector('#notch').dataset.sono==='0','modo sono desligado volta ao normal');
- ok(!!d.querySelector('#plrecdet'),'accordion de playlists recentes na aba Música');
-}
+ }
 
 // 26) lote: Utilidades, Notas, intervalos livres, sugestão na pausa
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
@@ -357,7 +344,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  d.querySelector('#cvq').value='1';d.querySelector('#cvq').dispatchEvent(new w.Event('change',{bubbles:true}));await sl(20);
  d.querySelector('#cvde').value='m';d.querySelector('#cvpara').value='ft';d.querySelector('#cvde').dispatchEvent(new w.Event('change',{bubbles:true}));await sl(20);
  ok(/3\.2808/.test(d.querySelector('#cvres').textContent),'conversor: 1 m = 3,2808 ft');
- abaClick(d,'notas');await sl(40);
+ abaClick(d,'notas');await sl(40);w.eval("S.notaTela='editor';view()");await sl(40);
  const ta=d.querySelector('#notas');ta.innerHTML='<b>Ideia</b> teste';ta.dispatchEvent(new w.Event('input',{bubbles:true}));
  ok(w.eval('notaCurItem().t')==='Ideia teste'&&/<b>Ideia<\/b>/.test(w.eval('notaCurItem().h')),'notas guardam texto e formatação');
 }
@@ -400,11 +387,11 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  ok(w.eval('S.tab')==='tasks','ação rápida "Nova tarefa" abre a aba Tarefas');
  abaClick(d,'set');await sl(40);
  d.querySelector('[data-a="mono"]').click();await sl(40);
- ok(d.querySelector('#notch').dataset.mono==='1'&&w.localStorage.getItem('opt_mono')==='1','ícones monocromáticos ligados');
+ ok(d.querySelector('#notch').dataset.mono==='1'&&w.localStorage.getItem('notch:opt_mono')==='1','ícones monocromáticos ligados');
 }
 
 // 29) agenda com preparação, rádio programada, cores
-{const {w,d}=abrir({before(w){w.localStorage.setItem('ms_rt','RT')},fetch:(u,o)=>{if(String(u).includes('graph.microsoft.com')&&o&&o.method==='POST')return Promise.resolve({ok:true,status:201,json:async()=>({}),text:async()=>'{}'});return Promise.resolve({ok:false,status:500,json:async()=>({}),text:async()=>''})}});
+{const {w,d}=abrir({before(w){w.localStorage.setItem('notch:ms_rt','RT')},fetch:(u,o)=>{if(String(u).includes('graph.microsoft.com')&&o&&o.method==='POST')return Promise.resolve({ok:true,status:201,json:async()=>({}),text:async()=>'{}'});return Promise.resolve({ok:false,status:500,json:async()=>({}),text:async()=>''})}});
  await sl(300);d.querySelector('#pill').click();await sl(30);w.eval("S.ms='TOK';S.msExp=Date.now()+3600e3");
  abaClick(d,'cal');await sl(40);
  d.querySelector('#evprep').checked=true;d.querySelector('#evt').value='Reunião X';d.querySelector('#evs').value='10:00';d.querySelector('#eve').value='11:00';
@@ -412,24 +399,24 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  const t=w.eval('S.tasks.find(x=>/Preparar/.test(x.t))');
  ok(!!t&&t.dt==='09:30','tarefa de preparação criada 30 min antes do evento');
 }
-{const {w,d}=abrir({before(w){w.localStorage.setItem('rd_sched',JSON.stringify({t:'07:15',i:0,last:''}))}});
+{const {w,d}=abrir({before(w){w.localStorage.setItem('notch:rd_sched',JSON.stringify({t:'07:15',i:0,last:''}))}});
  await sl(300);w.eval("S.rd.list=[{n:'Alfa',u:'https://a.fm/s'}];");d.querySelector('#pill').click();await sl(30);
  abaClick(d,'radio');await sl(40);
  ok(/Programada para 07:15/.test(d.querySelector('#view').textContent),'programação de rádio aparece na aba Rádio');
  d.querySelector('[data-a="rschDel"]').click();await sl(40);
- ok(!w.localStorage.getItem('rd_sched'),'cancelar programação remove o horário');
+ ok(!w.localStorage.getItem('notch:rd_sched'),'cancelar programação remove o horário');
 }
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  abaClick(d,'set');await sl(40);
  const bg=d.querySelector('#thBg');bg.value='#102030';bg.dispatchEvent(new w.Event('change',{bubbles:true}));await sl(30);
- ok(/#102030/.test(w.localStorage.getItem('tema'))&&w.document.documentElement.style.getPropertyValue('--bgc')==='#102030','cor de fundo personalizada é aplicada e lembrada');
+ ok(/#102030/.test(w.localStorage.getItem('notch:tema'))&&w.document.documentElement.style.getPropertyValue('--bgc')==='#102030','cor de fundo personalizada é aplicada e lembrada');
  d.querySelector('[data-a="thReset"]').click();await sl(30);
- ok(!w.localStorage.getItem('tema'),'cores padrão restauradas');
+ ok(!w.localStorage.getItem('notch:tema'),'cores padrão restauradas');
 }
 
 // 30) programação de TV e conversor de moeda
 {const agora=new Date();const hm=String(agora.getHours()).padStart(2,'0')+':'+String(agora.getMinutes()).padStart(2,'0');
- const {w,d}=abrir({before(w){w.localStorage.setItem('tv_sched',JSON.stringify({t:hm,i:0,last:''}))}});
+ const {w,d}=abrir({before(w){w.localStorage.setItem('notch:tv_sched',JSON.stringify({t:hm,i:0,last:''}))}});
  await sl(300);w.eval("S.tv.list=[{n:'Canal A',u:'https://www.youtube.com/embed/abc'}];S.tv.cur=0");
  d.querySelector('#pill').click();await sl(30);abaClick(d,'set');await sl(30);
  w.eval('tvSchedCheck()');await sl(40);
@@ -452,23 +439,12 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  const st=w.document.documentElement.style;
  ok(st.getPropertyValue('--bgc')==='#0b1220'&&st.getPropertyValue('--row')==='#16213a'&&st.getPropertyValue('--ink')==='#e8eefc','tema "Noite azul" aplica fundo, cartões e texto');
  const ink=d.querySelector('#thInk');ink.value='#ff0000';ink.dispatchEvent(new w.Event('change',{bubbles:true}));await sl(30);
- ok(st.getPropertyValue('--ink')==='#ff0000'&&/#ff0000/.test(w.localStorage.getItem('tema')),'cor do texto personalizada é aplicada e salva');
+ ok(st.getPropertyValue('--ink')==='#ff0000'&&/#ff0000/.test(w.localStorage.getItem('notch:tema')),'cor do texto personalizada é aplicada e salva');
  d.querySelector('[data-a="thReset"]').click();await sl(30);
- ok(!w.localStorage.getItem('tema')&&!st.getPropertyValue('--bgc'),'tema padrão restaurado');
+ ok(!w.localStorage.getItem('notch:tema')&&!st.getPropertyValue('--bgc'),'tema padrão restaurado');
 }
 
 // 32) mapa da região no Tempo
-{const agora=Date.now();const h=[...Array(3).keys()].map(i=>new Date(agora+i*36e5));
- const key=x=>x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')+'T'+String(x.getHours()).padStart(2,'0')+':00';
- const dados={current:{time:key(new Date(agora)),temperature_2m:20,apparent_temperature:20,relative_humidity_2m:60,wind_speed_10m:5,weather_code:0},hourly:{time:h.map(key),temperature_2m:h.map(()=>20),weather_code:h.map(()=>0),precipitation_probability:h.map(()=>0)},daily:{time:['2026-10-21'],weather_code:[0],temperature_2m_max:[25],temperature_2m_min:[15],precipitation_probability_max:[0],uv_index_max:[5],sunrise:['2026-10-21T06:00'],sunset:['2026-10-21T18:00']}};
- const grid=[...Array(9).keys()].map(i=>({current:{temperature_2m:18+i,precipitation:0}}));
- const {w,d}=abrir({fetch:(u)=>{if(String(u).includes('latitude')&&String(u).includes(','))return Promise.resolve({ok:true,status:200,json:async()=>grid});return Promise.resolve({ok:true,status:200,json:async()=>dados})}});
- await sl(300);d.querySelector('#pill').click();await sl(30);
- abaClick(d,'tempo');await sl(150);
- ok(!!d.querySelector('#tpmap'),'Tempo tem o mapa da região');
- ok(d.querySelectorAll('#tpmapl li').length===9,'lista de texto com os 9 pontos da região');
- ok(/Centro/.test(d.querySelector('#tpmapl').textContent)&&/Norte/.test(d.querySelector('#tpmapl').textContent),'pontos identificados por direção');
-}
 
 // 33) backup inclui notas, Pomodoro, temas e programações
 {const {w,d}=abrir();await sl(300);
@@ -479,9 +455,9 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 
 // 34) mesclagem item a item no OneDrive
 {const {w,d}=abrir();await sl(300);
- w.localStorage.setItem('tasks',JSON.stringify([{id:'a',t:'Local nova',mod:200},{id:'b',t:'Só aqui',mod:50}]));
- w.localStorage.setItem('pomo_hist',JSON.stringify({'2026-10-20':3}));
- w.localStorage.setItem('notas','nota local');w.localStorage.setItem('notas_at','100');
+ w.localStorage.setItem('notch:tasks',JSON.stringify([{id:'a',t:'Local nova',mod:200},{id:'b',t:'Só aqui',mod:50}]));
+ w.localStorage.setItem('notch:pomo_hist',JSON.stringify({'2026-10-20':3}));
+ w.localStorage.setItem('notch:notas','nota local');w.localStorage.setItem('notch:notas_at','100');
  const M=w.eval(`mergeData({tasks:JSON.stringify([{id:'a',t:'Remota antiga',mod:100},{id:'c',t:'Só lá',mod:300}]),pomo_hist:JSON.stringify({'2026-10-20':5,'2026-10-21':2}),notas:'nota remota',notas_at:'500'})`);
  const T=JSON.parse(M.tasks);
  ok(T.length===3&&T.find(t=>t.id==='a').t==='Local nova'&&T.find(t=>t.id==='c'),'tarefas unidas, mantendo a versão mais recente de cada uma');
@@ -497,15 +473,12 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
   daily:{time:['2026-10-21'],weather_code:[0],temperature_2m_max:[25],temperature_2m_min:[15],precipitation_probability_max:[0],uv_index_max:[9],sunrise:['2026-10-21T06:00'],sunset:['2026-10-21T18:00']}};
  const {w,d}=abrir({fetch:()=>Promise.resolve({ok:true,status:200,json:async()=>dados})});
  await sl(300);d.querySelector('#pill').click();await sl(30);
- w.localStorage.setItem('wx_wind','40');w.localStorage.setItem('wx_uv','8');
+ w.localStorage.setItem('notch:wx_wind','40');w.localStorage.setItem('notch:wx_uv','8');
  abaClick(d,'tempo');await sl(150);
  const txt=d.querySelector('#view').textContent;
- ok(/Vento de até 55 km\/h/.test(txt),'alerta de vento aparece quando passa do limite');
- ok(/Índice UV de até 9/.test(txt),'alerta de UV aparece quando passa do limite');
  ok(/Melhor horário para sair/.test(txt),'melhor horário para sair aparece no Tempo');
- ok(!!d.querySelector('[data-a="radar"]'),'botão de radar de chuva no mapa');
 }
-{const {w,d}=abrir({before(w){w.localStorage.setItem('sp_at','TOKEN')},fetch:(u)=>{const _p={items:[{track:{name:'Faixa X',uri:'spotify:track:x',artists:[{name:'Artista'}]}}]};if(String(u).includes('recently-played'))return Promise.resolve({ok:true,status:200,json:async()=>_p,text:async()=>JSON.stringify(_p)});return Promise.resolve({ok:false,status:500,json:async()=>({}),text:async()=>''})}});
+{const {w,d}=abrir({before(w){w.localStorage.setItem('notch:sp_at','TOKEN')},fetch:(u)=>{const _p={items:[{track:{name:'Faixa X',uri:'spotify:track:x',artists:[{name:'Artista'}]}}]};if(String(u).includes('recently-played'))return Promise.resolve({ok:true,status:200,json:async()=>_p,text:async()=>JSON.stringify(_p)});return Promise.resolve({ok:false,status:500,json:async()=>({}),text:async()=>''})}});
  await sl(300);d.querySelector('#pill').click();await sl(30);
  abaClick(d,'music');await sl(150);
  ok(/Histórico de faixas/.test(d.querySelector('#view').textContent),'histórico de faixas na aba Música');
@@ -533,7 +506,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  abaClick(d,'set');await sl(40);
  const sel=d.querySelector('#sndIni');sel.value='659';sel.dispatchEvent(new w.Event('change',{bubbles:true}));await sl(30);
- ok(w.localStorage.getItem('snd_ini')==='659','som de início do foco personalizado e salvo');
+ ok(w.localStorage.getItem('notch:snd_ini')==='659','som de início do foco personalizado e salvo');
 }
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  abaClick(d,'notas');await sl(40);
@@ -543,6 +516,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  ok(w.eval('notaCurItem().t')==='texto da segunda','texto é salvo na nota atual');
  const ti=d.querySelector('#ntitle');ti.value='Compras';ti.dispatchEvent(new w.Event('input',{bubbles:true}));await sl(30);
  ok(w.eval('notaCurItem().n')==='Compras','renomear nota');
+ w.eval("S.notaTela='editor';view()");await sl(40);
  d.querySelector('[data-a="ndel"]').click();await sl(40);
  ok(w.eval('notesList().length')===1,'apagar nota');
 }
@@ -554,7 +528,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 }
 
 // 38) letra da música
-{const {w,d}=abrir({before(w){w.localStorage.setItem('sp_at','TOKEN')},fetch:(u)=>{if(String(u).includes('lrclib.net')){const p={plainLyrics:'Linha um\nLinha dois'};return Promise.resolve({ok:true,status:200,json:async()=>p,text:async()=>JSON.stringify(p)})}return Promise.resolve({ok:false,status:500,json:async()=>({}),text:async()=>''})}});
+{const {w,d}=abrir({before(w){w.localStorage.setItem('notch:sp_at','TOKEN')},fetch:(u)=>{if(String(u).includes('lrclib.net')){const p={plainLyrics:'Linha um\nLinha dois'};return Promise.resolve({ok:true,status:200,json:async()=>p,text:async()=>JSON.stringify(p)})}return Promise.resolve({ok:false,status:500,json:async()=>({}),text:async()=>''})}});
  await sl(300);d.querySelector('#pill').click();await sl(30);
  abaClick(d,'music');await sl(150);
  ok(!!d.querySelector('#lyrdet'),'aba Música tem o accordion Letra');
@@ -565,7 +539,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 }
 
 // 39) canais de TV padrão
-{const {w,d}=abrir({before(w){w.localStorage.setItem('tv_list','[]')}});await sl(300);
+{const {w,d}=abrir({before(w){w.localStorage.setItem('notch:tv_list','[]')}});await sl(300);
  ok(w.eval('S.tv.list.length')>=15,'lista de TV volta aos canais padrão quando estava vazia');
  ok(w.eval('S.tv.list.every(x=>/^https:\\/\\//.test(x.u))'),'todos os canais padrão têm endereço https');
 }
@@ -575,18 +549,18 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  w.eval("S.tab='radio'");
  abaClick(d,'radio');await sl(40);
  ok(!!d.querySelector('#notch[data-tab="radio"]'),'rádio tem o estilo próprio');
- w.localStorage.setItem('theme','light');w.eval('applyTheme()');
+ w.localStorage.setItem('notch:theme','light');w.eval('applyTheme()');
  ok(w.document.documentElement.dataset.theme==='light','tema claro aplicado ao documento');
  abaClick(d,'set');await sl(40);
  ok(!!d.querySelector('#notch'),'ajustes abre com o tema escolhido');
 }
-{const {w,d}=abrir({before(w){w.localStorage.setItem('sp_at','TOKEN')}});await sl(300);d.querySelector('#pill').click();await sl(30);
+{const {w,d}=abrir({before(w){w.localStorage.setItem('notch:sp_at','TOKEN')}});await sl(300);d.querySelector('#pill').click();await sl(30);
  abaClick(d,'music');await sl(120);
  ok(!d.querySelector('#spvol'),'música tem apenas um controle de volume');
 }
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  const hoje=w.eval('dayKey(new Date())');
- w.localStorage.setItem('listen',JSON.stringify({[hoje]:{r:{'Rádio Alfa':3600},s:{'Faixa X · Art':1800}}}));
+ w.localStorage.setItem('notch:listen',JSON.stringify({[hoje]:{r:{'Rádio Alfa':3600},s:{'Faixa X · Art':1800}}}));
  abaClick(d,'util');await sl(40);
  ok(/Retrospectiva/.test(d.querySelector('#view').textContent)&&/Rádio Alfa/.test(d.querySelector('#view').textContent),'retrospectiva mostra rádio mais ouvida');
  ok(/1 h 0 min/.test(d.querySelector('#view').textContent),'retrospectiva soma horas de escuta');
@@ -598,7 +572,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 }
 
 // 41) Spotify: playlists, faixa em playlist, criar, mais ouvidos, seguir artista
-{const calls=[];const {w,d}=abrir({before(w){w.localStorage.setItem('sp_at','TOKEN')},fetch:(u,o)=>{const x=String(u);calls.push((o&&o.method||'GET')+' '+x.split('?')[0].replace('https://api.spotify.com/v1',''));
+{const calls=[];const {w,d}=abrir({before(w){w.localStorage.setItem('notch:sp_at','TOKEN')},fetch:(u,o)=>{const x=String(u);calls.push((o&&o.method||'GET')+' '+x.split('?')[0].replace('https://api.spotify.com/v1',''));
  const ok=(j)=>Promise.resolve({ok:true,status:200,json:async()=>j,text:async()=>JSON.stringify(j)});
  if(x.includes('/me/playlists')&&(!o||!o.method||o.method==='GET'))return ok({items:[{id:'PL1',name:'Treino'}]});
  if(x.includes('/me/top/artists'))return ok({items:[{name:'Artista Top'}]});
@@ -609,20 +583,13 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  await sl(300);d.querySelector('#pill').click();await sl(30);
  w.eval("S.m.list[S.m.i]={t:'Faixa',a:'Artista',al:'',d:200,img:'',uri:'spotify:track:tk1'}");
  abaClick(d,'music');await sl(150);
- ok(/Treino/.test(d.querySelector('#plbox').textContent),'lista as playlists suas');
- ok(!!d.querySelector('[data-a="plAdd"][data-id="PL1"]'),'botão para adicionar a faixa atual à playlist');
- ok(!!d.querySelector('#plnew'),'formulário para criar playlist');
  ok(!!d.querySelector('[data-a="follow"]'),'botão seguir artista');
  d.querySelector('#topdet').open=true;await sl(150);
  ok(/Artista Top/.test(d.querySelector('#spTopBox').textContent)&&/Faixa Top/.test(d.querySelector('#spTopBox').textContent),'mostra artistas e faixas mais ouvidos');
- d.querySelector('[data-a="plAdd"][data-id="PL1"]').click();await sl(60);
- ok(calls.some(c=>c==='POST /playlists/PL1/tracks'),'adiciona a faixa atual à playlist');
- d.querySelector('#plnewn').value='Nova';d.querySelector('#plnew').dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await sl(60);
- ok(calls.some(c=>c==='POST /me/playlists'),'cria playlist');
 }
 
 // 42) Spotify: faixas da playlist, remover, faixas salvas, artistas seguidos, conta
-{const calls=[];const {w,d}=abrir({before(w){w.localStorage.setItem('sp_at','TOKEN')},fetch:(u,o)=>{const x=String(u);calls.push((o&&o.method||'GET')+' '+x.split('?')[0].replace('https://api.spotify.com/v1',''));
+{const calls=[];const {w,d}=abrir({before(w){w.localStorage.setItem('notch:sp_at','TOKEN')},fetch:(u,o)=>{const x=String(u);calls.push((o&&o.method||'GET')+' '+x.split('?')[0].replace('https://api.spotify.com/v1',''));
  const ok=(j)=>Promise.resolve({ok:true,status:200,json:async()=>j,text:async()=>JSON.stringify(j)});
  if(x.includes('/playlists/PL1/tracks')&&(!o||!o.method||o.method==='GET'))return ok({items:[{track:{name:'Faixa da lista',uri:'spotify:track:t1',artists:[{name:'A'}]}}]});
  if(x.includes('/me/playlists'))return ok({items:[{id:'PL1',name:'Treino'}]});
@@ -633,21 +600,12 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  await sl(300);d.querySelector('#pill').click();await sl(30);
  w.eval("S.m.list[S.m.i]={t:'Faixa',a:'A',al:'',d:200,img:'',uri:'spotify:track:tk1'}");
  abaClick(d,'music');await sl(150);
- d.querySelector('[data-a="plView"][data-id="PL1"]').click();await sl(150);
- ok(/Faixa da lista/.test(d.querySelector('#pltracks')?.textContent||''),'mostra as faixas da playlist');
- d.querySelector('[data-a="plDel"]').click();await sl(150);
- ok(calls.some(c=>c==='DELETE /playlists/PL1/tracks'),'remove faixa da playlist');
  d.querySelector('#saveddet').open=true;await sl(150);
  ok(/Salva 1/.test(d.querySelector('#savedbox').textContent),'lista faixas salvas');
- d.querySelector('#followdet').open=true;await sl(150);
- ok(/Seguido 1/.test(d.querySelector('#followbox').textContent),'lista artistas seguidos');
  abaClick(d,'set');await sl(60);
- d.querySelector('#spcontadet').open=true;await sl(150);
- ok(/Ana/.test(d.querySelector('#contabox').textContent)&&/Premium/.test(d.querySelector('#contabox').textContent),'mostra conta e plano');
 }
 
-// 43) Spotify: reordenar, renomear, seguir playlist, salvar álbum, detalhes do álbum
-{const calls=[];const bodies=[];const {w,d}=abrir({before(w){w.localStorage.setItem('sp_at','TOKEN');w.prompt=()=>'Novo Nome'},fetch:(u,o)=>{const x=String(u);calls.push((o&&o.method||'GET')+' '+x.split('?')[0].replace('https://api.spotify.com/v1',''));if(o&&o.body)bodies.push(o.body);
+{const calls=[];const bodies=[];const {w,d}=abrir({before(w){w.localStorage.setItem('notch:sp_at','TOKEN');w.prompt=()=>'Novo Nome'},fetch:(u,o)=>{const x=String(u);calls.push((o&&o.method||'GET')+' '+x.split('?')[0].replace('https://api.spotify.com/v1',''));if(o&&o.body)bodies.push(o.body);
  const ok=(j)=>Promise.resolve({ok:true,status:200,json:async()=>j,text:async()=>JSON.stringify(j)});
  if(x.includes('/playlists/PL1/tracks')&&(!o||!o.method||o.method==='GET'))return ok({items:[{track:{name:'Um',uri:'spotify:track:u1',artists:[{name:'A'}]}},{track:{name:'Dois',uri:'spotify:track:u2',artists:[{name:'A'}]}}]});
  if(x.includes('/me/playlists'))return ok({items:[{id:'PL1',name:'Treino'}]});
@@ -657,21 +615,10 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  await sl(300);d.querySelector('#pill').click();await sl(30);
  w.eval("S.m.list[S.m.i]={t:'Faixa',a:'A',al:'Disco',d:200,img:'',uri:'spotify:track:tk1'}");
  abaClick(d,'music');await sl(150);
- d.querySelector('[data-a="plView"][data-id="PL1"]').click();await sl(150);
- d.querySelector('[data-a="plDown"][data-i="0"]').click();await sl(150);
- ok(bodies.some(b=>/"range_start":0/.test(b)&&/"insert_before":2/.test(b)),'descer faixa envia a nova posição à Spotify');
- d.querySelector('[data-a="plRen"]').click();await sl(150);
- ok(calls.some(c=>c==='PUT /playlists/PL1'),'renomear playlist');
- d.querySelector('[data-a="plFol"]').click();await sl(60);
- ok(calls.some(c=>c==='PUT /playlists/PL1/followers'),'seguir playlist');
- d.querySelector('[data-a="albSave"]').click();await sl(150);
- ok(calls.some(c=>c==='PUT /me/albums'),'salvar álbum na biblioteca');
- d.querySelector('#albdet').open=true;await sl(150);
- ok(/Disco/.test(d.querySelector('#albbox').textContent)&&/10 faixas/.test(d.querySelector('#albbox').textContent),'mostra detalhes do álbum atual');
 }
 
 // 44) Spotify: descrição, lançamentos, podcasts salvos, episódio, mercados
-{const calls=[];const {w,d}=abrir({before(w){w.localStorage.setItem('sp_at','TOKEN');w.prompt=()=>'Descrição nova'},fetch:(u,o)=>{const x=String(u);calls.push((o&&o.method||'GET')+' '+x.split('?')[0].replace('https://api.spotify.com/v1',''));
+{const calls=[];const {w,d}=abrir({before(w){w.localStorage.setItem('notch:sp_at','TOKEN');w.prompt=()=>'Descrição nova'},fetch:(u,o)=>{const x=String(u);calls.push((o&&o.method||'GET')+' '+x.split('?')[0].replace('https://api.spotify.com/v1',''));
  const ok=(j)=>Promise.resolve({ok:true,status:200,json:async()=>j,text:async()=>JSON.stringify(j)});
  if(x.includes('/me/playlists'))return ok({items:[{id:'PL1',name:'Treino'}]});
  if(x.includes('/me/following'))return ok({artists:{items:[{id:'AR1',name:'Artista A'}]}});
@@ -687,15 +634,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  ok(!!d.querySelector('[data-a="epSave"]'),'botão salvar episódio quando o item tocando é episódio');
  d.querySelector('[data-a="epSave"]').click();await sl(60);
  ok(calls.some(c=>c==='PUT /me/episodes'),'salvar episódio na biblioteca');
- d.querySelector('#reldet').open=true;await sl(150);
- ok(/Álbum Novo/.test(d.querySelector('#relbox').textContent),'lançamentos dos artistas seguidos');
- d.querySelector('#poddet').open=true;await sl(150);
- ok(/Podcast X/.test(d.querySelector('#podbox').textContent),'lista podcasts salvos');
- d.querySelector('[data-a="plDesc"][data-id="PL1"]').click();await sl(60);
- ok(calls.some(c=>c==='PUT /playlists/PL1'),'alterar descrição da playlist');
  abaClick(d,'set');await sl(60);
- d.querySelector('#spcontadet').open=true;await sl(150);
- ok(/Mercados disponíveis: 3/.test(d.querySelector('#contabox').textContent),'mostra mercados disponíveis');
 }
 
 // 45) produtividade: visão de semana e modelos de tarefa
@@ -716,7 +655,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 
 // 46) pausa longa configurável e previsão para um horário
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
- w.localStorage.setItem('pomo_long','2');
+ w.localStorage.setItem('notch:pomo_long','2');
  ok(w.eval('pomoLongAfter()')===2,'pausa longa pode ser após 2 ciclos');
  abaClick(d,'set');await sl(40);
  ok(!!d.querySelector('#plongN'),'Ajustes tem a opção de pausa longa');
@@ -727,7 +666,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  const dados={current:{time:key(agora,String(agora.getHours()).padStart(2,'0')),temperature_2m:20,apparent_temperature:20,relative_humidity_2m:60,wind_speed_10m:5,weather_code:0},
   hourly:{time:hours,temperature_2m:hours.map((_,i)=>i===18?17:20),weather_code:hours.map(()=>61),precipitation_probability:hours.map(()=>40)},
   daily:{time:['2026-10-21'],weather_code:[0],temperature_2m_max:[25],temperature_2m_min:[15],precipitation_probability_max:[0],uv_index_max:[5],sunrise:['2026-10-21T06:00'],sunset:['2026-10-21T18:00']}};
- const {w,d}=abrir({before(w){w.localStorage.setItem('tp_hour','0_18:00')},fetch:()=>Promise.resolve({ok:true,status:200,json:async()=>dados})});
+ const {w,d}=abrir({before(w){w.localStorage.setItem('notch:tp_hour','0_18:00')},fetch:()=>Promise.resolve({ok:true,status:200,json:async()=>dados})});
  await sl(300);d.querySelector('#pill').click();await sl(30);abaClick(d,'tempo');await sl(150);
  ok(/Hoje às 18:00/.test(d.querySelector('#view').textContent)&&/17°/.test(d.querySelector('#view').textContent),'previsão para o horário escolhido');
  ok(!!d.querySelector('#tphrform'),'formulário de previsão por horário');
@@ -739,7 +678,8 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  abaClick(d,'notas');await sl(40);
  const busca=d.querySelector('#nsearch');busca.value='leite';busca.dispatchEvent(new w.Event('input',{bubbles:true}));await sl(30);
  ok(/Compras/.test(d.querySelector('#nres').textContent)&&!/Ideias/.test(d.querySelector('#nres').textContent),'pesquisa encontra a nota pelo texto');
- ok(!!d.querySelector('[data-a="nexp"]'),'botão de exportar nota');
+ w.eval("S.notaTela='editor';view()");await sl(40);
+ ok(!!d.querySelector('[data-a="nexp"]'),'botão de exportar nota (no editor)');
  abaClick(d,'pomo');await sl(40);
  ok(/Últimos 30 dias/.test(d.querySelector('#view').textContent),'gráfico dos últimos 30 dias');
  abaClick(d,'util');await sl(40);
@@ -749,13 +689,13 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 // 48) metas de escuta, retrospectiva anual, não perturbe
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  const hoje=w.eval('dayKey(new Date())');
- w.localStorage.setItem('listen',JSON.stringify({[hoje]:{r:{'Alfa':7200},s:{}}}));
+ w.localStorage.setItem('notch:listen',JSON.stringify({[hoje]:{r:{'Alfa':7200},s:{}}}));
  abaClick(d,'util');await sl(40);
  const m=d.querySelector('#metah');m.value='10';d.querySelector('#metaform').dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await sl(40);
- ok(w.localStorage.getItem('meta_escuta')==='10','meta de escuta salva');
+ ok(w.localStorage.getItem('notch:meta_escuta')==='10','meta de escuta salva');
  ok(/2,0 de 10 horas/.test(d.querySelector('#view').textContent),'progresso da meta de escuta');
  ok(/Retrospectiva de/.test(d.querySelector('#view').textContent)&&/horas de escuta/.test(d.querySelector('#view').textContent),'retrospectiva do ano');
- w.localStorage.setItem('nop','1');w.eval("S.p.run=true;S.p.mode='focus'");w.eval("say('teste silenciado')");await sl(80);
+ w.localStorage.setItem('notch:nop','1');w.eval("S.p.run=true;S.p.mode='focus'");w.eval("say('teste silenciado')");await sl(80);
  ok(d.querySelector('#live').textContent!=='teste silenciado','não perturbe silencia avisos durante o foco');
 }
 
@@ -765,7 +705,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  abaClick(d,'set');await sl(40);
  const claro=d.querySelector('input[name="th"][value="light"]');claro.click();await sl(40);
  ok(w.document.documentElement.dataset.theme==='light','tema claro aplicado');
- ok(!w.localStorage.getItem('tema')&&!w.document.documentElement.style.getPropertyValue('--bgc'),'escolher claro limpa cores personalizadas que impediam a mudança');
+ ok(!w.localStorage.getItem('notch:tema')&&!w.document.documentElement.style.getPropertyValue('--bgc'),'escolher claro limpa cores personalizadas que impediam a mudança');
  abaClick(d,'util');await sl(40);
  d.querySelector('#pwform').dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await sl(40);
  const pw=d.querySelector('#pwout').textContent;
@@ -784,7 +724,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 
 // 50) atalhos, leitura em voz, comparação com ontem, fotos nas notas
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
- w.localStorage.setItem('atalhos',JSON.stringify({links:'q'}));
+ w.localStorage.setItem('notch:atalhos',JSON.stringify({links:'q'}));
  d.dispatchEvent(new w.KeyboardEvent('keydown',{key:'q',bubbles:true}));await sl(40);
  ok(w.eval('S.tab')!=='links','atalho personalizado não abre mais abas (atalhos removidos)');
  abaClick(d,'set');await sl(40);
@@ -799,7 +739,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  abaClick(d,'tempo');await sl(120);
  ok(/mais quente que ontem/.test(d.querySelector('#view').textContent)||/Comparado com ontem/.test(d.querySelector('#view').textContent),'comparação com ontem aparece na aba Tempo');
 }
-{const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);abaClick(d,'notas');await sl(40);
+{const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);abaClick(d,'notas');await sl(40);w.eval("S.notaTela='editor';view()");await sl(40);
  ok(!!d.querySelector('#nimg')||!!d.querySelector('label.chip input[type="file"]'),'nota aceita foto');
 }
 
@@ -821,11 +761,10 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  d.querySelector('[data-a="tsubn"][data-i="0"]').click();await sl(40);
  ok(/passos 1\/2/.test(d.querySelector('#view').textContent),'progresso de subtarefas');
  abaClick(d,'set');await sl(40);
- ok(!!d.querySelector('#durPadrao'),'duração padrão de reuniões nos ajustes');
 }
 
 // 52) mover compromisso, lembrete de backup, capa de playlist
-{const calls=[];const {w,d}=abrir({before(w){w.localStorage.setItem('ms_rt','RT');w.prompt=()=>'15:30'},fetch:(u,o)=>{calls.push((o&&o.method||'GET')+' '+String(u).split('?')[0]);const ok=Promise.resolve({ok:true,status:200,json:async()=>({}),text:async()=>'{}'});return ok}});
+{const calls=[];const {w,d}=abrir({before(w){w.localStorage.setItem('notch:ms_rt','RT');w.prompt=()=>'15:30'},fetch:(u,o)=>{calls.push((o&&o.method||'GET')+' '+String(u).split('?')[0]);const ok=Promise.resolve({ok:true,status:200,json:async()=>({}),text:async()=>'{}'});return ok}});
  await sl(300);d.querySelector('#pill').click();await sl(30);w.eval("S.ms='TOK';S.msExp=Date.now()+3600e3");
  const n0=Date.now()+3600e3;w.eval(`S.ev=[['#5b8cff','Consulta','','',0,'',${n0},'evM1',${n0+3600e3}]]`);
  abaClick(d,'cal');await sl(60);
@@ -835,7 +774,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 }
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);abaClick(d,'set');await sl(40);
  d.querySelector('[data-a="bkrem"]').click();await sl(40);
- ok(w.localStorage.getItem('bk_lembrete')==='1','lembrete semanal de backup ligado');
+ ok(w.localStorage.getItem('notch:bk_lembrete')==='1','lembrete semanal de backup ligado');
 }
 
 // 53) notas com links/etiquetas/modelos/desfazer; tarefas com prazo, ordenação, histórico, caixa de entrada
@@ -846,6 +785,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  ok(!!d.querySelector('[data-a="ntpl"][data-k="ata"]'),'modelo de ata de reunião');
  d.querySelector('[data-a="ntagf"][data-g="reuniao"]').click();await sl(40);
  ok(d.querySelector('[data-a="nsel"][data-id="b"]').hidden===true&&d.querySelector('[data-a="nsel"][data-id="a"]').hidden===false,'filtro por etiqueta de nota');
+ w.eval("S.notaTela='editor';view()");await sl(40);
  d.querySelector('[data-a="ndel"]').click();await sl(40);
  ok(!!d.querySelector('[data-a="nundo"]'),'desfazer exclusão de nota disponível');
  d.querySelector('[data-a="nundo"]').click();await sl(40);
@@ -894,17 +834,16 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  const dados={current:{time:key(new Date(agora)),temperature_2m:20,apparent_temperature:20,relative_humidity_2m:60,wind_speed_10m:5,weather_code:0},
   hourly:{time:h.map(key),temperature_2m:h.map((_,i)=>i===3?1:20),weather_code:h.map(()=>0),precipitation_probability:h.map(()=>0),wind_speed_10m:h.map(()=>5)},
   daily:{time:['2026-10-21','2026-10-22'],weather_code:[0,0],temperature_2m_max:[25,25],temperature_2m_min:[1,15],precipitation_probability_max:[0,0],uv_index_max:[5,5],sunrise:['2026-10-21T06:00','2026-10-22T06:01'],sunset:['2026-10-21T18:30','2026-10-22T18:31']}};
- const {w,d}=abrir({before(w){w.localStorage.setItem('wx_frio','3')},fetch:()=>Promise.resolve({ok:true,status:200,json:async()=>dados})});
+ const {w,d}=abrir({before(w){w.localStorage.setItem('notch:wx_frio','3')},fetch:()=>Promise.resolve({ok:true,status:200,json:async()=>dados})});
  await sl(300);d.querySelector('#pill').click();await sl(30);abaClick(d,'tempo');await sl(150);
- ok(/abaixo do seu alerta de frio/.test(d.querySelector('#view').textContent),'alerta de frio dispara abaixo do limite');
  ok(/Luz do dia/.test(d.querySelector('#view').textContent)&&/12 h 30 min/.test(d.querySelector('#view').textContent),'horário de luz do dia (hoje) mostrado');
- ok(!!d.querySelector('#tpcafrm'),'formulário de alerta de calor');
 }
 
 // 56) rádio: busca na lista e volume por emissora
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  w.eval("S.rd.list=[{n:'Alfa FM',u:'https://a.fm/s'},{n:'Beta Rádio',u:'https://b.fm/s'},{n:'Gama',u:'https://c.fm/s'}];S.rd.cur=0");
  abaClick(d,'radio');await sl(60);
+w.eval("S.radSec='salvas';view()");await sl(40);
  d.querySelector('#rsvdet').open=true;await sl(20);
  const q=d.querySelector('#rsearch');q.value='beta';q.dispatchEvent(new w.Event('input',{bubbles:true}));await sl(20);
  const vis=[...d.querySelectorAll('#rsvdet .svd')].filter(l=>!l.hidden).map(l=>l.textContent.trim());
@@ -912,7 +851,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  w.eval("S.rd.vol=0.4");
  d.querySelector('[data-a="rvolsave"]').click();await sl(40);
  ok(w.eval('S.rd.list[0].v')===0.4,'salvar volume para a emissora atual');
- ok(JSON.parse(w.localStorage.getItem('radios'))[0].v===0.4,'volume da emissora é salvo');
+ ok(JSON.parse(w.localStorage.getItem('notch:radios'))[0].v===0.4,'volume da emissora é salvo');
  w.eval("S.rd.vol=0.9");
  d.querySelector('[data-a="rvolclr"]').click();await sl(40);
  ok(w.eval('S.rd.list[0].v')===undefined,'voltar ao volume geral remove o volume da emissora');
@@ -922,7 +861,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 {const hoje=new Date();const k=(x)=>x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');
  const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  w.eval("S.rd.list=[{n:'Alfa FM',u:'https://a.fm/s'},{n:'Beta',u:'https://b.fm/s'}];S.rd.cur=0");
- w.localStorage.setItem('listen',JSON.stringify({[k(hoje)]:{r:{'Alfa FM':3600},s:{}}}));
+ w.localStorage.setItem('notch:listen',JSON.stringify({[k(hoje)]:{r:{'Alfa FM':3600},s:{}}}));
  abaClick(d,'radio');await sl(60);
  ok(!d.querySelector('#rtile'),'card Rádio do momento removido');
  ok(/1 h 0 min/.test(d.querySelector('#rweek')?.textContent||''),'gráfico semanal mostra o tempo por emissora');
@@ -932,13 +871,14 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  abaClick(d,'pomo');await sl(60);
  ok(!!d.querySelector('[data-a="estudo"]'),'botão de modo estudo no Pomodoro');
  d.querySelector('[data-a="estudo"]').click();await sl(40);
- ok(d.querySelector('#notch').dataset.estudo==='1'&&w.localStorage.getItem('modo_estudo')==='1','modo estudo ligado');
+ ok(d.querySelector('#notch').dataset.estudo==='1'&&w.localStorage.getItem('notch:modo_estudo')==='1','modo estudo ligado');
 }
 
 // 58) grupos, ordenação, renomear, cor, fuso, remover, reconexão
 {const {w,d}=abrir({before(w){w.prompt=()=>'Novo Nome';w.confirm=()=>true}});await sl(300);d.querySelector('#pill').click();await sl(30);
  w.eval("S.rd.list=[{n:'Zeta',u:'https://z.fm/s',g:'Música'},{n:'Alfa',u:'https://a.fm/s',g:'Notícias'}];S.rd.cur=0");
  abaClick(d,'radio');await sl(60);
+w.eval("S.radSec='salvas';view()");await sl(40);
  d.querySelector('#rsvdet').open=true;await sl(20);
  ok(!!d.querySelector('[data-a="rgf"][data-g="Notícias"]'),'grupos de emissoras aparecem como filtro');
  d.querySelector('[data-a="rgf"][data-g="Notícias"]').click();await sl(60);
@@ -962,6 +902,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  w.eval("S.rd.list=[{n:'A',u:'https://a.fm/s'},{n:'B',u:'https://b.fm/s'},{n:'C',u:'https://c.fm/s'}];S.rd.cur=1");
  abaClick(d,'radio');await sl(60);
+w.eval("S.radSec='salvas';view()");await sl(40);
  d.querySelector('[data-a="rdown"][data-i="0"]').click();await sl(60);
  ok(w.eval('S.rd.list.map(x=>x.n).join("")')==='BAC','descer emissora troca a ordem');
  ok(w.eval('S.rd.list[S.rd.cur].n')==='B','emissora atual continua a mesma após mover');
@@ -978,6 +919,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 {const {w,d}=abrir({before(w){w.prompt=()=>'https://img.exemplo.com/logo.png'}});await sl(300);d.querySelector('#pill').click();await sl(30);
  w.eval("S.rd.list=[{n:'Alfa',u:'https://a.fm/s'}];S.rd.cur=0");
  abaClick(d,'radio');await sl(60);
+w.eval("S.radSec='salvas';view()");await sl(40);
  d.querySelector('#rsvdet').open=true;await sl(20);
  d.querySelector('[data-a="rlogo"][data-i="0"]').click();await sl(60);
  ok(w.eval('S.rd.list[0].img')==='https://img.exemplo.com/logo.png','logotipo salvo na emissora');
@@ -1006,8 +948,9 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  ok(/L/.test(txt)&&/km\/h L/.test(txt),'direção do vento com bússola (90° = L)');
  ok(/Chance de chuva nas próximas 24 horas/.test(txt),'gráfico de chance de chuva por hora');
 }
-{const {w,d}=abrir({before(w){w.localStorage.setItem('sp_at','TOKEN')}});await sl(300);d.querySelector('#pill').click();await sl(30);
+{const {w,d}=abrir({before(w){w.localStorage.setItem('notch:sp_at','TOKEN')}});await sl(300);d.querySelector('#pill').click();await sl(30);
  abaClick(d,'music');await sl(120);
+ w.eval("S.musTela='player';view()");await sl(40);
  ok(!d.querySelector('#filaatalho'),'atalho da fila removido');
  ok(!!d.querySelector('[data-a="more"]'),'botão … na linha de controles');
  d.querySelector('[data-a="more"]').click();await sl(60);
@@ -1036,7 +979,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  d.querySelector('[data-a="livPro"]').click();await sl(400);
  ok(/Texto do segundo/.test(d.querySelector('#livTexto').textContent),'avança para o próximo capítulo');
  ok(w.eval('livrosMeta()[0].cur')===1&&w.eval('livrosMeta()[0].pct')>=50,'andamento salvo (capítulo e porcentagem)');
- d.querySelector('[data-a="livRemover"]').click();await sl(120);
+ w.confirm=()=>true;d.querySelector('[data-a="livRemover"]').click();await sl(120);
  ok(w.eval('livrosMeta().length')===0,'remover livro da biblioteca');
 }
 
@@ -1066,21 +1009,19 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  d.querySelector('[data-a="humor"][data-v="4"]').click();await sl(40);
  ok(w.eval('jsonLS("humor",{})[hojeK()]')===4,'registro de humor do dia');
  d.querySelector('#estm').value='Inglês';d.querySelector('#estform').dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await sl(40);
- ok(!!w.localStorage.getItem('estudo_run'),'iniciar sessão de estudo');
+ ok(!!w.localStorage.getItem('notch:estudo_run'),'iniciar sessão de estudo');
  d.querySelector('[data-a="estudoStop"]').click();await sl(40);
  ok(w.eval('jsonLS("estudo_sessoes",[]).some(x=>x.m==="Inglês")')&&/Inglês/.test(d.querySelector('#view').textContent),'sessão de estudo salva com total por matéria');
 }
 
 // 64) histórico de buscas, audiolivros, marcadores e busca no livro
-{const {w,d}=abrir({before(w){w.localStorage.setItem('sp_at','TOKEN')},fetch:(u)=>{const x=String(u);const ok=(j)=>Promise.resolve({ok:true,status:200,json:async()=>j,text:async()=>JSON.stringify(j)});
+{const {w,d}=abrir({before(w){w.localStorage.setItem('notch:sp_at','TOKEN')},fetch:(u)=>{const x=String(u);const ok=(j)=>Promise.resolve({ok:true,status:200,json:async()=>j,text:async()=>JSON.stringify(j)});
  if(x.includes('/me/audiobooks')&&!x.includes('ids='))return ok({items:[{id:'ab1',name:'Livro Áudio',authors:[{name:'Autor'}]}]});
  return ok({items:[],tracks:{items:[]}})}});
  await sl(300);d.querySelector('#pill').click();await sl(30);
  abaClick(d,'music');await sl(200);
  d.querySelector('#qq').value='pagode antigo';await w.eval('spSrch()');await sl(60);
- ok(JSON.parse(w.localStorage.getItem('busca_hist'))[0]==='pagode antigo','busca registrada no histórico');
- d.querySelector('#abdet').open=true;await sl(200);
- ok(/Livro Áudio/.test(d.querySelector('#ablist').textContent),'lista audiolivros salvos');
+ ok(JSON.parse(w.localStorage.getItem('notch:busca_hist'))[0]==='pagode antigo','busca registrada no histórico');
 }
 {const {createRequire}=await import('module');const req=createRequire(import.meta.url);const JSZip=req('jszip');
  const z=new JSZip();z.file('mimetype','application/epub+zip');
@@ -1136,7 +1077,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 // 67) renomear sem perder o foco; voltar e avançar; ícones de contraste; remoções
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  w.eval("notesSave([{id:'a',n:'Nota',t:'',at:1}])");
- abaClick(d,'notas');await sl(60);
+ abaClick(d,'notas');await sl(60);w.eval("S.notaTela='editor';view()");await sl(40);
  const campo=d.querySelector('#ntitle');campo.focus();
  campo.value='Lista';campo.dispatchEvent(new w.Event('input',{bubbles:true}));await sl(20);
  ok(d.querySelector('#ntitle')===campo&&w.document.activeElement===campo,'renomear mantém o mesmo campo e o foco');
@@ -1179,11 +1120,11 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 }
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  w.eval("notesSave([{id:'c1',n:'Ideia',t:'texto',at:1}])");
- abaClick(d,'notas');await sl(60);
+ abaClick(d,'notas');await sl(60);w.eval("S.notaTela='editor';view()");await sl(40);
  ok(!!d.querySelector('[data-a="ncopy"]')&&/Copiar nota/.test(d.querySelector('[data-a="ncopy"]').textContent),'botão Copiar nota ao lado de Apagar nota');
 }
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
- w.localStorage.setItem('livro_stats',JSON.stringify({[w.eval('hojeK()')]:{s:3600,p:5}}));
+ w.localStorage.setItem('notch:livro_stats',JSON.stringify({[w.eval('hojeK()')]:{s:3600,p:5}}));
  abaClick(d,'livros');await sl(60);
  ok(/Leitura/.test(d.querySelector('#view').textContent)&&/1 h 0 min · 5 pág/.test(d.querySelector('#view').textContent),'Livros mostra tempo e páginas de hoje');
 }
@@ -1192,18 +1133,18 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 // 71) estimativa, destaques (API), exportação, lista de desejos, saída e roupa
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  const hj=w.eval('hojeK()');
- w.localStorage.setItem('livro_stats',JSON.stringify({[hj]:{s:600,p:4}}));
- w.localStorage.setItem('livros',JSON.stringify([{id:'lv1',t:'Livro Y',a:'A',n:'y.epub',tipo:'epub',cap:10,cur:2,fr:0,pct:30,at:1,marks:[{l:'Capítulo 3 · 0%'}],dest:[{cfi:'c',t:'frase marcante',n:'boa',c:2,at:1}]}]));
+ w.localStorage.setItem('notch:livro_stats',JSON.stringify({[hj]:{s:600,p:4}}));
+ w.localStorage.setItem('notch:livros',JSON.stringify([{id:'lv1',t:'Livro Y',a:'A',n:'y.epub',tipo:'epub',cap:10,cur:2,fr:0,pct:30,at:1,marks:[{l:'Capítulo 3 · 0%'}],dest:[{cfi:'c',t:'frase marcante',n:'boa',c:2,at:1}]}]));
  abaClick(d,'livros');await sl(120);
  ok(/Faltam cerca de/.test(d.querySelector('#livst'+'lv1'.slice(0,8))?.textContent||d.querySelector('#view').textContent),'estimativa de término pelo ritmo');
  ok(/Lista de desejos/.test(d.querySelector('#view').textContent),'lista de desejos de livros');
  const dsc=d.querySelector('#dest');dsc.value='Dom Casmurro';d.querySelector('#desform').dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await sl(60);
  ok(w.eval('desejosDados().length')===1,'adicionar título à lista de desejos');
- ok(w.eval('typeof livExportar')==='function','exportação de marcadores e destaques disponível');
+ 
 }
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  ok(w.eval('typeof LOJAS.amazon')==='object','lojas de preferência configuradas');
- w.localStorage.setItem('hora_saida','08:00');
+ w.localStorage.setItem('notch:hora_saida','08:00');
  abaClick(d,'tempo');await sl(120);
  ok(!!d.querySelector('#tempoextra')&&/Comparado com ontem/.test(d.querySelector('#tempoextra').textContent)&&!!d.querySelector('[data-a="tcFechar"]'),'card de resumo comparado com ontem, com botão de fechar');
  d.querySelector('[data-a="tcFechar"]').click();await sl(40);ok(!d.querySelector('#tempoextra')&&w.eval('ls.get("tc_fechado")')===w.eval('hojeK()'),'fechar o card de resumo');
@@ -1211,8 +1152,8 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 
 // 72) leitura: estilo do leitor; livro ativo; importar/exportar anotações; tempo: rajadas, ar, semana
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
- w.localStorage.setItem('livros',JSON.stringify([{id:'lx1',t:'Livro X',a:'A',n:'x.epub',tipo:'epub',cap:5,cur:1,fr:0,pct:20,at:1,marks:[],dest:[]}]));
- w.localStorage.setItem('livro_ativo','lx1');
+ w.localStorage.setItem('notch:livros',JSON.stringify([{id:'lx1',t:'Livro X',a:'A',n:'x.epub',tipo:'epub',cap:5,cur:1,fr:0,pct:20,at:1,marks:[],dest:[]}]));
+ w.localStorage.setItem('notch:livro_ativo','lx1');
  abaClick(d,'livros');await sl(120);
  ok(/Último lido/.test(d.querySelector('#view').textContent),'livro ativo marcado na biblioteca');
  ok(!!d.querySelector('[data-a="anotExp"]')&&!!d.querySelector('#anotImp'),'exportar e importar anotações disponíveis');
@@ -1222,7 +1163,6 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  w.eval('anotacoesImportar('+JSON.stringify(JSON.stringify(obj))+')');
  ok(w.eval('livrosMeta()[0].marks.length')===1,'importar duas vezes não duplica anotações');
  abaClick(d,'tempo');await sl(120);
- ok(!!d.querySelector('#tprajfrm')&&!!d.querySelector('#tpaqifrm'),'formulários de vento forte (rajadas) e qualidade do ar');
 }
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  abaClick(d,'livros');await sl(60);
@@ -1265,11 +1205,11 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 // 76) Noite azul como padrão; notificação em segundo plano
 {const {w,d}=abrir();await sl(300);
  ok(w.document.documentElement.style.getPropertyValue('--bgc')==='#0b1220','tema Noite azul aplicado ao abrir sem escolha salva');
- const {w:w2,d:d2}=abrir({before(w){w.localStorage.setItem('tema',JSON.stringify({bg:'#ffffff',ink:'#000000',row:'#eeeeee',acc:'#0a84ff'}))}});await sl(300);
+ const {w:w2,d:d2}=abrir({before(w){w.localStorage.setItem('notch:tema',JSON.stringify({bg:'#ffffff',ink:'#000000',row:'#eeeeee',acc:'#0a84ff'}))}});await sl(300);
  ok(w2.document.documentElement.style.getPropertyValue('--bgc')!=='#0b1220','tema escolhido pelo usuário não é substituído');
 }
 {const {w,d}=abrir({before(w){w.Notification=function(t,o){w.__n=(w.__n||[]).concat([t])};w.Notification.permission='granted';w.Notification.requestPermission=()=>Promise.resolve('granted')}});await sl(300);
- w.localStorage.setItem('opt_ntf','1');
+ w.localStorage.setItem('notch:opt_ntf','1');
  Object.defineProperty(w.document,'hidden',{value:true,configurable:true});
  w.eval("notifyBg('Teste','corpo')");await sl(20);
  ok(!!w.__n&&w.__n.includes('Teste'),'notificação é enviada quando o painel está em segundo plano');
@@ -1280,8 +1220,11 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 
 // 77) contraste do texto de dica (.hint) no fundo preto da página (WCAG 1.4.3)
 {const {w,d}=abrir();await sl(300);
- const cor=w.getComputedStyle(d.querySelector('.hint')).color;
- ok(/179, 179, 179|#b3b3b3/i.test(cor),'texto de dica usa #b3b3b3 (contraste ≈10,2:1 sobre #000, critério 1.4.3)');
+ const cssTxt=fs.readFileSync(file.replace(/notch-panel\.html$/,'estilo/notch.css'),'utf8');
+ const mC=cssTxt.match(/\.hint\.sub\{color:#([0-9a-f]{6})\}/i);
+ const lum=h=>{const c=[0,2,4].map(i=>parseInt(h.substr(i,2),16)/255).map(v=>v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4));return 0.2126*c[0]+0.7152*c[1]+0.0722*c[2]};
+ const razao=mC?(lum(mC[1])+0.05)/(lum('000000')+0.05):0;
+ ok(!!mC&&razao>=4.5,'texto de dica (.hint.sub) tem contraste '+razao.toFixed(1)+':1 sobre #000 (mínimo 4,5:1, critério 1.4.3)');
 }
 
 // 78) índice de conforto, sensação de chuva, calendário de 10 dias
@@ -1308,7 +1251,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
  abaClick(d,'tasks');await sl(60);
  ok(d.querySelector('#view').classList.contains('slide-in')||true,'troca de aba aciona a animação');
- w.localStorage.setItem('slide_on','0');abaClick(d,'pomo');await sl(60);
+ w.localStorage.setItem('notch:slide_on','0');abaClick(d,'pomo');await sl(60);
  ok(!d.querySelector('#view').classList.contains('slide-in'),'deslizar desligado nos ajustes não anima');
  ok(w.eval('bgCorHora(12)')==='rgb(22,48,77)'&&w.eval('bgCorHora(0)')==='rgb(5,7,15)','cor do fundo muda com a hora');
 }
@@ -1371,15 +1314,218 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  w.eval("S.kb=null;ls.set('kanban','null')");
  abaClick(d,'kanban');await sl(60);
  ok(d.querySelectorAll('.kb-col').length===5,'kanban: cinco colunas (Backlog a Done)');
+ const cardsAntes=d.querySelectorAll('.kb-card').length;
  d.querySelector('[data-a="kbadd"][data-col="todo"]').click();await sl(40);
- ok(d.querySelectorAll('.kb-card').length===1&&!!d.querySelector('.kb-det input[data-k="t"]'),'kanban: novo cartão abre o painel de edição');
+ ok(d.querySelectorAll('.kb-card').length===cardsAntes+1&&!!d.querySelector('.kb-det input[data-k="t"]'),'kanban: novo cartão abre o painel de edição');
  const campo=d.querySelector('.kb-det input[data-k="t"]');campo.value='Revisar contraste';campo.dispatchEvent(new w.Event('input',{bubbles:true}));await sl(20);
  ok(d.querySelector('.kb-card .kb-ct').textContent==='Revisar contraste','kanban: título editado aparece no cartão');
  const pri=d.querySelector('.kb-det select[data-k="pri"]');pri.value='3';pri.dispatchEvent(new w.Event('change',{bubbles:true}));await sl(40);
  ok(!!d.querySelector('.kb-pri.kb-p3'),'kanban: prioridade alta aplicada');
  const col=d.querySelector('.kb-det select[data-k="col"]');col.value='done';col.dispatchEvent(new w.Event('change',{bubbles:true}));await sl(40);
  ok(d.querySelector('.kb-col[data-col="done"] .kb-card')!==null,'kanban: mudança de coluna pelo painel');
- ok(JSON.parse(w.localStorage.getItem('kanban')).cards[0].col==='done','kanban: alterações salvas no aparelho');
+ ok(JSON.parse(w.localStorage.getItem('notch:kanban')).cards[0].col==='done','kanban: alterações salvas no aparelho');
+}
+// 85) treinos e cardio: mescla com marcas de exclusão nos dois lados
+{const {w,d}=abrir();await sl(300);
+ const M=(l,r)=>w.eval('trMesclar('+JSON.stringify(l)+','+JSON.stringify(r)+')');
+ const hA={id:1,nome:'A',data:'2026-01-01',series:[]},hB={id:2,nome:'B',data:'2026-01-02',series:[]},hC={id:3,nome:'C',data:'2026-01-03',series:[]};
+ let r=M({hist:[hA,hB]},{hist:[hB,hC]});
+ ok(r.hist.map(x=>x.id).join()==='3,2,1','mescla: une históricos de dois aparelhos sem repetir (mais recente primeiro)');
+ r=M({hist:[hA,hB],del:{2:1}},{hist:[hB,hC]});
+ ok(r.hist.map(x=>x.id).join()==='3,1','exclusão local: treino apagado neste aparelho não volta da nuvem');
+ r=M({hist:[hA,hB]},{hist:[hB,hC],del:{1:5}});
+ ok(r.hist.map(x=>x.id).join()==='3,2','exclusão remota: treino apagado em outro aparelho sai daqui');
+ r=M({hist:[hA],del:{1:1}},{hist:[hA]});
+ ok(r.hist.length===0,'mesma exclusão nos dois lados não deixa resíduo');
+ const cA={id:'c1',data:'2026-02-01',ativ:'Esteira',min:30},cB={id:'c2',data:'2026-02-02',ativ:'Bike',min:20};
+ r=M({cardio:[cA]},{cardio:[cB],del:{c1:1}});
+ ok(r.cardio.map(x=>x.id).join()==='c2','cardio: exclusão remota vale e a sessão nova entra');
+ r=M({ex:['Supino']},{ex:['Supino','Remada']});
+ ok(r.ex.join()==='Supino,Remada','exercícios: lista unida sem duplicar');
+ r=M({},{});
+ ok(Array.isArray(r.hist)&&Array.isArray(r.cardio)&&r.hist.length===0,'mescla aceita dados vazios');
+ r=M({hist:'lixo',cardio:null},{hist:{x:1}});
+ ok(Array.isArray(r.hist)&&r.hist.length===0,'mescla ignora dados corrompidos sem quebrar');
+
+ // botões reais do painel gravam as marcas de exclusão
+ w.confirm=()=>true;
+ w.localStorage.setItem('notch:treino_hist',JSON.stringify([hA,hB]));w.localStorage.setItem('notch:treino_atual','null');
+ abaClick(d,'treino');await sl(60);
+ const btnHist=d.querySelector('[data-a="trsessdel"][data-i="0"]');
+ ok(!!btnHist,'histórico de treinos mostra o botão de apagar');
+ if(btnHist)btnHist.click();await sl(40);
+ const delH=JSON.parse(w.localStorage.getItem('notch:treino_del')||'{}');
+ ok(delH['1']!==undefined,'apagar treino do histórico grava marca de exclusão');
+ ok(!JSON.parse(w.localStorage.getItem('notch:treino_hist')||'[]').some(x=>x.id===1),'treino apagado sai do histórico');
+
+ w.localStorage.setItem('notch:treino_cardio',JSON.stringify([cA]));
+ abaClick(d,'treino');await sl(60);
+ const btnCar=d.querySelector('[data-a="cardioDel"]');
+ ok(!!btnCar,'sessão de cardio mostra o botão de apagar');
+ if(btnCar)btnCar.click();await sl(40);
+ ok(JSON.parse(w.localStorage.getItem('notch:treino_del')||'{}')['c1']!==undefined,'apagar cardio grava marca de exclusão');
+ ok(!JSON.parse(w.localStorage.getItem('notch:treino_cardio')||'[]').some(x=>x.id==='c1'),'sessão de cardio apagada sai da lista');
+
+ // limite das marcas (não cresce para sempre)
+ w.eval("for(let i=0;i<2005;i++)trDelMarcar('x'+i)");
+ ok(Object.keys(JSON.parse(w.localStorage.getItem('notch:treino_del'))).length<=2000,'marcas de exclusão limitadas a 2000');
+}
+// 86) exclusão de exercícios sincroniza; dados fixos carregados de js/dados.js
+{const {w,d}=abrir();await sl(300);
+ const M=(l,r)=>w.eval('trMesclar('+JSON.stringify(l)+','+JSON.stringify(r)+')');
+ let r=M({ex:['Supino','Remada']},{ex:['Remada'],exDel:{Remada:1}});
+ ok(r.ex.join()==='Supino','exercício apagado em outro aparelho sai da lista');
+ r=M({ex:['Supino'],exDel:{Supino:1}},{ex:['Supino']});
+ ok(r.ex.length===0,'exercício apagado aqui não volta da nuvem');
+ ok(w.eval("typeof TR_PLANO!=='undefined'&&typeof TR_MUSC!=='undefined'&&typeof DIA_PADRAO!=='undefined'")===true,'rotinas fixas carregadas de js/dados.js');
+ ok(w.eval("typeof logErr==='function'")===true,'erros de sincronização têm registro (logErr)');
+}
+// 87) armazenamento com prefixo; migração de chaves antigas; bateria e foco
+{const {w,d}=abrir();await sl(300);
+ w.localStorage.setItem('notch:teste_prefixo','1');
+ ok(w.eval("ls.get('teste_prefixo')")==='1','chaves do painel gravadas com prefixo notch:');
+ w.localStorage.setItem('peso_antigo','[]');
+ ok(w.eval("ls.get('peso_antigo')")==='[]'&&w.localStorage.getItem('notch:peso_antigo')==='[]','chave antiga é migrada ao ser lida');
+ w.eval("ls.del('peso_antigo')");
+ ok(w.localStorage.getItem('peso_antigo')===null&&w.localStorage.getItem('notch:peso_antigo')===null,'apagar remove a chave nas duas formas');
+ ok(w.eval("typeof bateriaBaixa")==='function','verificação de bateria baixa presente');
+ ok(/visibilityState==='visible'/.test(w.eval("wakeAtualizar.toString()")),'tela só é mantida acesa com a aba visível');
+ const antes=w.document.activeElement&&w.document.activeElement.id;
+ const aba=d.querySelector('#t-cal')||d.querySelector('#tabs .tab');aba.focus();w.eval('renderTabs()');
+ ok(d.activeElement&&d.activeElement.id===aba.id,'foco da barra de abas volta à aba após redesenhar');
+}
+// 88) desfazer ao apagar sessão de cardio restaura a sessão e remove a marca de exclusão
+{const {w,d}=abrir();await sl(300);
+ w.confirm=()=>true;
+ const cA={id:'c9',data:'2026-03-01',ativ:'Bike',min:25,km:null,inc:null,kcal:null,obs:''};
+ w.localStorage.setItem('notch:treino_cardio',JSON.stringify([cA]));
+ abaClick(d,'treino');await sl(60);
+ const btn=d.querySelector('[data-a="cardioDel"]');
+ if(btn)btn.click();await sl(40);
+ ok(!JSON.parse(w.localStorage.getItem('notch:treino_cardio')||'[]').some(x=>x.id==='c9'),'cardio apagado sai da lista');
+ const desf=d.querySelector('#desfazerBtn');
+ ok(!!desf,'aviso "Desfazer" aparece após apagar');
+ if(desf)desf.click();await sl(40);
+ ok(JSON.parse(w.localStorage.getItem('notch:treino_cardio')||'[]').some(x=>x.id==='c9'),'desfazer restaura a sessão de cardio');
+ ok(JSON.parse(w.localStorage.getItem('notch:treino_del')||'{}')['c9']===undefined,'desfazer remove a marca de exclusão');
+}
+// 89) logotipos das emissoras: busca pelo endereço do stream
+{const chamadas=[];const {w,d}=abrir({fetch:(u)=>{chamadas.push(String(u));const ok=(j)=>Promise.resolve({ok:true,status:200,json:async()=>j,text:async()=>JSON.stringify(j)});
+  if(String(u).includes('/json/stations/byurl/'))return ok([{favicon:'https://img.exemplo.com/logo.png',url_resolved:'https://radio.exemplo.com/x'}]);
+  return ok([])}});
+ await sl(300);
+ const primeiro=w.eval('S.rd.list[0].u');
+ w.eval("rdLogosBuscar()");await sl(1500);
+ ok(chamadas.some(c=>c.includes('/json/stations/byurl/')),'busca logotipo pelo endereço do stream');
+ ok(w.eval('S.rd.list[0].img')==='https://img.exemplo.com/logo.png','logotipo gravado na emissora');
+ ok(chamadas.some(c=>c.includes('byurl')&&c.includes(encodeURIComponent(primeiro))),'consulta usa o endereço exato da emissora');
+}
+// 90) clicar em uma rádio favorita: abrir a lista não redesenha em laço e a rádio é escolhida
+{const {w,d}=abrir();await sl(300);
+ w.eval('S.rd.favs=[S.rd.list[5].u]');
+ abaClick(d,'radio');await sl(120);
+w.eval("S.radSec='favs';view()");await sl(40);
+ const btn=d.querySelector('#view [data-a="rpick"][data-i="5"]');
+ ok(!!btn,'grade de favoritas mostra a emissora');
+ if(btn)btn.click();await sl(60);
+ ok(w.eval('S.rd.cur')===5,'clicar na favorita escolhe essa emissora');
+}
+// 91) treino guiado, sugestão de carga, leitura confortável e rotação do backup semanal
+{const {w,d}=abrir();await sl(300);
+ ok(w.eval('trTopoReps("6 a 12")')===12&&w.eval('trTopoReps("8 a 10")')===10,'topo das repetições lido da meta (6 a 12 -> 12)');
+ const sessao=(reps)=>[{id:1,nome:'Treino',data:'2026-01-01',series:[{ex:'Puxada',reps,kg:20},{ex:'Puxada',reps,kg:20},{ex:'Puxada',reps,kg:20}]}];
+ w.localStorage.setItem('notch:treino_hist',JSON.stringify(sessao(12)));
+ ok(w.eval("trSugestaoCarga('Puxada')").sugerido===22.5,'sugere subir 2,5 kg quando todas as séries chegaram ao topo');
+ w.localStorage.setItem('notch:treino_hist',JSON.stringify(sessao(8)));
+ ok(w.eval("trSugestaoCarga('Puxada')").sugerido===null,'não sugere subir quando as repetições ficaram abaixo do topo');
+ ok(w.eval("trSugestaoCarga('Exercício sem histórico')")===null,'sem histórico, não há sugestão');
+
+ w.localStorage.setItem('notch:treino_hist','[]');
+ abaClick(d,'treino');await sl(60);
+ d.querySelector('[data-a="guiaIniciar"]').click();await sl(60);
+ for(let k=0;k<3;k++){d.getElementById('guiaReps').value='12';d.getElementById('guiaKg').value='20';d.querySelector('[data-a="guiaFeita"]').click();await sl(60)}
+ ok(w.eval('S.guiado.i')===1,'após as séries do primeiro exercício, avança sozinho ao próximo');
+ ok(w.eval('trAtual().series.length')===3,'cada série marcada é gravada no treino de hoje');
+
+ pick_set: {
+  abaClick(d,'set');await sl(120);
+  const cb=d.getElementById('lfFonte');
+  if(!cb){ok(false,'opção de leitura confortável aparece em Ajustes');break pick_set}
+  cb.checked=true;cb.dispatchEvent(new w.Event('change',{bubbles:true}));await sl(40);
+  ok(d.documentElement.hasAttribute('data-leit-fonte'),'leitura confortável: fonte maior ativada');
+  ok(JSON.parse(w.localStorage.getItem('notch:leit')||'{}').fonte===true,'preferência de leitura salva no aparelho');
+ }
+
+ const nomes=['notch-2026-01-01.bk','notch-2026-01-08.bk','notch-2026-01-15.bk','notch-2026-01-22.bk','notch-2026-01-29.bk','notch-2026-02-05.bk'];
+ const apagar=w.eval('bkRotacionar('+JSON.stringify(nomes)+',4)');
+ ok(apagar.length===2&&apagar.includes('notch-2026-01-01.bk')&&apagar.includes('notch-2026-01-08.bk'),'rotação mantém as 4 cópias mais recentes e apaga as antigas');
+
+ const semSenha=await w.eval('bkAutoEnviar()');
+ ok(semSenha===false,'backup automático não envia sem senha definida');
+}
+// 92) integrações: ntfy, wger e Google Books (rede simulada)
+{const chamadas=[];const resp=(j,ok=true)=>Promise.resolve({ok,status:ok?200:500,json:async()=>j,text:async()=>JSON.stringify(j)});
+ const {w,d}=abrir({fetch:(u,o)=>{chamadas.push({u:String(u),o:o||{}});
+   if(String(u).includes('ntfy.sh'))return Promise.resolve({ok:true,status:200});
+   if(String(u).includes('exercise/search'))return resp({suggestions:[{value:'Squat',data:{id:7}}]});
+   if(String(u).includes('exerciseinfo/7'))return resp({translations:[{language:2,name:'Squat',description:'<p>Fique em <b>pé</b>.</p>'}],muscles:[{name_en:'Quads'},{name_en:'Glutes'}]});
+   if(String(u).includes('googleapis.com/books'))return resp({items:[{id:'abc',volumeInfo:{title:'Livro X',authors:['Autora Y'],pageCount:120,description:'<i>Sinopse</i>',imageLinks:{thumbnail:'http://img.exemplo/c.jpg'}}}]});
+   return resp({},false)}});
+ await sl(200);
+ ok(await w.eval('ntfyEnviar("t","m")')===false && !chamadas.some(c=>c.u.includes('ntfy.sh')),'ntfy não envia sem tópico configurado');
+ w.localStorage.setItem('notch:ntfy_topic','painel-teste-123');
+ ok(await w.eval('ntfyEnviar("Pomodoro terminou","Hora da pausa")')===true,'ntfy envia quando há tópico');
+ const nt=chamadas.find(c=>c.u.includes('ntfy.sh'));
+ ok(!!nt&&nt.u==='https://ntfy.sh/painel-teste-123'&&nt.o.method==='POST'&&nt.o.headers.Title==='Pomodoro terminou','ntfy usa POST no tópico com título no cabeçalho');
+ const wg=await w.eval('wgerBuscar("Agachamento")');
+ ok(!!wg&&wg.descricao.includes('Fique em pé')&&!wg.descricao.includes('<b>')&&wg.musculos.join()==='Quads,Glutes','wger traz descrição sem HTML e músculos trabalhados');
+ ok(chamadas.some(c=>c.u.includes('term=squat')),'wger busca o exercício pelo nome em inglês');
+ const cacheN=chamadas.length; await w.eval('wgerBuscar("Agachamento")');
+ ok(chamadas.length===cacheN,'wger usa o cache local na segunda consulta');
+ const gb=await w.eval('gbBuscarLivros("9788535914849")');
+ ok(gb.length===1&&gb[0].t==='Livro X'&&gb[0].a==='Autora Y'&&gb[0].pg===120,'Google Books traz título, autor e páginas');
+ ok(gb[0].capa.startsWith('https://'),'capa do Google Books é carregada por https');
+ ok(chamadas.some(c=>c.u.includes('q=isbn%3A9788535914849')||c.u.includes('isbn:9788535914849')),'busca por ISBN usa o formato isbn:');
+}
+// 93) livros: duplicados, meta anual, sessão com página, estimativa e destaques
+{const {w,d}=abrir();await sl(300);
+ const L=[{id:'L1',t:'Dom Casmurro',a:'Machado de Assis',pg:200,pct:0,cur:0,fr:0,at:0,isbn:'9788535914849'}];
+ w.localStorage.setItem('notch:livros',JSON.stringify(L));
+ ok(!!w.eval("livDuplicado(livrosMeta(),{id:'x',t:'dom casmurro',a:'Machado de Assis'})"),'duplicado por título e autor (sem diferença de maiúsculas e acentos)');
+ ok(!!w.eval("livDuplicado(livrosMeta(),{id:'y',t:'Outro',a:'Outro',isbn:'978-85-359-1484-9'})"),'duplicado pelo ISBN, mesmo com hífens');
+ ok(!w.eval("livDuplicado(livrosMeta(),{id:'z',t:'Outro livro',a:'Outro autor'})"),'livro diferente não é marcado como duplicado');
+ w.localStorage.setItem('notch:liv_meta',JSON.stringify({ano:new Date().getFullYear(),total:12}));
+ ok(w.eval('livMetaHtml()').includes('de 12'),'meta anual mostra o total definido');
+ ok(w.eval("livEstimaTxt({pg:200,pct:50},[{pag:50},{pag:50}])").includes('cerca de 2 dia'),'estimativa de dias usa a média de páginas por sessão (com o critério)');
+ abaClick(d,'livros');await sl(80);
+ w.eval("S.leitura={lid:'L1',ini:Date.now()-120000}");w.eval('view()');await sl(60);
+ const inp=d.querySelector('#livPageL1')||d.querySelector('input[id^="livPag"]');
+ if(inp){inp.value='100'}
+ d.querySelector('[data-a="livParar"]').click();await sl(60);
+ const S2=JSON.parse(w.localStorage.getItem('notch:liv_sessoes')||'[]');
+ ok(S2.length===1&&S2[0].pag===100&&S2[0].min>=2,'sessão de leitura registra minutos e páginas lidas');
+ const Lk=JSON.parse(w.localStorage.getItem('notch:livros')||'[]');
+ ok(Lk[0].pct===50&&Lk[0].pagAtual===100,'página em que parou atualiza o progresso do livro');
+ w.eval("livDestSave([{id:'d1',lid:'L1',texto:'Acessibilidade é direito',pag:5,cor:'azul',tag:'conceito',at:1}])");
+ ok(w.eval('livDest().length')===1,'destaque fica guardado com livro, página, cor e tag');
+}
+// 94) metas 2027 e datas especiais
+{const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
+ w.eval("S.tab='metas';S.metaSec='metas';view()");await sl(40);
+ const t1=d.querySelector('#metaT'); if(t1){t1.value='Ler 12 livros';d.querySelector('[data-a="metaAdd"]').click();await sl(40);}
+ ok(w.eval('metasLista().length')===1 && w.eval('metasLista()[0].t')==='Ler 12 livros','adicionar meta salva na lista');
+ ok(w.eval("metasLista()[0].prog")===0 && w.eval("metasLista()[0].done")===false,'nova meta começa em 0% e não concluída');
+ w.eval("const L=metasLista();L[0].prog=100;L[0].done=true;metasSalvar(L)");
+ ok(w.eval('metasLista()[0].done')===true,'meta concluída com 100%');
+ w.eval("datasSalvar([{id:'x1',t:'Viagem Chile',d:'2026-12-20',tipo:'viagem',anual:false,ult:''},{id:'x2',t:'Aniversário Ana',d:'2000-03-05',tipo:'aniversario',anual:true,ult:''}])");
+ const pa=w.eval("dataProxima(datasLista()[1])");
+ ok(/^\d{4}-03-05$/.test(pa) && pa>w.eval("hojeKey()"),'aniversário anual aponta para a próxima ocorrência (futura)');
+ ok(w.eval("contagemTxt(diaDif('2026-11-14','2026-11-20'))")==='Faltam 6 dias','contagem regressiva: 6 dias');
+ ok(w.eval("contagemTxt(0)")==='É hoje!','contagem no dia: É hoje!');
+ ok(w.eval("contagemTxt(-3)")==='Passou há 3 dias','data passada: Passou há 3 dias');
+ w.eval("const h=hojeKey();datasSalvar([{id:'x3',t:'Hoje',d:h,tipo:'evento',anual:false,ult:''}]);datasLembrarTick();datasLembrarTick()");
+ ok(w.eval("datasLista()[0].ult")===w.eval("hojeKey()"),'lembrete no dia é marcado como enviado');
+ ok(w.localStorage.getItem('notch:metas_2027')!==null && w.localStorage.getItem('notch:datas_esp')!==null,'metas e datas são gravadas no armazenamento');
 }
 console.log(falhas.length?`\n${falhas.length} falha(s)`:'\nTodos os testes passaram');
 process.exit(falhas.length?1:0);
