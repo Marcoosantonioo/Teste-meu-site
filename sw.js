@@ -1,5 +1,5 @@
-const VERSAO = 'painel-v88';
-const ARQUIVOS = ['./', './notch-panel.html', './estilo/notch.css', './js/notch.js', './js/dados.js', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
+const VERSAO = 'painel-v94';
+const ARQUIVOS = ['./', './notch-panel.html', './estilo/notch.css', './js/notch.js', './js/dados.js', './diario.html', './segundo-cerebro.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('message', e => {
   if (e.data === 'skip') self.skipWaiting();

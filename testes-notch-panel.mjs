@@ -18,7 +18,7 @@ function abrir(extra={}){const errs=[];const vc=new VirtualConsole();vc.on('jsdo
 // 1) abas e interface
 {const {w,d,errs}=abrir();await sl(300);
  const abasRapido=d.querySelectorAll('#tabs .tab').length;ok(abasRapido===5&&!!d.querySelector('#tabsMore'),'barra mostra 5 abas e o botão Mais (fora da lista)');d.querySelector('#tabsMore').click();
- const abas=d.querySelectorAll('#tabs .tab').length;ok(abas===14&&!!d.querySelector('#tabsMore'),'14 abas e o botão Menos ao expandir');
+ const abas=d.querySelectorAll('#tabs .tab').length;ok(abas===15&&!!d.querySelector('#tabsMore'),'15 abas e o botão Menos ao expandir');
  ok(!d.querySelector('#t-tokens'),'aba Tokens removida');
  for(const id of ['cal','set','radio','tv','tempo','music']){abaClick(d,id);await sl(30)}
  ok(!errs.length,'trocar todas as abas sem erro de JavaScript');
@@ -71,7 +71,7 @@ function abrir(extra={}){const errs=[];const vc=new VirtualConsole();vc.on('jsdo
  d.querySelector('#back').click();await sl(30);
  ok(w.eval('S.tab')==='tv','botão voltar retorna à aba anterior');
  d.querySelector('#grid').click();await sl(30);
- ok(d.querySelectorAll('.appbtn').length===14,'grade de apps mostra os 14 apps (uma por aba)');
+ ok(d.querySelectorAll('.appbtn').length===15,'grade de apps mostra os 15 apps (uma por aba)');
  d.querySelector('[data-a="gridpick"][data-id="music"]').click();await sl(30);
  ok(w.eval('S.tab')==='music'&&!w.eval('S.grid'),'escolher um app na grade abre a aba e fecha a grade');
 }

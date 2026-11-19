@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Segundo Cérebro</title>
+<style>
+  :root {
+    --bg: #f5f4f0; --surface: #ffffff; --ink: #1d1f23; --muted: #5d6270;
+    --accent: #2f5fa8; --accent-ink: #ffffff; --accent-soft: #e3ebf7;
+    --line: #d9d7d0; --danger: #a33a3a; --focus: #1b4f9c;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15171c; --surface: #1f222a; --ink: #eceef3; --muted: #aab0bd;
+      --accent: #8ab4f8; --accent-ink: #10131a; --accent-soft: #263248;
+      --line: #343844; --danger: #f08c8c; --focus: #a9c8ff;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15171c; --surface: #1f222a; --ink: #eceef3; --muted: #aab0bd;
+    --accent: #8ab4f8; --accent-ink: #10131a; --accent-soft: #263248;
+    --line: #343844; --danger: #f08c8c; --focus: #a9c8ff;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .skip { position: absolute; left: -9999px; top: 0; background: var(--accent); color: var(--accent-ink); padding: 8px 12px; z-index: 99; }
+  .skip:focus { left: 8px; top: 8px; }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  .app { display: grid; grid-template-columns: 220px minmax(0, 1fr) minmax(0, 1.1fr); height: 100vh; height: 100dvh; }
+  @media (max-width: 1000px) { .app { grid-template-columns: 1fr; height: auto; min-height: 100vh; } }
+
+  aside.nav {
+    background: var(--surface); border-right: 1px solid var(--line);
+    padding: 18px 14px; overflow: auto; display: flex; flex-direction: column; gap: 18px;
+  }
+  .brand { font-size: 1.15rem; font-weight: 700; margin: 0; }
+  .nav-group h2 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 6px; font-weight: 600; }
+  .nav-btn {
+    display: flex; justify-content: space-between; align-items: center; width: 100%;
+    min-height: 40px; padding: 8px 10px; border: 0; border-radius: 8px;
+    background: transparent; color: var(--ink); font: inherit; text-align: left; cursor: pointer;
+  }
+  .nav-btn:hover { background: var(--accent-soft); }
+  .nav-btn[aria-current="true"] { background: var(--accent); color: var(--accent-ink); }
+  .nav-btn .n { font-size: 0.85rem; opacity: 0.8; }
+  .tag-chip {
+    display: inline-flex; align-items: center; min-height: 32px; padding: 4px 10px; margin: 0 6px 6px 0;
+    border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--ink);
+    font: inherit; font-size: 0.9rem; cursor: pointer;
+  }
+  .tag-chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+
+  main.list-col { display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+  .toolbar { padding: 16px 18px 10px; border-bottom: 1px solid var(--line); background: var(--bg); display: grid; gap: 10px; }
+  .search-row { display: flex; gap: 8px; }
+  input, select, textarea {
+    font: inherit; color: var(--ink); background: var(--surface);
+    border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; width: 100%; min-height: 44px;
+  }
+  textarea { min-height: 120px; resize: vertical; line-height: 1.55; }
+  label { display: grid; gap: 5px; font-size: 0.9rem; color: var(--muted); }
+  .btn {
+    font: inherit; min-height: 44px; padding: 0 16px; border-radius: 8px; cursor: pointer;
+    border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink);
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap;
+  }
+  .btn.ghost { background: transparent; color: var(--accent); }
+  .btn.small { min-height: 36px; padding: 0 12px; font-size: 0.9rem; }
+  .btn.danger { border-color: var(--danger); background: transparent; color: var(--danger); }
+  .muted { color: var(--muted); font-size: 0.9rem; }
+  .capture { display: flex; gap: 8px; }
+
+  .items { flex: 1; overflow: auto; padding: 12px 14px 40px; display: grid; gap: 10px; align-content: start; }
+  .item {
+    width: 100%; text-align: left; font: inherit; color: var(--ink);
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 12px 14px; cursor: pointer; display: grid; gap: 6px;
+  }
+  .item:hover { border-color: var(--accent); }
+  .item[aria-current="true"] { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+  .item-title { font-weight: 600; overflow-wrap: anywhere; }
+  .item-excerpt { color: var(--muted); font-size: 0.92rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: 0.82rem; color: var(--muted); align-items: center; }
+  .badge { border-radius: 6px; padding: 1px 7px; background: var(--accent-soft); color: var(--ink); font-size: 0.78rem; }
+  mark { background: #ffe38a; color: #1d1f23; border-radius: 3px; padding: 0 2px; }
+  .empty { text-align: center; color: var(--muted); padding: 40px 16px; border: 1px dashed var(--line); border-radius: 12px; }
+
+  section.editor { background: var(--surface); border-left: 1px solid var(--line); overflow: auto; padding: 20px 22px 60px; min-width: 0; }
+  @media (max-width: 1000px) { section.editor { border-left: 0; border-top: 1px solid var(--line); } }
+  .ed-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+  .ed-form { display: grid; gap: 14px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .row2 { grid-template-columns: 1fr; } }
+  .ed-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; }
+  .design-box { border: 1px dashed var(--line); border-radius: 12px; padding: 12px; display: grid; gap: 10px; }
+  .design-box img { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+  .status { min-height: 1.4em; color: var(--accent); font-size: 0.92rem; }
+  .error { color: var(--danger); }
+  .welcome { color: var(--muted); padding: 30px 6px; }
+  .welcome h2 { color: var(--ink); font-size: 1.2rem; margin: 0 0 8px; }
+  .welcome ul { padding-left: 20px; }
+
+  .toast {
+    position: fixed; left: 50%; transform: translateX(-50%); bottom: 20px; z-index: 40;
+    background: var(--ink); color: var(--surface); padding: 10px 14px; border-radius: 10px;
+    display: flex; gap: 12px; align-items: center; box-shadow: 0 8px 22px rgba(0,0,0,.25); max-width: calc(100% - 32px);
+  }
+  .toast .btn { color: var(--accent-ink); }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+</style>
+</head>
+<body>
+<a class="skip" href="#lista">Pular para a lista</a>
+<div class="app">
+
+  <aside class="nav" aria-label="Navegação">
+    <p class="brand">Segundo Cérebro</p>
+
+    <div class="nav-group">
+      <h2>Coleções</h2>
+      <div id="navTipos"></div>
+    </div>
+
+    <div class="nav-group">
+      <h2>Etiquetas</h2>
+      <div id="navTags"></div>
+    </div>
+
+    <div class="nav-group">
+      <h2>Dados</h2>
+      <div style="display:grid;gap:8px">
+        <button type="button" class="btn ghost small" id="exportBtn">Exportar backup (.json)</button>
+        <label class="btn ghost small" style="cursor:pointer">
+          Importar backup
+          <input type="file" id="importFile" accept="application/json" class="sr-only">
+        </label>
+        <button type="button" class="btn ghost small" id="themeBtn">Alternar tema</button>
+      </div>
+      <p class="muted" style="margin:8px 0 0">Os itens ficam salvos só neste navegador. Exporte um backup para guardar ou levar para outro aparelho.</p>
+    </div>
+  </aside>
+
+  <main class="list-col" id="lista" aria-label="Itens">
+    <div class="toolbar">
+      <label for="busca" class="sr-only">Buscar em tudo</label>
+      <div class="search-row">
+        <input type="search" id="busca" placeholder="Buscar em títulos, textos e etiquetas (Ctrl+K)" autocomplete="off">
+      </div>
+      <form class="capture" id="captura" autocomplete="off">
+        <label for="capturaTxt" class="sr-only">Captura rápida de ideia</label>
+        <input type="text" id="capturaTxt" maxlength="200" placeholder="Captura rápida: escreva uma ideia e pressione Enter">
+        <button type="submit" class="btn small">Guardar ideia</button>
+      </form>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+        <p class="muted" id="contagem" role="status" aria-live="polite" style="margin:0"></p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <label style="display:flex;align-items:center;gap:6px">
+            Ordenar
+            <select id="ordem" style="width:auto;min-height:36px;padding:4px 8px">
+              <option value="recente">Mais recentes</option>
+              <option value="antigo">Mais antigos</option>
+              <option value="titulo">Título (A-Z)</option>
+            </select>
+          </label>
+          <button type="button" class="btn small" id="novoBtn">+ Novo item</button>
+        </div>
+      </div>
+    </div>
+    <div class="items" id="items"></div>
+  </main>
+
+  <section class="editor" aria-label="Editor" id="editorBox">
+    <div id="welcome" class="welcome">
+      <h2>Bem-vindo</h2>
+      <p>Guarde tudo em um só lugar e encontre pela busca, sem vasculhar pastas.</p>
+      <ul>
+        <li><b>Anotação:</b> texto livre para estudos, reuniões e lembretes.</li>
+        <li><b>Ideia:</b> pensamentos rápidos. Use a captura no topo da lista.</li>
+        <li><b>Documento:</b> texto ou link de um arquivo, página ou pasta.</li>
+        <li><b>Design:</b> imagem com notas, links e etiquetas.</li>
+      </ul>
+      <p>Escolha um item na lista, ou clique em <b>+ Novo item</b>.</p>
+    </div>
+
+    <form id="form" class="ed-form" hidden novalidate>
+      <div class="ed-head">
+        <h2 id="edTitulo" style="margin:0;font-size:1.2rem;font-weight:600">Novo item</h2>
+        <span class="muted" id="edMeta"></span>
+      </div>
+      <div class="row2">
+        <label>
+          Tipo
+          <select id="fTipo">
+            <option value="nota">Anotação</option>
+            <option value="ideia">Ideia</option>
+            <option value="doc">Documento</option>
+            <option value="design">Design</option>
+          </select>
+        </label>
+        <label>
+          Etiquetas (separadas por vírgula)
+          <input type="text" id="fTags" maxlength="200" placeholder="ex: trabalho, leitura">
+        </label>
+      </div>
+      <label>
+        Título
+        <input type="text" id="fTitulo" maxlength="150" required>
+      </label>
+      <label>
+        Texto
+        <textarea id="fTexto" maxlength="20000" placeholder="Escreva aqui"></textarea>
+      </label>
+      <label>
+        Link (opcional)
+        <input type="url" id="fLink" maxlength="500" placeholder="https://">
+      </label>
+      <div class="design-box" id="designBox" hidden>
+        <label>
+          Imagem do design (até 1,5 MB)
+          <input type="file" id="fImagem" accept="image/*">
+        </label>
+        <p class="muted" id="imgInfo" style="margin:0"></p>
+        <img id="imgPrev" alt="" hidden>
+        <div><button type="button" class="btn ghost small" id="imgRemover" hidden>Remover imagem</button></div>
+      </div>
+      <p class="error" id="formErro" role="alert"></p>
+      <div class="ed-actions">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button type="button" class="btn ghost small" id="fixarBtn">Fixar no topo</button>
+          <button type="button" class="btn ghost small" id="mdBtn">Baixar em Markdown</button>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button type="button" class="btn danger small" id="excluirBtn">Excluir</button>
+          <button type="button" class="btn ghost small" id="cancelarBtn">Cancelar</button>
+          <button type="submit" class="btn" id="salvarBtn">Salvar</button>
+        </div>
+      </div>
+      <p class="status" id="status" role="status"></p>
+    </form>
+  </section>
+</div>
+
+<div class="toast" id="toast" hidden>
+  <span id="toastTxt"></span>
+  <button type="button" class="btn small" id="toastBtn">Desfazer</button>
+</div>
+
+<script>
+(function () {
+  var KEY = "segundo_cerebro_v1";
+  var TIPOS = { nota: "Anotação", ideia: "Ideia", doc: "Documento", design: "Design" };
+  var MAX_IMG = 1.5 * 1024 * 1024;
+
+  var itens = [];
+  var filtro = { tipo: "todos", tag: "", texto: "" };
+  var atual = null;
+  var editando = null;
+  var imgTemp = null;
+  var toastT = null;
+  var undoAction = null;
+
+  function $(id) { return document.getElementById(id); }
+  function el(tag, cls, txt) { var n = document.createElement(tag); if (cls) n.className = cls; if (txt != null) n.textContent = txt; return n; }
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function fmt(iso) {
+    var d = new Date(iso); if (isNaN(d)) return "";
+    return d.toLocaleDateString("pt-BR") + " " + pad(d.getHours()) + ":" + pad(d.getMinutes());
+  }
+  function norm(s) { return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
+
+  function load() {
+    try { var r = localStorage.getItem(KEY); itens = r ? JSON.parse(r) : []; if (!Array.isArray(itens)) itens = []; }
+    catch (e) { itens = []; }
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(itens)); return true; }
+    catch (e) { say("Não foi possível salvar (espaço cheio). Exporte um backup e remova imagens grandes."); return false; }
+  }
+
+  function say(msg, undo) {
+    $("toastTxt").textContent = msg;
+    undoAction = undo || null;
+    $("toastBtn").hidden = !undo;
+    $("toast").hidden = false;
+    clearTimeout(toastT);
+    toastT = setTimeout(function () { $("toast").hidden = true; undoAction = null; }, 6000);
+  }
+
+  function tagsDe(s) {
+    return String(s || "").split(",").map(function (t) { return t.trim().slice(0, 40); })
+      .filter(Boolean).filter(function (t, i, a) { return a.indexOf(t) === i; }).slice(0, 20);
+  }
+
+  function pontuar(it, termos) {
+    var titulo = norm(it.titulo), corpo = norm(it.texto), tags = norm((it.tags || []).join(" ")), link = norm(it.link);
+    var s = 0;
+    for (var i = 0; i < termos.length; i++) {
+      var t = termos[i];
+      if (titulo.indexOf(t) >= 0) s += 10;
+      if (tags.indexOf(t) >= 0) s += 6;
+      if (corpo.indexOf(t) >= 0) s += 2;
+      if (link.indexOf(t) >= 0) s += 1;
+      if (s === 0) return 0;
+    }
+    return s;
+  }
+
+  function filtrados() {
+    var termos = norm(filtro.texto).split(/\s+/).filter(Boolean);
+    var lista = itens.filter(function (it) {
+      if (filtro.tipo !== "todos" && it.tipo !== filtro.tipo) return false;
+      if (filtro.tag && (it.tags || []).indexOf(filtro.tag) < 0) return false;
+      return true;
+    });
+    if (termos.length) {
+      lista = lista.map(function (it) { return { it: it, s: pontuar(it, termos) }; })
+        .filter(function (x) { return x.s > 0; })
+        .sort(function (a, b) { return b.s - a.s; })
+        .map(function (x) { return x.it; });
+    } else {
+      var ord = $("ordem").value;
+      lista = lista.slice().sort(function (a, b) {
+        if (a.fixado !== b.fixado) return a.fixado ? -1 : 1;
+        if (ord === "titulo") return norm(a.titulo).localeCompare(norm(b.titulo));
+        var c = a.atualizado < b.atualizado ? 1 : -1;
+        return ord === "antigo" ? -c : c;
+      });
+    }
+    return lista;
+  }
+
+  function destacar(texto, termos) {
+    var frag = document.createDocumentFragment();
+    var src = String(texto || "");
+    if (!termos.length) { frag.appendChild(document.createTextNode(src)); return frag; }
+    var low = norm(src), ranges = [];
+    termos.forEach(function (t) {
+      var p = 0;
+      while ((p = low.indexOf(t, p)) >= 0) { ranges.push([p, p + t.length]); p += t.length; }
+    });
+    ranges.sort(function (a, b) { return a[0] - b[0]; });
+    var pos = 0;
+    ranges.forEach(function (r) {
+      if (r[0] < pos) return;
+      if (r[0] > pos) frag.appendChild(document.createTextNode(src.slice(pos, r[0])));
+      frag.appendChild(el("mark", null, src.slice(r[0], r[1])));
+      pos = r[1];
+    });
+    if (pos < src.length) frag.appendChild(document.createTextNode(src.slice(pos)));
+    return frag;
+  }
+
+  function renderNav() {
+    var box = $("navTipos");
+    box.textContent = "";
+    var todos = [["todos", "Tudo", itens.length]].concat(Object.keys(TIPOS).map(function (k) {
+      return [k, TIPOS[k] + "s", itens.filter(function (x) { return x.tipo === k; }).length];
+    }));
+    todos.forEach(function (t) {
+      var b = el("button", "nav-btn");
+      b.type = "button";
+      b.setAttribute("aria-current", filtro.tipo === t[0] ? "true" : "false");
+      b.appendChild(el("span", null, t[1]));
+      b.appendChild(el("span", "n", String(t[2])));
+      b.onclick = function () { filtro.tipo = t[0]; render(); };
+      box.appendChild(b);
+    });
+
+    var tagBox = $("navTags");
+    tagBox.textContent = "";
+    var contagem = {};
+    itens.forEach(function (it) { (it.tags || []).forEach(function (t) { contagem[t] = (contagem[t] || 0) + 1; }); });
+    var nomes = Object.keys(contagem).sort(function (a, b) { return norm(a).localeCompare(norm(b)); });
+    if (!nomes.length) { tagBox.appendChild(el("p", "muted", "Nenhuma etiqueta ainda.")); return; }
+    nomes.forEach(function (t) {
+      var b = el("button", "tag-chip", t + " (" + contagem[t] + ")");
+      b.type = "button";
+      b.setAttribute("aria-pressed", filtro.tag === t ? "true" : "false");
+      b.onclick = function () { filtro.tag = filtro.tag === t ? "" : t; render(); };
+      tagBox.appendChild(b);
+    });
+  }
+
+  function renderLista() {
+    var box = $("items");
+    box.textContent = "";
+    var lista = filtrados();
+    var termos = norm(filtro.texto).split(/\s+/).filter(Boolean);
+    $("contagem").textContent = lista.length + (lista.length === 1 ? " item" : " itens") +
+      (filtro.texto ? " para \u201C" + filtro.texto + "\u201D" : "");
+    if (!lista.length) {
+      box.appendChild(el("div", "empty", itens.length ? "Nada encontrado com esses filtros." : "Nenhum item ainda. Use a captura rápida ou o botão Novo item."));
+      return;
+    }
+    lista.forEach(function (it) {
+      var card = el("button", "item");
+      card.type = "button";
+      card.setAttribute("aria-current", atual === it.id ? "true" : "false");
+      var t = el("div", "item-title");
+      if (it.fixado) t.appendChild(document.createTextNode("\uD83D\uDCCC "));
+      t.appendChild(destacar(it.titulo || "Sem título", termos));
+      card.appendChild(t);
+      var corpo = (it.texto || it.link || (it.imagem ? "[imagem]" : "")).replace(/\s+/g, " ").slice(0, 180);
+      if (corpo) { var ex = el("div", "item-excerpt"); ex.appendChild(destacar(corpo, termos)); card.appendChild(ex); }
+      var meta = el("div", "meta");
+      meta.appendChild(el("span", "badge", TIPOS[it.tipo]));
+      meta.appendChild(el("span", null, fmt(it.atualizado)));
+      (it.tags || []).slice(0, 4).forEach(function (tg) { meta.appendChild(el("span", null, "#" + tg)); });
+      card.appendChild(meta);
+      card.onclick = function () { abrir(it.id); };
+      box.appendChild(card);
+    });
+  }
+
+  function render() {
+    renderNav();
+    renderLista();
+  }
+
+  function mostrarEditor(visivel) {
+    $("welcome").hidden = visivel;
+    $("form").hidden = !visivel;
+  }
+
+  function abrir(id) {
+    var it = itens.filter(function (x) { return x.id === id; })[0];
+    if (!it) return;
+    atual = id;
+    editando = id;
+    preencher(it);
+    mostrarEditor(true);
+    render();
+    $("fTitulo").focus();
+  }
+
+  function preencher(it) {
+    $("edTitulo").textContent = it ? "Editar item" : "Novo item";
+    $("edMeta").textContent = it ? "Criado em " + fmt(it.criado) + " · atualizado em " + fmt(it.atualizado) : "";
+    $("fTipo").value = it ? it.tipo : "nota";
+    $("fTags").value = it ? (it.tags || []).join(", ") : "";
+    $("fTitulo").value = it ? it.titulo : "";
+    $("fTexto").value = it ? it.texto : "";
+    $("fLink").value = it ? it.link : "";
+    imgTemp = it && it.imagem ? it.imagem : null;
+    $("fixarBtn").textContent = it && it.fixado ? "Desafixar" : "Fixar no topo";
+    $("excluirBtn").hidden = !it;
+    $("mdBtn").hidden = !it;
+    $("formErro").textContent = "";
+    $("status").textContent = "";
+    atualizarTipo();
+    atualizarImagem();
+  }
+
+  function atualizarTipo() {
+    var design = $("fTipo").value === "design";
+    $("designBox").hidden = !design;
+  }
+
+  function atualizarImagem() {
+    var img = $("imgPrev");
+    if (imgTemp) {
+      img.src = imgTemp; img.hidden = false; img.alt = "Prévia do design";
+      $("imgRemover").hidden = false;
+      $("imgInfo").textContent = "Imagem carregada.";
+    } else {
+      img.removeAttribute("src"); img.hidden = true; img.alt = "";
+      $("imgRemover").hidden = true;
+      $("imgInfo").textContent = "Nenhuma imagem.";
+    }
+  }
+
+  function novo() {
+    editando = null; atual = null;
+    preencher(null);
+    mostrarEditor(true);
+    render();
+    $("fTitulo").focus();
+  }
+
+  function fecharEditor() {
+    editando = null; atual = null;
+    mostrarEditor(false);
+    render();
+  }
+
+  $("form").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    $("formErro").textContent = "";
+    var titulo = $("fTitulo").value.trim();
+    if (!titulo) { $("formErro").textContent = "Informe um título."; $("fTitulo").focus(); return; }
+    var link = $("fLink").value.trim();
+    if (link && !/^https?:\/\//i.test(link)) { $("formErro").textContent = "O link deve começar com http:// ou https://."; $("fLink").focus(); return; }
+    var agora = new Date().toISOString();
+    var base = editando ? itens.filter(function (x) { return x.id === editando; })[0] : null;
+    var dados = {
+      id: base ? base.id : uid(),
+      tipo: $("fTipo").value,
+      titulo: titulo.slice(0, 150),
+      texto: $("fTexto").value.slice(0, 20000),
+      link: link,
+      tags: tagsDe($("fTags").value),
+      imagem: $("fTipo").value === "design" ? imgTemp : null,
+      fixado: base ? base.fixado : false,
+      criado: base ? base.criado : agora,
+      atualizado: agora
+    };
+    if (base) {
+      itens = itens.map(function (x) { return x.id === base.id ? dados : x; });
+    } else {
+      itens.unshift(dados);
+    }
+    if (!save()) return;
+    editando = dados.id; atual = dados.id;
+    $("status").textContent = base ? "Alterações salvas." : "Item criado.";
+    preencher(dados);
+    render();
+  });
+
+  $("cancelarBtn").addEventListener("click", fecharEditor);
+  $("novoBtn").addEventListener("click", novo);
+
+  $("excluirBtn").addEventListener("click", function () {
+    if (!editando) return;
+    var id = editando;
+    var it = itens.filter(function (x) { return x.id === id; })[0];
+    if (!it) return;
+    if (!confirm("Mover \u201C" + (it.titulo || "Sem título") + "\u201D para a lixeira? Você pode desfazer logo em seguida.")) return;
+    var antes = itens.slice();
+    itens = itens.filter(function (x) { return x.id !== id; });
+    save();
+    fecharEditor();
+    say("Item excluído.", function () { itens = antes; save(); render(); });
+  });
+
+  $("fixarBtn").addEventListener("click", function () {
+    if (!editando) { say("Salve o item antes de fixá-lo."); return; }
+    itens = itens.map(function (x) { return x.id === editando ? Object.assign({}, x, { fixado: !x.fixado }) : x; });
+    save();
+    var it = itens.filter(function (x) { return x.id === editando; })[0];
+    $("fixarBtn").textContent = it.fixado ? "Desafixar" : "Fixar no topo";
+    render();
+  });
+
+  $("fTipo").addEventListener("change", atualizarTipo);
+
+  $("fImagem").addEventListener("change", function () {
+    var f = this.files && this.files[0];
+    if (!f) return;
+    if (f.size > MAX_IMG) { $("formErro").textContent = "A imagem passa de 1,5 MB. Escolha uma menor."; this.value = ""; return; }
+    var r = new FileReader();
+    r.onload = function () { imgTemp = r.result; atualizarImagem(); };
+    r.readAsDataURL(f);
+    this.value = "";
+  });
+  $("imgRemover").addEventListener("click", function () { imgTemp = null; atualizarImagem(); });
+
+  $("mdBtn").addEventListener("click", function () {
+    var it = itens.filter(function (x) { return x.id === editando; })[0];
+    if (!it) return;
+    var md = "# " + it.titulo + "\n\n" +
+      "- Tipo: " + TIPOS[it.tipo] + "\n" +
+      (it.tags.length ? "- Etiquetas: " + it.tags.join(", ") + "\n" : "") +
+      (it.link ? "- Link: " + it.link + "\n" : "") +
+      "- Atualizado: " + fmt(it.atualizado) + "\n\n" + (it.texto || "");
+    baixar(new Blob([md], { type: "text/markdown;charset=utf-8" }), slug(it.titulo) + ".md");
+  });
+
+  function slug(s) { return norm(s).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "item"; }
+
+  $("captura").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var t = $("capturaTxt").value.trim();
+    if (!t) return;
+    var agora = new Date().toISOString();
+    itens.unshift({ id: uid(), tipo: "ideia", titulo: t.slice(0, 150), texto: "", link: "", tags: [], imagem: null, fixado: false, criado: agora, atualizado: agora });
+    if (save()) {
+      $("capturaTxt").value = "";
+      say("Ideia guardada.");
+      render();
+    }
+  });
+
+  var buscaT = null;
+  $("busca").addEventListener("input", function () {
+    clearTimeout(buscaT);
+    var v = this.value;
+    buscaT = setTimeout(function () { filtro.texto = v; renderLista(); }, 120);
+  });
+
+  $("ordem").addEventListener("change", renderLista);
+
+  function baixar(blob, nome) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = nome;
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 0);
+  }
+
+  $("exportBtn").addEventListener("click", function () {
+    baixar(new Blob([JSON.stringify({ formato: "segundo-cerebro-v1", exportado: new Date().toISOString(), itens: itens }, null, 2)],
+      { type: "application/json" }), "segundo-cerebro-" + new Date().toISOString().slice(0, 10) + ".json");
+    say("Backup exportado.");
+  });
+
+  $("importFile").addEventListener("change", function (ev) {
+    var f = ev.target.files && ev.target.files[0];
+    if (!f) return;
+    var r = new FileReader();
+    r.onload = function () {
+      try {
+        var d = JSON.parse(r.result);
+        var lista = Array.isArray(d) ? d : (d && Array.isArray(d.itens) ? d.itens : null);
+        if (!lista) throw new Error("formato");
+        var ids = {};
+        itens.forEach(function (x) { ids[x.id] = true; });
+        var novos = 0;
+        lista.forEach(function (x) {
+          if (x && x.id && x.titulo && TIPOS[x.tipo] && !ids[x.id]) {
+            x.tags = Array.isArray(x.tags) ? x.tags : [];
+            itens.push(x); novos++;
+          }
+        });
+        save(); render();
+        say(novos + (novos === 1 ? " item importado." : " itens importados."));
+      } catch (e) {
+        say("Arquivo de backup inválido.");
+      }
+      ev.target.value = "";
+    };
+    r.readAsText(f);
+  });
+
+  $("themeBtn").addEventListener("click", function () {
+    var html = document.documentElement;
+    var escuro = html.getAttribute("data-theme") === "dark" ||
+      (!html.hasAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    html.setAttribute("data-theme", escuro ? "light" : "dark");
+  });
+
+  $("toastBtn").addEventListener("click", function () {
+    if (undoAction) { undoAction(); undoAction = null; }
+    $("toast").hidden = true;
+  });
+
+  document.addEventListener("keydown", function (ev) {
+    if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === "k") {
+      ev.preventDefault();
+      $("busca").focus();
+      $("busca").select();
+    }
+    if (ev.key === "Escape" && !$("form").hidden && document.activeElement && document.activeElement.closest("#form")) {
+      fecharEditor();
+    }
+  });
+
+  load();
+  render();
+})();
+</script>
+</body>
+</html>
