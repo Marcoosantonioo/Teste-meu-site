@@ -1196,21 +1196,46 @@ body.dev-celular #quick{top:auto!important;bottom:calc(4.75rem + env(safe-area-i
 .auto-celular .agnd-lista .row > *{min-width:min(100%,7rem)}
 .dev-celular .agnd-ctrl input[type="date"]{min-width:9.5rem;max-width:100%;width:auto}
 .auto-celular .agnd-ctrl input[type="date"]{min-width:9.5rem;max-width:100%;width:auto}
-.dev-celular label{color:#ffffff!important}
-.auto-celular label{color:#ffffff!important}
+:where(.dev-celular) label{color:var(--ink)!important}
+:where(.auto-celular) label{color:var(--ink)!important}
 .dev-celular .mus-grid > p{grid-column:1/-1;margin:0.25rem 0}
 .auto-celular .mus-grid > p{grid-column:1/-1;margin:0.25rem 0}
 #notch .metas-root label,#notch .metas-root .meta-form label,#notch .metas-root .meta-chk{color:#ffffff!important;opacity:1!important}
 .dev-celular input[type="time"]{min-width:7rem;width:auto!important;max-width:100%}
-.dev-celular .sub,.dev-celular .lbl,.dev-celular .rot-lbl{color:#ffffff!important;opacity:.9!important}
+:where(.dev-celular) .sub,:where(.dev-celular) .lbl,:where(.dev-celular) .rot-lbl{color:var(--ink)!important;opacity:.9!important}
 
+/* ===== Barra de abas inferior também no iPad e no computador ===== */
+.dev-tablet .inner{display:block!important;padding:0.6rem 0.6rem calc(5.25rem + env(safe-area-inset-bottom,0px))!important}
+.dev-tablet #tabs{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:30;display:flex!important;flex-direction:row!important;align-items:stretch;justify-content:flex-start;gap:0.25rem;overflow-x:auto;overflow-y:hidden;padding:0.4rem 0.5rem calc(0.4rem + env(safe-area-inset-bottom,0px));background:rgba(12,12,16,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,.14);scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.dev-tablet #tabs .tab{width:4.1rem!important;min-width:4.1rem;height:3.7rem!important;min-height:3.7rem;padding:0.25rem 0.1rem!important;flex-direction:column!important;justify-content:center;align-items:center;gap:0.15rem;border-radius:0.9rem!important;background:transparent!important;color:#fff!important;scroll-snap-align:start}
+.dev-tablet #tabs .tab svg{width:1.35rem!important;height:1.35rem!important;color:#fff!important}
+.dev-tablet #tabs .tab span{display:block!important;font-size:0.62rem;line-height:1.1;text-align:center;white-space:normal;max-width:4rem}
+.dev-tablet #tabs .tab[aria-selected="true"],.dev-tablet #tabs .tab.on,.dev-tablet #tabs .tab.act{background:rgba(255,255,255,.2)!important}
+.dev-tablet #tabs .tab:focus-visible{outline:2px solid #fff;outline-offset:2px}
+body.dev-tablet #quick{bottom:calc(4.75rem + env(safe-area-inset-bottom,0px))!important}
+.dev-tablet #focoBtn{bottom:calc(4.75rem + env(safe-area-inset-bottom,0px))!important;left:0.75rem!important}
+.dev-tablet #tabs .tab span{color:#ffffff!important;opacity:1!important}
+.dev-tablet #tabsMoreBox{display:none!important}
+body.dev-tablet #quick{top:auto!important;bottom:calc(4.75rem + env(safe-area-inset-bottom,0px))!important}
+.dev-computador .inner{display:block!important;padding:0.6rem 0.6rem calc(5.25rem + env(safe-area-inset-bottom,0px))!important}
+.dev-computador #tabs{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:30;display:flex!important;flex-direction:row!important;align-items:stretch;justify-content:flex-start;gap:0.25rem;overflow-x:auto;overflow-y:hidden;padding:0.4rem 0.5rem calc(0.4rem + env(safe-area-inset-bottom,0px));background:rgba(12,12,16,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,.14);scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.dev-computador #tabs .tab{width:4.1rem!important;min-width:4.1rem;height:3.7rem!important;min-height:3.7rem;padding:0.25rem 0.1rem!important;flex-direction:column!important;justify-content:center;align-items:center;gap:0.15rem;border-radius:0.9rem!important;background:transparent!important;color:#fff!important;scroll-snap-align:start}
+.dev-computador #tabs .tab svg{width:1.35rem!important;height:1.35rem!important;color:#fff!important}
+.dev-computador #tabs .tab span{display:block!important;font-size:0.62rem;line-height:1.1;text-align:center;white-space:normal;max-width:4rem}
+.dev-computador #tabs .tab[aria-selected="true"],.dev-computador #tabs .tab.on,.dev-computador #tabs .tab.act{background:rgba(255,255,255,.2)!important}
+.dev-computador #tabs .tab:focus-visible{outline:2px solid #fff;outline-offset:2px}
+body.dev-computador #quick{bottom:calc(4.75rem + env(safe-area-inset-bottom,0px))!important}
+.dev-computador #focoBtn{bottom:calc(4.75rem + env(safe-area-inset-bottom,0px))!important;left:0.75rem!important}
+.dev-computador #tabs .tab span{color:#ffffff!important;opacity:1!important}
+.dev-computador #tabsMoreBox{display:none!important}
+body.dev-computador #quick{top:auto!important;bottom:calc(4.75rem + env(safe-area-inset-bottom,0px))!important}
 /* ===== Celular: revisão das abas restantes (Ajustes, Tempo, Metas, Casa, Meu dia, TV) ===== */
-.dev-celular label,.dev-celular .sub,.auto-celular label,.auto-celular .sub{color:#ffffff!important;opacity:.92!important}
+:where(.dev-celular) label,:where(.dev-celular) .sub,:where(.auto-celular) label,:where(.auto-celular) .sub{color:var(--ink)!important;opacity:.92!important}
 .dev-celular [style*="monospace"],.auto-celular [style*="monospace"]{white-space:normal!important;overflow-wrap:anywhere;word-break:break-all}
 .dev-celular #quick,.auto-celular #quick{width:3rem!important;height:3rem!important}
 
 /* ===== Ajustes no celular: contraste dos rótulos, endereço quebrável e espaço para os botões flutuantes ===== */
-#notch.dev-celular #view label,#notch.auto-celular #view label,#notch.dev-celular #view .opt,#notch.auto-celular #view .opt,#notch.dev-celular #view .sub,#notch.auto-celular #view .sub{color:#ffffff!important;opacity:1!important}
+:where(#notch.dev-celular) #view label,:where(#notch.auto-celular) #view label,:where(#notch.dev-celular) #view .opt,:where(#notch.auto-celular) #view .opt,:where(#notch.dev-celular) #view .sub,:where(#notch.auto-celular) #view .sub{color:var(--ink)!important;opacity:1!important}
 #notch.dev-celular #ruri,#notch.auto-celular #ruri{display:block;max-width:100%;white-space:normal!important;overflow-wrap:anywhere;word-break:break-all}
 #notch.dev-celular .inner::after,#notch.auto-celular .inner::after{content:"";display:block;height:3.5rem}
 
@@ -1230,10 +1255,10 @@ body.dev-celular #quick{top:auto!important;bottom:calc(4.75rem + env(safe-area-i
 .dev-tablet .mus-menu{grid-template-columns:minmax(9.5rem,11rem) minmax(0,1fr)}
 .dev-tablet .rad-grid{grid-template-columns:repeat(auto-fill,minmax(6.5rem,1fr));gap:0.75rem}
 .dev-tablet .tr-grid{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
-.dev-tablet .agnd-ctrl label,.dev-tablet .agnd-ctrl span{color:#ffffff!important;opacity:1!important}
-.dev-tablet textarea{background:rgba(0,0,0,.35);color:#ffffff;border:1px solid rgba(255,255,255,.2);border-radius:0.6rem;font:inherit;box-sizing:border-box;width:100%}
+:where(.dev-tablet) .agnd-ctrl label,:where(.dev-tablet) .agnd-ctrl span{color:var(--ink)!important;opacity:1!important}
+:where(.dev-tablet) textarea{background:var(--bgc,#f2f2f7);color:var(--ink);border:1px solid rgba(127,127,127,.35);border-radius:0.6rem;font:inherit;box-sizing:border-box;width:100%}
 #notch.dev-tablet #view input[type="time"]{min-width:7.5rem;width:auto}
-#notch.dev-tablet #view label,#notch.dev-tablet #view .sub{color:#ffffff!important;opacity:1!important}
+:where(#notch.dev-tablet) #view label,:where(#notch.dev-tablet) #view .sub{color:var(--ink)!important;opacity:1!important}
 #notch.dev-tablet #view input[type="time"]{margin-right:0.6rem}
 
 /* ===== Computador (dev-computador): ajuste fino de alvos e textos pequenos ===== */
@@ -1247,3 +1272,15 @@ body.dev-celular #quick{top:auto!important;bottom:calc(4.75rem + env(safe-area-i
 .diario-top{display:flex;justify-content:space-between;align-items:center;gap:0.75rem;flex-wrap:wrap}
 .diario-frame{width:100%;height:calc(100vh - 13rem);min-height:520px;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:#f6f1ea}
 .dev-celular .diario-frame,.auto-celular .diario-frame{height:calc(100vh - 15rem);min-height:460px}
+
+
+/* ===== Celular: rolagem do conteúdo (a área #view rola; cabeçalho some ao rolar) ===== */
+#notch.dev-celular .wrap,#notch.auto-celular .wrap{height:100%}
+#notch.dev-celular .inner,#notch.auto-celular .inner{display:flex!important;flex-direction:column;height:100%;min-height:0;overflow:hidden!important}
+#notch.dev-celular .inner::after,#notch.auto-celular .inner::after{display:none}
+#notch.dev-celular #view,#notch.auto-celular #view{flex:1 1 auto;min-height:0;overflow-y:auto!important;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;padding-bottom:4rem}
+/* cabeçalho sobreposto: sai do fluxo, para esconder/mostrar não mudar a altura do conteúdo (evita oscilação) */
+#notch.dev-celular .hdr,#notch.dev-celular #navbtns,#notch.auto-celular .hdr,#notch.auto-celular #navbtns{position:absolute;left:0;right:0;top:0;z-index:6;background:var(--bg,#e9e9eb);padding-top:env(safe-area-inset-top,0px)}
+#notch.dev-celular #view,#notch.auto-celular #view{padding-top:6.5rem}
+/* ===== Texto legível no modo automático com sistema claro (sem tema escolhido) ===== */
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--ink:#111111;--mute:#5b5b63}}
