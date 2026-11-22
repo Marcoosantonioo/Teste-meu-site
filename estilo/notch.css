@@ -1279,14 +1279,14 @@ body.dev-computador #quick{top:auto!important;bottom:calc(4.75rem + env(safe-are
 .rad-viz-ini{display:grid;place-items:center;width:100%;height:100%;font-weight:700;font-size:0.9rem;color:#111;background:#e5e7eb}
 
 /* ===== Tema claro: abas com cores fixas escuras passam a usar superfícies claras ===== */
-:root[data-theme="light"] #notch .npc,#notch .mus-root{background:#f3f3f6!important}
+:root[data-theme="light"] #notch .npc:not(:has(.mus-player)),#notch .mus-root:not(:has(.mus-player)){background:#f3f3f6!important}
 :root[data-theme="light"] #notch .mus-glass{background:rgba(255,255,255,.78)!important;border-color:rgba(0,0,0,.08)!important}
 :root[data-theme="light"] #notch .mus-bar{background:rgba(255,255,255,.92)!important}
 :root[data-theme="light"] #notch #feriadoAviso,#notch .agnd-lista .row,#notch .agnd-lista .row{background:#ffffff!important;color:var(--ink)!important}
 :root[data-theme="light"] #notch .dia-lin-tl,#notch .dia-card{background:#ffffff!important;color:var(--ink)!important}
 :root[data-theme="light"] #notch .tvbox{background:#eeeef2!important}
 :root[data-theme="light"] #notch .tvbox video,#notch .tvbox iframe{background:#000}
-@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) #notch .npc,#notch .mus-root{background:#f3f3f6!important}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) #notch .npc:not(:has(.mus-player)),#notch .mus-root:not(:has(.mus-player)){background:#f3f3f6!important}
 :root:not([data-theme="dark"]) #notch .mus-glass{background:rgba(255,255,255,.78)!important;border-color:rgba(0,0,0,.08)!important}
 :root:not([data-theme="dark"]) #notch .mus-bar{background:rgba(255,255,255,.92)!important}
 :root:not([data-theme="dark"]) #notch #feriadoAviso,#notch .agnd-lista .row,#notch .agnd-lista .row{background:#ffffff!important;color:var(--ink)!important}
@@ -1331,3 +1331,136 @@ body.dev-computador #quick{top:auto!important;bottom:calc(4.75rem + env(safe-are
 #notch #navBaixo .ib span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #notch #navBaixo .ib:disabled{opacity:.35}
 #notch #navbtns{display:none!important}
+
+/* ===== Modo foco e botão + dentro da barra inferior (ao lado de Apresentação, check e sino) ===== */
+#notch #barraBase #focoBtn,#notch #barraBase #quick{position:static!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;transform:none!important;flex:0 0 auto;margin:0}
+#notch #barraBase #focoBtn{min-height:40px;padding:0 0.75rem;font-size:0.8rem;white-space:nowrap;border-radius:999px}
+#notch #barraBase #quick{width:2.6rem!important;height:2.6rem!important;min-width:2.6rem;border-radius:50%}
+
+/* ===== Música: tela de reprodução (player) — fundo flutuante, vidro escuro e barra em pílula ===== */
+#notch #view:has(.mus-player) > .tela-titulo{display:none}
+#notch #view:has(.mus-player) .mus-fundo-ctl,
+#notch #view:has(.mus-player) .sp-box,
+#notch #view:has(.mus-player) #spFila,
+#notch #view:has(.mus-player) #spBusca,
+#notch #view:has(.mus-player) .mus-player > .prog,
+#notch #view:has(.mus-player) .mus-player > .ctrl{display:none!important}
+#notch #view .mus-root:has(.mus-player){background-color:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0 auto;max-width:880px}
+#notch #view .mus-player{background:rgba(18,18,22,.55)!important;backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);border:1px solid rgba(255,255,255,.18)!important;border-radius:28px;box-shadow:0 22px 50px rgba(0,0,0,.35);padding:1.25rem 1rem 1rem}
+#notch #view .mus-player,#notch #view .mus-player *{color:#fff}
+#notch #view .mus-player .sub{color:rgba(255,255,255,.7)!important}
+#notch #view .mus-bar{position:sticky;bottom:12px;width:min(94%,680px);margin:0.75rem auto 0;display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0.7rem;border-radius:999px;background:rgba(18,18,22,.62);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);border:1px solid rgba(255,255,255,.22);box-shadow:0 14px 34px rgba(0,0,0,.4)}
+#notch #view .mus-bar .mus-barra-txt{flex:1 1 auto;min-width:0;background:rgba(0,0,0,.5);border-radius:999px;padding:0.3rem 0.9rem;color:#fff}
+#notch #view .mus-bar *{color:#fff}
+#notch #view .mus-bar .chip{background:transparent!important;border:0!important;color:#fff!important;min-height:36px;padding:0 0.45rem;box-shadow:none}
+#notch #view .mus-bar .mus-vol{background:transparent;border:0;color:#fff}
+#notch #view .mus-bar .mus-barra-prog{position:absolute;left:1rem;right:1rem;bottom:0.1rem}
+#notch #view .mus-bar{position:sticky}
+#notch #view .mus-player,#notch #view .mus-player *{color:#fff!important}
+#notch #view .mus-player .sub{color:rgba(255,255,255,.72)!important}
+#notch #view .mus-bar{background:rgba(18,18,22,.66)!important;border:1px solid rgba(255,255,255,.22)!important}
+#notch #view .mus-bar *{color:#fff!important}
+#notch #view .mus-bar .mus-barra-txt{background:rgba(0,0,0,.5)!important}
+#notch #view .mus-bar .chip{background:transparent!important;border:0!important;color:#fff!important}
+#notch[data-tab="music"] #view .mus-player .mus-info,#notch[data-tab="music"] #view .mus-player .mus-info *{color:#fff!important}
+#notch[data-tab="music"] #view .mus-player > .chip{background:#ffffff!important;color:#111111!important;border:0!important}
+#notch[data-tab="music"] #view .mus-player .mus-info:not(.a):not(.b):not(.c),#notch[data-tab="music"] #view .mus-player .mus-info:not(.a):not(.b):not(.c) *:not(.a):not(.b):not(.c){color:#fff!important}
+
+/* ===== Música: carrossel 3D (cover flow) com cartões translúcidos ===== */
+#notch .cf-stage{position:relative;height:330px;width:100%;perspective:1100px;transform-style:preserve-3d;margin:0.5rem 0;overflow:visible}
+#notch .cf-card{position:absolute;left:50%;top:50%;width:190px;height:262px;border-radius:20px;padding:12px 12px 10px;display:flex;flex-direction:column;gap:10px;background:rgba(255,255,255,.14);backdrop-filter:blur(14px) saturate(130%);-webkit-backdrop-filter:blur(14px) saturate(130%);border:1px solid rgba(255,255,255,.32);box-shadow:0 18px 40px rgba(0,0,0,.35);transition:transform .4s ease,opacity .4s ease;box-sizing:border-box}
+#notch .cf-card.cf-atual{width:218px;height:300px}
+#notch .cf-img{display:block;width:100%;aspect-ratio:1;border-radius:12px;background:#222 center/cover no-repeat;box-shadow:0 8px 18px rgba(0,0,0,.35)}
+#notch .cf-meta{display:block;color:#fff;text-align:center;overflow:hidden;min-width:0}
+#notch .cf-meta b{display:block;font-size:0.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#notch .cf-meta span{display:block;font-size:0.8rem;opacity:0.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#notch #view:has(.mus-player) .mus-info{display:none!important}
+#notch.auto-celular .cf-stage,#notch.dev-celular .cf-stage{transform:scale(0.82);transform-origin:center}
+
+/* ===== Música: barra em pílula com ícones, três pontos na sub-cápsula, barra de arrasto e botão auxiliar ===== */
+#notch[data-tab="music"] #view .mus-bar .mus-ico{min-width:40px;min-height:40px;width:40px;height:40px;padding:0;border-radius:50%;display:inline-flex;align-items:center;justify-content:center}
+#notch[data-tab="music"] #view .mus-bar .mus-ico:hover,#notch[data-tab="music"] #view .mus-bar .mus-ico:focus-visible{background:rgba(255,255,255,.14)!important}
+#notch[data-tab="music"] #view .mus-bar .mus-barra-txt{display:flex;align-items:center;gap:0.4rem}
+#notch[data-tab="music"] #view .mus-bar .mus-barra-txt > b,#notch[data-tab="music"] #view .mus-bar .mus-barra-txt > .sub{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#notch[data-tab="music"] #view .mus-bar .mus-barra-txt > b{flex:0 1 auto}
+#notch[data-tab="music"] #view .mus-bar .mus-barra-txt > .sub{flex:0 1 auto;min-width:0}
+#notch[data-tab="music"] #view .mus-bar .mus-ponto{margin-left:auto;flex:0 0 auto;width:30px;height:30px;min-height:30px;border-radius:50%;background:transparent!important;border:0!important;color:#fff!important;display:inline-flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
+#notch[data-tab="music"] #view .mus-bar .mus-ponto:hover,#notch[data-tab="music"] #view .mus-bar .mus-ponto:focus-visible{background:rgba(255,255,255,.16)!important}
+#notch #view .mus-bar::after{content:"";position:absolute;left:50%;bottom:-17px;width:92px;height:6px;border-radius:6px;background:rgba(255,255,255,.95);transform:translateX(-50%);box-shadow:0 2px 8px rgba(0,0,0,.25);pointer-events:none}
+#notch #view .mus-bar::before{content:"";position:absolute;left:calc(50% + 62px);bottom:-19px;width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);pointer-events:none}
+#notch #view .mus-bar{margin-bottom:1.25rem}
+#notch[data-tab="music"] #view .mus-bar .mus-barra-txt{display:flex!important;flex-direction:row!important;align-items:center!important;text-align:left!important;flex-wrap:nowrap!important}
+#notch[data-tab="music"] #view .mus-bar .mus-barra-txt > div,#notch[data-tab="music"] #view .mus-bar .mus-barra-txt > b{text-align:left!important}
+#notch #view .mus-bar .mus-barra-txt{display:flex;align-items:center;gap:0.55rem;padding:0.25rem 0.8rem 0.25rem 0.3rem;min-width:0}
+#notch #view .mus-bar .mus-barra-txt > .mus-barra-capa{flex:0 0 auto;width:36px;height:36px;min-width:36px;border:0;padding:0;margin:0;border-radius:9px;overflow:hidden;background:#2a2a30;box-shadow:none}
+#notch #view .mus-bar .mus-barra-txt > .mus-barra-capa > span{display:block;width:100%;height:100%;background-size:cover;background-position:center}
+#notch #view .mus-bar .mus-barra-txt > b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto}
+#notch #view .mus-bar .mus-barra-txt > .sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto;opacity:.8}
+#notch #view .mus-bar .mus-barra-txt > .mus-ponto{margin-left:auto;flex:0 0 auto}
+
+/* ===== Música (player) — ajuste conforme o exemplo: cartões e pílula de vidro claro, sem painel ===== */
+#notch #view:has(.mus-player) .mus-root{background-color:transparent!important}
+#notch #view:has(.mus-player) .mus-player{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#notch #view:has(.mus-player) > .chip,#notch #view:has(.mus-player) .mus-player > .chip{display:none!important}
+#notch #view:has(.mus-player) #musMais > summary{display:none!important}
+#notch #view:has(.mus-player) #navBaixo{display:none!important}
+#notch #view:has(.mus-player) .cf-stage{height:360px}
+#notch #view:has(.mus-player) .cf-card{background:rgba(255,255,255,.42)!important;border:1px solid rgba(255,255,255,.7)!important;box-shadow:0 16px 36px rgba(0,0,0,.22)!important}
+#notch #view:has(.mus-player) .cf-card.cf-atual{width:252px;height:344px}
+#notch #view:has(.mus-player) .cf-meta b{color:#1d1d1f!important;font-size:1rem}
+#notch #view:has(.mus-player) .cf-meta span{color:#3a3a3e!important}
+#notch #view:has(.mus-player) .mus-bar{background:rgba(238,238,242,.72)!important;border:1px solid rgba(255,255,255,.85)!important;box-shadow:0 14px 34px rgba(0,0,0,.2)!important}
+#notch #view:has(.mus-player) .mus-bar,#notch #view:has(.mus-player) .mus-bar *:not(.mus-barra-capa):not(.mus-barra-capa *){color:#1d1d1f!important}
+#notch #view:has(.mus-player) .mus-bar .mus-barra-txt{background:rgba(255,255,255,.9)!important}
+#notch #view:has(.mus-player) .mus-bar .mus-barra-txt *{color:#1d1d1f!important}
+#notch #view:has(.mus-player) .mus-bar .ib{background:transparent!important;border:0!important;box-shadow:none!important}
+#notch #view:has(.mus-player) .mus-bar .ib.big{background:rgba(255,255,255,.95)!important;border-radius:50%!important;box-shadow:0 4px 12px rgba(0,0,0,.15)!important}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar .mus-barra-txt > b,#notch[data-tab="music"] #view:has(.mus-player) .mus-bar .mus-barra-txt > .sub{color:#1d1d1f!important;opacity:1!important}
+#notch[data-tab="music"] #view:has(.mus-player) .cf-card{background:rgba(214,214,220,.5)!important}
+#notch[data-tab="music"] #view:has(.mus-player) .cf-card.cf-atual{width:290px;height:378px}
+
+/* ===== Música (player): papel de parede — o fundo fica visível e a troca de imagem continua disponível ===== */
+#notch #view:has(.mus-player) .mus-root{min-height:calc(100% - 1rem);border-radius:26px;position:relative;overflow:hidden}
+#notch #view:has(.mus-player) .mus-fundo-ctl{display:block!important;position:absolute;top:0.6rem;right:0.6rem;z-index:5}
+#notch #view:has(.mus-player) .mus-fundo-btn{font-size:0.78rem;min-height:34px;padding:0 0.7rem;background:rgba(255,255,255,.7)!important;color:#1d1d1f!important;border:0!important}
+
+/* ===== Tela de Música: fundo cobre a tela inteira; vidro claro nos cartões e na pílula ===== */
+#notch[data-tab="music"] #view:has(.mus-player) .mus-root:not(.a):not(.b){width:100%!important;max-width:none!important;min-height:100%!important;margin:0!important;border-radius:0!important;padding:0!important;box-sizing:border-box}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-root:not(.a):not(.b) .mus-player{min-height:100%;border-radius:0}
+#notch[data-tab="music"] #view:has(.mus-player) .cf-card:not(.a):not(.b){background:rgba(255,255,255,.38)!important;backdrop-filter:blur(22px) saturate(180%)!important;-webkit-backdrop-filter:blur(22px) saturate(180%)!important;border:1px solid rgba(255,255,255,.75)!important;box-shadow:0 18px 40px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.7)!important}
+#notch[data-tab="music"] #view:has(.mus-player) .cf-card.cf-atual:not(.a):not(.b){background:rgba(255,255,255,.5)!important}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar:not(.a):not(.b){background:rgba(246,246,248,.6)!important;backdrop-filter:blur(24px) saturate(180%)!important;-webkit-backdrop-filter:blur(24px) saturate(180%)!important;border:1px solid rgba(255,255,255,.85)!important;box-shadow:0 14px 34px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.8)!important}
+#notch[data-tab="music"] #view:has(.mus-player){position:relative}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-root:not(.a):not(.b){position:absolute!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;height:auto!important;min-height:0!important;overflow-y:auto!important;overscroll-behavior:contain}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-root:not(.a):not(.b){padding-bottom:2.2rem!important}
+
+/* ===== Rádio (player): mesmos efeitos da Música — fundo na tela inteira, sobreposição e vidro claro ===== */
+#notch[data-tab="radio"] #view:has(.rad-player){position:relative}
+#notch[data-tab="radio"] #view:has(.rad-player) .rad-root:not(.a):not(.b){position:absolute!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;height:auto!important;min-height:0!important;max-width:none!important;margin:0!important;border:0!important;border-radius:0!important;padding:0 0 2.2rem!important;overflow-y:auto!important;overscroll-behavior:contain;background:url('../assets/papel-de-parede-musica.jpg') center/cover no-repeat fixed!important;box-shadow:none!important}
+#notch[data-tab="radio"] #view:has(.rad-player) .rad-stage:not(.a):not(.b){--sp:6.5rem;height:min(52vh,20rem)}
+#notch[data-tab="radio"] #view:has(.rad-player) .rad-viz:not(.a):not(.b){background:rgba(255,255,255,.38)!important;backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.75)!important;box-shadow:0 18px 40px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.7)!important}
+#notch[data-tab="radio"] #view:has(.rad-player) .rad-hero:not(.a):not(.b){background:rgba(255,255,255,.5)!important;backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.8)!important}
+#notch[data-tab="radio"] #view:has(.rad-player) .rad-bar:not(.a):not(.b){background:rgba(246,246,248,.6)!important;backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.85)!important;box-shadow:0 14px 34px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.8)!important}
+
+/* ===== Música (player): verificação do documento — transporte à esquerda, sub-cápsula no centro, ícones à direita ===== */
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > .mus-barra-ctl{order:0}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > .mus-barra-txt{order:1;flex:1 1 auto}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > .chip{order:2}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > .mus-vol{order:3}
+/* uma única visualização, sem rolagem */
+#notch[data-tab="music"] #view:has(.mus-player) .cf-stage:not(.a):not(.b){height:292px}
+#notch[data-tab="music"] #view:has(.mus-player) .cf-card:not(.a):not(.b){width:170px;height:236px}
+#notch[data-tab="music"] #view:has(.mus-player) .cf-card.cf-atual:not(.a):not(.b){width:236px;height:304px}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-root:not(.a):not(.b){padding-top:0.5rem!important;padding-bottom:1.2rem!important}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-root:not(.a):not(.b){display:flex!important;flex-direction:column;justify-content:center;align-items:center}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-player:not(.a):not(.b){min-height:0!important;height:auto!important;width:100%;display:flex;flex-direction:column;align-items:center;gap:0.4rem}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar:not(.a):not(.b){margin-top:0.4rem}
+/* ===== Música: indicador branco de progresso dentro da sub-cápsula (lado direito) ===== */
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar .mus-barra-txt > .mus-barra-prog:not(.a):not(.b){position:static!important;left:auto!important;right:auto!important;bottom:auto!important;width:64px;height:4px;flex:0 0 64px;margin:0 0.2rem 0 0.4rem;border-radius:99px;background:rgba(0,0,0,.18);overflow:hidden;display:block}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar .mus-barra-txt > .mus-barra-prog span:not(.a):not(.b){display:block;height:100%;background:#ffffff;border-radius:99px}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar .mus-barra-txt > .mus-barra-prog:not(.a):not(.b){background:rgba(0,0,0,.32);height:5px}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar:not(.a):not(.b){flex-wrap:nowrap!important}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar .mus-barra-txt > .mus-barra-prog:not(.a):not(.b){width:52px;flex:0 0 52px;margin:0 0.1rem 0 0.3rem;background:rgba(0,0,0,.28)}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar .mus-barra-txt > .mus-barra-prog span:not(.a):not(.b){background:#1d1d1f!important}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar .mus-barra-txt{min-width:0;flex:1 1 0}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar:not(.a):not(.b){width:min(96%,800px)}
