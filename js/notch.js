@@ -23,7 +23,7 @@ function iconOn(h){const c=(h||'#636366').replace('#','');const l=[0,2,4].map(i=
 function renderTabs(){
  const focoAnt=(document.activeElement&&document.activeElement.closest&&document.activeElement.closest('#tabs'))?document.activeElement.id:'';
  $('#notch').dataset.tab=S.tab;const visiveis=(S.tabsAll||(document.getElementById('notch')&&['dev-celular','dev-tablet','dev-computador'].some(c=>document.getElementById('notch').classList.contains(c))))?TABS:TABS.slice(0,TABS_TOPO);const botaoMais=`<button class="tab" id="tabsMore" data-a="tabsMore" aria-expanded="${!!S.tabsAll}" aria-label="${S.tabsAll?'Mostrar menos botões':'Mostrar todos os botões'}" title="${S.tabsAll?'Mostrar menos':'Mostrar todos'}" style="--tc:#8e8e93;--tt:#111"><span aria-hidden="true" style="font-size:1.625rem;line-height:1">${S.tabsAll?'«':'⋯'}</span><span>${S.tabsAll?'Menos':'Mais'}</span></button>`;
- $('#tabs').innerHTML=visiveis.map(([id,l,i])=>(id==='radio'?'<span class="sp"></span>':'')+`<button class="tab" style="--tc:${TAB_COL[id]||'#636366'};--tt:${iconOn(TAB_COL[id])}" role="tab" id="t-${id}" aria-selected="${S.tab===id}" aria-controls="view" tabindex="${S.tab===id?0:-1}" aria-label="${l}" title="${l}" data-tab="${id}">${ic(id==='radio'?(S.rd&&S.rd.on?'radio-on':'radio-off'):i)}<span>${l}</span></button>`).join('');let mb=document.getElementById('tabsMoreBox');if(!mb){mb=document.createElement('div');mb.id='tabsMoreBox';$('#tabs').insertAdjacentElement('afterend',mb)}mb.innerHTML=botaoMais;if(focoAnt){const el=document.getElementById(focoAnt);if(el)el.focus({preventScroll:true})}}
+ $('#tabs').innerHTML=visiveis.map(([id,l,i])=>(id==='radio'?'<span class="sp"></span>':'')+`<button class="tab" style="--tc:${TAB_COL[id]||'#636366'};--tt:${iconOn(TAB_COL[id])}" id="t-${id}" aria-current="${S.tab===id?'page':'false'}" aria-controls="view" tabindex="${S.tab===id?0:-1}" aria-label="${l}" title="${l}" data-tab="${id}">${ic(id==='radio'?(S.rd&&S.rd.on?'radio-on':'radio-off'):i)}<span>${l}</span></button>`).join('');let mb=document.getElementById('tabsMoreBox');if(!mb){mb=document.createElement('div');mb.id='tabsMoreBox';$('#tabs').insertAdjacentElement('afterend',mb)}mb.innerHTML=botaoMais;if(focoAnt){const el=document.getElementById(focoAnt);if(el)el.focus({preventScroll:true})}}
 function viewInner(){
  const v=$('#view');v.setAttribute('aria-labelledby','t-'+S.tab);if(S.foco){v.innerHTML=focoHtml();return}
 
@@ -140,6 +140,8 @@ async function spSync(){
  if(key!==m.key){m.key=key;if(S.tab==='music'&&S.open){const f=document.activeElement&&document.activeElement.dataset&&document.activeElement.dataset.a;view();if(f){const n=$('#view [data-a="'+f+'"]');if(n)n.focus()}}}
  $('#notch').classList.toggle('playing',m.play||!!(S.rd&&S.rd.on))}
 let spPlayer=null,spDeviceId=null,spBlocked=false,spSdk=false;
+/* caminho de 'tocar' sempre com o aparelho do player web, para a reprodução começar sem precisar apertar play antes */
+const spPlayPath=()=>'/me/player/play'+(spDeviceId?'?device_id='+encodeURIComponent(spDeviceId):'');
 window.onSpotifyWebPlaybackSDKReady=()=>spInitPlayer();
 function spInitPlayer(){
  if(spPlayer||spBlocked||!S.tok)return;
@@ -1741,7 +1743,7 @@ document.addEventListener('click',e=>{const lb=e.target.closest&&e.target.closes
  if(a==='apFonte'){ls.set('apres_fonte',apresFonte()==='radio'?'spotify':'radio');apresRender();return}
  if(a==='apDest'){ls.set('apres_destaque',t.dataset.c);apresRender();return}
  if(a==='apSair'){apresSair();return}
- if(a==='apMusPlay'){if(apresFonte()==='spotify'){const tocando=!!S.m.play;spApi(tocando?'/me/player/pause':'/me/player/play',{method:'PUT'}).then(()=>{if(S.err===0)S.m.play=!tocando;else if(S.err===404)say('Nenhum dispositivo ativo. Abra o Spotify e toque uma faixa');else if(S.err===403)say('Controlar a reprodução exige Spotify Premium');apresRender()});S.m.play=!tocando;apresRender();return}
+ if(a==='apMusPlay'){if(apresFonte()==='spotify'){const tocando=!!S.m.play;spApi(tocando?'/me/player/pause':spPlayPath(),{method:'PUT'}).then(()=>{if(S.err===0)S.m.play=!tocando;else if(S.err===404)say('Nenhum dispositivo ativo. Abra o Spotify e toque uma faixa');else if(S.err===403)say('Controlar a reprodução exige Spotify Premium');apresRender()});S.m.play=!tocando;apresRender();return}
   const c=S.rd.list[S.rd.cur];if(!c)return;if(radioTocando())rdStop();else rdPlay(S.rd.cur);apresRender();return}});
 document.addEventListener('change',e=>{if(e.target.dataset&&e.target.dataset.a==='apDestHex'){const v=e.target.value.trim();if(/^#[0-9a-fA-F]{6}$/.test(v)){ls.set('apres_destaque',v.toUpperCase());apresRender()}}});
 document.addEventListener('input',e=>{const a=e.target.dataset&&e.target.dataset.a;if(a==='apMaster'){ls.set('apres_master',e.target.value);apresRender();apresAplicarSom()}if(a==='apMusica'){ls.set('apres_musica',e.target.value);apresRender();apresAplicarSom()}});
@@ -2190,7 +2192,7 @@ document.addEventListener('toggle',e=>{if(e.target.id!=='spContinuar'||!e.target
   c2.innerHTML='<ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.6rem">'+itens.map(x=>{const ep=x.episode,pos=x.resume_point.resume_position_ms,dur=ep.duration_ms||pos||1;const pct=Math.min(100,Math.round(pos/dur*100));
    return '<li><div style="font-weight:600;overflow-wrap:anywhere">'+esc(ep.name||'Episódio')+'</div><div class="sub" style="font-size:0.8rem">'+esc((ep.show&&ep.show.name)||'')+' · '+Math.round(pos/60000)+' de '+Math.round(dur/60000)+' min</div><progress value="'+pct+'" max="100" aria-label="Progresso de '+esc(ep.name||'episódio')+'" style="width:100%;height:0.5rem;margin:0.3rem 0">'+pct+'%</progress><button type="button" class="chip" data-a="epCont" data-uri="'+esc(ep.uri)+'" data-pos="'+pos+'">Continuar de '+Math.floor(pos/60000)+':'+String(Math.floor(pos/1000)%60).padStart(2,'0')+'</button></li>'}).join('')+'</ul>'}).catch(()=>{const c2=$('#spContCorpo');if(c2)c2.innerHTML='<p class="sub">Não foi possível carregar agora.</p>'})});
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="epCont"]');if(!b)return;
- spApi('/me/player/play',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({uris:[b.dataset.uri],position_ms:+b.dataset.pos})}).then(()=>{if(S.err===0)say('Retomando o episódio');else if(S.err===403)say('Controlar a reprodução exige Spotify Premium');else if(S.err===404)say('Nenhum aparelho ativo. Abra o Spotify em um aparelho')})});
+ spApi(spPlayPath(),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({uris:[b.dataset.uri],position_ms:+b.dataset.pos})}).then(()=>{if(S.err===0)say('Retomando o episódio');else if(S.err===403)say('Controlar a reprodução exige Spotify Premium');else if(S.err===404)say('Nenhum aparelho ativo. Abra o Spotify em um aparelho')})});
 function spFiltrosEContinuar(){spFiltrosDom();spSugestoesDom();spBuscaDom();spFilaDom()}
 /* ===== Treinos: exercícios, séries (repetições e peso), histórico e evolução ===== */
 S.trProg=S.trProg||null;
@@ -2257,11 +2259,11 @@ document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest
    if(a==='musSec'){S.musSec=t.dataset.s;S.musBusca='';view();return}
  if(a==='musAbrirPl'){S.musPlId=t.dataset.id;S.musPlCtx=t.dataset.uri;S.musPlKind='playlist';S.musSec='faixas';view();return}
  if(a==='musAbrirItem'){S.musPlId=t.dataset.id;S.musPlCtx=t.dataset.uri;S.musPlKind='album';S.musSec='faixas';view();return}
- if(a==='musTocarContexto'){const uri=t.dataset.uri;if(!uri)return;spApi('/me/player/play',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({context_uri:uri})}).then(()=>{if(S.err)spFail('Não foi possível tocar. Verifique o aparelho ativo.');else{S.musTela='player';S.m.play=true}view()});return}
+ if(a==='musTocarContexto'){const uri=t.dataset.uri;if(!uri)return;spApi(spPlayPath(),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({context_uri:uri})}).then(()=>{if(S.err)spFail('Não foi possível tocar. Verifique o aparelho ativo.');else{S.musTela='player';S.m.play=true}view()});return}
  if(a==='musLetraAtalho'){S.musTela='player';view();const ld=$('#lyrdet');if(ld)ld.open=true;return}
  if(a==='musVoltar'){S.musSec='playlists';view();return}
- if(a==='musTocarFaixa'){const ctx=t.dataset.uri;const k=+t.dataset.k;spApi('/me/player/play',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({context_uri:ctx,offset:{position:k}})}).then(()=>{if(S.err)spFail('Não foi possível tocar. Verifique o aparelho ativo.');else{S.musTela='player';S.m.play=true}view()});return}
- if(a==='musFaixaFila'){const uri=t.dataset.uri;if(!uri)return;spApi('/me/player/play',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({uris:[uri]})}).then(()=>{if(S.err)spFail('Não foi possível tocar. Verifique o aparelho ativo.');else{S.musTela='player';S.m.play=true}view()});return}
+ if(a==='musTocarFaixa'){const ctx=t.dataset.uri;const k=+t.dataset.k;spApi(spPlayPath(),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({context_uri:ctx,offset:{position:k}})}).then(()=>{if(S.err)spFail('Não foi possível tocar. Verifique o aparelho ativo.');else{S.musTela='player';S.m.play=true}view()});return}
+ if(a==='musFaixaFila'){const uri=t.dataset.uri;if(!uri)return;spApi(spPlayPath(),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({uris:[uri]})}).then(()=>{if(S.err)spFail('Não foi possível tocar. Verifique o aparelho ativo.');else{S.musTela='player';S.m.play=true}view()});return}
  if(a==='musPlayer'){S.musTela='player';view();return}
  if(a==='musTela'){S.musTela=t.dataset.t;view();return}
  if(a==='musFilaAtalho'){S.musTela='menu';S.musSec='fila';S.musBusca='';view();return}
@@ -2347,7 +2349,7 @@ function spSugestoesDom(){const v=$('#view');if(!v||S.tab!=='music'||!S.tok||v.q
  spDepoisMais(v,box)}
 document.addEventListener('toggle',e=>{if(e.target.id!=='spSug'||!e.target.open)return;spSugQ=spGeneroDaFaixa();spSugCarregar(spSugQ)},true);
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="spPlay"]');if(!b)return;const abrir=()=>{if(b.dataset.id)window.open('https://open.spotify.com/playlist/'+encodeURIComponent(b.dataset.id),'_blank','noopener')};
- spApi('/me/player/play',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({context_uri:b.dataset.uri})}).then(()=>{if(S.err===0){say('Tocando a playlist');return}if(S.err===403){say('Tocar no aparelho exige Premium. Abrindo no Spotify');abrir();return}say('Nenhum aparelho ativo. Abrindo a playlist no Spotify');abrir()})});
+ spApi(spPlayPath(),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({context_uri:b.dataset.uri})}).then(()=>{if(S.err===0){say('Tocando a playlist');return}if(S.err===403){say('Tocar no aparelho exige Premium. Abrindo no Spotify');abrir();return}say('Nenhum aparelho ativo. Abrindo a playlist no Spotify');abrir()})});
 /* ===== Modo sono: saída sempre visível e pausa programada do Spotify ===== */
 function sonoBtnDom(){const n=document.getElementById('notch');if(!n)return;let b=document.getElementById('sonoSair');
  if(!S.sono){if(b)b.remove();return}
@@ -2528,7 +2530,8 @@ function musCoresCarregar(url){S.musCores=S.musCores||{};if(S.musCores[url]!==un
   catch(_){S.musCores[url]='none'}
   if(S.tab==='music')view()};
  im.onerror=()=>{S.musCores[url]='none';if(S.tab==='music')view()};im.src=url}
-function musFundo(){const img=S.musBgImg||ls.get('mus_bg');if(img)return "background:url('"+img+"') center/cover no-repeat fixed";
+const MUS_FUNDO_PADRAO='assets/papel-de-parede-musica.jpg';
+function musFundo(){const img=S.musBgImg||ls.get('mus_bg')||MUS_FUNDO_PADRAO;if(img)return "background:url('"+img+"') center/cover no-repeat fixed";
  const tr=(S.m.list||[])[S.m.i]||{};const c=tr.img?(S.musCores||{})[tr.img]:undefined;
  if(tr.img&&c===undefined)musCoresCarregar(tr.img);
  if(Array.isArray(c))return 'background:linear-gradient(160deg,'+c[0]+' 0%,'+c[1]+' 50%,#0b0b0d 100%)';
@@ -2560,19 +2563,30 @@ const icoM=(d)=>'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" str
    corpo='<p class="sub" style="margin:0 0 0.4rem">'+vis.length+' '+({fila:'faixa(s) na fila',albuns:'álbum(ns)',adicionadas:'álbum(ns)',musicas:'faixa(s)',artistas:'artista(s)'}[sec]||'playlist(s)')+'</p><div class="mus-top"><label class="sr" for="musBuscaQ">Pesquisar nesta seção</label><input id="musBuscaQ" type="search" value="'+esc(S.musBusca||'')+'" placeholder="Pesquisar nesta seção" data-a="musBusca"></div><div class="mus-grid">'+(vis.length?vis.map(x=>x._lib?musLibItemHtml(x):'<button type="button" class="mus-card" data-a="'+(x.faixa?'musFaixaFila':'musAbrirPl')+'" data-id="'+esc(x.id)+'" data-uri="'+esc(x.uri||'')+'"><span class="mus-capa"'+(x.img?' style="background-image:url(\''+esc(x.img)+'\')"':'')+' aria-hidden="true"></span><b>'+esc(x.n)+'</b><span class="sub">'+esc(x.sub)+'</span></button>').join(''):'<p class="sub">'+esc(vazio)+'</p>')+'</div>'}
  const titulo={adicionadas:'Recentemente adicionadas',albuns:'Álbuns',musicas:'Músicas',artistas:'Artistas',playlists:'Minhas playlists',recentes:'Ouvidas recentemente',fila:'Fila de reprodução',faixas:'Faixas'}[sec]||'';
  return '<div class="mus-menu"><aside class="mus-glass mus-side" aria-label="Biblioteca"><h2 class="mus-h">Biblioteca</h2><nav class="mus-navs">'+nav+'</nav></aside><section class="mus-glass mus-main" aria-label="'+esc(titulo)+'"><h3 class="mus-h">'+esc(titulo)+'</h3>'+corpo+'</section></div>'}
-function musPlayerHtml(tr,m){const fila=(S.queue||[]).map(t=>musCapaUrl(t)).filter(Boolean).slice(0,4);
- const capa=tr.img?'<span class="mus-capa-grande" style="background-image:url(\''+esc(tr.img)+'\')" aria-hidden="true"></span>':'<span class="mus-capa-grande vazia" aria-hidden="true"></span>';
- musCarregarHistorico();const atualUri=(S.m.list[S.m.i]||{}).uri;const anteriores=(S.musHist||[]).filter(t=>t.uri!==atualUri).map(t=>musCapaUrl(t)).filter(Boolean).slice(0,2);
- const lados=[...anteriores.map((u,k)=>({u,d:-(k+1)})),...fila.slice(0,3).map((u,k)=>({u,d:k+1}))];
- const leque=lados.map(o=>{const a=Math.abs(o.d);return '<span class="mus-leque" style="--d:'+o.d+';--s:'+(a===1?0.72:0.5)+';--o:'+(a===1?0.85:0.5)+';--z:'+(a===1?2:1)+';background-image:url(\''+esc(o.u)+'\')" aria-hidden="true"></span>'}).join('');
- const palco='<div class="mus-stage" aria-label="Próximas faixas">'+leque+capa+'</div>';
+/* Carrossel 3D da tela de reprodução: 2 faixas anteriores à esquerda, a atual no centro e 2 próximas à direita */
+const MUS_DEMO_FAIXAS=[{t:'Sounds of Summer',a:'The Beach Boys',c:'#e8a33d'},{t:'Blue Jean',a:'Lo-fi Beats',c:'#3d6f9e'},{t:'Kakorro',a:'The Beach Boys',c:'#b84a5f'},{t:'F1 Theme',a:'Adam Tyler',c:'#c0392b'}];
+function musCartaoHtml(o,d){const a=Math.abs(d);const tx=d*(a===0?0:(a===1?92:150)),tz=a===0?0:(a===1?-55:-120),ry=(d===0?0:(d<0?1:-1)*(a===1?26:34)),sc=a===0?1:(a===1?0.9:0.8),op=a===0?1:(a===1?0.95:0.75),z=3-a;
+ const img=o.img||musCapaUrl(o);const titulo=o.t||o.name||'';const artista=o.a||(o.artists&&o.artists[0]&&o.artists[0].name)||'';
+ const capa=img?'<span class="cf-img" style="background-image:url(\''+esc(img)+'\')" aria-hidden="true"></span>':'<span class="cf-img" style="background:'+esc(o.c||'#555')+'" aria-hidden="true"></span>';
+ return '<div class="cf-card'+(a===0?' cf-atual':'')+'" style="transform:translate(-50%,-50%) translateX('+tx+'px) translateZ('+tz+'px) rotateY('+ry+'deg) scale('+sc+');opacity:'+op+';z-index:'+z+'">'+capa+'<span class="cf-meta"><b>'+esc(titulo)+'</b><span>'+esc(artista)+'</span></span></div>'}
+function musCarrosselHtml(tr,anteriores,proximas){
+ let ant=anteriores,prox=proximas;if(!ant.length&&!prox.length&&!S.tok){ant=MUS_DEMO_FAIXAS.slice(0,2);prox=MUS_DEMO_FAIXAS.slice(2,4)}
+ const cartoes=[...ant.slice(0,2).map((o,k)=>musCartaoHtml(o,-(k+1))),...prox.slice(0,2).map((o,k)=>musCartaoHtml(o,k+1)),musCartaoHtml({t:tr.t,a:tr.a,img:tr.img,c:tr.img?'':'linear-gradient(160deg,#f6b26b 0%,#c8553d 100%)'},0)];
+ return '<div class="mus-stage cf-stage" aria-label="Faixas próximas">'+cartoes.join('')+'</div>'}
+function musPlayerHtml(tr,m){
+  musCarregarHistorico();const atualUri=(S.m.list[S.m.i]||{}).uri;const anteriores=(S.musHist||[]).filter(t=>t.uri!==atualUri).slice(0,2);const proximas=(S.queue||[]).slice(0,2);
+  const palco=musCarrosselHtml(tr,anteriores,proximas);
  return '<div class="mus-player"><button type="button" class="chip" data-a="musMenu">‹ Menu de música</button>'+palco+
   '<div class="mus-info"><b>'+esc(tr.t||'Nada tocando')+'</b><span class="sub">'+esc(tr.a||'')+'</span></div>'+
   '<div class="np-state" role="status">'+(!S.tok?(m.play?'Simulação em andamento':'Simulação pausada'):m.play?'Tocando':((S.devs||[]).some(x=>x.is_active)?(m.pos>0?'Pausada':'Última música ouvida'):'Nenhuma reprodução ativa'))+'</div>'+
   '<div class="prog"><span id="mpos">'+fmt(m.pos)+'</span><input class="seek" id="mseek" type="range" min="0" max="'+(tr.d||0)+'" step="1" value="'+m.pos+'" aria-label="Posição da faixa" aria-valuetext="'+fmt(m.pos)+' de '+fmt(tr.d||0)+'" style="--p:'+((tr.d?m.pos/tr.d*100:0).toFixed(1))+'%"><span id="mdur">'+fmt(tr.d||0)+'</span></div>'+
   '<div class="ctrl"><button class="ib" data-a="shuf" aria-pressed="'+m.shuf+'" aria-label="Aleatório">'+ic('shuf')+'</button><button class="ib" data-a="rep" aria-pressed="'+m.rep+'" aria-label="'+(!m.rep?'Repetição desligada':(m.repState==='track'?'Repetir faixa':'Repetir lista'))+'">'+ic('rep')+'</button>'+(S.tok?'<button class="ib sm like" data-a="like" aria-pressed="'+!!m.liked+'" aria-label="Favoritar faixa">'+ic(m.liked?'heartf':'heart')+'</button>':'')+'</div>'+
   '<details class="dt" id="musMais" style="margin:0.5rem 0"><summary>Mais opções e outras seções</summary>'+plsSection()+'</details></div>'}
-function musBarraHtml(tr,m){const pct=(tr.d?m.pos/tr.d*100:0).toFixed(1);return '<div class="mus-bar" role="region" aria-label="Reprodução"><button type="button" class="mus-barra-capa" data-a="musPlayer" aria-label="Abrir tela de reprodução">'+(tr.img?'<span style="background-image:url(\''+esc(tr.img)+'\')" aria-hidden="true"></span>':'')+'</button><div class="mus-barra-txt"><b>'+esc(tr.t||'Nada tocando')+'</b><span class="sub">'+esc(tr.a||'')+'</span></div><div class="mus-barra-ctl"><button class="ib" data-a="prev" aria-label="Faixa anterior">'+ic('prev')+'</button><button class="ib big" data-a="play" aria-label="'+(m.play?'Pausar':'Tocar')+'">'+ic(m.play?'pause':'play')+'</button><button class="ib" data-a="next" aria-label="Próxima faixa">'+ic('next')+'</button></div><button type="button" class="chip" data-a="musLetraAtalho">Letra</button><button type="button" class="chip" data-a="musFilaAtalho">Fila</button><button type="button" class="mus-vol" data-a="musMaisAtalho" aria-label="Volume e mais opções" title="Volume e mais opções"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></button><div class="mus-barra-prog" id="mbarprog" aria-hidden="true"><span style="width:'+pct+'%"></span></div></div>'}
+/* Ícones da barra da Música (Letra, Fila e três pontos) */
+function musIcone(path){return '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+path+'</svg>'}
+function musIcoBtn(a,rotulo,icone){return '<button type="button" class="chip mus-ico" data-a="'+a+'" aria-label="'+rotulo+'" title="'+rotulo+'">'+icone+'</button>'}
+function musPontosIcone(){return musIcone('<circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/>')}
+function musBarraHtml(tr,m){const pct=(tr.d?m.pos/tr.d*100:0).toFixed(1);return '<div class="mus-bar" role="region" aria-label="Reprodução"><button type="button" class="mus-barra-capa" data-a="musPlayer" aria-label="Abrir tela de reprodução">'+(tr.img?'<span style="background-image:url(\''+esc(tr.img)+'\')" aria-hidden="true"></span>':'')+'</button><div class="mus-barra-txt"><b>'+esc(tr.t||'Nada tocando')+'</b><span class="sub">'+esc(tr.a||'')+'</span><button type="button" class="mus-ponto" data-a="musMaisAtalho" aria-label="Mais opções" title="Mais opções">'+musPontosIcone()+'</button></div><div class="mus-barra-ctl"><button class="ib" data-a="prev" aria-label="Faixa anterior">'+ic('prev')+'</button><button class="ib big" data-a="play" aria-label="'+(m.play?'Pausar':'Tocar')+'">'+ic(m.play?'pause':'play')+'</button><button class="ib" data-a="next" aria-label="Próxima faixa">'+ic('next')+'</button></div>'+musIcoBtn('musLetraAtalho','Letra',musIcone('<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 21 12z"/>'))+musIcoBtn('musFilaAtalho','Fila',musIcone('<path d="M4 6h12M4 12h12M4 18h8"/><path d="M17 15v6M14 18h6"/>'))+'<button type="button" class="mus-vol" data-a="musMaisAtalho" aria-label="Volume e mais opções" title="Volume e mais opções"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></button><div class="mus-barra-prog" id="mbarprog" aria-hidden="true"><span style="width:'+pct+'%"></span></div></div>'}
 function musDots(t){return '<div class="rad-dots" role="tablist" aria-label="Telas da música">'+[['menu','Biblioteca'],['player','Reprodução']].map(([k,l])=>'<button type="button" role="tab" class="rad-dot'+(t===k?' on':'')+'" data-a="musTela" data-t="'+k+'" aria-selected="'+(t===k)+'" aria-label="'+l+'"></button>').join('')+'</div>'}
 function musicoHtml(){const m=S.m,tr=m.list[m.i]||{t:'',a:'',al:'',d:0,img:''};
  const tela=S.musTela||'menu';const corpo=tela==='player'?musPlayerHtml(tr,m):musMenuHtml();
@@ -2696,7 +2710,9 @@ function radFimMontar(){const m=document.querySelector('#view .rad-root .mus-mai
  if(!m){const r=document.getElementById('rweek'),v=document.getElementById('view'),nb=document.getElementById('navBaixo');if(r&&v&&nb&&r.nextElementSibling!==nb)v.insertBefore(r,nb);return}
 
  ['#rvolstation','.rad-chips','#rweek'].forEach(sel=>{const e=m.querySelector(sel);if(e&&e.parentElement===m&&m.lastElementChild!==e)m.appendChild(e)})}
-(function setasObservadas(){const v=document.getElementById('view');const acompanha=()=>{navBaixoMontar();radFimMontar()};acompanha();if(v)new MutationObserver(acompanha).observe(v,{childList:true});})();
+/* Capa da faixa dentro da sub-cápsula da barra da Música (como no exemplo) */
+function musCapaNaCapsula(){document.querySelectorAll('#view .mus-bar').forEach(b=>{const capa=b.querySelector(':scope > .mus-barra-capa'),txt=b.querySelector(':scope > .mus-barra-txt'),prog=b.querySelector(':scope > #mbarprog');if(capa&&txt&&capa.parentElement!==txt)txt.prepend(capa);if(prog&&txt&&prog.parentElement!==txt)txt.appendChild(prog)})}
+(function setasObservadas(){const v=document.getElementById('view');const acompanha=()=>{navBaixoMontar();radFimMontar();musCapaNaCapsula()};acompanha();if(v)new MutationObserver(acompanha).observe(v,{childList:true});})();
 /* Gesto de arrastar: esquerda = próxima aba, direita = aba anterior (ignora listas com rolagem lateral e campos) */
 (function gestoAbas(){let x0=0,y0=0,t0=0,ativo=false;
  const ignora=alvo=>{for(let e=alvo;e&&e.id!=='view';e=e.parentElement){if(!e.tagName)continue;const tg=e.tagName;if(tg==='INPUT'||tg==='TEXTAREA'||tg==='SELECT'||tg==='CANVAS'||e.isContentEditable)return true;const cs=getComputedStyle(e);if(/(auto|scroll)/.test(cs.overflowX)&&e.scrollWidth>e.clientWidth+2)return true}return false};
@@ -2964,7 +2980,7 @@ async function spBuscar(mais){const q=(($('#spBuscaQ')||{}).value||'').trim();co
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a]');if(!b)return;
  if(b.dataset.a==='spBuscar'){spBuscar(false);return}
  if(b.dataset.a==='spBuscarMais'){spBuscar(true);return}
- if(b.dataset.a==='spTocar'){spApi('/me/player/play',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({uris:[b.dataset.uri]})}).then(()=>{if(S.err===0)say('Tocando a música');else if(S.err===403)say('Tocar no aparelho exige Premium. Abra no Spotify');else say('Nenhum aparelho ativo. Abra o Spotify em um aparelho')});return}});
+ if(b.dataset.a==='spTocar'){spApi(spPlayPath(),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({uris:[b.dataset.uri]})}).then(()=>{if(S.err===0)say('Tocando a música');else if(S.err===403)say('Tocar no aparelho exige Premium. Abra no Spotify');else say('Nenhum aparelho ativo. Abra o Spotify em um aparelho')});return}});
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target&&e.target.id==='spBuscaQ'){e.preventDefault();spBuscar()}});
 /* ===== Backup dos livros sem conta: baixa uma cópia de cada arquivo ===== */
 async function livrosBaixarCopia(){const L=livrosMeta();if(!L.length){say('Nenhum livro para baixar');return}let n=0;
@@ -3175,7 +3191,7 @@ function msMeta(){if(!('mediaSession' in navigator)||typeof MediaMetadata==='und
   navigator.mediaSession.playbackState=msTocando()?'playing':'paused'}catch(_){}}
 function msAcoes(){if(!('mediaSession' in navigator))return;const A=navigator.mediaSession;
  const set=(acao,fn)=>{try{A.setActionHandler(acao,fn)}catch(_){}};
- set('play',()=>{if(msFonteRadio()){if(!radioTocando())rdPlay(S.rd.cur)}else if(S.tok)spApi('/me/player/play',{method:'PUT'})});
+ set('play',()=>{if(msFonteRadio()){if(!radioTocando())rdPlay(S.rd.cur)}else if(S.tok)spApi(spPlayPath(),{method:'PUT'})});
  set('pause',()=>{if(msFonteRadio()){if(radioTocando())rdStop()}else if(S.tok)spApi('/me/player/pause',{method:'PUT'})});
  set('nexttrack',()=>{if(msFonteRadio()){rdStep(1);setTimeout(msMeta,300)}else if(S.tok)spApi('/me/player/next',{method:'POST'}).then(()=>setTimeout(msMeta,500))});
  set('previoustrack',()=>{if(msFonteRadio()){rdStep(-1);setTimeout(msMeta,300)}else if(S.tok)spApi('/me/player/previous',{method:'POST'}).then(()=>setTimeout(msMeta,500))})}
@@ -3594,7 +3610,7 @@ function tplAdd(k){const tp=tplAll()[k];if(!tp)return;const hoje=dayKey(new Date
 function overdueHtml(){const hoje=dayKey(new Date());const n=(S.tasks||[]).filter(t=>!t.d&&t.due&&t.due<hoje).length;return n?'<div class="note" role="status">'+n+' tarefa(s) atrasada(s).</div>':''}
 function radioHistHtml(){let h=[];try{h=JSON.parse(ls.get('rd_hist')||'[]')||[]}catch(_){}if(!Array.isArray(h)||!h.length)return '';
  return '<details class="dt" style="margin-top:0.75rem"><summary>Tocadas recentemente</summary><ul class="svlist">'+h.map(n=>{const i=S.rd.list.findIndex(x=>x.n===n);return i<0?'':'<li class="svd"><button type="button" class="svdbtn" data-a="rpick" data-i="'+i+'"><span class="grow">'+esc(n)+'</span></button></li>'}).join('')+'</ul></details>'}
-async function spReplay(uri){await spApi('/me/player/play',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({uris:[uri]})})}
+async function spReplay(uri){await spApi(spPlayPath(),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({uris:[uri]})})}
 async function spHistLoad(){const box=$('#hsthist');if(!box)return;const r=await spApi('/me/player/recently-played?limit=20');const items=(r&&r.items)||[];const seen=new Set();const list=[];
  items.forEach(it=>{const t=it.track;if(!t||seen.has(t.uri))return;seen.add(t.uri);list.push(t)});
  box.innerHTML=list.length?'<ul class="svlist">'+list.slice(0,15).map(t=>'<li class="svd" style="display:flex;align-items:center;gap:0.5rem"><span class="grow">'+esc(t.name)+' <span class="sub">· '+esc((t.artists||[]).map(a=>a.name).join(', '))+'</span></span><button type="button" class="chip" data-a="tagain" data-u="'+esc(t.uri)+'">Tocar de novo</button></li>').join('')+'</ul>':'<p class="sub">Nenhuma faixa recente.</p>'}
@@ -3997,7 +4013,7 @@ if(!window.notchApp){
 $('#view').addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
  if(a==='devtoggle'){S.devOpen=!S.devOpen;spPaint();if(S.devOpen)spDevs();return}
  if(a==='devpick'){const id=b.dataset.id;spApi('/me/player',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({device_ids:[id],play:true})}).then(()=>{if(S.err)spFail('Não foi possível trocar de aparelho');else say('Reproduzindo em '+b.textContent.trim().replace(/ · tocando$/,''));setTimeout(()=>{spSync();spDevs()},900)});return}
- if(a==='plsplay'){const u=b.dataset.u;spApi('/me/player/play',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({context_uri:u})}).then(()=>{if(S.err)spFail('Não foi possível tocar a playlist');else say('Tocando playlist')});return}
+ if(a==='plsplay'){const u=b.dataset.u;spApi(spPlayPath(),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({context_uri:u})}).then(()=>{if(S.err)spFail('Não foi possível tocar a playlist');else say('Tocando playlist')});return}
 });
 $('#view').addEventListener('toggle',e=>{if(e.target.id==='pls'&&e.target.open)plsLoad()},true);
 
@@ -4067,8 +4083,20 @@ function barraBaseMontar(){const n=document.getElementById('notch');if(!n)return
  const hdr=n.querySelector('.hdr');if(!hdr)return;
  const hora=hdr.querySelector('.hclk');if(hora&&hora.parentElement!==b)b.appendChild(hora);
  const tabs=document.getElementById('tabs');if(tabs&&tabs.parentElement!==b)b.appendChild(tabs);if(tabs){tabs.tabIndex=0;tabs.setAttribute('aria-label','Abas do painel (use as setas para rolar)')}
- [...hdr.children].filter(c=>c.id==='apresHdr'||c.id==='syncIco'||(c.tagName==='BUTTON'&&c.classList.contains('syncIco'))).forEach(c=>b.appendChild(c));
+ const achados=[...hdr.children].filter(c=>c.id==='apresHdr'||c.id==='syncIco'||(c.tagName==='BUTTON'&&c.classList.contains('syncIco')));
+ BARRA_EXTRAS=[...(BARRA_EXTRAS||[]),...achados.filter(x=>!(BARRA_EXTRAS||[]).includes(x))];
+ barraExtrasMontar();
 }
+/* Apresentação, check, sino, Modo foco e + ficam no fim da faixa de abas (depois de Utilidades). Refeito sempre que a faixa é redesenhada. */
+var BARRA_EXTRAS;
+var BARRA_FIXOS={};
+function barraExtrasMontar(){const t=document.getElementById('tabs');if(!t)return;
+ if(!t._extrasObs){t._extrasObs=new MutationObserver(barraExtrasMontar);t._extrasObs.observe(t,{childList:true})}
+ const rank=x=>x.id==='apresHdr'?0:(x.id==='syncIco'?1:2);
+ BARRA_FIXOS={foco:document.getElementById('focoBtn')||(BARRA_FIXOS&&BARRA_FIXOS.foco),quick:document.getElementById('quick')||(BARRA_FIXOS&&BARRA_FIXOS.quick)};
+ const itens=[...(BARRA_EXTRAS||[]).slice().sort((a,b)=>rank(a)-rank(b)),BARRA_FIXOS.foco,BARRA_FIXOS.quick].filter(Boolean);
+ const fim=[...t.children].slice(-itens.length);if(fim.length===itens.length&&fim.every((e,i)=>e===itens[i]))return;
+ itens.forEach(e=>t.appendChild(e))}
 barraBaseMontar();{const h=document.querySelector('#notch .hdr');if(h)new MutationObserver(barraBaseMontar).observe(h,{childList:true});}
 dispEscolhaInicial();
 // celular estreito: aplica o layout de celular mesmo se outro aparelho foi escolhido
