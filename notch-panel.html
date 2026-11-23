@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="estilo/notch.css">
+<link rel="stylesheet" href="estilo/radio.css">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -35,9 +36,10 @@
   <div class="sr" role="status" aria-live="polite" id="live"></div>
 </main>
 <script src="js/dados.js"></script>
+<script src="js/radio.js"></script>
 <script src="js/notch.js"></script>
 <script>
-if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){var recarregou=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(recarregou)return;recarregou=true;location.reload()});navigator.serviceWorker.register('sw.js').then(function(reg){function verificar(){reg.update().catch(function(){})}verificar();setInterval(verificar,600000);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')verificar()});reg.addEventListener('updatefound',function(){var w=reg.installing;if(w)w.addEventListener('statechange',function(){if(w.state==='installed'&&navigator.serviceWorker.controller)w.postMessage('skip')})})}).catch(function(){});}
+if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){var recarregou=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(recarregou)return;recarregou=true;location.reload()});navigator.serviceWorker.register('sw.js').then(function(reg){function verificar(){reg.update().catch(function(){})}verificar();setInterval(verificar,600000);document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')verificar()});function avisarAtualizacao(w){if(document.getElementById('avisoAtualiza'))return;var a=document.createElement('div');a.id='avisoAtualiza';a.setAttribute('role','status');a.setAttribute('aria-live','polite');a.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:5.5rem;z-index:9999;display:flex;gap:.75rem;align-items:center;padding:.6rem .9rem;border-radius:999px;background:#fff;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.25);font:600 .9rem system-ui,sans-serif;max-width:94vw';var t=document.createElement('span');t.textContent='Nova versão do painel disponível.';var b=document.createElement('button');b.type='button';b.textContent='Atualizar agora';b.style.cssText='min-height:36px;padding:0 .8rem;border-radius:999px;border:1px solid #111;background:#111;color:#fff;font:inherit;cursor:pointer';b.addEventListener('click',function(){w.postMessage('skip')});a.appendChild(t);a.appendChild(b);document.body.appendChild(a);b.focus()}reg.addEventListener('updatefound',function(){var w=reg.installing;if(w)w.addEventListener('statechange',function(){if(w.state==='installed'&&navigator.serviceWorker.controller)avisarAtualizacao(w)})});if(reg.waiting&&navigator.serviceWorker.controller)avisarAtualizacao(reg.waiting)}).catch(function(){});}
 </script>
 </body>
 </html>

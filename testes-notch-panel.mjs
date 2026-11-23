@@ -196,43 +196,43 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 
 // 18) rádio: Só favoritas ao lado de Buscar mais rádios; rádios salvas em accordion
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
- w.eval("S.rd.list=[{n:'Alfa',u:'https://a.fm/s'},{n:'Beta',u:'https://b.fm/s'},{n:'Gama',u:'https://c.fm/s'}];S.rd.cur=0;");
+ w.eval("RADIO.s.list=[{n:'Alfa',u:'https://a.fm/s'},{n:'Beta',u:'https://b.fm/s'},{n:'Gama',u:'https://c.fm/s'}];RADIO.s.cur=0;");
  abaClick(d,'radio');await sl(40);
- w.eval("S.radSec='favs';view()");await sl(40);const favOk=/Estações favoritas/.test(d.querySelector('#view .rad-head').textContent);
- w.eval("S.radSec='explorar';view()");await sl(40);const descOk=!!d.querySelector('#rsdet');
+ w.eval("RADIO.s.radSec='favs';view()");await sl(40);const favOk=/Estações favoritas/.test(d.querySelector('#view .rad-head').textContent);
+ w.eval("RADIO.s.radSec='explorar';view()");await sl(40);const descOk=!!d.querySelector('#rsdet');
  ok(favOk&&descOk,'Favoritas e busca de emissoras ficam em seções do menu');
- w.eval("S.radSec='favs';view()");await sl(40);
+ w.eval("RADIO.s.radSec='favs';view()");await sl(40);
  const linha=d.querySelector('#view');
 ok(!linha.querySelector('#rsfdet'),'favoritas são uma grade, sem acordeão');
- ok(!w.eval('S.rd.onlyFav'),'abrir o accordion não altera o filtro de navegação');
- w.eval("S.radTela='player';view()");await sl(40);
+ ok(!w.eval('RADIO.s.onlyFav'),'abrir o accordion não altera o filtro de navegação');
+ w.eval("RADIO.s.radTela='player';view()");await sl(40);
  d.querySelector('[data-a="rfonly"]').click();await sl(60);
- ok(w.eval('S.rd.onlyFav')===true,'botão Navegar só entre favoritas liga o filtro');
+ ok(w.eval('RADIO.s.onlyFav')===true,'botão Navegar só entre favoritas liga o filtro');
  d.querySelector('[data-a="rfonly"]').click();await sl(60);
- ok(w.eval('S.rd.onlyFav')===false,'botão Navegar só entre favoritas desliga o filtro');
-w.eval("S.radTela='menu';S.radSec='salvas';view()");await sl(40);
+ ok(w.eval('RADIO.s.onlyFav')===false,'botão Navegar só entre favoritas desliga o filtro');
+w.eval("RADIO.s.radTela='menu';RADIO.s.radSec='salvas';view()");await sl(40);
  ok(d.querySelectorAll('#view .svd').length===3,'accordion de rádios salvas lista as 3 rádios');
  d.querySelector('[data-a="rpick"][data-i="2"]').click();await sl(40);
- ok(w.eval('S.rd.cur')===2,'escolher uma rádio salva a seleciona e toca');
+ ok(w.eval('RADIO.s.cur')===2,'escolher uma rádio salva a seleciona e toca');
 }
 
 // 19) rádio: controles numa linha; desligar em com Personalizado
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
- w.eval("S.rd.list=[{n:'Alfa',u:'https://a.fm/s'}];S.rd.cur=0");
+ w.eval("RADIO.s.list=[{n:'Alfa',u:'https://a.fm/s'}];RADIO.s.cur=0");
  abaClick(d,'radio');await sl(40);
-w.eval("S.radTela='player';view()");await sl(40);
+w.eval("RADIO.s.radTela='player';view()");await sl(40);
 const secundaria=d.querySelector('#view .ctrl2');
   const barraCtl=d.querySelectorAll('.rad-bar .mus-barra-ctl button');ok(barraCtl.length===3&&!!secundaria&&secundaria.querySelectorAll('.ib').length===2,'três controles na barra inferior e favorita/aleatória em linha secundária');
   const rp=d.querySelector('.rad-bar [data-a="rplay"]');ok(!!rp&&/Ouvir|Pausar/.test(rp.getAttribute('aria-label')||rp.textContent),'botão de reproduzir da barra diz a ação disponível');
-w.eval("S.radTela='player';view()");await sl(40);
+w.eval("RADIO.s.radTela='player';view()");await sl(40);
  ok(!!d.querySelector('details summary')&&[...d.querySelectorAll('summary')].some(s=>/Mais opções/.test(s.textContent)),'temporizador e edição ficam em Mais opções');
-w.eval("S.radTela='player';view()");await sl(40);
+w.eval("RADIO.s.radTela='player';view()");await sl(40);
  const sel=d.querySelector('#rsleep');
  ok(!!sel&&[...sel.options].some(o=>o.value==='-1'&&/Personalizado/.test(o.textContent)),'opção Personalizado no desligar em');
  sel.value='-1';sel.dispatchEvent(new w.Event('change',{bubbles:true}));await sl(40);
  ok(!d.querySelector('#rscm').hidden,'escolher Personalizado mostra o campo de minutos');
  const c=d.querySelector('#rscm');c.value='7';c.dispatchEvent(new w.Event('change',{bubbles:true}));await sl(40);
- ok(w.eval('S.rd.sleepM')===7,'minutos personalizados definem o temporizador');
+ ok(w.eval('RADIO.s.sleepM')===7,'minutos personalizados definem o temporizador');
 }
 
 // 20) Tempo: cidades salvas com deslizar (sem comparação)
@@ -291,7 +291,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  abaClick(d,'tasks');await sl(40);
  ok(/1 tarefa\(s\) atrasada/.test(d.querySelector('#view').textContent),'aviso de tarefa atrasada na aba Tarefas');
  w.localStorage.setItem('notch:rd_hist',JSON.stringify(['Alfa']));
- w.eval("S.rd.list=[{n:'Alfa',u:'https://a.fm/s'},{n:'Beta',u:'https://b.fm/s'}];S.rd.cur=0");
+ w.eval("RADIO.s.list=[{n:'Alfa',u:'https://a.fm/s'},{n:'Beta',u:'https://b.fm/s'}];RADIO.s.cur=0");
  abaClick(d,'radio');await sl(40);
  ok(/Tocadas recentemente/.test(d.querySelector('#view').textContent),'histórico de rádios tocadas aparece na aba Rádio');
  abaClick(d,'set');await sl(30);
@@ -400,7 +400,7 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  ok(!!t&&t.dt==='09:30','tarefa de preparação criada 30 min antes do evento');
 }
 {const {w,d}=abrir({before(w){w.localStorage.setItem('notch:rd_sched',JSON.stringify({t:'07:15',i:0,last:''}))}});
- await sl(300);w.eval("S.rd.list=[{n:'Alfa',u:'https://a.fm/s'}];");d.querySelector('#pill').click();await sl(30);
+ await sl(300);w.eval("RADIO.s.list=[{n:'Alfa',u:'https://a.fm/s'}];");d.querySelector('#pill').click();await sl(30);
  abaClick(d,'radio');await sl(40);
  ok(/Programada para 07:15/.test(d.querySelector('#view').textContent),'programação de rádio aparece na aba Rádio');
  d.querySelector('[data-a="rschDel"]').click();await sl(40);
@@ -841,26 +841,26 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
 
 // 56) rádio: busca na lista e volume por emissora
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
- w.eval("S.rd.list=[{n:'Alfa FM',u:'https://a.fm/s'},{n:'Beta Rádio',u:'https://b.fm/s'},{n:'Gama',u:'https://c.fm/s'}];S.rd.cur=0");
+ w.eval("RADIO.s.list=[{n:'Alfa FM',u:'https://a.fm/s'},{n:'Beta Rádio',u:'https://b.fm/s'},{n:'Gama',u:'https://c.fm/s'}];RADIO.s.cur=0");
  abaClick(d,'radio');await sl(60);
-w.eval("S.radSec='salvas';view()");await sl(40);
+w.eval("RADIO.s.radSec='salvas';view()");await sl(40);
  d.querySelector('#rsvdet').open=true;await sl(20);
  const q=d.querySelector('#rsearch');q.value='beta';q.dispatchEvent(new w.Event('input',{bubbles:true}));await sl(20);
  const vis=[...d.querySelectorAll('#rsvdet .svd')].filter(l=>!l.hidden).map(l=>l.textContent.trim());
  ok(vis.length===1&&/Beta/.test(vis[0]),'busca na lista de rádios filtra pelo nome');
- w.eval("S.rd.vol=0.4");
+ w.eval("RADIO.s.vol=0.4");
  d.querySelector('[data-a="rvolsave"]').click();await sl(40);
- ok(w.eval('S.rd.list[0].v')===0.4,'salvar volume para a emissora atual');
+ ok(w.eval('RADIO.s.list[0].v')===0.4,'salvar volume para a emissora atual');
  ok(JSON.parse(w.localStorage.getItem('notch:radios'))[0].v===0.4,'volume da emissora é salvo');
- w.eval("S.rd.vol=0.9");
+ w.eval("RADIO.s.vol=0.9");
  d.querySelector('[data-a="rvolclr"]').click();await sl(40);
- ok(w.eval('S.rd.list[0].v')===undefined,'voltar ao volume geral remove o volume da emissora');
+ ok(w.eval('RADIO.s.list[0].v')===undefined,'voltar ao volume geral remove o volume da emissora');
 }
 
 // 57) atalho da rádio, gráfico semanal por emissora, modo de estudo
 {const hoje=new Date();const k=(x)=>x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');
  const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
- w.eval("S.rd.list=[{n:'Alfa FM',u:'https://a.fm/s'},{n:'Beta',u:'https://b.fm/s'}];S.rd.cur=0");
+ w.eval("RADIO.s.list=[{n:'Alfa FM',u:'https://a.fm/s'},{n:'Beta',u:'https://b.fm/s'}];RADIO.s.cur=0");
  w.localStorage.setItem('notch:listen',JSON.stringify({[k(hoje)]:{r:{'Alfa FM':3600},s:{}}}));
  abaClick(d,'radio');await sl(60);
  ok(!d.querySelector('#rtile'),'card Rádio do momento removido');
@@ -876,9 +876,9 @@ w.eval("S.radSec='salvas';view()");await sl(40);
 
 // 58) grupos, ordenação, renomear, cor, fuso, remover, reconexão
 {const {w,d}=abrir({before(w){w.prompt=()=>'Novo Nome';w.confirm=()=>true}});await sl(300);d.querySelector('#pill').click();await sl(30);
- w.eval("S.rd.list=[{n:'Zeta',u:'https://z.fm/s',g:'Música'},{n:'Alfa',u:'https://a.fm/s',g:'Notícias'}];S.rd.cur=0");
+ w.eval("RADIO.s.list=[{n:'Zeta',u:'https://z.fm/s',g:'Música'},{n:'Alfa',u:'https://a.fm/s',g:'Notícias'}];RADIO.s.cur=0");
  abaClick(d,'radio');await sl(60);
-w.eval("S.radSec='salvas';view()");await sl(40);
+w.eval("RADIO.s.radSec='salvas';view()");await sl(40);
  d.querySelector('#rsvdet').open=true;await sl(20);
  ok(!!d.querySelector('[data-a="rgf"][data-g="Notícias"]'),'grupos de emissoras aparecem como filtro');
  d.querySelector('[data-a="rgf"][data-g="Notícias"]').click();await sl(60);
@@ -886,45 +886,45 @@ w.eval("S.radSec='salvas';view()");await sl(40);
  ok(vis===1,'filtro por grupo mostra só as emissoras do grupo');
  d.querySelector('[data-a="rgf"][data-g=""]').click();await sl(60);
  d.querySelector('[data-a="rsort"][data-k="nome"]').click();await sl(60);
- ok(w.eval('S.rd.list[0].n')==='Alfa'&&w.eval('S.rd.list[S.rd.cur].n')==='Zeta','ordenar por nome mantém a emissora atual');
+ ok(w.eval('RADIO.s.list[0].n')==='Alfa'&&w.eval('RADIO.s.list[RADIO.s.cur].n')==='Zeta','ordenar por nome mantém a emissora atual');
  d.querySelector('[data-a="rren"][data-i="0"]').click();await sl(60);
- ok(w.eval('S.rd.list[0].n')==='Novo Nome','renomear emissora direto na lista');
+ ok(w.eval('RADIO.s.list[0].n')==='Novo Nome','renomear emissora direto na lista');
  d.querySelector('[data-a="rdel"][data-i="0"]').click();await sl(60);
- ok(w.eval('S.rd.list.length')===1,'remover emissora direto na lista');
+ ok(w.eval('RADIO.s.list.length')===1,'remover emissora direto na lista');
 }
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
- w.eval("S.rd.list=[{n:'Alfa',u:'https://a.fm/s',tz:'Europe/Lisbon'}];S.rd.cur=0");
+ w.eval("RADIO.s.list=[{n:'Alfa',u:'https://a.fm/s',tz:'Europe/Lisbon'}];RADIO.s.cur=0");
  abaClick(d,'radio');await sl(60);
  
 }
 
 // 59) ordem manual e aviso de carregamento
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
- w.eval("S.rd.list=[{n:'A',u:'https://a.fm/s'},{n:'B',u:'https://b.fm/s'},{n:'C',u:'https://c.fm/s'}];S.rd.cur=1");
+ w.eval("RADIO.s.list=[{n:'A',u:'https://a.fm/s'},{n:'B',u:'https://b.fm/s'},{n:'C',u:'https://c.fm/s'}];RADIO.s.cur=1");
  abaClick(d,'radio');await sl(60);
-w.eval("S.radSec='salvas';view()");await sl(40);
+w.eval("RADIO.s.radSec='salvas';view()");await sl(40);
  d.querySelector('[data-a="rdown"][data-i="0"]').click();await sl(60);
- ok(w.eval('S.rd.list.map(x=>x.n).join("")')==='BAC','descer emissora troca a ordem');
- ok(w.eval('S.rd.list[S.rd.cur].n')==='B','emissora atual continua a mesma após mover');
+ ok(w.eval('RADIO.s.list.map(x=>x.n).join("")')==='BAC','descer emissora troca a ordem');
+ ok(w.eval('RADIO.s.list[RADIO.s.cur].n')==='B','emissora atual continua a mesma após mover');
  d.querySelector('[data-a="rup"][data-i="1"]').click();await sl(60);
- ok(w.eval('S.rd.list.map(x=>x.n).join("")')==='ABC','subir emissora volta a ordem');
+ ok(w.eval('RADIO.s.list.map(x=>x.n).join("")')==='ABC','subir emissora volta a ordem');
 }
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
- w.eval("S.rd.list=[{n:'A',u:'https://a.fm/s'}];S.rd.cur=0;S.rd.st='load';S.rd.t0=Date.now()-9000;S.rd.i=0");
+ w.eval("RADIO.s.list=[{n:'A',u:'https://a.fm/s'}];RADIO.s.cur=0;RADIO.s.st='load';RADIO.s.t0=Date.now()-9000;RADIO.s.i=0");
  abaClick(d,'radio');await sl(60);
  ok(!!d.querySelector('[data-a="rretry"]'),'aviso de demora com botão tentar de novo');
 }
 
 // 60) logotipo por emissora e desfazer visível
 {const {w,d}=abrir({before(w){w.prompt=()=>'https://img.exemplo.com/logo.png'}});await sl(300);d.querySelector('#pill').click();await sl(30);
- w.eval("S.rd.list=[{n:'Alfa',u:'https://a.fm/s'}];S.rd.cur=0");
+ w.eval("RADIO.s.list=[{n:'Alfa',u:'https://a.fm/s'}];RADIO.s.cur=0");
  abaClick(d,'radio');await sl(60);
-w.eval("S.radSec='salvas';view()");await sl(40);
+w.eval("RADIO.s.radSec='salvas';view()");await sl(40);
  d.querySelector('#rsvdet').open=true;await sl(20);
  d.querySelector('[data-a="rlogo"][data-i="0"]').click();await sl(60);
- ok(w.eval('S.rd.list[0].img')==='https://img.exemplo.com/logo.png','logotipo salvo na emissora');
+ ok(w.eval('RADIO.s.list[0].img')==='https://img.exemplo.com/logo.png','logotipo salvo na emissora');
  ok(!!d.querySelector('#rsvdet img.rlogo'),'logotipo aparece na lista');
- const b=w.eval('JSON.parse(bkClean({radios:JSON.stringify(S.rd.list)}).radios)[0].img');
+ const b=w.eval('JSON.parse(bkClean({radios:JSON.stringify(RADIO.s.list)}).radios)[0].img');
  ok(b==='https://img.exemplo.com/logo.png','logotipo entra no backup');
 }
 {const {w,d}=abrir();await sl(300);d.querySelector('#pill').click();await sl(30);
@@ -1281,8 +1281,8 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
  const cartao=d.querySelector('#apCartao');const f0=w.eval("ls.get('apres_fonte')");
  const ev1=new w.Event('pointerdown',{bubbles:true});Object.defineProperty(ev1,'clientX',{value:200});cartao.dispatchEvent(ev1);
  const ev2=new w.Event('pointerup',{bubbles:true});Object.defineProperty(ev2,'clientX',{value:60});d.dispatchEvent(ev2);await sl(40);
- w.eval("S.rd.list=[{n:'A',u:'https://a.fm/s'},{n:'B',u:'https://b.fm/s'}];S.rd.cur=0");const c0=w.eval('S.rd.cur');const ev3=new w.Event('pointerdown',{bubbles:true});Object.defineProperty(ev3,'clientX',{value:200});d.querySelector('#apCartao').dispatchEvent(ev3);const ev4=new w.Event('pointerup',{bubbles:true});Object.defineProperty(ev4,'clientX',{value:60});d.dispatchEvent(ev4);await sl(40);
- ok(w.eval('S.rd.cur')!==c0,'arrastar o cartão do rádio troca de estação');
+ w.eval("RADIO.s.list=[{n:'A',u:'https://a.fm/s'},{n:'B',u:'https://b.fm/s'}];RADIO.s.cur=0");const c0=w.eval('RADIO.s.cur');const ev3=new w.Event('pointerdown',{bubbles:true});Object.defineProperty(ev3,'clientX',{value:200});d.querySelector('#apCartao').dispatchEvent(ev3);const ev4=new w.Event('pointerup',{bubbles:true});Object.defineProperty(ev4,'clientX',{value:60});d.dispatchEvent(ev4);await sl(40);
+ ok(w.eval('RADIO.s.cur')!==c0,'arrastar o cartão do rádio troca de estação');
  d.querySelector('[data-a="apFonte"]').click();await sl(40);
  ok(w.eval("apresFonte()")==='spotify','botão troca a fonte entre rádio e Spotify');
  d.querySelector('[data-a="apSair"]').click();await sl(30);
@@ -1414,21 +1414,21 @@ if(false){//OBSOLETO: aba Tarefas removida (tarefas agora na Agenda e no Kanban)
   if(String(u).includes('/json/stations/byurl/'))return ok([{favicon:'https://img.exemplo.com/logo.png',url_resolved:'https://radio.exemplo.com/x'}]);
   return ok([])}});
  await sl(300);
- const primeiro=w.eval('S.rd.list[0].u');
+ const primeiro=w.eval('RADIO.s.list[0].u');
  w.eval("rdLogosBuscar()");await sl(1500);
  ok(chamadas.some(c=>c.includes('/json/stations/byurl/')),'busca logotipo pelo endereço do stream');
- ok(w.eval('S.rd.list[0].img')==='https://img.exemplo.com/logo.png','logotipo gravado na emissora');
+ ok(w.eval('RADIO.s.list[0].img')==='https://img.exemplo.com/logo.png','logotipo gravado na emissora');
  ok(chamadas.some(c=>c.includes('byurl')&&c.includes(encodeURIComponent(primeiro))),'consulta usa o endereço exato da emissora');
 }
 // 90) clicar em uma rádio favorita: abrir a lista não redesenha em laço e a rádio é escolhida
 {const {w,d}=abrir();await sl(300);
- w.eval('S.rd.favs=[S.rd.list[5].u]');
+ w.eval('RADIO.s.favs=[RADIO.s.list[5].u]');
  abaClick(d,'radio');await sl(120);
-w.eval("S.radSec='favs';view()");await sl(40);
+w.eval("RADIO.s.radSec='favs';view()");await sl(40);
  const btn=d.querySelector('#view [data-a="rpick"][data-i="5"]');
  ok(!!btn,'grade de favoritas mostra a emissora');
  if(btn)btn.click();await sl(60);
- ok(w.eval('S.rd.cur')===5,'clicar na favorita escolhe essa emissora');
+ ok(w.eval('RADIO.s.cur')===5,'clicar na favorita escolhe essa emissora');
 }
 // 91) treino guiado, sugestão de carga, leitura confortável e rotação do backup semanal
 {const {w,d}=abrir();await sl(300);

@@ -1,5 +1,5 @@
-const VERSAO = 'painel-v120';
-const ARQUIVOS = ['./', './notch-panel.html', './estilo/notch.css', './js/notch.js', './js/dados.js', './diario.html', './segundo-cerebro.html', './assets/papel-de-parede-musica.jpg', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
+const VERSAO = 'painel-v129';
+const ARQUIVOS = ['./', './notch-panel.html', './estilo/notch.css', './estilo/radio.css', './js/notch.js', './js/radio.js', './js/dados.js', './diario.html', './segundo-cerebro.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('message', e => {
   if (e.data === 'skip') self.skipWaiting();
@@ -7,7 +7,8 @@ self.addEventListener('message', e => {
 
 self.addEventListener('install', e => {
   // Cada arquivo é guardado à parte: um arquivo ausente (ex.: ícone ainda não enviado) não impede a atualização do painel
-  e.waitUntil(caches.open(VERSAO).then(c => Promise.allSettled(ARQUIVOS.map(u => c.add(u)))).then(() => self.skipWaiting()));
+  // Não ativa sozinha: a página mostra o aviso e a versão nova entra quando o usuário confirmar
+  e.waitUntil(caches.open(VERSAO).then(c => Promise.allSettled(ARQUIVOS.map(u => c.add(u)))));
 });
 
 self.addEventListener('activate', e => {
