@@ -1156,14 +1156,14 @@ body.dev-computador #quick{top:auto!important;bottom:calc(4.75rem + env(safe-are
 #notch.dev-tablet #view,#notch.dev-computador #view{flex:1 1 auto;min-height:0;overflow-y:auto!important;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;padding-bottom:4rem;padding-top:0.75rem}
 
 /* ===== Tema claro: abas com cores fixas escuras passam a usar superfícies claras ===== */
-:root[data-theme="light"] #notch .npc:not(:has(.mus-player)),#notch .mus-root:not(:has(.mus-player)){background:#f3f3f6!important}
+:root[data-theme="light"] #notch .npc:not(:has(.mus-player)):not(:has(.rad-player)),#notch .mus-root:not(:has(.mus-player)):not(:has(.rad-player)){background:#f3f3f6!important}
 :root[data-theme="light"] #notch .mus-glass{background:rgba(255,255,255,.78)!important;border-color:rgba(0,0,0,.08)!important}
 :root[data-theme="light"] #notch .mus-bar{background:rgba(255,255,255,.92)!important}
 :root[data-theme="light"] #notch #feriadoAviso,#notch .agnd-lista .row,#notch .agnd-lista .row{background:#ffffff!important;color:var(--ink)!important}
 :root[data-theme="light"] #notch .dia-lin-tl,#notch .dia-card{background:#ffffff!important;color:var(--ink)!important}
 :root[data-theme="light"] #notch .tvbox{background:#eeeef2!important}
 :root[data-theme="light"] #notch .tvbox video,#notch .tvbox iframe{background:#000}
-@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) #notch .npc:not(:has(.mus-player)),#notch .mus-root:not(:has(.mus-player)){background:#f3f3f6!important}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]) #notch .npc:not(:has(.mus-player)):not(:has(.rad-player)),#notch .mus-root:not(:has(.mus-player)):not(:has(.rad-player)){background:#f3f3f6!important}
 :root:not([data-theme="dark"]) #notch .mus-glass{background:rgba(255,255,255,.78)!important;border-color:rgba(0,0,0,.08)!important}
 :root:not([data-theme="dark"]) #notch .mus-bar{background:rgba(255,255,255,.92)!important}
 :root:not([data-theme="dark"]) #notch #feriadoAviso,#notch .agnd-lista .row,#notch .agnd-lista .row{background:#ffffff!important;color:var(--ink)!important}
