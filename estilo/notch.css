@@ -1263,8 +1263,6 @@ body.dev-computador #quick{top:auto!important;bottom:calc(4.75rem + env(safe-are
 #notch[data-tab="music"] #view .mus-bar .mus-barra-txt > .sub{flex:0 1 auto;min-width:0}
 #notch[data-tab="music"] #view .mus-bar .mus-ponto{margin-left:auto;flex:0 0 auto;width:30px;height:30px;min-height:30px;border-radius:50%;background:transparent!important;border:0!important;color:#fff!important;display:inline-flex;align-items:center;justify-content:center;padding:0;cursor:pointer}
 #notch[data-tab="music"] #view .mus-bar .mus-ponto:hover,#notch[data-tab="music"] #view .mus-bar .mus-ponto:focus-visible{background:rgba(255,255,255,.16)!important}
-#notch #view .mus-bar::after{content:"";position:absolute;left:50%;bottom:-17px;width:92px;height:6px;border-radius:6px;background:rgba(255,255,255,.95);transform:translateX(-50%);box-shadow:0 2px 8px rgba(0,0,0,.25);pointer-events:none}
-#notch #view .mus-bar::before{content:"";position:absolute;left:calc(50% + 62px);bottom:-19px;width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);pointer-events:none}
 #notch #view .mus-bar{margin-bottom:1.25rem}
 #notch[data-tab="music"] #view .mus-bar .mus-barra-txt{display:flex!important;flex-direction:row!important;align-items:center!important;text-align:left!important;flex-wrap:nowrap!important}
 #notch[data-tab="music"] #view .mus-bar .mus-barra-txt > div,#notch[data-tab="music"] #view .mus-bar .mus-barra-txt > b{text-align:left!important}
