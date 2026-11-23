@@ -23,7 +23,7 @@ function iconOn(h){const c=(h||'#636366').replace('#','');const l=[0,2,4].map(i=
 function renderTabs(){
  const focoAnt=(document.activeElement&&document.activeElement.closest&&document.activeElement.closest('#tabs'))?document.activeElement.id:'';
  $('#notch').dataset.tab=S.tab;const visiveis=(S.tabsAll||(document.getElementById('notch')&&['dev-celular','dev-tablet','dev-computador'].some(c=>document.getElementById('notch').classList.contains(c))))?TABS:TABS.slice(0,TABS_TOPO);const botaoMais=`<button class="tab" id="tabsMore" data-a="tabsMore" aria-expanded="${!!S.tabsAll}" aria-label="${S.tabsAll?'Mostrar menos botões':'Mostrar todos os botões'}" title="${S.tabsAll?'Mostrar menos':'Mostrar todos'}" style="--tc:#8e8e93;--tt:#111"><span aria-hidden="true" style="font-size:1.625rem;line-height:1">${S.tabsAll?'«':'⋯'}</span><span>${S.tabsAll?'Menos':'Mais'}</span></button>`;
- $('#tabs').innerHTML=visiveis.map(([id,l,i])=>(id==='radio'?'<span class="sp"></span>':'')+`<button class="tab" style="--tc:${TAB_COL[id]||'#636366'};--tt:${iconOn(TAB_COL[id])}" id="t-${id}" aria-current="${S.tab===id?'page':'false'}" aria-controls="view" tabindex="${S.tab===id?0:-1}" aria-label="${l}" title="${l}" data-tab="${id}">${ic(id==='radio'?(S.rd&&S.rd.on?'radio-on':'radio-off'):i)}<span>${l}</span></button>`).join('');let mb=document.getElementById('tabsMoreBox');if(!mb){mb=document.createElement('div');mb.id='tabsMoreBox';$('#tabs').insertAdjacentElement('afterend',mb)}mb.innerHTML=botaoMais;if(focoAnt){const el=document.getElementById(focoAnt);if(el)el.focus({preventScroll:true})}}
+ $('#tabs').innerHTML=visiveis.map(([id,l,i])=>(id==='radio'?'<span class="sp"></span>':'')+`<button class="tab" style="--tc:${TAB_COL[id]||'#636366'};--tt:${iconOn(TAB_COL[id])}" id="t-${id}" aria-current="${S.tab===id?'page':'false'}" aria-controls="view" tabindex="${S.tab===id?0:-1}" aria-label="${l}" title="${l}" data-tab="${id}">${ic(id==='radio'?(RADIO.s&&RADIO.s.on?'radio-on':'radio-off'):i)}<span>${l}</span></button>`).join('');let mb=document.getElementById('tabsMoreBox');if(!mb){mb=document.createElement('div');mb.id='tabsMoreBox';$('#tabs').insertAdjacentElement('afterend',mb)}mb.innerHTML=botaoMais;if(focoAnt){const el=document.getElementById(focoAnt);if(el)el.focus({preventScroll:true})}}
 function viewInner(){
  const v=$('#view');v.setAttribute('aria-labelledby','t-'+S.tab);if(S.foco){v.innerHTML=focoHtml();return}
 
@@ -34,7 +34,7 @@ if(S.tab==='music')v.innerHTML=musicoHtml();
  if(S.tab==='treino')v.innerHTML=treinoView();
  if(S.tab==='dia'){v.innerHTML=diaView();diaAutoSync();diaModelosDom()}
  if(S.tab==='casa'){v.innerHTML=casaView();contasDom();contasAvDom()}
- if(S.tab==='radio')v.innerHTML=radioView();
+ if(S.tab==='radio')v.innerHTML=RADIO.radioView();
  if(S.tab==='clip'){drawClip();if(!window.notchApp){const v=$('#view');if(v)v.insertAdjacentHTML('afterbegin','<button type="button" class="chip" data-a="cpaste" style="margin-bottom:0.625rem">Colar da área de transferência</button>')}}
  if(S.tab==='pomo'){const p=S.p;v.innerHTML=taskSel()+`<div class="pomo ${p.mode!=='focus'?'rest':''}" id="pm"><div class="big"><span class="time" id="ptime" role="timer">${fmt(p.left)}</span><span class="mode">${pnome(p.mode)}</span></div>
   <div class="pr"><button class="ib go" data-a="pgo" aria-label="${p.run?'Pausar':'Iniciar'}">${ic(p.run?'pause':'play')}</button><button class="ib" data-a="prs" aria-label="Reiniciar">${ic('reset')}</button><button class="ib" data-a="psk" aria-label="Pular etapa">${ic('next')}</button>
@@ -61,9 +61,9 @@ function tickInner(paintOnly){const m=S.m,tr=m.list[m.i];let dt=0;
  if(dt>0){
   if(m.play){m.pos+=dt;if(m.pos>=tr.d){if(m.rep)m.pos=0;else go(1)}}
   const p=S.p;if(p.run){p.left-=dt;if(p.left<=0){if(p.mode==='focus'){p.done=Math.min(pomoLongAfter(),p.done+1);pdSave();pdHistAdd();bump();p.mode=p.done>=pomoLongAfter()?'long':'rest'}else{if(p.mode==='long'){p.done=0;pdSave()}p.mode='focus'}p.left=pdur(p.mode);if(S.tab==='pomo')view();say(pmsg(p.mode));alarm()}}}
- pTitle();rdSleepTick();pillPaint();alertTick();const mbp=$('#mbarprog');if(mbp&&m.list[m.i]){mbp.firstElementChild.style.width=((m.list[m.i].d?m.pos/m.list[m.i].d*100:0).toFixed(1))+'%'}const mp=$('#mpos');if(mp&&!S.seeking){const sk=$('#mseek'),dd=m.list[m.i].d;if(!sk||document.activeElement!==sk){mp.textContent=fmt(m.pos);if(sk){sk.max=dd;sk.value=m.pos;sk.style.setProperty('--p',(m.pos/dd*100)+'%');sk.setAttribute('aria-valuetext',fmt(m.pos)+' de '+fmt(dd))}}}
+ pTitle();RADIO.rdSleepTick();pillPaint();alertTick();const mbp=$('#mbarprog');if(mbp&&m.list[m.i]){mbp.firstElementChild.style.width=((m.list[m.i].d?m.pos/m.list[m.i].d*100:0).toFixed(1))+'%'}const mp=$('#mpos');if(mp&&!S.seeking){const sk=$('#mseek'),dd=m.list[m.i].d;if(!sk||document.activeElement!==sk){mp.textContent=fmt(m.pos);if(sk){sk.max=dd;sk.value=m.pos;sk.style.setProperty('--p',(m.pos/dd*100)+'%');sk.setAttribute('aria-valuetext',fmt(m.pos)+' de '+fmt(dd))}}}
 const pt=$('#ptime');if(pt)pt.textContent=fmt(S.p.left);cycPaint();
- $('#notch').classList.toggle('playing',m.play||!!(S.rd&&S.rd.on))}
+ $('#notch').classList.toggle('playing',m.play||!!(RADIO.s&&RADIO.s.on))}
 function go(d){const m=S.m;m.i=m.shuf?Math.floor(Math.random()*m.list.length):(m.i+d+m.list.length)%m.list.length;m.pos=0;if(S.tab==='music')view()}
 function setOpen(_o,_q){if(S.open&&$('#tabs').children.length)return;S.open=true;$('#notch').dataset.open='true';renderTabs();view()}
 function pick(id){if(id==='tasks')id='kanban';if(GRUPO_LEGADO[id]){S.grupoSec=GRUPO_LEGADO[id];id='grupo'}usoRegistrar(id);if(id!=='tasks')S.undo=null;S.slideDir=Math.sign(TABS.findIndex(t=>t[0]===id)-TABS.findIndex(t=>t[0]===S.tab))||1;S.slideGo=true;S.tab=id;renderTabs();view();{const tb=$('#t-'+id);if(tb)tb.focus()}if(id==='cal'&&msOn()&&Date.now()-(S.msAt||0)>30000)msSync();if(id==='music'&&S.tok)spDevs()}
@@ -76,7 +76,7 @@ $('#view').addEventListener('click',e=>{
  const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,m=S.m,i=+b.dataset.i,p=S.p;
  if(a==='sconn')return spLogin();if(a==='sdis')return spOut();
  if(a==='mconn')return mAuth();if(a==='mdis'){S.ms=null;S.msExp=0;S.ev=null;S.evg=null;S.td=null;alertHide();ls.del('ms_rt');view();$('#view').focus();return}
- if(taskAct(a,i)||radioAct(a,i,b)||miscAct(a,b)||tvAct(a,b))return;
+ if(taskAct(a,i)||RADIO.radioAct(a,i,b)||miscAct(a,b)||tvAct(a,b))return;
  if(S.tok&&a==='like')return spLike();
  if(S.tok&&['play','next','prev','shuf','rep'].includes(a))return spCmd(a);
  if(a==='play'){m.play=!m.play;view();$('#view').querySelector('[data-a=play]').focus()}
@@ -101,7 +101,7 @@ agendar(()=>tick(),1000);tick(true);
 const SPOTIFY_CLIENT_ID='e13cde702b164cd4bfe2684e0f3de4d7';
 const SPOTIFY_REDIRECT=location.origin+location.pathname;
 const SP_SCOPES='user-read-playback-state user-modify-playback-state user-library-read user-library-modify user-read-recently-played streaming playlist-read-private playlist-modify-private playlist-modify-public user-top-read user-follow-read user-follow-modify ugc-image-upload';
-const SECRETS=new Set(['sp_at','sp_rt','ms_rt','bk_auto_senha']);
+const SECRETS=new Set(['sp_at','sp_rt','ms_rt','bk_auto_senha','diario_senha']);
 const VAULT=window.notchApp&&typeof notchApp.secretGet==='function'?notchApp:null;
 const ls0={get:k=>{try{let v=localStorage.getItem(PX+k);if(v===null){v=localStorage.getItem(k);if(v!==null)localStorage.setItem(PX+k,v)}return v}catch(_){return null}},set:(k,v)=>{try{localStorage.setItem(PX+k,v)}catch(_){if(!window.__quotaAvisado){window.__quotaAvisado=1;say('Armazenamento do navegador cheio. Exporte um backup e libere espaço')}}},del:k=>{try{localStorage.removeItem(PX+k);localStorage.removeItem(k)}catch(_){}}};
 const UNDO_KEYS=['tasks','notas_list','links','inbox'];const UNDO_STACK=[];let UNDO_BUSY=false;
@@ -138,7 +138,7 @@ async function spSync(){
  const sv=$('#svol');if(sv&&document.activeElement!==sv&&m.vol!=null){sv.value=m.vol;sv.setAttribute('aria-valuetext',m.vol+'%')}
  if(m.uri&&m.uri!==m.likeFor){m.likeFor=m.uri;m.liked=false;spLikeCheck(m.uri)}
  if(key!==m.key){m.key=key;if(S.tab==='music'&&S.open){const f=document.activeElement&&document.activeElement.dataset&&document.activeElement.dataset.a;view();if(f){const n=$('#view [data-a="'+f+'"]');if(n)n.focus()}}}
- $('#notch').classList.toggle('playing',m.play||!!(S.rd&&S.rd.on))}
+ $('#notch').classList.toggle('playing',m.play||!!(RADIO.s&&RADIO.s.on))}
 let spPlayer=null,spDeviceId=null,spBlocked=false,spSdk=false;
 /* caminho de 'tocar' sempre com o aparelho do player web, para a reprodução começar sem precisar apertar play antes */
 const spPlayPath=()=>'/me/player/play'+(spDeviceId?'?device_id='+encodeURIComponent(spDeviceId):'');
@@ -225,8 +225,8 @@ function ac(){return S.ac||(S.ac=new (window.AudioContext||window.webkitAudioCon
 function beep(f){try{const c=ac(),o=c.createOscillator(),g=c.createGain();o.frequency.value=f||880;o.connect(g);g.connect(c.destination);g.gain.setValueAtTime(.15,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.7);o.start();o.stop(c.currentTime+.7)}catch(_){}}
 document.addEventListener('click',()=>{if(ls.get('opt_snd')==='1'){try{const c=ac();if(c.state==='suspended')c.resume()}catch(_){}}});
 function estudoAjusta(){const n=$('#notch');if(n)n.dataset.estudo=S.estudo?'1':'0';if(!S.estudo)return;
- if(S.p.mode==='focus'&&S.p.run&&!S.rd.on&&S.rd.list[S.rd.cur]&&S.rd.list[S.rd.cur].u){RA.volume=0.2;rdPlay(S.rd.cur)}
- if(S.p.mode!=='focus'&&S.rd.on)rdStop()}
+ if(S.p.mode==='focus'&&S.p.run&&!RADIO.s.on&&RADIO.s.list[RADIO.s.cur]&&RADIO.s.list[RADIO.s.cur].u){RA.volume=0.2;RADIO.rdPlay(RADIO.s.cur)}
+ if(S.p.mode!=='focus'&&RADIO.s.on)RADIO.rdStop()}
 function alarm(){const msg=pmsg(S.p.mode);
  if(ls.get('opt_snd')==='1')beep(S.p.mode==='focus'?(+ls.get('snd_ini')||880):(+ls.get('snd_fim')||523));
  notifyBg('Pomodoro',msg)}
@@ -405,129 +405,57 @@ const RD_DEF=[
  {n:'Rádio Românticas',u:'https://stream.vagalume.fm/hls/1470155219129532/aac.m3u8',g:'Brasil · estilos e regionais'},
  {n:'Rádio Reggae',u:'https://stream.vagalume.fm/hls/1465840912218182609/aac.m3u8',g:'Brasil · estilos e regionais'}];
 const nrm=t=>String(t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
-function rdMerge(list){const out=list.filter(x=>x.n||x.u).map(x=>({n:x.n,u:x.u,g:x.g||''}));
- RD_DEF.forEach(d=>{const i=out.findIndex(x=>nrm(x.n)===nrm(d.n)||(d.u&&x.u===d.u));if(i<0)out.push({n:d.n,u:d.u,g:d.g});else if(!out[i].g)out[i].g=d.g});return out}
-function rdSort(list){const rank=new Map(RD_DEF.map((d,i)=>[nrm(d.n),i]));return list.map((x,i)=>({x,i,r:rank.has(nrm(x.n))?rank.get(nrm(x.n)):1e6})).sort((a,b)=>a.r-b.r||a.i-b.i).map(o=>o.x)}
-S.rd={list:[],draft:[],i:-1,cur:0,tok:0,hls:null,hlsP:null,st:'',on:false,edit:false,vol:(v=>v===null?0.8:Math.min(1,Math.max(0,+v||0)))(ls.get('rd_vol'))};
-try{const r=JSON.parse(ls.get('radios')||'null');if(Array.isArray(r))S.rd.list=r.slice(0,200).map(x=>({n:String(x.n||'').slice(0,40),u:String(x.u||''),g:String(x.g||'').slice(0,30)}))}catch(_){}
-if(!ls.get('radios_v4')){S.rd.list=rdSort(rdMerge(S.rd.list));ls.set('radios',JSON.stringify(S.rd.list));ls.set('radios_v4','1');ls.del('rd_cur')}
-S.rd.cur=Math.min(Math.max(0,+ls.get('rd_cur')||0),Math.max(0,S.rd.list.length-1));
-S.rd.favs=(()=>{try{const f=JSON.parse(ls.get('rd_favs')||'[]');return Array.isArray(f)?f.filter(x=>typeof x==='string').slice(0,200):[]}catch(_){return[]}})();
+
+
+RADIO.s={list:[],draft:[],i:-1,cur:0,tok:0,hls:null,hlsP:null,st:'',on:false,edit:false,vol:(v=>v===null?0.8:Math.min(1,Math.max(0,+v||0)))(ls.get('rd_vol'))};
+try{const r=JSON.parse(ls.get('radios')||'null');if(Array.isArray(r))RADIO.s.list=r.slice(0,200).map(x=>({n:String(x.n||'').slice(0,40),u:String(x.u||''),g:String(x.g||'').slice(0,30)}))}catch(_){}
+if(!ls.get('radios_v4')){RADIO.s.list=RADIO.rdSort(RADIO.rdMerge(RADIO.s.list));ls.set('radios',JSON.stringify(RADIO.s.list));ls.set('radios_v4','1');ls.del('rd_cur')}
+RADIO.s.cur=Math.min(Math.max(0,+ls.get('rd_cur')||0),Math.max(0,RADIO.s.list.length-1));
+RADIO.s.favs=(()=>{try{const f=JSON.parse(ls.get('rd_favs')||'[]');return Array.isArray(f)?f.filter(x=>typeof x==='string').slice(0,200):[]}catch(_){return[]}})();
 const RA=new Audio();RA.preload='none';
-const rdName=k=>{const x=S.rd.list[k===undefined?S.rd.cur:k];return (x&&x.n)||'Emissora '+((k===undefined?S.rd.cur:k)+1)};
-const rdPlaying=()=>S.rd.i>=0&&['load','live','wait'].includes(S.rd.st);
+const rdName=k=>{const x=RADIO.s.list[k===undefined?RADIO.s.cur:k];return (x&&x.n)||'Emissora '+((k===undefined?RADIO.s.cur:k)+1)};
+const rdPlaying=()=>RADIO.s.i>=0&&['load','live','wait'].includes(RADIO.s.st);
 function pdSave(){ls.set('pomo_done',JSON.stringify({d:new Date().toDateString(),n:S.p.done}))}
 try{const j=JSON.parse(ls.get('pomo_done')||'null');if(j&&j.d===new Date().toDateString())S.p.done=Math.min(pomoLongAfter(),Math.max(0,+j.n||0))}catch(_){}
-function rdMedia(){if(!('mediaSession' in navigator))return;try{const ms=navigator.mediaSession;ms.metadata=new MediaMetadata({title:rdName(S.rd.i>=0?S.rd.i:S.rd.cur),artist:'Rádio'});
- ms.setActionHandler('nexttrack',()=>rdStep(1));ms.setActionHandler('previoustrack',()=>rdStep(-1));ms.setActionHandler('pause',()=>rdStop());ms.setActionHandler('play',()=>rdPlay(S.rd.cur))}catch(_){}}
-function rdRender(){$('#notch').classList.toggle('playing',S.m.play||S.rd.on);const rtIc=document.querySelector('#t-radio svg');if(rtIc)rtIc.outerHTML=ic(S.rd.on?'radio-on':'radio-off');if(S.tab!=='radio'||S.rd.edit)return;
- const a=document.activeElement,sel=a&&a.dataset&&a.dataset.a?'[data-a="'+a.dataset.a+'"]'+(a.dataset.i!==undefined?'[data-i="'+a.dataset.i+'"]':''):'';view();if(sel){const n=$('#view '+sel);if(n)n.focus()}}
-function rdDetach(){if(S.rd.hls){try{S.rd.hls.destroy()}catch(_){}S.rd.hls=null}}
-function rdStop(){S.rd.tok++;rdDetach();try{RA.pause();RA.removeAttribute('src');RA.load()}catch(_){}S.rd.i=-1;S.rd.st='';S.rd.on=false;rdRender()}
-function emissoraForaAr(){const k=S.rd.i;if(k<0||!S.rd.list[k])return;const n=rdName(k);say('Emissora fora do ar: '+n);notifyBg('Rádio fora do ar',n+' parou de tocar')}
-function rdFail(){if((S.rd.retry||0)>=3)emissoraForaAr();if((S.rd.retry||0)<3&&S.rd.i>=0&&S.rd.list[S.rd.i]&&S.rd.list[S.rd.i].u){const k=S.rd.i;S.rd.retry=(S.rd.retry||0)+1;setTimeout(()=>{if(S.rd.i===k&&S.rd.st==='err')rdPlay(k)},2500*S.rd.retry)}S.rd.st='err';S.rd.on=false;rdRender();say('Não foi possível tocar '+rdName(S.rd.i))}
+
+
+
+
+
+
 const isHls=u=>/\.m3u8(\?|#|$)/i.test(u);
 const HLS_VER='1.7.3',HLS_SRI='sha384-cciJ0zi8d1uMKC2zJd7jvPY4HQt7W4ByUI/FlMkltvBi31aW61rcpVBhpmW8/NwX';
-function loadHls(){if(window.Hls)return Promise.resolve(window.Hls);if(S.rd.hlsP)return S.rd.hlsP;
+function loadHls(){if(window.Hls)return Promise.resolve(window.Hls);if(RADIO.s.hlsP)return RADIO.s.hlsP;
  const tenta=(src,cdn)=>new Promise((ok,no)=>{const sc=document.createElement('script');sc.src=src;sc.integrity=HLS_SRI;if(cdn)sc.crossOrigin='anonymous';sc.onload=()=>window.Hls?ok(window.Hls):no(new Error('hls'));sc.onerror=()=>no(new Error('hls'));document.head.appendChild(sc)});
  const cdn='https://cdn.jsdelivr.net/npm/hls.js@'+HLS_VER+'/dist/hls.min.js';
- S.rd.hlsP=(location.protocol==='file:'?tenta(cdn,true):tenta('/vendor/hls.min.js',false).catch(()=>tenta(cdn,true))).catch(e=>{S.rd.hlsP=null;throw e});return S.rd.hlsP}
-function rdPlay(i){const st=S.rd.list[i];if(!st||!st.u)return;S.rd.t0=Date.now();
- S.rd.cur=i;ls.set('rd_cur',i);S.rd.i=i;S.rd.on=false;rdDetach();S.rd.niveis=[];const tok=++S.rd.tok;
- const url=(location.protocol==='https:'&&/^http:/i.test(st.u))?st.u.replace(/^http:/i,'https:'):st.u;
- S.rd.st='load';rdRender();RA.volume=(st.v!=null?st.v:S.rd.vol);
- const falha=()=>{if(tok===S.rd.tok&&S.rd.i===i)rdFail()},tocar=()=>{const pr=RA.play();if(pr&&pr.catch)pr.catch(e=>{if(e&&e.name!=='AbortError')falha()})};
- if(!isHls(url)||RA.canPlayType('application/vnd.apple.mpegurl')){RA.src=url;tocar();return}
- loadHls().then(Hls=>{if(tok!==S.rd.tok)return;if(!window.Hls.isSupported()){falha();return}
-  const h=new Hls({lowLatencyMode:false});S.rd.hls=h;
-  h.on(Hls.Events.ERROR,(_e,d)=>{if(d&&d.fatal)falha()});h.on(Hls.Events.MANIFEST_PARSED,()=>{S.rd.niveis=(h.levels||[]).map((l,i)=>({i,k:Math.round((l.bitrate||0)/1000)})).filter(x=>x.k>0);tocar()});
-  h.loadSource(url);h.attachMedia(RA)}).catch(falha)}
-function rdPool(){return S.rd.list.map((x,i)=>x.u&&(!S.rd.onlyFav||isFav(x.u))?i:-1).filter(i=>i>=0)}
-function rdEmpty(){say(S.rd.onlyFav?'Nenhuma favorita com link. Favorite uma emissora primeiro':'Nenhuma emissora com link. Adicione em Editar emissoras')}
-function rdStep(d){const pl=rdPool();if(!pl.length){rdEmpty();return false}
- const idx=pl.indexOf(S.rd.cur),k=idx<0?(d>0?pl[0]:pl[pl.length-1]):pl[(idx+d+pl.length)%pl.length];
- const was=rdPlaying()||(S.rd.i>=0&&S.rd.st==='err');
- if(was)rdPlay(k);else{S.rd.cur=k;ls.set('rd_cur',k);S.rd.i=-1;S.rd.st='';rdRender();say(rdName(k)+', emissora '+(pl.indexOf(k)+1)+' de '+pl.length)}
- return true}
-const isFav=u=>!!u&&S.rd.favs.includes(u);
-function toggleFav(i){const u=S.rd.list[i]&&S.rd.list[i].u;if(!u){say('Adicione o link desta emissora antes de favoritar');return}
- const k=S.rd.favs.indexOf(u);if(k>=0){S.rd.favs.splice(k,1);say('Removida dos favoritos')}else{if(S.rd.favs.length>=200)S.rd.favs.shift();S.rd.favs.push(u);say('Adicionada aos favoritos')}
- ls.set('rd_favs',JSON.stringify(S.rd.favs))}
-function rdRand(){const pl=rdPool();if(!pl.length){rdEmpty();return}
- let k=pl[Math.floor(Math.random()*pl.length)];if(pl.length>1&&k===S.rd.cur)k=pl[(pl.indexOf(k)+1)%pl.length];rdPlay(k)}
-RA.addEventListener('playing',()=>{if(S.rd.i<0)return;S.rd.retry=0;try{const n=rdName(S.rd.cur);let h=JSON.parse(ls.get('rd_hist')||'[]');if(!Array.isArray(h))h=[];ls.set('rd_hist',JSON.stringify([n].concat(h.filter(x=>x!==n)).slice(0,8)))}catch(_){}S.rd.st='live';S.rd.on=true;rdRender();rdMedia();say('Tocando '+rdName(S.rd.i))});
-RA.addEventListener('waiting',()=>{if(S.rd.i>=0&&S.rd.st==='live'){S.rd.st='wait';S.rd.on=false;rdRender()}});
-RA.addEventListener('error',()=>{if(S.rd.i>=0)rdFail()});
-function rdCollect(){S.rd.draft=S.rd.draft.map((s,k)=>{const n=$('#rn'+k),u=$('#ru'+k);return n&&u?{n:n.value,u:u.value,g:s.g||''}:s})}
-function radioPlayerHtml(){const R=S.rd;const L=R.list,pl=L.map((x,i)=>x.u?i:-1).filter(i=>i>=0),k=R.cur,s=L[k]||{n:'',u:'',img:''},on=rdPlaying()&&R.i===k,pos=pl.indexOf(k)+1;
- const ehTocavel=j=>j!==k&&L[j]&&L[j].u;
- const anteriores=[];try{const h=JSON.parse(ls.get('rd_hist')||'[]')||[];(Array.isArray(h)?h:[]).forEach(n=>{const j=L.findIndex((x,q)=>q!==k&&x.u&&rdName(q)===n);if(j>=0&&!anteriores.includes(j))anteriores.push(j)})}catch(_){}
- const ant3=anteriores.slice(0,3);
- const prox=[];for(let t=1;t<pl.length&&prox.length<3;t++){const j=pl[(pos-1+t)%pl.length];if(ehTocavel(j)&&!prox.includes(j)&&!ant3.includes(j))prox.push(j)}
- const viz=[...ant3.map((i,q)=>({i,d:-(q+1)})),...prox.map((i,q)=>({i,d:q+1}))];
- const hero='<span class="rad-hero'+(s.img?' com-logo':' sem-logo')+(on?' on':'')+'" aria-hidden="true">'+(s.img?'<img src="'+esc(s.img)+'" alt="" loading="lazy" referrerpolicy="no-referrer">':'<span class="eq"><i></i><i></i><i></i></span>')+'</span>';
- const iniciais=n=>String(n||'').replace(/[^A-Za-zÀ-ú0-9 ]/g,' ').split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase()||'?';
- const carrossel='<div class="rad-stage" aria-label="Rádios anteriores e próximas">'+viz.map(o=>{const a=Math.abs(o.d),sc=a===1?0.72:0.5,op=a===1?0.85:0.5,z=a===1?2:1;const midia=L[o.i].img?'<img src="'+esc(L[o.i].img)+'" alt="" loading="lazy" referrerpolicy="no-referrer">':'<span class="rad-viz-ini" aria-hidden="true">'+esc(iniciais(rdName(o.i)))+'</span>';return '<button type="button" class="rad-viz" data-a="rpick" data-i="'+o.i+'" style="--d:'+o.d+';--s:'+sc+';--o:'+op+';--z:'+z+'" aria-label="Ouvir '+esc(rdName(o.i))+'">'+midia+'</button>'}).join('')+hero+'</div>';
- return `<div class="rad-player"><div class="rad-head rad-head-play"><button type="button" class="chip" data-a="radMenu">‹ Menu de rádio</button><div class="rad-search"><label class="sr" for="radBuscaP">Buscar emissora</label><input id="radBuscaP" type="search" value="${esc(S.radBusca||'')}" placeholder="Buscar por nome, gênero ou cidade" data-a="radBuscaP"></div></div>${carrossel}<div class="rad-info"><b>${esc(L.length?rdName(k):'Sem emissoras')}</b>${on?'<span class="rad-live">Ao vivo</span>':''}</div><p class="sub" style="margin:0 0 10px">${s.g?esc(s.g)+' · ':''}${pos?'Emissora '+pos+' de '+pl.length:(S.rd.onlyFav?pl.length+(pl.length===1?' favorita':' favoritas'):pl.length+(pl.length===1?' emissora com link':' emissoras com link'))}</p>\n 
- ${S.rd.i>=0&&S.rd.i!==S.rd.cur&&S.rd.st?'<p class="sub" style="margin:0 0 8px">Tocando agora: <b>'+esc(rdName(S.rd.i))+'</b></p>':''}<div class="rvol" style="margin:0 0 8px"><button type="button" class="chip" data-a="rfonly" aria-pressed="${S.rd.onlyFav?'true':'false'}">Navegar só entre favoritas: ${S.rd.onlyFav?'ligado':'desligado'}</button></div>${S.rd.st==='err'&&s.u?'<div class="rvol" style="margin:0 0 8px"><button type="button" class="chip" data-a="rplay">Tentar novamente</button><button type="button" class="chip" data-a="rnext">Escolher outra rádio</button></div><details class="dt" style="margin:0 0 8px"><summary>Mais informações</summary><p class="sub">Endereço da transmissão: '+esc(s.u)+'</p></details>':''}<div class="ctrl ctrl2"><button type="button" class="ib sm like" data-a="rfav" aria-pressed="${isFav(s.u)}" aria-label="${isFav(s.u)?'Remover dos favoritos':'Adicionar aos favoritos'}">${ic(isFav(s.u)?'heartf':'heart')}</button><button type="button" class="ib" data-a="rrand" aria-label="Ouvir rádio aleatória">${ic('shuf')}</button></div>
- <div class="rvol"><label for="rvol" class="sub">Volume</label><input id="rvol" type="range" min="0" max="1" step="0.05" value="${R.vol}"></div><details class="dt" style="margin:0.5rem 0"><summary>Mais opções</summary><div class="rvol"><button class="chip" data-a="redit">Editar emissoras</button></div>${sleepRow()}</details></div>`}
-function radGradeHtml(itens){if(!itens.length)return '<p class="sub">Nenhuma emissora para mostrar.</p>';
- return '<div class="rad-grid">'+itens.map(([x,i])=>{const on=rdPlaying()&&S.rd.i===i;const sem=!x.u;const nome=x.n||('Emissora '+(i+1));
-  return '<button type="button" class="rad-card'+(on?' on':'')+'" data-a="rpick" data-i="'+i+'" aria-label="'+esc(nome)+(sem?', sem endereço':'')+(on?', ao vivo':'')+'"><span class="rad-logo'+(x.img?'':' sem')+'"'+(x.img?' style="background-image:url(\''+esc(x.img)+'\')"':'')+' aria-hidden="true">'+(x.img?'':esc(nome.slice(0,2).toUpperCase()))+'</span><b>'+esc(nome)+'</b><span class="sub">'+(on?'<span class="rad-live">Ao vivo</span>':esc(sem?'Sem endereço':(x.g||'Emissora')))+'</span></button>'}).join('')+'</div>'}
-function radioMenuHtml(){const R=S.rd;const L=R.list;const sec=S.radSec||'todas';const q=livNorm(S.radBusca||'');const gen=S.radGen||'';
- const generos=[...new Set(L.map(x=>(x.g||'').split(',')[0].trim()).filter(Boolean))].slice(0,12);
- const resumoGen=generos.slice(0,3).join(', ');
- const ico=(d)=>'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+d+'</svg>';
- const IC={todas:ico('<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>'),favs:ico('<path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/>'),gen:ico('<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="7.5" r="1.2"/>'),explorar:ico('<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>'),salvas:ico('<path d="M4 6h16M4 12h16M4 18h10"/>'),config:ico('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>')};
- const itemNav=(k,l,sub)=>'<button type="button" class="mus-nav'+(sec===k?' on':'')+'" data-a="radSec" data-s="'+k+'"'+(sec===k?' aria-current="true"':'')+'><span class="mus-nav-ic">'+IC[k]+'</span><span class="mus-nav-tx">'+l+(sub?'<span class="mus-nav-sub">'+esc(sub)+'</span>':'')+'</span></button>';
- const nav=[['favs','Estações favoritas',''],['todas','Todas as estações',''],['gen','Gêneros',resumoGen],['explorar','Explorar',''],['salvas','Minhas rádios','']].map(([k,l,sub])=>itemNav(k,l,sub)).join('')+'<button type="button" class="mus-nav" data-a="redit"><span class="mus-nav-ic">'+IC.config+'</span><span class="mus-nav-tx">Configurações</span></button>';
- const titulo={todas:'Todas as estações',favs:'Estações favoritas',gen:'Gêneros',explorar:'Explorar',salvas:'Minhas rádios'}[sec]||'';
- let corpo='';
- if(sec==='explorar')corpo=rsBox()+rsTopBoxHtml();
- else if(sec==='salvas')corpo=savedBox();
- else{let itens=L.map((x,i)=>[x,i]);
-  if(sec==='favs')itens=itens.filter(([x])=>isFav(x.u));
-  if(sec==='gen'&&gen)itens=itens.filter(([x])=>(x.g||'').split(',')[0].trim()===gen);
-  if(q)itens=itens.filter(([x])=>livNorm((x.n||'')+' '+(x.g||'')).includes(q));
-  const chips=sec==='explorar'||sec==='salvas'?'':'<div class="rad-chips" role="group" aria-label="Filtrar por gênero">'+['',...generos].map(g=>'<button type="button" class="chip'+(g===gen?' on':'')+'" data-a="radGen" data-g="'+esc(g)+'" aria-pressed="'+(g===gen)+'">'+esc(g||'Todas')+'</button>').join('')+'<button type="button" class="chip" data-a="radSec" data-s="favs" aria-pressed="'+(sec==='favs')+'">Favoritas</button></div>';
-  const vazio=sec==='favs'&&!itens.length?'<p class="sub">Nenhuma estação favorita ainda. Toque em ♡ na tela de reprodução para favoritar.</p>':'';
-  corpo='<p class="sub" style="margin:0 0 0.5rem">'+itens.length+' estaç'+(itens.length===1?'ão':'ões')+'</p>'+vazio+radGradeHtml(itens)+chips}
- return '<div class="mus-menu rad-menu"><aside class="mus-glass mus-side" aria-label="Rádio"><h2 class="mus-h">Rádio</h2><nav class="mus-navs">'+nav+'</nav></aside><section class="mus-glass mus-main" aria-label="'+esc(titulo)+'"><div class="rad-head"><h3 class="mus-h">'+esc(titulo)+'</h3><div class="rad-search"><label class="sr" for="radBuscaQ">Buscar emissora</label><input id="radBuscaQ" type="search" value="'+esc(S.radBusca||'')+'" placeholder="Buscar por nome, gênero ou cidade" data-a="radBusca"></div></div>'+corpo+'</section></div>'}
-function radBarra(s,on){const ctl=(acao,icone,rotulo,extra)=>'<button type="button" class="ib'+(extra||'')+'" data-a="'+acao+'" aria-label="'+rotulo+'">'+icone+'<span class="rad-lbl" aria-hidden="true">'+rotulo+'</span></button>';
- return '<div class="mus-bar rad-bar" role="region" aria-label="Rádio em reprodução"><button type="button" class="mus-barra-capa" data-a="radPlayer" aria-label="Abrir tela de reprodução">'+(s.img?'<span style="background-image:url(\''+esc(s.img)+'\')" aria-hidden="true"></span>':'')+'</button><div class="mus-barra-txt"><span class="sub">Agora ouvindo</span><span class="rad-now"><span class="rad-eq'+(on?' on':'')+'" aria-hidden="true"><i></i><i></i><i></i></span><b>'+esc(s.n||'Nenhuma rádio')+'</b></span><span class="sub">'+(on?'Ao vivo':'Parada')+'</span></div><div class="mus-barra-ctl">'+ctl('rprev',ic('prev'),'Anterior')+ctl('rplay',ic(on?'pause':'play'),on?'Pausar':'Ouvir',on?' big':' big')+ctl('rnext',ic('next'),'Próxima')+'</div></div>'}
-function radDots(t){return '<div class="rad-dots" role="tablist" aria-label="Telas da rádio">'+[['menu','Menu de rádio'],['player','Reprodução']].map(([k,l])=>'<button type="button" role="tab" class="rad-dot'+(t===k?' on':'')+'" data-a="radTela" data-t="'+k+'" aria-selected="'+(t===k)+'" aria-label="'+l+'"></button>').join('')+'</div>'}
-function radioRoot(corpo){const R=S.rd;const L=R.list,k=R.cur,s=L[k]||{n:'',u:'',img:''};const on=rdPlaying()&&R.i===k;
- return '<section class="mus-root rad-root npc" aria-label="Rádio" style="background:linear-gradient(160deg,#2a2a33 0%,#0b0b0d 100%)">'+corpo+radBarra(s,on)+radDots(S.radTela||'menu')+'</section>'}
-function radioView(){const R=S.rd;
- if(R.edit)return radioRoot(`<div class="mus-menu rad-menu rad-menu-solo"><section class="mus-glass mus-main rad-edit" aria-label="Editar emissoras"><div class="rad-head"><h3 class="mus-h">Editar emissoras</h3></div><form id="rform">${R.draft.map((s,k)=>`<div class="rrow"><input id="rn${k}" aria-label="Nome da emissora ${k+1}" placeholder="Nome" maxlength="40" value="${esc(s.n)}" autocomplete="off"><input id="ru${k}" type="url" inputmode="url" aria-label="Link do stream da emissora ${k+1}" placeholder="https://..." value="${esc(s.u)}" autocomplete="off"><button type="button" class="ib sm" data-a="rrm" data-i="${k}" aria-label="Remover emissora ${k+1}${s.n?': '+esc(s.n):''}">${ic('x')}</button></div>`).join('')}<div class="redact"><button type="button" class="chip" data-a="radd">Adicionar emissora</button><button type="button" class="chip" data-a="rsug">Adicionar sugeridas</button><button type="button" class="chip" data-a="rimp">Importar playlist (.m3u ou .pls)</button><input type="file" id="rimpf" accept=".m3u,.m3u8,.pls,text/plain,audio/x-mpegurl,audio/x-scpls" class="sr" tabindex="-1" aria-hidden="true"></div><p class="sub" id="rimsg" role="status" style="margin:0"></p><p class="err" id="rerr" role="alert"></p><div style="display:flex;justify-content:flex-end;gap:0.5rem"><button type="button" class="chip" data-a="rcan">Cancelar</button><button class="chip">Salvar</button></div></form></section></div>`);
- const tela=S.radTela||'menu';return radioRoot(tela==='player'?radioPlayerHtml():radioMenuHtml())}
-function radioAct(a,i,b){const R=S.rd;
- if(a==='redit'){R.draft=R.list.map(x=>({n:x.n,u:x.u,g:x.g||''}));if(!R.draft.length)R.draft.push({n:'',u:'',g:''});R.edit=true;view();const n=$('#rn0');if(n)n.focus();return true}
- if(a==='rcan'){R.edit=false;view();const b=$('#view [data-a="redit"]');if(b)b.focus();return true}
- if(a==='radd'){if(R.draft.length>=200){say('Limite de 200 emissoras');return true}rdCollect();R.draft.push({n:'',u:''});view();const n=$('#rn'+(R.draft.length-1));if(n)n.focus();return true}
- if(a==='rrm'){rdCollect();R.draft.splice(i,1);view();const b=$('#view [data-a="rrm"][data-i="'+Math.min(i,R.draft.length-1)+'"]')||$('#view [data-a="radd"]');if(b)b.focus();say('Emissora removida');return true}
- if(a==='rsug'){rdCollect();const before=R.draft.filter(x=>x.n||x.u).length;R.draft=rdMerge(R.draft);view();say((R.draft.length-before)+' emissoras sugeridas adicionadas');return true}
- if(a==='rplay'){const s=R.list[R.cur];if(!s||!s.u){say('Esta rádio ainda não tem endereço de transmissão. Adicione em Editar emissoras ou escolha outra rádio');return true}
-  if(rdPlaying()&&R.i===R.cur){rdStop();say('Rádio parada')}else rdPlay(R.cur);return true}
- if(a==='rimp'){$('#rimpf').click();return true}
- if(a==='rnext'){rdStep(1);return true}
- if(a==='rprev'){rdStep(-1);return true}
-  if(a==='radSec'){S.radSec=b.dataset.s;S.radBusca='';S.radGen='';view();return}
- if(a==='radGen'){S.radGen=b.dataset.g||'';view();return}
- if(a==='radPlayer'){S.radTela='player';view();return}
- if(a==='radMenu'){S.radTela='menu';view();return}
- if(a==='radTela'){S.radTela=b.dataset.t;view();return}
- if(a==='rpick'){const k=+i;S.rd.cur=k;ls.set('rd_cur',k);if(S.rd.list[k]&&S.rd.list[k].u){rdPlay(k);S.radTela='player'}else{say('Esta rádio ainda não tem endereço de transmissão. Adicione em Editar emissoras')}view();const n=$('#view [data-a="rpick"][data-i="'+k+'"]');if(n)n.focus();return true}
- if(a==='rfonly'){R.onlyFav=!R.onlyFav;if(R.onlyFav&&!rdPool().includes(R.cur)){const p=rdPool();if(p.length)R.cur=p[0];else{R.onlyFav=true}}view();const b=$('#view [data-a="rfonly"]');if(b)b.focus();say(R.onlyFav?'Mostrando só favoritas':'Mostrando todas as emissoras');return true}
- if(a==='rfav'){toggleFav(R.cur);view();const b=$('#view [data-a="rfav"]');if(b)b.focus();return true}
- if(a==='rrand'){rdRand();return true}
- return false}
-$('#view').addEventListener('input',e=>{if(e.target.id==='rvol'){S.rd.vol=+e.target.value;const cur=S.rd.list[S.rd.cur];if(cur&&cur.v!=null){cur.v=S.rd.vol;ls.set('radios',JSON.stringify(S.rd.list))}RA.volume=S.rd.vol;ls.set('rd_vol',S.rd.vol)}});
+ RADIO.s.hlsP=(location.protocol==='file:'?tenta(cdn,true):tenta('/vendor/hls.min.js',false).catch(()=>tenta(cdn,true))).catch(e=>{RADIO.s.hlsP=null;throw e});return RADIO.s.hlsP}
+
+
+
+
+const isFav=u=>!!u&&RADIO.s.favs.includes(u);
+function toggleFav(i){const u=RADIO.s.list[i]&&RADIO.s.list[i].u;if(!u){say('Adicione o link desta emissora antes de favoritar');return}
+ const k=RADIO.s.favs.indexOf(u);if(k>=0){RADIO.s.favs.splice(k,1);say('Removida dos favoritos')}else{if(RADIO.s.favs.length>=200)RADIO.s.favs.shift();RADIO.s.favs.push(u);say('Adicionada aos favoritos')}
+ ls.set('rd_favs',JSON.stringify(RADIO.s.favs))}
+
+RA.addEventListener('playing',()=>{if(RADIO.s.i<0)return;RADIO.s.retry=0;try{const n=rdName(RADIO.s.cur);let h=JSON.parse(ls.get('rd_hist')||'[]');if(!Array.isArray(h))h=[];ls.set('rd_hist',JSON.stringify([n].concat(h.filter(x=>x!==n)).slice(0,8)))}catch(_){}RADIO.s.st='live';RADIO.s.on=true;RADIO.rdRender();RADIO.rdMedia();say('Tocando '+rdName(RADIO.s.i))});
+RA.addEventListener('waiting',()=>{if(RADIO.s.i>=0&&RADIO.s.st==='live'){RADIO.s.st='wait';RADIO.s.on=false;RADIO.rdRender()}});
+RA.addEventListener('error',()=>{if(RADIO.s.i>=0)RADIO.rdFail()});
+
+
+
+
+
+
+
+
+
+$('#view').addEventListener('input',e=>{if(e.target.id==='rvol'){RADIO.s.vol=+e.target.value;const cur=RADIO.s.list[RADIO.s.cur];if(cur&&cur.v!=null){cur.v=RADIO.s.vol;ls.set('radios',JSON.stringify(RADIO.s.list))}RA.volume=RADIO.s.vol;ls.set('rd_vol',RADIO.s.vol)}});
 
 /* envios de formulário: tempos do Pomodoro, edição de tarefa e emissoras */
 function subExtra(e){const f=e.target;
  if(f.id==='qform'){spSrch();return true}
- if(f.id==='rsform'){rsRun();return true}
+ if(f.id==='rsform'){RADIO.rsRun();return true}
    
  if(f.id==='evform'){evCreate();return true}
   if(f.id==='pwform'){senhaGerar();return true}
@@ -546,14 +474,14 @@ function subExtra(e){const f=e.target;
  if(f.classList&&f.classList.contains('ef')){const i=+f.dataset.r,v=$('#ted').value.trim();
   if(!v){say('Digite o texto da tarefa ou cancele com Esc');$('#ted').focus();return true}
   const dd=($('#ted-d')||{}).value;S.tasks[i].t=esc(v);S.tasks[i].due=/^\d{4}-\d\d-\d\d$/.test(dd||'')?dd:undefined;S.tasks[i].mod=Date.now();S.tasks[i].dy=true;save();say('Tarefa atualizada');endEdit(i);return true}
- if(f.id==='rform'){rdCollect();const out=[];
-  for(let k=0;k<S.rd.draft.length;k++){const n=S.rd.draft[k].n.trim().slice(0,40),u=S.rd.draft[k].u.trim();
+ if(f.id==='rform'){RADIO.rdCollect();const out=[];
+  for(let k=0;k<RADIO.s.draft.length;k++){const n=RADIO.s.draft[k].n.trim().slice(0,40),u=RADIO.s.draft[k].u.trim();
    if(!n&&!u)continue;
    if(u&&!/^https?:\/\/\S+$/i.test(u)){$('#rerr').textContent='Link inválido na emissora '+(k+1)+'. Ele deve começar com http:// ou https://.';const x=$('#ru'+k);x.setAttribute('aria-invalid','true');x.focus();return true}
    if(u&&location.protocol==='https:'&&/^http:/i.test(u)){$('#rerr').textContent='Emissora '+(k+1)+': esta página está em https, então o link também precisa começar com https://.';const x=$('#ru'+k);x.setAttribute('aria-invalid','true');x.focus();return true}
    if(u&&/\.(pls|m3u)(\?|#|$)/i.test(u)){$('#rerr').textContent='Emissora '+(k+1)+': este link é uma lista de reprodução (.pls ou .m3u). Baixe o arquivo e use Importar playlist.';const x=$('#ru'+k);x.setAttribute('aria-invalid','true');x.focus();return true}
-   out.push({n:n||'Emissora '+(out.length+1),u,g:S.rd.draft[k].g||''})}
-  rdStop();S.rd.list=out;S.rd.cur=Math.min(S.rd.cur,Math.max(0,out.length-1));ls.set('radios',JSON.stringify(out));ls.set('rd_cur',S.rd.cur);S.rd.edit=false;view();const b=$('#view [data-a="redit"]');if(b)b.focus();say('Emissoras salvas');return true}
+   out.push({n:n||'Emissora '+(out.length+1),u,g:RADIO.s.draft[k].g||''})}
+  RADIO.rdStop();RADIO.s.list=out;RADIO.s.cur=Math.min(RADIO.s.cur,Math.max(0,out.length-1));ls.set('radios',JSON.stringify(out));ls.set('rd_cur',RADIO.s.cur);RADIO.s.edit=false;view();const b=$('#view [data-a="redit"]');if(b)b.focus();say('Emissoras salvas');return true}
  return false}
 
 /* Spotify: volume, posição da faixa e favoritos */
@@ -588,11 +516,11 @@ function miscAct(a,b){
  if(a==='drvrest'){drvRestore(false);return true}
  if(a==='drvyes'){drvRestore(true);return true}
  if(a==='drvno'){const o=S.drv.offer;if(o)ls.set('drv_at',String(o.at));S.drv.offer=null;S.drv.hold=false;say('Backup do OneDrive ignorado. Os dados daqui serão mantidos');repaintSet();return true}
- if(a==='rpre'){const p=RS_PRE[+b.dataset.k];if(p){$('#rsq').value=p.q;S.rd.rsQ=p.q;$('#rsbr').checked=!!p.br;rsRun(p)}return true}
- if(a==='rsadd'||a==='rsplay'){const u=b.dataset.u,n=b.dataset.n,L=S.rd.list;let k=L.findIndex(x=>x.u===u);
+ if(a==='rpre'){const p=RS_PRE[+b.dataset.k];if(p){$('#rsq').value=p.q;RADIO.s.rsQ=p.q;$('#rsbr').checked=!!p.br;RADIO.rsRun(p)}return true}
+ if(a==='rsadd'||a==='rsplay'){const u=b.dataset.u,n=b.dataset.n,L=RADIO.s.list;let k=L.findIndex(x=>x.u===u);
   if(k<0){if(L.length>=200){say('Limite de 200 emissoras');return true}L.push({n:n.slice(0,40),u,g:'Busca',img:b.dataset.img||''});ls.set('radios',JSON.stringify(L));k=L.length-1;say('Adicionada à lista: '+n)}else say('Já está na lista: '+n);
   if(k>=0&&!L[k].img&&b.dataset.img){L[k].img=b.dataset.img;ls.set('radios',JSON.stringify(L))}
-  if(a==='rsplay')rdPlay(k);else{b.textContent='Na lista';b.setAttribute('aria-disabled','true')}return true}
+  if(a==='rsplay')RADIO.rdPlay(k);else{b.textContent='Na lista';b.setAttribute('aria-disabled','true')}return true}
  if(window.notchApp&&notchApp.clip&&(a==='ccopy'||a==='cpin'||a==='cdel'||a==='cclr')){
   const it=S.clip[+(b&&b.dataset.i)];
   if(a==='cclr'){q='';notchApp.clip.clear();say('Histórico limpo, itens fixados mantidos')}
@@ -682,93 +610,48 @@ agendar(()=>{if(S.tok&&S.open&&S.tab==='music')spDevs()},20000);
 
 /* Rádio: temporizador para dormir */
 const SLEEP_OPTS=[0,15,30,45,60,90];
-const sleepTxt=()=>S.rd.sleepAt?'Para em '+Math.max(1,Math.ceil((S.rd.sleepAt-Date.now())/60000))+' min':'';
+const sleepTxt=()=>RADIO.s.sleepAt?'Para em '+Math.max(1,Math.ceil((RADIO.s.sleepAt-Date.now())/60000))+' min':'';
 const RS_PAISES=[['BR','Brasil'],['US','EUA'],['GB','Reino Unido'],['PT','Portugal'],['FR','França'],['DE','Alemanha'],['ES','Espanha'],['IT','Itália'],['JP','Japão'],['MX','México'],['AR','Argentina'],['CA','Canadá'],['IN','Índia'],['AU','Austrália']];
-function rsTopBoxHtml(){return '<details class="dt" id="rstopBox"'+(S.rsTopOpen?' open':'')+' style="margin:0.5rem 0"><summary>Mais acessadas por país (diretório)</summary><div class="redact" role="group" aria-label="Escolher país" style="margin-top:0.4rem">'+RS_PAISES.map(([c,n])=>'<button type="button" class="chip" data-a="rstop" data-cc="'+c+'">'+n+'</button>').join('')+'</div></details>'}
+
 // guarda se a seção Mais ouvidas por país está aberta, sem redesenhar a aba
 document.addEventListener('toggle',e=>{if(e.target&&e.target.id==='rstopBox')S.rsTopOpen=e.target.open},true);
-function radioExtrasDom(){const v=$('#view');if(!v||S.tab!=='radio')return;
- const rf=v.querySelector('#rsform');if(rf&&!v.querySelector('#rstopBox'))rf.insertAdjacentHTML('afterend',rsTopBoxHtml());
- v.querySelectorAll('#rtile,#rweek').forEach(n=>n.remove());
- 
- const listen=S.listenAll||(()=>{try{return JSON.parse(ls.get('listen')||'{}')||{}}catch(_){return {}}})();
- const dias=[...Array(7).keys()].reverse().map(i=>dayKey(new Date(Date.now()-i*864e5)));
- const tot={};dias.forEach(k=>{const d=listen[k];if(d&&d.r)Object.entries(d.r).forEach(([n,sec])=>{tot[n]=tot[n]||{sec:0,dia:{}};tot[n].sec+=sec;tot[n].dia[k]=(tot[n].dia[k]||0)+sec})});
- const top=Object.entries(tot).sort((a,b)=>b[1].sec-a[1].sec).slice(0,6);
- const sec2=x=>{const h=Math.floor(x/3600),m=Math.round((x%3600)/60);return h?h+' h '+m+' min':m+' min'};
- const wk=document.createElement('section');wk.id='rweek';wk.setAttribute('aria-label','Tempo ouvido por emissora na semana');wk.className='tp-card';wk.style.margin='0 0 12px';
- wk.innerHTML='<div class="tp-k">Últimos 7 dias por emissora</div>'+(top.length?top.map(([n,o])=>{const max=Math.max(1,...dias.map(k=>o.dia[k]||0));return '<div style="margin-top:0.5rem"><div style="display:flex;justify-content:space-between;font-size:0.875rem"><span>'+esc(n)+'</span><b>'+sec2(o.sec)+'</b></div><div style="display:flex;align-items:flex-end;gap:0.1875rem;height:2.125rem;margin-top:0.25rem" role="img" aria-label="'+esc(n)+': '+sec2(o.sec)+' na semana">'+dias.map(k=>'<i style="flex:1;display:block;min-height:0.125rem;height:'+Math.round((o.dia[k]||0)/max*100)+'%;background:var(--acc,#30d158);border-radius:0.1875rem 3px 1px 1px"></i>').join('')+'</div></div>'}).join(''):'<p class="sub" style="margin:0.375rem 0 0">Ainda sem dados de escuta na semana.</p>');
- const detW=v.querySelector('#rsvdet');if(detW)detW.after(wk);else(v.querySelector('.rad-root .mus-main')||v).appendChild(wk);radioListDom();
- const det=v.querySelector('#rsvdet');
- if(det&&!det.querySelector('#rsearch')){const wrap=document.createElement('div');wrap.style.margin='8px 0';wrap.innerHTML='<label class="sr" for="rsearch">Buscar nas rádios salvas</label><input id="rsearch" type="search" placeholder="Buscar rádio pelo nome" maxlength="40" autocomplete="off" style="width:100%;box-sizing:border-box;border-radius:0.75rem;padding:0.625rem;background:var(--row);color:var(--ink);border:0;font:inherit">';const sm=det.querySelector('summary');sm?sm.after(wrap):det.prepend(wrap)}
- const cur=S.rd.list[S.rd.cur];
- const ex=v.querySelector('#rvolstation');if(ex)ex.remove();
- if(cur&&cur.u){const box=document.createElement('div');box.id='rvolstation';box.className='rvol';box.style.flexWrap='wrap';
-  box.innerHTML='<span class="sub">Volume desta emissora: '+(cur.v!=null?Math.round(cur.v*100)+'%':'geral')+'</span><button type="button" class="chip" data-a="rvolsave">Salvar volume para esta emissora</button>'+(cur.v!=null?'<button type="button" class="chip" data-a="rvolclr">Usar volume geral</button>':'');
-  const rv=v.querySelector('#rvol');if(rv&&rv.parentElement)rv.parentElement.after(box);else{const r=v.querySelector('.rad-root .mus-main');(r||v).append(box)}}}
+
 document.addEventListener('input',e=>{if(e.target.id!=='rsearch')return;const q=e.target.value.trim().toLowerCase();document.querySelectorAll('#rsvdet .svd').forEach(li=>{li.hidden=!!q&&!li.textContent.toLowerCase().includes(q)})});
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-a]');if(!t)return;
- if(t.dataset.a==='rvolsave'){const c=S.rd.list[S.rd.cur];if(c){c.v=S.rd.vol;ls.set('radios',JSON.stringify(S.rd.list));RA.volume=c.v;view();say('Volume salvo para '+(c.n||'esta emissora'))}return}
+ if(t.dataset.a==='rvolsave'){const c=RADIO.s.list[RADIO.s.cur];if(c){c.v=RADIO.s.vol;ls.set('radios',JSON.stringify(RADIO.s.list));RA.volume=c.v;view();say('Volume salvo para '+(c.n||'esta emissora'))}return}
  if(t.dataset.a==='rgf'){rdg=t.dataset.g||'';view();return}
- if(t.dataset.a==='rlogo'){const i=+t.dataset.i,x=S.rd.list[i];if(!x)return;const u=window.prompt('Endereço da imagem do logotipo (https). Deixe vazio para remover.',x.img||'');if(u===null)return;const v=u.trim();if(!v){delete x.img;rdSaveList();view();say('Logotipo removido');return}if(!/^https:\/\/\S+$/i.test(v)){say('O endereço precisa começar com https://');return}x.img=v.slice(0,300);rdSaveList();view();say('Logotipo salvo');return}
- if(t.dataset.a==='rup'||t.dataset.a==='rdown'){rdMove(+t.dataset.i,t.dataset.a==='rup'?-1:1);return}
- if(t.dataset.a==='rretry'){S.rd.retry=0;S.rd.wt=0;rdPlay(S.rd.cur);return}
- if(t.dataset.a==='rsort'){rdSortList(t.dataset.k);return}
- if(t.dataset.a==='rren'||t.dataset.a==='rgru'||t.dataset.a==='rtz'){const i=+t.dataset.i,x=S.rd.list[i];if(!x)return;
+ if(t.dataset.a==='rlogo'){const i=+t.dataset.i,x=RADIO.s.list[i];if(!x)return;const u=window.prompt('Endereço da imagem do logotipo (https). Deixe vazio para remover.',x.img||'');if(u===null)return;const v=u.trim();if(!v){delete x.img;RADIO.rdSaveList();view();say('Logotipo removido');return}if(!/^https:\/\/\S+$/i.test(v)){say('O endereço precisa começar com https://');return}x.img=v.slice(0,300);RADIO.rdSaveList();view();say('Logotipo salvo');return}
+ if(t.dataset.a==='rup'||t.dataset.a==='rdown'){RADIO.rdMove(+t.dataset.i,t.dataset.a==='rup'?-1:1);return}
+ if(t.dataset.a==='rretry'){RADIO.s.retry=0;RADIO.s.wt=0;RADIO.rdPlay(RADIO.s.cur);return}
+ if(t.dataset.a==='rsort'){RADIO.rdSortList(t.dataset.k);return}
+ if(t.dataset.a==='rren'||t.dataset.a==='rgru'||t.dataset.a==='rtz'){const i=+t.dataset.i,x=RADIO.s.list[i];if(!x)return;
   if(t.dataset.a==='rren'){const n=window.prompt('Novo nome da emissora',x.n||'');if(n&&n.trim()){x.n=n.trim().slice(0,40)}}
   if(t.dataset.a==='rgru'){const g=window.prompt('Grupo da emissora (ex.: Notícias, Música). Deixe vazio para tirar do grupo.',x.g||'');if(g!==null){x.g=g.trim().slice(0,30)||undefined;if(!x.g)delete x.g}}
   if(t.dataset.a==='rtz'){const z=window.prompt('Fuso horário (ex.: America/Sao_Paulo, Europe/Lisbon). Deixe vazio para remover.',x.tz||'');if(z!==null){if(!z.trim()){delete x.tz}else{try{new Intl.DateTimeFormat('pt-BR',{timeZone:z.trim()});x.tz=z.trim()}catch(_){say('Fuso inválido');return}}}}
-  rdSaveList();view();return}
- if(t.dataset.a==='rcor'){const i=+t.dataset.i,x=S.rd.list[i];if(!x)return;const inp=document.createElement('input');inp.type='color';inp.value=x.c||'#30d158';inp.addEventListener('change',()=>{x.c=inp.value;rdSaveList();view();say('Cor da emissora salva')});inp.click();return}
- if(t.dataset.a==='rdel'){const i=+t.dataset.i,x=S.rd.list[i];if(!x)return;if(!window.confirm('Remover "'+(x.n||'emissora')+'" da lista?'))return;
-  const wasCur=i===S.rd.cur;S.rd.list.splice(i,1);
+  RADIO.rdSaveList();view();return}
+ if(t.dataset.a==='rcor'){const i=+t.dataset.i,x=RADIO.s.list[i];if(!x)return;const inp=document.createElement('input');inp.type='color';inp.value=x.c||'#30d158';inp.addEventListener('change',()=>{x.c=inp.value;RADIO.rdSaveList();view();say('Cor da emissora salva')});inp.click();return}
+ if(t.dataset.a==='rdel'){const i=+t.dataset.i,x=RADIO.s.list[i];if(!x)return;if(!window.confirm('Remover "'+(x.n||'emissora')+'" da lista?'))return;
+  const wasCur=i===RADIO.s.cur;RADIO.s.list.splice(i,1);
   const sc=(()=>{try{return JSON.parse(ls.get('rd_sched')||'null')}catch(_){return null}})();if(sc){if(sc.i===i)ls.del('rd_sched');else if(sc.i>i){sc.i--;ls.set('rd_sched',JSON.stringify(sc))}}
-  if(S.rd.cur>i)S.rd.cur--;else if(wasCur)S.rd.cur=Math.min(S.rd.cur,Math.max(0,S.rd.list.length-1));
-  if(wasCur&&S.rd.on)rdStop();rdSaveList();ls.set('rd_cur',S.rd.cur);view();say('Emissora removida');return}
- if(t.dataset.a==='rtile'){const c=S.rd.list[S.rd.cur];if(!c||!c.u){say('Esta emissora não tem link');return}if(S.rd.i===S.rd.cur&&S.rd.on)rdStop();else rdPlay(S.rd.cur);return}
- if(t.dataset.a==='estudo'){S.estudo=!S.estudo;ls.set('modo_estudo',S.estudo?'1':'0');const n=$('#notch');if(n)n.dataset.estudo=S.estudo?'1':'0';if(!S.estudo&&S.rd.on)rdStop();if(S.estudo&&!S.rd.on&&S.rd.list[S.rd.cur]&&S.rd.list[S.rd.cur].u)rdPlay(S.rd.cur);view();say(S.estudo?'Modo estudo: rádio de fundo':'Modo estudo desligado');return}
- if(t.dataset.a==='rvolclr'){const c=S.rd.list[S.rd.cur];if(c){delete c.v;ls.set('radios',JSON.stringify(S.rd.list));RA.volume=S.rd.vol;view();say('Usando volume geral')}return}});
+  if(RADIO.s.cur>i)RADIO.s.cur--;else if(wasCur)RADIO.s.cur=Math.min(RADIO.s.cur,Math.max(0,RADIO.s.list.length-1));
+  if(wasCur&&RADIO.s.on)RADIO.rdStop();RADIO.rdSaveList();ls.set('rd_cur',RADIO.s.cur);view();say('Emissora removida');return}
+ if(t.dataset.a==='rtile'){const c=RADIO.s.list[RADIO.s.cur];if(!c||!c.u){say('Esta emissora não tem link');return}if(RADIO.s.i===RADIO.s.cur&&RADIO.s.on)RADIO.rdStop();else RADIO.rdPlay(RADIO.s.cur);return}
+ if(t.dataset.a==='estudo'){S.estudo=!S.estudo;ls.set('modo_estudo',S.estudo?'1':'0');const n=$('#notch');if(n)n.dataset.estudo=S.estudo?'1':'0';if(!S.estudo&&RADIO.s.on)RADIO.rdStop();if(S.estudo&&!RADIO.s.on&&RADIO.s.list[RADIO.s.cur]&&RADIO.s.list[RADIO.s.cur].u)RADIO.rdPlay(RADIO.s.cur);view();say(S.estudo?'Modo estudo: rádio de fundo':'Modo estudo desligado');return}
+ if(t.dataset.a==='rvolclr'){const c=RADIO.s.list[RADIO.s.cur];if(c){delete c.v;ls.set('radios',JSON.stringify(RADIO.s.list));RA.volume=RADIO.s.vol;view();say('Usando volume geral')}return}});
 let rdg='';
-function radioListDom(){const v=$('#view');if(!v)return;v.querySelectorAll('#rlctl,#rload').forEach(n=>n.remove());
- if(S.rd.st==='load'&&S.rd.t0){const espera=Date.now()-S.rd.t0;if(espera<8000&&!S.rd.wt){S.rd.wt=setTimeout(()=>{S.rd.wt=0;if(S.tab==='radio')view()},8100-espera)}
-  if(espera>=8000){const b=document.createElement('div');b.id='rload';b.setAttribute('role','status');b.className='note';b.innerHTML='A rádio está demorando para começar. <button type="button" class="chip" data-a="rretry" style="margin-left:0.375rem">Tentar de novo</button>';v.prepend(b)}}const tEl=v.querySelector('#rtile span');const cz=S.rd.list[S.rd.cur];if(tEl&&cz&&cz.tz&&!tEl.dataset.hl){tEl.dataset.hl='1';tEl.textContent+=' · '+new Date().toLocaleTimeString('pt-BR',{timeZone:cz.tz,hour:'2-digit',minute:'2-digit'})+' local'}
- const det=v.querySelector('#rsvdet');if(!det)return;
- const grupos=[...new Set(S.rd.list.map(x=>x.g).filter(Boolean))];
- const ctl=document.createElement('div');ctl.id='rlctl';ctl.className='redact';ctl.setAttribute('role','group');ctl.setAttribute('aria-label','Organizar emissoras');ctl.style.margin='8px 0';
- ctl.innerHTML=(grupos.length?'<span class="sub" style="align-self:center">Grupo:</span><button type="button" class="chip" data-a="rgf" data-g="" aria-pressed="'+(!rdg)+'">Todos</button>'+grupos.map(g=>'<button type="button" class="chip" data-a="rgf" data-g="'+esc(g)+'" aria-pressed="'+(rdg===g)+'">'+esc(g)+'</button>').join(''):'')+
-  '<span class="sub" style="align-self:center">Ordenar:</span><button type="button" class="chip" data-a="rsort" data-k="nome">Nome</button><button type="button" class="chip" data-a="rsort" data-k="tocada">Última tocada</button>';
- det.querySelector('summary').after(ctl);
- det.querySelectorAll('.svd').forEach(li=>{const b=li.querySelector('[data-i]');if(!b)return;const i=+b.dataset.i,x=S.rd.list[i];if(!x)return;
-  li.hidden=!!rdg&&x.g!==rdg;if(x.c)li.style.borderLeft='4px solid '+x.c;if(x.img){const bt=li.querySelector('.svdbtn');if(bt&&!bt.querySelector('img.rlogo'))bt.insertAdjacentHTML('afterbegin','<img class="rlogo" src="'+esc(x.img)+'" alt="" width="28" height="28" style="border-radius:0.375rem;object-fit:cover;margin-right:0.5rem;flex:none">')}
-  if(!li.querySelector('.rctl')){const box=document.createElement('span');box.className='rctl';box.style.display='flex';box.style.gap='4px';box.style.flexWrap='wrap';
-   box.innerHTML='<button type="button" class="chip" data-a="rlogo" data-i="'+i+'" aria-label="Logotipo de '+esc(x.n)+'">Logo</button><button type="button" class="chip" data-a="rup" data-i="'+i+'" aria-label="Subir '+esc(x.n)+'"'+(i===0?' disabled':'')+'>↑</button><button type="button" class="chip" data-a="rdown" data-i="'+i+'" aria-label="Descer '+esc(x.n)+'"'+(i===S.rd.list.length-1?' disabled':'')+'>↓</button><button type="button" class="chip" data-a="rren" data-i="'+i+'" aria-label="Renomear '+esc(x.n)+'">Renomear</button><button type="button" class="chip" data-a="rgru" data-i="'+i+'" aria-label="Grupo de '+esc(x.n)+'">Grupo</button><button type="button" class="chip" data-a="rcor" data-i="'+i+'" aria-label="Cor de '+esc(x.n)+'">Cor</button><button type="button" class="chip" data-a="rtz" data-i="'+i+'" aria-label="Fuso horário de '+esc(x.n)+'">Fuso</button><button type="button" class="chip" data-a="rdel" data-i="'+i+'" aria-label="Remover '+esc(x.n)+'">Remover</button>';
-   li.appendChild(box)}});
-}
-function rdSaveList(){ls.set('radios',JSON.stringify(S.rd.list))}
-function rdMove(i,d){const j=i+d;if(j<0||j>=S.rd.list.length)return;const cur=S.rd.list[S.rd.cur];
- const sc=(()=>{try{return JSON.parse(ls.get('rd_sched')||'null')}catch(_){return null}})();const schedSt=sc&&S.rd.list[sc.i];
- const tmp=S.rd.list[i];S.rd.list[i]=S.rd.list[j];S.rd.list[j]=tmp;
- S.rd.cur=Math.max(0,S.rd.list.indexOf(cur));rdSaveList();ls.set('rd_cur',S.rd.cur);
- if(sc&&schedSt){sc.i=S.rd.list.indexOf(schedSt);if(sc.i>=0)ls.set('rd_sched',JSON.stringify(sc))}
- view();say('Emissora movida')}
-function rdSortList(k){const cur=S.rd.list[S.rd.cur];const sc=(()=>{try{return JSON.parse(ls.get('rd_sched')||'null')}catch(_){return null}})();const schedSt=sc&&S.rd.list[sc.i];
- let hist=[];try{hist=JSON.parse(ls.get('rd_hist')||'[]')||[]}catch(_){}
- if(k==='nome')S.rd.list.sort((a,b)=>String(a.n).localeCompare(String(b.n),'pt-BR'));
- else S.rd.list.sort((a,b)=>{const ia=hist.indexOf(a.n),ib=hist.indexOf(b.n);return (ia<0?99:ia)-(ib<0?99:ib)});
- S.rd.cur=Math.max(0,S.rd.list.indexOf(cur));rdSaveList();ls.set('rd_cur',S.rd.cur);
- if(sc&&schedSt){sc.i=S.rd.list.indexOf(schedSt);if(sc.i>=0)ls.set('rd_sched',JSON.stringify(sc))}
- view();say('Lista ordenada: '+(k==='nome'?'por nome':'por última tocada'))}
+
+
+
+
 /* ===== Notificações em segundo plano ===== */
 function notifyBg(titulo,corpo){if(document.hidden)ntfyEnviar(titulo,corpo);if(ls.get('opt_ntf')!=='1'||!document.hidden)return;if(!('Notification' in window)||Notification.permission!=='granted')return;
  const opts={body:corpo,icon:'icon-192.png',tag:titulo};
  const local=()=>{try{new Notification(titulo,opts)}catch(_){}};
  if(navigator.serviceWorker&&navigator.serviceWorker.ready){navigator.serviceWorker.ready.then(reg=>reg.showNotification(titulo,opts)).catch(local)}else local()}
-function sleepRow(){return `<div class="rvol"><label for="rsleep" class="sub">Desligar em</label><select id="rsleep">${SLEEP_OPTS.map(m=>`<option value="${m}"${(S.rd.sleepM||0)===m?' selected':''}>${m?m+' min':'Desativado'}</option>`).join('')}<option value="-1"${(S.rd.sleepM||0)&&!SLEEP_OPTS.includes(S.rd.sleepM)?' selected':''}>Personalizado</option></select><input type="number" id="rscm" min="1" max="1440" inputmode="numeric" aria-label="Minutos personalizados" placeholder="min" value="${(S.rd.sleepM&&!SLEEP_OPTS.includes(S.rd.sleepM))?S.rd.sleepM:''}" style="width:4.75rem"${(S.rd.sleepM&&!SLEEP_OPTS.includes(S.rd.sleepM))?'':' hidden'}><span class="sub" id="rslp">${sleepTxt()}</span></div>`}
-function rdSleepTick(){const R=S.rd;if(!R||!R.sleepAt)return;
- if(Date.now()>=R.sleepAt){R.sleepAt=0;R.sleepM=0;const was=rdPlaying();if(was)rdStop();else if(S.tab==='radio'&&!R.edit)rdRender();say(was?'Temporizador encerrado: a rádio parou':'Temporizador da rádio encerrado');return}
- const e=$('#rslp');if(e)e.textContent=sleepTxt()}
+function sleepRow(){return `<div class="rvol"><label for="rsleep" class="sub">Desligar em</label><select id="rsleep">${SLEEP_OPTS.map(m=>`<option value="${m}"${(RADIO.s.sleepM||0)===m?' selected':''}>${m?m+' min':'Desativado'}</option>`).join('')}<option value="-1"${(RADIO.s.sleepM||0)&&!SLEEP_OPTS.includes(RADIO.s.sleepM)?' selected':''}>Personalizado</option></select><input type="number" id="rscm" min="1" max="1440" inputmode="numeric" aria-label="Minutos personalizados" placeholder="min" value="${(RADIO.s.sleepM&&!SLEEP_OPTS.includes(RADIO.s.sleepM))?RADIO.s.sleepM:''}" style="width:4.75rem"${(RADIO.s.sleepM&&!SLEEP_OPTS.includes(RADIO.s.sleepM))?'':' hidden'}><span class="sub" id="rslp">${sleepTxt()}</span></div>`}
+
 $('#view').addEventListener('change',e=>{const t=e.target;
- if(t.id==='rsleep'){const m=+t.value;if(m===-1){const c=$('#rscm');if(c){c.hidden=false;c.focus()}return}const c0=$('#rscm');if(c0)c0.hidden=true;S.rd.sleepM=m;S.rd.sleepAt=m?Date.now()+m*60000:0;const x=$('#rslp');if(x)x.textContent=sleepTxt();say(m?'A rádio vai parar em '+m+' minutos':'Temporizador desativado')}
+ if(t.id==='rsleep'){const m=+t.value;if(m===-1){const c=$('#rscm');if(c){c.hidden=false;c.focus()}return}const c0=$('#rscm');if(c0)c0.hidden=true;RADIO.s.sleepM=m;RADIO.s.sleepAt=m?Date.now()+m*60000:0;const x=$('#rslp');if(x)x.textContent=sleepTxt();say(m?'A rádio vai parar em '+m+' minutos':'Temporizador desativado')}
  if(t.id==='impf'){bkImport(t.files[0]);t.value=''}});
 
 /* Backup: exportar e importar (sem tokens de login) */
@@ -864,7 +747,7 @@ function pillInfo(){const p=S.p;
  if(S.td){const n=Date.now(),ev=S.td.find(e=>e.f>n&&e.s-n<=15*60000);
   if(ev){const m=Math.ceil((ev.s-n)/60000);return m>0?{t:cut(ev.t,18)+' em '+m+' min',l:ev.t+', em '+m+' minutos'}:{t:cut(ev.t,18)+' agora',l:ev.t+', em andamento'}}}
  if(S.tok&&S.m.uri&&S.m.play)return {t:cut(S.m.list[0].t+' · '+S.m.list[0].a,30),l:'Tocando '+S.m.list[0].t};
- if(S.rd&&S.rd.on)return {t:cut(rdName(S.rd.i),30),l:'Rádio '+rdName(S.rd.i)};
+ if(RADIO.s&&RADIO.s.on)return {t:cut(rdName(RADIO.s.i),30),l:'Rádio '+rdName(RADIO.s.i)};
  return null}
 function pillPaint(){if(!window.__pronto)return;const nt=$('#notch'),pb=$('#pill');if(!nt||!pb)return;
  const i=ls.get('opt_pill')!=='0'&&!S.open?pillInfo():null,e=$('#pst'),t=i?i.t:'';
@@ -903,10 +786,10 @@ $('#view').addEventListener('change',e=>{const t=e.target;if(t.id!=='rimpf')retu
  f.text().then(tx=>{const r=parsePlaylist(tx);
   if(r.hls){msg('Este arquivo é uma lista HLS (.m3u8). Cole o endereço dela no campo do link de uma emissora.');return}
   if(!r.items.length){msg('Não encontrei links http ou https nesse arquivo.');return}
-  rdCollect();const have=new Set(S.rd.draft.map(x=>x.u));let add=0;
-  for(const it of r.items){if(S.rd.draft.length>=200)break;if(have.has(it.u))continue;have.add(it.u);S.rd.draft.push({n:it.n,u:it.u,g:'Importadas'});add++}
+  RADIO.rdCollect();const have=new Set(RADIO.s.draft.map(x=>x.u));let add=0;
+  for(const it of r.items){if(RADIO.s.draft.length>=200)break;if(have.has(it.u))continue;have.add(it.u);RADIO.s.draft.push({n:it.n,u:it.u,g:'Importadas'});add++}
   view();msg(add+' emissoras importadas. Revise a lista e toque em Salvar.');say(add+' emissoras importadas. Revise e salve.');
-  const n=$('#rn'+(S.rd.draft.length-add));if(add&&n)n.focus()},()=>msg('Não consegui ler o arquivo.'))});
+  const n=$('#rn'+(RADIO.s.draft.length-add));if(add&&n)n.focus()},()=>msg('Não consegui ler o arquivo.'))});
 
 window.__pronto=true;pillPaint();
 /* ===== Tarefas com vencimento e sincronização com o Microsoft To Do ===== */
@@ -1033,30 +916,14 @@ const RS_PRE=[{l:'Lo-fi rock',q:'lofi rock'},{l:'Lo-fi eletrônica',q:'lofi elec
 const RB=['https://de1.api.radio-browser.info','https://fi1.api.radio-browser.info','https://at1.api.radio-browser.info'];
 async function rbFetch(par){let ult;for(const b of RB){try{const r=await fetch(b+'/json/stations/search?'+new URLSearchParams(par));if(r.ok)return await r.json()}catch(e){ult=e}}throw ult||new Error('rb')}
 async function rbPorUrl(u){for(const b of RB){try{const r=await fetch(b+'/json/stations/byurl/'+encodeURIComponent(u));if(r.ok){const j=await r.json();if(Array.isArray(j))return j}}catch(_){/* tenta a próxima base */}}return []}
-function savedBox(){const R=S.rd,L=R.list,open=R.savedOpen?' open':'';
+function savedBox(){const R=RADIO.s,L=R.list,open=R.savedOpen?' open':'';
  const itemL=(x,i)=>{const cur=i===R.cur;return '<li class="svd'+(cur?' cur':'')+'"><button type="button" class="svdbtn" data-a="rpick" data-i="'+i+'" aria-current="'+cur+'"><span class="grow">'+esc(x.n||('Emissora '+(i+1)))+(x.u&&isFav(x.u)?' <span class="fav" aria-label="favorita">★</span>':'')+'</span></button></li>'};const comL=L.map((x,i)=>[x,i]).filter(([x])=>x.u),semL=L.map((x,i)=>[x,i]).filter(([x])=>!x.u);const items=comL.map(([x,i])=>itemL(x,i)).join('')+(semL.length?'<li class="sub" role="presentation" style="margin-top:0.5rem">Precisa de configuração</li>'+semL.map(([x,i])=>itemL(x,i)).join(''):'');
  return '<details class="dt rsv" id="rsvdet"'+open+'><summary>Rádios salvas ('+L.length+')</summary>'+(L.length?'<p class="sub" style="margin:0 0 0.4rem">Toque em uma rádio para começar a ouvi-la.</p><ul class="svlist">'+items+'</ul>':'<p class="sub">Nenhuma rádio salva ainda. Use Buscar mais rádios para adicionar.</p>')+'</details>'}
-function rsBox(){const R=S.rd;
- return `<details class="dt" id="rsdet"${R.rsOpen?' open':''}><summary>Buscar mais rádios</summary>
- <p class="sub" style="margin:0.375rem 0">Pesquisa no diretório público Radio Browser (precisa de internet).</p>
- <div class="redact">${RS_PRE.map((p,k)=>`<button type="button" class="chip" data-a="rpre" data-k="${k}">${p.l}</button>`).join('')}</div>
- <form id="rsform" class="add"><input id="rsq" aria-label="Buscar rádio por nome ou estilo" placeholder="Nome ou estilo (ex.: lofi rock)" autocomplete="off" value="${esc(R.rsQ||'')}"><button>Buscar</button></form>
- <label class="cbz"><input type="checkbox" id="rsbr"${R.rsBr?' checked':''}> Só rádios do Brasil</label>
- <div id="rsres" aria-live="polite">${R.rsHtml||''}</div></details>`}
-async function rsRun(preset){const R=S.rd,out=$('#rsres'),q=($('#rsq').value||'').trim(),br=$('#rsbr').checked,order=(preset&&preset.order)||(br&&!q?'clickcount':'votes');
- R.rsQ=q;R.rsBr=br;if(q.length<2&&!(preset&&(preset.br||preset.cc))){out.textContent='Digite pelo menos 2 letras ou use um dos atalhos.';return}
- out.textContent='Buscando…';
- const base={hidebroken:'true',order,reverse:'true',limit:'30'};if(br)base.countrycode='BR';{const idi=(($('#rsidioma')||{}).value||'').trim(),bit=+(($('#rsbit')||{}).value||0);if(idi)base.language=idi;if(bit)base.bitrateMin=String(bit)}if(preset&&preset.cc)base.countrycode=preset.cc;if(location.protocol==='https:')base.is_https='true';
- try{let lista=await rbFetch(q?{...base,name:q}:base);const pal=q.toLowerCase().split(/\s+/).filter(Boolean);
-  if(q&&lista.length<8&&pal.length){const t=await rbFetch({...base,tag:pal[0]});lista=lista.concat(t.filter(x=>pal.every(w=>(String(x.name)+' '+String(x.tags)).toLowerCase().includes(w))))}
-  const vis=new Set(),itens=lista.filter(x=>{const u=String(x.url_resolved||x.url||'');if(!/^https?:\/\/\S+$/i.test(u)||(location.protocol==='https:'&&!/^https:/i.test(u))||vis.has(u))return false;vis.add(u);return true}).slice(0,25);
-  R.rsHtml=itens.length?itens.map(x=>{const u=String(x.url_resolved||x.url),n=String(x.name||'Rádio').trim().slice(0,40),img=String(x.favicon||'').replace(/^http:/i,'https:'),meta=[x.country,(x.codec||'').toUpperCase()+(x.bitrate?' '+x.bitrate+' kbps':''),(x.votes||0)+' votos',(x.clickcount||0)+' acessos no diretório'].filter(Boolean).join(' · ');
-   return `<div class="row"><span class="grow">${esc(n)}<br><span class="sub">${esc(meta)}</span></span><button type="button" class="chip" data-a="rsadd" data-u="${esc(u)}" data-img="${esc(/^https:\/\/\S+$/i.test(img)?img:'')}" data-n="${esc(n)}" aria-label="Adicionar à lista: ${esc(n)}">Adicionar</button><button type="button" class="chip" data-a="rsplay" data-u="${esc(u)}" data-img="${esc(/^https:\/\/\S+$/i.test(img)?img:'')}" data-n="${esc(n)}" aria-label="Adicionar e ouvir: ${esc(n)}">Ouvir e salvar</button></div>`}).join(''):'Nada encontrado para essa busca.';
-  out.innerHTML=R.rsHtml;say(itens.length+(itens.length===1?' rádio encontrada':' rádios encontradas'))}
- catch(_){R.rsHtml='';out.textContent='Não foi possível buscar agora. Confira a conexão com a internet.'}}
-$('#view').addEventListener('toggle',e=>{if(e.target.id==='rsdet')S.rd.rsOpen=e.target.open;if(e.target.id==='rsvdet')S.rd.savedOpen=e.target.open;
+
+
+$('#view').addEventListener('toggle',e=>{if(e.target.id==='rsdet')RADIO.s.rsOpen=e.target.open;if(e.target.id==='rsvdet')RADIO.s.savedOpen=e.target.open;
  },true);
-$('#view').addEventListener('input',e=>{if(e.target.id==='rsq')S.rd.rsQ=e.target.value});
+$('#view').addEventListener('input',e=>{if(e.target.id==='rsq')RADIO.s.rsQ=e.target.value});
 
 /* ===== Relógio (horário de São Paulo), data e previsão do tempo ===== */
 const TZ='America/Sao_Paulo';
@@ -1227,7 +1094,7 @@ function fxRun(){const c=fxCache(),r=$('#fxres'),q=parseFloat(String($('#fxq').v
  if(!c||!c.rates){r.textContent='Cotações indisponíveis agora';return}if(isNaN(q)){r.textContent='Digite um número';return}
  const v=q/c.rates[de]*c.rates[pa];r.textContent=q.toLocaleString('pt-BR')+' '+de+' = '+v.toLocaleString('pt-BR',{maximumFractionDigits:2})+' '+pa}
 function listenTick(){try{const hoje=dayKey(new Date());let L=JSON.parse(ls.get('listen')||'{}')||{};L[hoje]=L[hoje]||{r:{},s:{}};
- if(rdPlaying()&&S.rd.list[S.rd.cur]){const n=rdName(S.rd.cur);L[hoje].r[n]=(L[hoje].r[n]||0)+15}
+ if(rdPlaying()&&RADIO.s.list[RADIO.s.cur]){const n=rdName(RADIO.s.cur);L[hoje].r[n]=(L[hoje].r[n]||0)+15}
  const tr=S.m&&S.m.play&&S.m.list&&S.m.list[S.m.i];if(tr&&tr.t){const k=tr.t+(tr.a?' · '+tr.a:'');L[hoje].s[k]=(L[hoje].s[k]||0)+15}
  const ks=Object.keys(L).sort();if(ks.length>400)ks.slice(0,ks.length-400).forEach(k=>delete L[k]);ls.set('listen',JSON.stringify(L))}catch(_){}}
 agendar(listenTick,15000);
@@ -1406,8 +1273,9 @@ async function epubLer(zip){const cont=zip.file('META-INF/container.xml');if(!co
  else{const it=Object.values(man).find(x=>/cover-image/.test(x.props));if(it)capaPath=normPath(base+it.href)}
  const drm=!!zip.file('META-INF/encryption.xml');
  return {titulo:titulo.trim().slice(0,160),autor:autor.trim().slice(0,120),spine,capaPath,drm}}
-async function livroNuvemEnviar(id,blob){if(!msOn())return false;try{if(!await msEnsure())return false;const r=await fetch('https://graph.microsoft.com/v1.0/me/drive/special/approot:/livros/'+id+'.epub:/content',{method:'PUT',headers:{Authorization:'Bearer '+S.ms,'Content-Type':'application/epub+zip'},body:blob});return r.ok}catch(_){return false}}
-async function livroNuvemBaixar(id){if(!msOn())return null;try{if(!await msEnsure())return null;const r=await fetch('https://graph.microsoft.com/v1.0/me/drive/special/approot:/livros/'+id+'.epub:/content',{headers:{Authorization:'Bearer '+S.ms}});if(!r.ok)return null;const b=await r.blob();await idbPut(id,b);return b}catch(_){return null}}
+function livroNuvemCaminho(id,mime){return '/me/drive/special/approot:/livros/'+id+(mime==='application/pdf'?'.pdf':'.epub')}
+async function livroNuvemEnviar(id,blob){if(!msOn())return false;try{if(!await msEnsure())return false;const r=await fetch('https://graph.microsoft.com/v1.0'+livroNuvemCaminho(id,blob.type)+':/content',{method:'PUT',headers:{Authorization:'Bearer '+S.ms,'Content-Type':blob.type||'application/epub+zip'},body:blob});return r.ok}catch(_){return false}}
+async function livroNuvemBaixar(id,tipo){if(!msOn())return null;try{if(!await msEnsure())return null;const ordem=tipo==='pdf'?['application/pdf','application/epub+zip']:['application/epub+zip','application/pdf'];let r=null;for(const mime of ordem){r=await fetch('https://graph.microsoft.com/v1.0'+livroNuvemCaminho(id,mime)+':/content',{headers:{Authorization:'Bearer '+S.ms}});if(r.ok)break}if(!r||!r.ok)return null;const b=await r.blob();await idbPut(id,b);return b}catch(_){return null}}
 async function livroAdicionar(file){const err=$('#livErr');if(err)err.textContent='';
  if(!file||!/\.(epub|pdf)$/i.test(file.name)){if(err)err.textContent='Escolha um arquivo .epub ou .pdf';return}
  if(/\.pdf$/i.test(file.name)){await pdfAdicionar(file);return}
@@ -1441,7 +1309,7 @@ async function livrosAfter(){const L=livrosMeta();for(const x of L){const el=$('
  const lv=$('#view');if(lv&&!$('#desdet')){lv.insertAdjacentHTML('beforeend',desejosHtml())}
  const fi=$('#livFile');if(fi)fi.onchange=()=>{if(fi.files&&fi.files[0])livroAdicionar(fi.files[0])};
  if(LIV_OPEN.id&&$('#livLeitor'))livroMostrar()}
-async function livroAbrir(id){let f=await idbGet(id);if(!f)f=await livroNuvemBaixar(id);const x=livrosMeta().find(y=>y.id===id);
+async function livroAbrir(id){const x=livrosMeta().find(y=>y.id===id);let f=await idbGet(id);if(!f)f=await livroNuvemBaixar(id,x&&x.tipo);
  if(!f){say('Adicione o arquivo deste livro neste aparelho');return}
  if(x&&x.tipo==='pdf'){pdfAbrir(id,f,x);return}
  const JS=await loadJSZip();const zip=await JS.loadAsync(f);const info=await epubLer(zip);
@@ -1579,9 +1447,9 @@ function apresFocoHtml(){const p=S.p;const fase={focus:'Foco',rest:'Pausa curta'
  return '<div style="text-align:center;color:#111"><div style="font-size:clamp(16px,2.6vw,22px);opacity:.75">'+fase+(p.run?'':' · pausado')+'</div><div id="apFocoT" style="font:400 clamp(64px,16vw,170px)/1 Anton,system-ui,sans-serif;font-variant-numeric:tabular-nums;margin:0.625rem 0">'+mm+':'+ss+'</div>'+(tarefa?'<div style="font-size:clamp(16px,2.6vw,24px);opacity:.9">'+esc(tarefa.t)+'</div>':'')+'</div>'}
 function apresDestaqueHtml(){const atual=(apresPref('apres_destaque','#FF9F0A')||'').toUpperCase();const ops=[['#FF9F0A','Laranja'],['#64D2FF','Ciano'],['#30D158','Verde']];
  return '<div style="background:rgba(0,0,0,.06);border-radius:1.125rem;padding:0.875rem"><div style="font-size:0.75rem;opacity:.7;margin-bottom:0.5rem">Destaque dos minutos e segundos</div><div role="group" aria-label="Cor de destaque" style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap">'+ops.map(([c,n])=>'<button type="button" class="chip" data-a="apDest" data-c="'+c+'" aria-label="Destaque '+n+'" aria-pressed="'+(atual===c)+'" style="width:2.5rem;height:2.5rem;border-radius:50%;padding:0;background:'+c+';border:0.125rem solid '+(atual===c?'#111':'rgba(0,0,0,.25)')+'"></button>').join('')+'<input type="text" id="apDestHex" data-a="apDestHex" value="'+atual+'" maxlength="7" aria-label="Código HEX da cor de destaque" style="width:6rem;border-radius:0.625rem;padding:0.5rem;border:1px solid rgba(0,0,0,.2);background:#fff;color:#111;font:inherit"></div></div>'}
-function radioTocando(){return !!(S.rd.i===S.rd.cur&&typeof RA!=='undefined'&&RA&&!RA.paused)}
-function apresCartaoMusica(){const fonte=apresFonte();const rd=S.rd.list[S.rd.cur];const tr=S.m&&S.m.list[S.m.i];
- if(fonte!=='spotify'){const tocando=radioTocando();const fav=!!(rd&&S.rd.favs&&rd.u&&S.rd.favs.includes(rd.u));const ini=(rd&&rd.n?rd.n:'R').trim().charAt(0).toUpperCase();
+
+function apresCartaoMusica(){const fonte=apresFonte();const rd=RADIO.s.list[RADIO.s.cur];const tr=S.m&&S.m.list[S.m.i];
+ if(fonte!=='spotify'){const tocando=RADIO.radioTocando();const fav=!!(rd&&RADIO.s.favs&&rd.u&&RADIO.s.favs.includes(rd.u));const ini=(rd&&rd.n?rd.n:'R').trim().charAt(0).toUpperCase();
   const capa=rd&&rd.img?'<img src="'+esc(rd.img)+'" alt="Capa de '+esc(rd.n||'rádio')+'" style="width:100%;height:100%;object-fit:cover">':'<div aria-hidden="true" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font:400 3.5rem/1 Anton,system-ui,sans-serif;color:#fff;background:#1d1d1f">'+esc(ini)+'</div>';
   const btn=(a,l,t)=>'<button type="button" class="chip" data-a="'+a+'" aria-label="'+l+'" style="min-width:2.75rem;min-height:2.75rem">'+t+'</button>';
   return '<div id="apCartao" role="group" aria-label="Rádio. Arraste para trocar de estação" style="touch-action:pan-y;background:rgba(0,0,0,.06);border-radius:1.1rem;padding:.75rem;color:#111;user-select:none">'+
@@ -1602,7 +1470,7 @@ function apresSomHtml(){const modo=apresPref('apres_som','sistema');const sis=+a
 function apresAplicarSom(){const modo=apresPref('apres_som','sistema');const sis=+apresPref('apres_master',100)/100,mus=+apresPref('apres_musica',60)/100;
  let vol=sis*mus;if(modo==='assistir')vol=vol*0.4;const muda=modo==='mudo';
  if(apresFonte()==='spotify'){spApi('/me/player/volume?volume_percent='+Math.round(muda?0:vol*100),{method:'PUT'})}
- else if(RA){RA.muted=muda;RA.volume=Math.max(0,Math.min(1,vol));S.rd.vol=RA.volume}}
+ else if(RA){RA.muted=muda;RA.volume=Math.max(0,Math.min(1,vol));RADIO.s.vol=RA.volume}}
 function apresCoresHtml(){const atual=(apresPref('apres_cor','#DFF0C4')||'').toUpperCase();
  const sw=APRES_CORES.map(([c,n])=>'<button type="button" class="chip" data-a="apCor" data-c="'+c+'" aria-label="Fundo '+n+' '+c+'" aria-pressed="'+(atual===c.toUpperCase())+'" style="width:2.75rem;height:2.75rem;border-radius:50%;padding:0;background:'+c+';border:0.125rem solid '+(atual===c.toUpperCase()?'#111':'rgba(0,0,0,.25)')+'"></button>').join('');
  const livre=!APRES_CORES.some(([c])=>c.toUpperCase()===atual);
@@ -1718,7 +1586,7 @@ function apresSair(){S.apres=false;clearInterval(S.apresT);const el=document.get
 /* gestos e ações do modo apresentação */
 (function(){let x0=null;document.addEventListener('pointerdown',e=>{const c=e.target.closest&&e.target.closest('#apCartao');if(c)x0={x:e.clientX,id:c}});
  document.addEventListener('pointerup',e=>{if(!x0)return;const dx=e.clientX-x0.x;x0=null;if(Math.abs(dx)<50)return;if(apresFonte()==='radio'){apresTrocarEstacao(dx<0?1:-1)}else{apresTrocarFaixa(dx<0?1:-1)}})})();
-function apresTrocarEstacao(d){const n=S.rd.list.length;if(!n)return;const i=((S.rd.cur+d)%n+n)%n;S.rd.cur=i;ls.set('rd_cur',i);rdPlay(i);setTimeout(apresRender,150)}
+function apresTrocarEstacao(d){const n=RADIO.s.list.length;if(!n)return;const i=((RADIO.s.cur+d)%n+n)%n;RADIO.s.cur=i;ls.set('rd_cur',i);RADIO.rdPlay(i);setTimeout(apresRender,150)}
 function apresTrocarFaixa(d){if(!S.tok||!S.m)return;spApi(d>0?'/me/player/next':'/me/player/previous',{method:'POST'}).then(()=>setTimeout(apresRender,400))}
 document.addEventListener('click',e=>{const lb=e.target.closest&&e.target.closest('[data-a="livbaixar"]');if(lb){livrosBaixarCopia();return}const ls0=e.target.closest&&e.target.closest('[data-a="livsync"]');if(ls0){S.livSyncAt=0;livrosSyncNuvem();return}const mais=e.target.closest&&e.target.closest('#tabsMore');if(mais){S.tabsAll=!S.tabsAll;renderTabs();return}const t=e.target.closest&&e.target.closest('#apres [data-a]');if(!t)return;const a=t.dataset.a;
  if(a==='apRecolher'){ls.set('apres_menu',ls.get('apres_menu')==='0'?'1':'0');apresRender();return}
@@ -1729,13 +1597,13 @@ document.addEventListener('click',e=>{const lb=e.target.closest&&e.target.closes
  if(a==='apRelAberto'){ls.set('apres_rel_aberto',ls.get('apres_rel_aberto')==='1'?'0':'1');apresRender();return}
  if(a==='bMov'){ls.set('bolas_mov',t.dataset.v);BOLAS.items=[];BOLAS.col=0;apresRender();return}
  if(a==='bForma'){ls.set('bolas_forma',t.dataset.v);apresRender();return}
- if(a==='rFav'){toggleFav(S.rd.cur);apresRender();return}
- if(a==='rPlay'){if(radioTocando())rdStop();else rdPlay(S.rd.cur);apresRender();return}
- if(a==='rNext'){rdPlay(((S.rd.cur+1)%S.rd.list.length+S.rd.list.length)%S.rd.list.length);setTimeout(apresRender,150);return}
- if(a==='rPrev'){rdPlay(((S.rd.cur-1)%S.rd.list.length+S.rd.list.length)%S.rd.list.length);setTimeout(apresRender,150);return}
+ if(a==='rFav'){toggleFav(RADIO.s.cur);apresRender();return}
+ if(a==='rPlay'){if(RADIO.radioTocando())RADIO.rdStop();else RADIO.rdPlay(RADIO.s.cur);apresRender();return}
+ if(a==='rNext'){RADIO.rdPlay(((RADIO.s.cur+1)%RADIO.s.list.length+RADIO.s.list.length)%RADIO.s.list.length);setTimeout(apresRender,150);return}
+ if(a==='rPrev'){RADIO.rdPlay(((RADIO.s.cur-1)%RADIO.s.list.length+RADIO.s.list.length)%RADIO.s.list.length);setTimeout(apresRender,150);return}
  if(a==='apSpPrev'){spApi('/me/player/previous',{method:'POST'}).then(()=>setTimeout(apresRender,400));return}
  if(a==='apSpNext'){spApi('/me/player/next',{method:'POST'}).then(()=>setTimeout(apresRender,400));return}
- if(a==='rRand'){rdRand();setTimeout(apresRender,150);return}
+ if(a==='rRand'){RADIO.rdRand();setTimeout(apresRender,150);return}
  if(a==='apModo'){ls.set('apres_modo',t.dataset.m);apresRender();return}
  if(a==='apRelogio'){ls.set('apres_relogio',t.dataset.t);apresRender();return}
  if(a==='apCor'){ls.set('apres_cor',t.dataset.c);apresRender();return}
@@ -1744,11 +1612,11 @@ document.addEventListener('click',e=>{const lb=e.target.closest&&e.target.closes
  if(a==='apDest'){ls.set('apres_destaque',t.dataset.c);apresRender();return}
  if(a==='apSair'){apresSair();return}
  if(a==='apMusPlay'){if(apresFonte()==='spotify'){const tocando=!!S.m.play;spApi(tocando?'/me/player/pause':spPlayPath(),{method:'PUT'}).then(()=>{if(S.err===0)S.m.play=!tocando;else if(S.err===404)say('Nenhum dispositivo ativo. Abra o Spotify e toque uma faixa');else if(S.err===403)say('Controlar a reprodução exige Spotify Premium');apresRender()});S.m.play=!tocando;apresRender();return}
-  const c=S.rd.list[S.rd.cur];if(!c)return;if(radioTocando())rdStop();else rdPlay(S.rd.cur);apresRender();return}});
+  const c=RADIO.s.list[RADIO.s.cur];if(!c)return;if(RADIO.radioTocando())RADIO.rdStop();else RADIO.rdPlay(RADIO.s.cur);apresRender();return}});
 document.addEventListener('change',e=>{if(e.target.dataset&&e.target.dataset.a==='apDestHex'){const v=e.target.value.trim();if(/^#[0-9a-fA-F]{6}$/.test(v)){ls.set('apres_destaque',v.toUpperCase());apresRender()}}});
 document.addEventListener('input',e=>{const a=e.target.dataset&&e.target.dataset.a;if(a==='apMaster'){ls.set('apres_master',e.target.value);apresRender();apresAplicarSom()}if(a==='apMusica'){ls.set('apres_musica',e.target.value);apresRender();apresAplicarSom()}});
 document.addEventListener('change',e=>{if(e.target.dataset&&e.target.dataset.a==='apCorLivre'){ls.set('apres_cor',e.target.value.toUpperCase());apresRender();return}if(e.target.dataset&&e.target.dataset.a==='apCorHex'){const v=e.target.value.trim();if(/^#[0-9a-fA-F]{6}$/.test(v)){ls.set('apres_cor',v.toUpperCase());apresRender()}return}
- if(e.target.dataset&&e.target.dataset.a==='apVol'){const v=+e.target.value;if(apresFonte()==='spotify'){spApi('/me/player/volume?volume_percent='+v,{method:'PUT'})}else{S.rd.vol=v/100;RA.volume=S.rd.vol;ls.set('rd_vol',S.rd.vol)}}});
+ if(e.target.dataset&&e.target.dataset.a==='apVol'){const v=+e.target.value;if(apresFonte()==='spotify'){spApi('/me/player/volume?volume_percent='+v,{method:'PUT'})}else{RADIO.s.vol=v/100;RA.volume=RADIO.s.vol;ls.set('rd_vol',RADIO.s.vol)}}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&S.apres)apresSair()});
 /* ===== Bem-estar: hábitos, humor e estudo ===== */
 function jsonLS(k,def){try{const v=JSON.parse(ls.get(k)||'null');return v==null?def:v}catch(_){return def}}
@@ -2530,7 +2398,7 @@ function musCoresCarregar(url){S.musCores=S.musCores||{};if(S.musCores[url]!==un
   catch(_){S.musCores[url]='none'}
   if(S.tab==='music')view()};
  im.onerror=()=>{S.musCores[url]='none';if(S.tab==='music')view()};im.src=url}
-const MUS_FUNDO_PADRAO='assets/papel-de-parede-musica.jpg';
+const MUS_FUNDO_PADRAO=null;
 function musFundo(){const img=S.musBgImg||ls.get('mus_bg')||MUS_FUNDO_PADRAO;if(img)return "background:url('"+img+"') center/cover no-repeat fixed";
  const tr=(S.m.list||[])[S.m.i]||{};const c=tr.img?(S.musCores||{})[tr.img]:undefined;
  if(tr.img&&c===undefined)musCoresCarregar(tr.img);
@@ -2596,7 +2464,7 @@ document.addEventListener('change',e=>{const t2=e.target;if(!t2)return;
  if(t2.id==='musBgFile'){const f=t2.files&&t2.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const sc=Math.min(1,1600/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);const url=c.toDataURL('image/jpeg',0.82);ls.set('mus_bg',url);if(ls.get('mus_bg')===url){S.musBgImg=url;say('Fundo atualizado');view()}else say('Imagem muito grande para salvar no navegador. Escolha outra.')};im.src=rd.result};rd.readAsDataURL(f);return}
  if(t2.dataset&&t2.dataset.a==='musBusca'){S.musBusca=t2.value;view();return}
  if(t2.dataset&&t2.dataset.a==='radBusca'){S.radBusca=t2.value;view();return}
- if(t2.dataset&&t2.dataset.a==='radBuscaP'){S.radBusca=t2.value;if(t2.value.trim()){S.radTela='menu';S.radSec='todas'}view();return}});
+ if(t2.dataset&&t2.dataset.a==='radBuscaP'){S.radBusca=t2.value;if(t2.value.trim()){RADIO.s.radTela='menu';RADIO.s.radSec='todas'}view();return}});
 /* ===== Música: biblioteca do usuário (álbuns, músicas, artistas, recentemente adicionadas) ===== */
 async function musLibCarregar(sec){S.musLib=S.musLib||{};S.musLibAt=S.musLibAt||{};if(!S.tok||S.musLibAt[sec])return;S.musLibAt[sec]=Date.now();
  let r=null,lista=[];
@@ -2706,19 +2574,72 @@ function navBaixoMontar(){const v=document.getElementById('view');if(!v)return;
  if(v.lastElementChild!==w)v.appendChild(w)}
 /* as setas acompanham sempre o fim do conteúdo, em qualquer renderização */
 /* Rádio: volume, botões de gênero e 'Últimos 7 dias' ficam no fim da tela, nesta ordem */
-function radFimMontar(){const m=document.querySelector('#view .rad-root .mus-main');
- if(!m){const r=document.getElementById('rweek'),v=document.getElementById('view'),nb=document.getElementById('navBaixo');if(r&&v&&nb&&r.nextElementSibling!==nb)v.insertBefore(r,nb);return}
 
- ['#rvolstation','.rad-chips','#rweek'].forEach(sel=>{const e=m.querySelector(sel);if(e&&e.parentElement===m&&m.lastElementChild!==e)m.appendChild(e)})}
+/* Fundo escolhido pelo usuário (galeria), também aplicado à tela de reprodução da Rádio */
+
 /* Capa da faixa dentro da sub-cápsula da barra da Música (como no exemplo) */
 function musCapaNaCapsula(){document.querySelectorAll('#view .mus-bar').forEach(b=>{const capa=b.querySelector(':scope > .mus-barra-capa'),txt=b.querySelector(':scope > .mus-barra-txt'),prog=b.querySelector(':scope > #mbarprog');if(capa&&txt&&capa.parentElement!==txt)txt.prepend(capa);if(prog&&txt&&prog.parentElement!==txt)txt.appendChild(prog)})}
-(function setasObservadas(){const v=document.getElementById('view');const acompanha=()=>{navBaixoMontar();radFimMontar();musCapaNaCapsula()};acompanha();if(v)new MutationObserver(acompanha).observe(v,{childList:true});})();
+(function setasObservadas(){const v=document.getElementById('view');const acompanha=()=>{navBaixoMontar();RADIO.radFimMontar();musCapaNaCapsula();RADIO.radFundoAplicar()};acompanha();if(v)new MutationObserver(acompanha).observe(v,{childList:true});})();
 /* Gesto de arrastar: esquerda = próxima aba, direita = aba anterior (ignora listas com rolagem lateral e campos) */
 (function gestoAbas(){let x0=0,y0=0,t0=0,ativo=false;
  const ignora=alvo=>{for(let e=alvo;e&&e.id!=='view';e=e.parentElement){if(!e.tagName)continue;const tg=e.tagName;if(tg==='INPUT'||tg==='TEXTAREA'||tg==='SELECT'||tg==='CANVAS'||e.isContentEditable)return true;const cs=getComputedStyle(e);if(/(auto|scroll)/.test(cs.overflowX)&&e.scrollWidth>e.clientWidth+2)return true}return false};
  document.addEventListener('touchstart',e=>{const n=document.getElementById('notch');ativo=false;if(!n||S.foco||S.grid)return;const alvo=e.target;if(!alvo||!alvo.closest||!alvo.closest('#view')||ignora(alvo))return;x0=e.touches[0].clientX;y0=e.touches[0].clientY;t0=Date.now();ativo=true},{passive:true});
  document.addEventListener('touchend',e=>{if(!ativo)return;ativo=false;const t=e.changedTouches[0];const dx=t.clientX-x0,dy=t.clientY-y0;if(Date.now()-t0>800)return;if(Math.abs(dx)<70||Math.abs(dx)<Math.abs(dy)*1.6)return;const i=TABS.findIndex(x=>x[0]===S.tab);const j=dx<0?i+1:i-1;if(j<0||j>=TABS.length)return;pick(TABS[j][0])},{passive:true});
 })();
+/* ===== Diário: sincronização com o OneDrive (arquivo diario.json na pasta do aplicativo) ===== */
+const DIARIO_CHAVES={registros:'diario_registros_v1',config:'diario_config_v1',lixeira:'diario_lixeira_v1'};
+const DIARIO_CONFIG_LOCAL=['pinHash','pinSalt','lastBackup'];
+function diarioLer(k,fallback){try{const v=JSON.parse(localStorage.getItem(k)||'null');return v===null?fallback:v}catch(_){return fallback}}
+function diarioMesclar(loc,rem){
+ const porId={};const add=(x)=>{if(!x||!x.id)return;const c=porId[x.id];const n=(x.history||[]).length,m=c?(c.history||[]).length:-1;if(!c||n>m)porId[x.id]=x};
+ (loc.registros||[]).forEach(add);(rem.registros||[]).forEach(add);
+ const registros=Object.values(porId).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+ const lix={};[...(loc.lixeira||[]),...(rem.lixeira||[])].forEach(t=>{if(t&&t.entry&&t.entry.id&&!lix[t.entry.id])lix[t.entry.id]=t});
+ const cfg=Object.assign({},rem.config||{},loc.config||{});
+ DIARIO_CONFIG_LOCAL.forEach(k=>{if(loc.config&&loc.config[k]!==undefined)cfg[k]=loc.config[k];else delete cfg[k]});
+ return {registros,lixeira:Object.values(lix),config:cfg}}
+window._diarioBusy=false;window._diarioT=null;
+const DIARIO_CAMINHO='/me/drive/special/approot:/diario.json:/content';
+async function diarioSyncNuvem(auto){
+ if(!msOn()||window._diarioBusy)return;window._diarioBusy=true;
+ try{if(!await msEnsure())return;
+  const senha=ls.get('diario_senha');
+  if(!senha){if(!auto)say('Defina a senha de sincronização do Diário em Ajustes');return}
+  const loc={registros:diarioLer(DIARIO_CHAVES.registros,[]),config:diarioLer(DIARIO_CHAVES.config,{}),lixeira:diarioLer(DIARIO_CHAVES.lixeira,[])};
+  const r=await gj(DIARIO_CAMINHO);
+  if(!r.ok&&r.status!==404){if(!auto)say('Não foi possível sincronizar o Diário');return}
+  let rem={};
+  if(r.ok&&r.j&&typeof r.j==='object'){
+   if(r.j.enc){
+    try{rem=JSON.parse(await bkDecifrarTxt(r.j,senha))}
+    catch(_){if(!auto)say('A senha deste aparelho não corresponde à usada na nuvem. O Diário não foi alterado.');return}
+   }else rem=r.j; // versão anterior, sem criptografia: é lida e regravada cifrada
+  }
+  const m=diarioMesclar(loc,rem);
+  localStorage.setItem(DIARIO_CHAVES.registros,JSON.stringify(m.registros));
+  localStorage.setItem(DIARIO_CHAVES.lixeira,JSON.stringify(m.lixeira));
+  localStorage.setItem(DIARIO_CHAVES.config,JSON.stringify(m.config));
+  const payload=JSON.stringify({registros:m.registros,lixeira:m.lixeira,config:Object.fromEntries(Object.entries(m.config).filter(([k])=>!DIARIO_CONFIG_LOCAL.includes(k)))});
+  const cifrado=await bkCifrarTxt(payload,senha);
+  const w=await gj(DIARIO_CAMINHO,{method:'PUT',body:cifrado,headers:{'Content-Type':'application/json'}});
+  if(!w.ok&&!auto)say('Não foi possível enviar o Diário');
+ }catch(e){logErr('diario sync: '+(e&&e.message))}finally{window._diarioBusy=false}}
+/* Ajustes: definir ou trocar a senha da sincronização do Diário (guardada no cofre do aparelho) */
+function diarioSenhaDom(){const v=$('#view');if(!v||S.tab!=='set'||v.querySelector('#diarioSenha'))return;
+ const box=document.createElement('details');box.id='diarioSenha';box.className='dt';box.style.marginTop='0.75rem';
+ box.innerHTML='<summary>Senha da sincronização do Diário</summary><p class="sub" style="margin:0.4rem 0">O Diário é enviado ao OneDrive já cifrado com esta senha. Use a mesma senha em todos os aparelhos. Sem ela, o conteúdo não pode ser lido, nem por você.</p><button type="button" class="chip" id="diarioSenhaBtn">Definir ou trocar senha</button>';
+ v.querySelector('details#bkCifrado')?.after(box)||v.appendChild(box);
+ box.querySelector('#diarioSenhaBtn').addEventListener('click',diarioSenhaDefinir)}
+async function diarioSenhaDefinir(){
+ if(!window.crypto||!crypto.subtle){say('Este navegador não suporta criptografia');return}
+ const s1=prompt('Digite a senha da sincronização do Diário (mínimo de 8 caracteres). Guarde-a: sem ela o Diário na nuvem não pode ser lido.');
+ if(!s1)return;if(s1.length<8){say('A senha precisa ter pelo menos 8 caracteres');return}
+ const s2=prompt('Repita a senha');if(s2!==s1){say('As senhas não coincidem');return}
+ ls.set('diario_senha',s1);say('Senha definida neste aparelho');diarioSyncNuvem(false)}
+window._diarioAgendar=function(){if(window._diarioBusy||!msOn())return;clearTimeout(window._diarioT);window._diarioT=setTimeout(()=>diarioSyncNuvem(true),3000)};
+window.addEventListener('storage',e=>{if(e.key&&e.key.startsWith('diario_'))window._diarioAgendar()});
+agendar(()=>{if(msOn()&&!window._diarioBusy&&document.visibilityState!=='hidden')diarioSyncNuvem(true)},60000);
+setTimeout(()=>{if(msOn()){trSyncNuvem(true);diarioSyncNuvem(true)}},2000);
 /* ===== Integrações: wger (instruções do treino), Google Books (cadastro de livro) e ntfy (avisos no celular) ===== */
 const WGER_TERMOS={'Agachamento':'squat','Supino':'bench press','Remada':'bent over row','Desenvolvimento':'overhead press','Prancha (segundos, 30 a 45)':'plank','Levantamento terra ou romeno':'romanian deadlift','Puxada':'lat pulldown','Afundo':'lunge','Elevação de quadril':'hip thrust','Abdômen':'crunch'};
 function htmlTexto(h){return String(h||'').replace(/<br\s*\/?>/gi,' ').replace(/<[^>]+>/g,'').replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim()}
@@ -2795,11 +2716,11 @@ function trPlanoHtml(){return trCartao('Exemplo de plano semanal','<div class="t
 function trCasaHtml(){const lista=a=>'<ol class="tr-passos">'+a.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ol>';
  return trCartao(esc(TR_CASA.titulo),'<p class="sub">'+esc(TR_CASA.nota)+'</p><details class="tr-det" open><summary><b>Treino A (corpo inteiro, terça)</b></summary>'+lista(TR_CASA.A)+'</details><details class="tr-det" open><summary><b>Treino B (corpo inteiro, quinta)</b></summary>'+lista(TR_CASA.B)+'</details><details class="tr-det"><summary><b>Cardio silencioso (substitui esteira e pular corda)</b></summary>'+lista(TR_CASA.cardio)+'</details>')}
 /* ===== Escuta entre dispositivos (OneDrive, pasta do aplicativo) ===== */
-function rdDevId(){let d=ls.get('device_id');if(!d){d=Math.random().toString(36).slice(2,10);ls.set('device_id',d)}return d}
+
 async function listenSync(){if(!msOn()||S.listenBusy)return;S.listenBusy=true;S.listenAt=Date.now();
  try{if(!await msEnsure())return;
   let own={};try{own=JSON.parse(ls.get('listen')||'{}')||{}}catch(_){}
-  const w=await gj('/me/drive/special/approot:/listen_'+rdDevId()+'.json:/content',{method:'PUT',body:JSON.stringify(own),headers:{'Content-Type':'application/json'}});
+  const w=await gj('/me/drive/special/approot:/listen_'+RADIO.rdDevId()+'.json:/content',{method:'PUT',body:JSON.stringify(own),headers:{'Content-Type':'application/json'}});
   if(!w.ok){say(w.status===401||w.status===403?'Ative o backup OneDrive em Ajustes para sincronizar a escuta':'Não foi possível sincronizar a escuta');return}
   const lst=await gj('/me/drive/special/approot/children?$select=name');
   const arquivos=((lst.j&&lst.j.value)||[]).filter(x=>/^listen_.*\.json$/.test(x.name));
@@ -2825,24 +2746,15 @@ function npCorDom(){const sec=document.querySelector('#view .np.npc');if(!sec){r
    npAplicarCor()};
  im.onerror=()=>{S.npCor='#c8102e';npAplicarCor()};im.src=url}
 /* ===== Rádio: fundo com a cor média do logotipo da emissora ===== */
-function rdAplicarCor(){const n=document.getElementById('notch');if(!n)return;const c=S.rdCor||'#c8102e';n.style.setProperty('--rdbg',c);
- const v=c[0]==='#'?[1,3,5].map(k=>parseInt(c.substr(k,2),16)):(c.match(/\d+/g)||[200,16,46]).slice(0,3).map(Number);
- const L=v.map(x=>{x=x/255;return x<=0.03928?x/12.92:Math.pow((x+0.055)/1.055,2.4)});const lum=0.2126*L[0]+0.7152*L[1]+0.0722*L[2];
- n.style.setProperty('--rdfg',lum>0.18?'#111111':'#ffffff');n.style.setProperty('--rdnav',lum>0.18?'rgba(0,0,0,0.08)':'rgba(255,255,255,0.14)')}
-function rdCorDom(){const n=document.getElementById('notch');if(!n||S.tab!=='radio')return;
- const st=S.rd.list[S.rd.cur];const url=st&&st.img;if(!url){S.rdCor='#c8102e';rdAplicarCor();return}
- if(S.rdCorUrl===url){rdAplicarCor();return}
- S.rdCorUrl=url;const im=new Image();im.crossOrigin='anonymous';
- im.onload=()=>{try{const c=document.createElement('canvas');c.width=c.height=8;const x=c.getContext('2d');x.drawImage(im,0,0,8,8);const d=x.getImageData(0,0,8,8).data;let r=0,g=0,b=0,k=0;for(let i=0;i<d.length;i+=4){r+=d[i];g+=d[i+1];b+=d[i+2];k++}
-   S.rdCor='rgb('+[r,g,b].map(v=>Math.round(v/k*0.8)).join(',')+')'}catch(_){S.rdCor='#c8102e'}rdAplicarCor()};
- im.onerror=()=>{S.rdCor='#c8102e';rdAplicarCor()};im.src=url}
+
+
 function semLogoDom(){const v=$('#view');if(!v||S.tab!=='radio'||v.querySelector('#semLogo'))return;
- const sem=S.rd.list.filter(x=>!x.img).map(x=>x.n);if(!sem.length)return;
+ const sem=RADIO.s.list.filter(x=>!x.img).map(x=>x.n);if(!sem.length)return;
  const box=document.createElement('details');box.id='semLogo';box.className='dt';box.style.margin='0.75rem 0';
  box.innerHTML='<summary>Emissoras sem logotipo ('+sem.length+')</summary><p class="sub" style="margin:0.4rem 0">Procure o logotipo destas e cole no botão de logotipo de cada emissora.</p><ul style="margin:0 0 0.5rem;padding-left:1.1rem">'+sem.map(n=>'<li>'+esc(n)+'</li>').join('')+'</ul><button type="button" class="chip" data-a="semlogocopy">Copiar lista</button> <button type="button" class="chip" data-a="rdlogos">Buscar logotipos</button>';
  v.appendChild(box)}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="semlogocopy"]');if(!b)return;
- const txt=S.rd.list.filter(x=>!x.img).map(x=>x.n).join('\n');
+ const txt=RADIO.s.list.filter(x=>!x.img).map(x=>x.n).join('\n');
  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(()=>say('Lista copiada'),()=>say('Não foi possível copiar'))}else say('Não foi possível copiar')});
 /* ===== Meu dia: linha do tempo editável, com treino selecionável ===== */
 const DIA_ICONES=[['lua','🌙','Dormir'],['sol','☀️','Sol'],['check','✅','Concluir'],['andar','🚶','Caminhar'],['halter','🏋️','Musculação'],['calor','🔥','Calor'],['flocos','❄️','Banho frio'],['garfo','🍽️','Refeição'],['almoco','🥗','Almoço'],['cafe','☕','Café'],['cardio','🏃','Cardio'],['bike','🚴','Bicicleta'],['natacao','🏊','Natação'],['yoga','🧘','Alongamento'],['agua','💧','Água'],['remedio','💊','Remédio'],['sono','😴','Soneca'],['banho','🚿','Banho'],['estudo','📚','Estudo'],['livro','📘','Leitura'],['reuniao','👥','Reunião'],['trabalho','💼','Trabalho'],['musica','🎧','Música'],['compras','🛒','Compras'],['casa','🏠','Casa'],['telefone','☎️','Ligação']];
@@ -2913,7 +2825,7 @@ document.addEventListener('change',e=>{const el=e.target;if(!el.dataset||!el.dat
 const LIV_PARTE=327680*32;
 async function livroNuvemEnviarGrande(id,blob){if(!msOn())return false;if(blob.size<=3500000)return livroNuvemEnviar(id,blob);
  try{if(!await msEnsure())return false;
-  const s=await gj('/me/drive/special/approot:/livros/'+id+'.epub:/createUploadSession',{method:'POST',body:JSON.stringify({item:{'@microsoft.graph.conflictBehavior':'replace'}})});
+  const s=await gj(livroNuvemCaminho(id,blob.type)+':/createUploadSession',{method:'POST',body:JSON.stringify({item:{'@microsoft.graph.conflictBehavior':'replace'}})});
   if(!s.ok||!s.j||!s.j.uploadUrl)return false;
   for(let a=0;a<blob.size;a+=LIV_PARTE){const b=Math.min(blob.size,a+LIV_PARTE);
    const r=await fetch(s.j.uploadUrl,{method:'PUT',headers:{'Content-Range':'bytes '+a+'-'+(b-1)+'/'+blob.size},body:blob.slice(a,b)});
@@ -3004,12 +2916,8 @@ document.addEventListener('toggle',e=>{if(e.target.id!=='spFila'||!e.target.open
  spApi('/me/player/queue').then(r=>{const c2=$('#spFilaCorpo');if(!c2)return;const fila=((r&&r.queue)||[]).filter(Boolean).slice(0,10);
   c2.innerHTML=fila.length?'<ol style="margin:0;padding-left:1.2rem;display:flex;flex-direction:column;gap:0.3rem">'+fila.map(t=>'<li><b>'+esc(t.name||'Faixa')+'</b> <span class="sub">· '+esc((t.artists||[]).map(a=>a.name).join(', '))+'</span></li>').join('')+'</ol>':'<p class="sub">Fila vazia ou indisponível. A fila aparece quando há reprodução ativa.</p>'})},true);
 /* ===== Rádio: qualidade (quando a emissora oferece versões) ===== */
-function radioQualDom(){const v=$('#view');if(!v||S.tab!=='radio'||v.querySelector('#rqual'))return;const n=(S.rd.niveis||[]).length;if(n<2)return;
- const ref=v.querySelector('#rvol');if(!ref)return;const sel=document.createElement('label');sel.className='sub';sel.style.cssText='display:flex;gap:0.5rem;align-items:center;margin-top:0.4rem';
- const cur=S.rd.hls&&S.rd.hls.currentLevel>=0?S.rd.hls.currentLevel:-1;
- sel.innerHTML='Qualidade <select id="rqual" aria-label="Qualidade do áudio" style="padding:0.4rem;border-radius:0.6rem;font:inherit"><option value="-1"'+(cur===-1?' selected':'')+'>Automática</option>'+S.rd.niveis.map(x=>'<option value="'+x.i+'"'+(cur===x.i?' selected':'')+'>'+x.k+' kbps</option>').join('')+'</select>';
- ref.insertAdjacentElement('afterend',sel)}
-document.addEventListener('change',e=>{if(e.target.id!=='rqual')return;const v=+e.target.value;if(S.rd.hls){S.rd.hls.currentLevel=v;say(v<0?'Qualidade automática':'Qualidade fixada em '+(S.rd.niveis.find(x=>x.i===v)||{k:''}).k+' kbps')}});
+
+document.addEventListener('change',e=>{if(e.target.id!=='rqual')return;const v=+e.target.value;if(RADIO.s.hls){RADIO.s.hls.currentLevel=v;say(v<0?'Qualidade automática':'Qualidade fixada em '+(RADIO.s.niveis.find(x=>x.i===v)||{k:''}).k+' kbps')}});
 /* ===== Compartilhar pelo sistema (tarefa, nota e compromisso) ===== */
 async function shareItem(titulo,texto,url){const dados={title:titulo,text:texto};if(url)dados.url=url;
  if(navigator.share){try{await navigator.share(dados);return}catch(e){if(e&&e.name==='AbortError')return}}
@@ -3184,17 +3092,17 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
 
 /* ===== Tela bloqueada e fones: anterior, próxima, tocar e pausar (Media Session) ===== */
 function msFonteRadio(){return apresFonte()!=='spotify'||!S.tok}
-function msTocando(){return msFonteRadio()?radioTocando():!!(S.m&&S.m.play)}
+function msTocando(){return msFonteRadio()?RADIO.radioTocando():!!(S.m&&S.m.play)}
 function msMeta(){if(!('mediaSession' in navigator)||typeof MediaMetadata==='undefined')return;
- try{if(msFonteRadio()){const r=S.rd.list[S.rd.cur];navigator.mediaSession.metadata=new MediaMetadata({title:r?r.n:'Rádio',artist:'Rádio ao vivo',album:'Painel',artwork:r&&r.img?[{src:r.img,sizes:'512x512',type:'image/png'}]:[]})}
+ try{if(msFonteRadio()){const r=RADIO.s.list[RADIO.s.cur];navigator.mediaSession.metadata=new MediaMetadata({title:r?r.n:'Rádio',artist:'Rádio ao vivo',album:'Painel',artwork:r&&r.img?[{src:r.img,sizes:'512x512',type:'image/png'}]:[]})}
   else{const t=S.m&&S.m.list&&S.m.list[S.m.i];if(t)navigator.mediaSession.metadata=new MediaMetadata({title:t.t||'Música',artist:t.a||'Spotify',album:t.al||'',artwork:t.img?[{src:t.img,sizes:'640x640',type:'image/jpeg'}]:[]})}
   navigator.mediaSession.playbackState=msTocando()?'playing':'paused'}catch(_){}}
 function msAcoes(){if(!('mediaSession' in navigator))return;const A=navigator.mediaSession;
  const set=(acao,fn)=>{try{A.setActionHandler(acao,fn)}catch(_){}};
- set('play',()=>{if(msFonteRadio()){if(!radioTocando())rdPlay(S.rd.cur)}else if(S.tok)spApi(spPlayPath(),{method:'PUT'})});
- set('pause',()=>{if(msFonteRadio()){if(radioTocando())rdStop()}else if(S.tok)spApi('/me/player/pause',{method:'PUT'})});
- set('nexttrack',()=>{if(msFonteRadio()){rdStep(1);setTimeout(msMeta,300)}else if(S.tok)spApi('/me/player/next',{method:'POST'}).then(()=>setTimeout(msMeta,500))});
- set('previoustrack',()=>{if(msFonteRadio()){rdStep(-1);setTimeout(msMeta,300)}else if(S.tok)spApi('/me/player/previous',{method:'POST'}).then(()=>setTimeout(msMeta,500))})}
+ set('play',()=>{if(msFonteRadio()){if(!RADIO.radioTocando())RADIO.rdPlay(RADIO.s.cur)}else if(S.tok)spApi(spPlayPath(),{method:'PUT'})});
+ set('pause',()=>{if(msFonteRadio()){if(RADIO.radioTocando())RADIO.rdStop()}else if(S.tok)spApi('/me/player/pause',{method:'PUT'})});
+ set('nexttrack',()=>{if(msFonteRadio()){RADIO.rdStep(1);setTimeout(msMeta,300)}else if(S.tok)spApi('/me/player/next',{method:'POST'}).then(()=>setTimeout(msMeta,500))});
+ set('previoustrack',()=>{if(msFonteRadio()){RADIO.rdStep(-1);setTimeout(msMeta,300)}else if(S.tok)spApi('/me/player/previous',{method:'POST'}).then(()=>setTimeout(msMeta,500))})}
 agendar(msMeta,4000);
 setTimeout(msAcoes,1500);
 /* ===== Clima e localização: feriados (BrasilAPI), OpenFoodFacts, Last.fm, IQAir, rádio e alerta de treino ===== */
@@ -3225,10 +3133,7 @@ agendar(treinoAlertaClima,600000);
 /* ===== Ligações: código de barras (Meu dia), filtros de rádio, Last.fm e qualidade do ar ===== */
 function offDom(){const v=$('#view');if(!v||S.tab!=='dia')return;v.querySelectorAll('.dia-card').forEach(card=>{if(!card.querySelector('textarea[data-k="ref"]')||card.querySelector('#offCod'))return;
  const b=document.createElement('div');b.className='dia-treino';b.innerHTML='<label>Código de barras do produto<span class="tr-acoes" style="margin:0"><input id="offCod" inputmode="numeric" placeholder="Ex.: 7891000100103" aria-label="Código de barras" style="flex:1;min-width:0"><button type="button" class="chip" data-a="offbusca">Buscar</button></span></label><p id="offRes" class="sub" role="status" style="margin:0"></p>';card.appendChild(b)})}
-function radioFiltrosDom(){const v=$('#view');if(!v||S.tab!=='radio'||v.querySelector('#rsfiltros'))return;const f=v.querySelector('#rsform');if(!f)return;
- const d=document.createElement('div');d.id='rsfiltros';d.style.cssText='display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;margin:0.4rem 0';
- d.innerHTML='<label class="sub" style="display:flex;gap:0.3rem;align-items:center">Idioma <input id="rsidioma" placeholder="ex.: portuguese" aria-label="Idioma das rádios" style="padding:0.4rem;border-radius:0.6rem;font:inherit;width:9rem"></label><label class="sub" style="display:flex;gap:0.3rem;align-items:center">Bitrate mínimo <select id="rsbit" aria-label="Bitrate mínimo" style="padding:0.4rem;border-radius:0.6rem;font:inherit"><option value="0">Qualquer</option><option value="64">64 kbps</option><option value="128">128 kbps</option><option value="192">192 kbps</option></select></label>';
- f.insertAdjacentElement('afterend',d)}
+
 agendar(()=>{if(ls.get('iqair_key'))arLivreAlerta()},1800000);
 /* ===== Contas a pagar: lê boleto (código de barras ou linha digitável) e guarda vencimento e valor ===== */
 function contasLer(){try{const l=JSON.parse(ls.get('contas')||'[]');return Array.isArray(l)?l:[]}catch(_){return []}}
@@ -3305,37 +3210,14 @@ window.addEventListener('online',syncAtualizar);window.addEventListener('offline
 agendar(syncAtualizar,5000);
 setTimeout(syncDom,800);
 /* ===== Logotipos das emissoras já salvas: busca no catálogo pelo nome (com limite de tentativas) ===== */
-function rdLogoTent(){try{return JSON.parse(ls.get('rd_logo_tent')||'{}')||{}}catch(_){return {}}}
-async function rdLogosBuscar(){if(S.rdLogoBusy)return;S.rdLogoBusy=true;let tent=rdLogoTent();let n=0;if(ls.get('rd_logo_v')!=='2'){tent={};ls.del('rd_logo_tent');ls.set('rd_logo_v','2')}
- try{const pend=S.rd.list.filter(x=>x&&x.u&&!x.img&&(tent[x.u]||0)<2).slice(0,15);
-  if(!pend.length){say('Todas as emissoras já têm logotipo ou já foram tentadas');return}
-  say('Buscando logotipos… '+pend.length+' emissora(s)');
-  for(const x of pend){tent[x.u]=(tent[x.u]||0)+1;
-   const porUrl=await rbPorUrl(x.u);const fv=(porUrl||[]).find(c=>c&&c.favicon&&/^https?:\/\/\S+$/i.test(String(c.favicon)));
-   if(fv){x.img=String(fv.favicon).replace(/^http:/i,'https:');n++;await new Promise(res=>setTimeout(res,600));continue}
-   let r=[];try{r=await rbFetch({name:String(x.n||''),limit:'10',hidebroken:'true'})}catch(_){r=[]}
-   const nome=String(x.n||'').trim().toLowerCase();
-   const cand=(Array.isArray(r)?r:[]).filter(c=>c&&c.favicon&&String(c.name||'').trim().toLowerCase()===nome&&/^https?:\/\/\S+$/i.test(String(c.favicon)));
-   let host='';try{host=new URL(x.u).host}catch(_){}
-   const best=cand.find(c=>{try{return new URL(c.url_resolved||c.url).host===host}catch(_){return false}})||cand[0];
-   if(best){x.img=String(best.favicon).replace(/^http:/i,'https:');n++}
-   await new Promise(res=>setTimeout(res,1200))}
-  ls.set('rd_logo_tent',JSON.stringify(tent));
-  if(n){rdSaveList();view()}
-  say(n?n+' logotipo(s) encontrado(s)':'Nenhum logotipo encontrado nesta busca. Cole o endereço manualmente')
- }finally{S.rdLogoBusy=false}}
-document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="rdlogos"]');if(b)rdLogosBuscar()});
+
+
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="rdlogos"]');if(b)RADIO.rdLogosBuscar()});
 /* ===== Rádio: explorar por gênero e estado, e remover emissoras ===== */
 const RD_GENEROS=['sertanejo','samba','mpb','forro','rock','jazz','gospel','noticias','lofi','pop','funk','classica'];
 const RD_ESTADOS=['sao paulo','minas gerais','rio de janeiro','rio grande do sul','parana','bahia','pernambuco','santa catarina','ceara','goias'];
-function rdJaSalva(u){return S.rd.list.some(x=>x&&x.u===u)}
-function rdExplorarDom(){const v=$('#view');if(!v||S.tab!=='radio'||v.querySelector('#rdExplorar'))return;
- const box=document.createElement('details');box.id='rdExplorar';box.className='dt';box.style.margin='0.75rem 0';
- box.innerHTML='<summary>Explorar emissoras</summary>'+
-  '<p class="sub" style="margin:0.4rem 0 0.2rem">Gênero</p><div role="group" aria-label="Gêneros" style="display:flex;gap:0.4rem;flex-wrap:wrap">'+RD_GENEROS.map(g=>'<button type="button" class="chip" data-a="rdexp" data-k="tag" data-v="'+g+'">'+g+'</button>').join('')+'</div>'+
-  '<p class="sub" style="margin:0.6rem 0 0.2rem">Estado (Brasil)</p><div role="group" aria-label="Estados" style="display:flex;gap:0.4rem;flex-wrap:wrap">'+RD_ESTADOS.map(g=>'<button type="button" class="chip" data-a="rdexp" data-k="state" data-v="'+g+'">'+g.replace(/\b\w/g,c=>c.toUpperCase())+'</button>').join('')+'</div>'+
-  '<div id="rdExpRes" role="region" aria-live="polite" style="margin-top:0.6rem"></div>';
- const f=v.querySelector('#rsfiltros')||v.querySelector('#rsform');if(f)f.insertAdjacentElement('afterend',box);else v.appendChild(box)}
+
+
 document.addEventListener('click',async e=>{const b=e.target.closest&&e.target.closest('[data-a="rdexp"]');if(!b)return;
  const out=$('#rdExpRes');if(out)out.innerHTML='<p class="sub">Buscando…</p>';
  const par={countrycode:'BR',hidebroken:'true',order:'clickcount',reverse:'true',limit:'20'};par[b.dataset.k]=b.dataset.v;
@@ -3343,28 +3225,25 @@ document.addEventListener('click',async e=>{const b=e.target.closest&&e.target.c
  const vis=new Set();const itens=(Array.isArray(r)?r:[]).filter(x=>{const u=String(x.url_resolved||x.url||'').replace(/^http:/i,'https:');if(!/^https:\/\/\S+$/i.test(u)||vis.has(u))return false;vis.add(u);x._u=u;return true});
  if(!out)return;
  if(!itens.length){out.innerHTML='<p class="sub">Nenhuma emissora encontrada para este filtro.</p>';return}
- out.innerHTML='<ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.4rem">'+itens.slice(0,20).map(x=>{const j=rdJaSalva(x._u);const img=String(x.favicon||'').replace(/^http:/i,'https:');const ok=/^https:\/\/\S+$/i.test(img)?img:'';
+ out.innerHTML='<ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.4rem">'+itens.slice(0,20).map(x=>{const j=RADIO.rdJaSalva(x._u);const img=String(x.favicon||'').replace(/^http:/i,'https:');const ok=/^https:\/\/\S+$/i.test(img)?img:'';
   return '<li style="display:flex;justify-content:space-between;gap:0.5rem;align-items:center"><span style="min-width:0;overflow-wrap:anywhere"><b>'+esc(String(x.name||'Rádio').trim().slice(0,40))+'</b><br><span class="sub" style="font-size:0.8rem">'+esc([x.country,(x.codec||'').toUpperCase(),x.bitrate?x.bitrate+' kbps':''].filter(Boolean).join(' · '))+'</span></span>'+
   (j?'<span class="sub">Já salva</span>':'<button type="button" class="chip" data-a="rdexpadd" data-u="'+esc(x._u)+'" data-n="'+esc(String(x.name||'Rádio').trim().slice(0,40))+'" data-img="'+esc(ok)+'" aria-label="Adicionar '+esc(String(x.name||'Rádio'))+'">Adicionar</button>')+'</li>'}).join('')+'</ul>'});
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="rdexpadd"]');if(!b)return;
- if(rdJaSalva(b.dataset.u)){say('Essa emissora já está salva');return}
- S.rd.list.push({n:b.dataset.n,u:b.dataset.u,g:'Explorar',img:b.dataset.img||''});rdSaveList();b.textContent='Adicionada';b.disabled=true;say(b.dataset.n+' adicionada');view()});
+ if(RADIO.rdJaSalva(b.dataset.u)){say('Essa emissora já está salva');return}
+ RADIO.s.list.push({n:b.dataset.n,u:b.dataset.u,g:'Explorar',img:b.dataset.img||''});RADIO.rdSaveList();b.textContent='Adicionada';b.disabled=true;say(b.dataset.n+' adicionada');view()});
 /* remover emissora específica */
-function rdGerenciarDom(){const v=$('#view');if(!v||S.tab!=='radio'||v.querySelector('#rdGerenciar'))return;if(!S.rd.list.length)return;
- const box=document.createElement('details');box.id='rdGerenciar';box.className='dt';box.style.margin='0.75rem 0';
- box.innerHTML='<summary>Gerenciar emissoras ('+S.rd.list.length+')</summary><ul style="list-style:none;margin:0.5rem 0 0;padding:0;display:flex;flex-direction:column;gap:0.4rem">'+S.rd.list.map((x,i)=>'<li data-rdi="'+i+'" style="display:flex;justify-content:space-between;gap:0.5rem;align-items:center"><span style="min-width:0;overflow-wrap:anywhere">'+esc(x.n||'Emissora')+'</span><button type="button" class="chip" data-a="rdrem" data-i="'+i+'" aria-label="Remover '+esc(x.n||'emissora')+'">Remover</button></li>').join('')+'</ul>';
- const ref=v.querySelector('#rdExplorar')||v.querySelector('#rsfiltros')||v.querySelector('#rsform');if(ref)ref.insertAdjacentElement('afterend',box);else v.appendChild(box)}
-document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="rdrem"]');if(!b)return;const i=+b.dataset.i;const x=S.rd.list[i];if(!x)return;
+
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="rdrem"]');if(!b)return;const i=+b.dataset.i;const x=RADIO.s.list[i];if(!x)return;
  
- const tocando=S.rd.i===i||S.rd.cur===i;
- if(tocando)rdStop();
- const eraFav=Array.isArray(S.rd.favs)&&S.rd.favs.includes(x.u);
- S.rd.list.splice(i,1);
- if(Array.isArray(S.rd.favs))S.rd.favs=S.rd.favs.filter(u=>u!==x.u);
- if(S.rd.cur>i)S.rd.cur--;else if(S.rd.cur===i)S.rd.cur=Math.max(0,Math.min(S.rd.cur,S.rd.list.length-1));
- if(S.rd.i>i)S.rd.i--;
- rdSaveList();try{ls.set('rd_favs',JSON.stringify(S.rd.favs||[]))}catch(_){}
- say('Emissora removida');view();avisoDesfazer('Emissora "'+(x.n||'')+'" removida',()=>{const L=S.rd.list;const at=Math.min(i,L.length);L.splice(at,0,x);if(eraFav&&!S.rd.favs.includes(x.u))S.rd.favs.push(x.u);if(S.rd.cur>=at)S.rd.cur++;rdSaveList();try{ls.set('rd_favs',JSON.stringify(S.rd.favs||[]))}catch(_){}view()})});
+ const tocando=RADIO.s.i===i||RADIO.s.cur===i;
+ if(tocando)RADIO.rdStop();
+ const eraFav=Array.isArray(RADIO.s.favs)&&RADIO.s.favs.includes(x.u);
+ RADIO.s.list.splice(i,1);
+ if(Array.isArray(RADIO.s.favs))RADIO.s.favs=RADIO.s.favs.filter(u=>u!==x.u);
+ if(RADIO.s.cur>i)RADIO.s.cur--;else if(RADIO.s.cur===i)RADIO.s.cur=Math.max(0,Math.min(RADIO.s.cur,RADIO.s.list.length-1));
+ if(RADIO.s.i>i)RADIO.s.i--;
+ RADIO.rdSaveList();try{ls.set('rd_favs',JSON.stringify(RADIO.s.favs||[]))}catch(_){}
+ say('Emissora removida');view();avisoDesfazer('Emissora "'+(x.n||'')+'" removida',()=>{const L=RADIO.s.list;const at=Math.min(i,L.length);L.splice(at,0,x);if(eraFav&&!RADIO.s.favs.includes(x.u))RADIO.s.favs.push(x.u);if(RADIO.s.cur>=at)RADIO.s.cur++;RADIO.rdSaveList();try{ls.set('rd_favs',JSON.stringify(RADIO.s.favs||[]))}catch(_){}view()})});
 /* ===== Desfazer: aviso com botão por 8 segundos (rádio e Meu dia) ===== */
 let undoT=0;
 function avisoDesfazer(msg,fn){clearTimeout(undoT);document.getElementById('desfazerBox')?.remove();
@@ -3385,23 +3264,16 @@ function contasAvDom(){const box=$('#contasBox');if(!box||box.querySelector('#co
  p.innerHTML='Avisar com antecedência de <select id="contasAv" aria-label="Antecedência do aviso de contas" style="padding:0.4rem;border-radius:0.6rem;font:inherit">'+[0,1,2,3,5,7,14].map(n=>'<option value="'+n+'"'+(contasAntecedencia()===n?' selected':'')+'>'+(n===0?'o dia do vencimento':n+' dia(s)')+'</option>').join('')+'</select>';
  box.insertAdjacentElement('beforeend',p)}
 document.addEventListener('change',e=>{if(e.target.id==='contasAv'){ls.set('contas_av',e.target.value);say('Antecedência salva')}});
-function rdExpMais(){const st=S.rdExp;if(!st)return;const out=$('#rdExpRes');if(!out)return;st.off+=20;
- rbFetch(Object.assign({},st.par,{offset:String(st.off)})).then(r=>{const vis=new Set(S.rd.list.map(x=>x.u));const itens=(Array.isArray(r)?r:[]).filter(x=>{const u=String(x.url_resolved||x.url||'').replace(/^http:/i,'https:');if(!/^https:\/\/\S+$/i.test(u)||vis.has(u))return false;vis.add(u);x._u=u;return true});
-  const ul=out.querySelector('ul');if(!ul||!itens.length){say('Não há mais resultados');return}
-  ul.insertAdjacentHTML('beforeend',itens.map(x=>'<li style="display:flex;justify-content:space-between;gap:0.5rem;align-items:center"><span style="min-width:0;overflow-wrap:anywhere"><b>'+esc(String(x.name||'Rádio').trim().slice(0,40))+'</b></span><button type="button" class="chip" data-a="rdexpadd" data-u="'+esc(x._u)+'" data-n="'+esc(String(x.name||'Rádio').trim().slice(0,40))+'" data-img="">Adicionar</button></li>').join(''))}).catch(()=>{})}
-document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="rdexpmais"]');if(b)rdExpMais()});
+
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="rdexpmais"]');if(b)RADIO.rdExpMais()});
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="rdexp"]');if(!b)return;const par={countrycode:'BR',hidebroken:'true',order:'clickcount',reverse:'true',limit:'20'};par[b.dataset.k]=b.dataset.v;S.rdExp={par,off:0};
  setTimeout(()=>{const out=$('#rdExpRes');if(out&&!out.querySelector('[data-a="rdexpmais"]')&&out.querySelector('ul'))out.insertAdjacentHTML('beforeend','<p><button type="button" class="chip" data-a="rdexpmais">Ver mais</button></p>')},1500)});
-function rdOrdenarDom(){const v=$('#view');const box=v&&v.querySelector('#rdGerenciar');if(!box||box.querySelector('#rdOrdem'))return;
- const p=document.createElement('label');p.className='sub';p.style.cssText='display:flex;gap:0.5rem;align-items:center;margin:0.5rem 0';
- p.innerHTML='Ordenar por <select id="rdOrdem" aria-label="Ordenar emissoras" style="padding:0.4rem;border-radius:0.6rem;font:inherit"><option value="">Ordem atual</option><option value="nome">Nome (A a Z)</option><option value="genero">Gênero</option></select>';
- box.querySelector('summary').insertAdjacentElement('afterend',p)}
-document.addEventListener('change',e=>{if(e.target.id!=='rdOrdem')return;const v=e.target.value;if(!v)return;const cur=S.rd.list[S.rd.cur];
+
+document.addEventListener('change',e=>{if(e.target.id!=='rdOrdem')return;const v=e.target.value;if(!v)return;const cur=RADIO.s.list[RADIO.s.cur];
  const cmp=v==='nome'?(a,b)=>String(a.n||'').localeCompare(String(b.n||''),'pt-BR'):(a,b)=>String(a.g||'').localeCompare(String(b.g||''),'pt-BR')||String(a.n||'').localeCompare(String(b.n||''),'pt-BR');
- S.rd.list.sort(cmp);if(cur){const k=S.rd.list.indexOf(cur);if(k>=0)S.rd.cur=k}rdSaveList();say('Lista ordenada');view()});
-document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="rdmove"]');if(!b)return;rdMove(+b.dataset.i,+b.dataset.d);view()});
-function rdMoverDom(){const v=$('#view');const box=v&&v.querySelector('#rdGerenciar');if(!box)return;box.querySelectorAll('li[data-rdi]').forEach(li=>{if(li.querySelector('[data-a="rdmove"]'))return;const i=+li.dataset.rdi;const n=S.rd.list.length;
- const g=document.createElement('span');g.style.cssText='display:flex;gap:0.3rem';g.innerHTML='<button type="button" class="chip" data-a="rdmove" data-i="'+i+'" data-d="-1"'+(i===0?' disabled':'')+' aria-label="Subir '+esc(S.rd.list[i].n||'emissora')+'">↑</button><button type="button" class="chip" data-a="rdmove" data-i="'+i+'" data-d="1"'+(i===n-1?' disabled':'')+' aria-label="Descer '+esc(S.rd.list[i].n||'emissora')+'">↓</button>';li.insertBefore(g,li.querySelector('[data-a="rdrem"]'))})}
+ RADIO.s.list.sort(cmp);if(cur){const k=RADIO.s.list.indexOf(cur);if(k>=0)RADIO.s.cur=k}RADIO.rdSaveList();say('Lista ordenada');view()});
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="rdmove"]');if(!b)return;RADIO.rdMove(+b.dataset.i,+b.dataset.d);view()});
+
 /* ===== Backup: pré-visualização, exportação parcial. Kanban: filtro por etiqueta e gesto. Música: sugestões de busca ===== */
 const BK_GRUPOS={treinos:{n:'Treinos',k:['treino_ex','treino_hist','treino_atual','treino_cardio','treino_del','treino_ex_del','treino_metas']},meu_dia:{n:'Meu dia',k:['meu_dia_dias','meu_dia_ultima','meu_dia_feito']},kanban:{n:'Kanban',k:['kanban','kb_plano','kb_rev','kb_distr','kb_cols','kb_del','kb_list']},contas:{n:'Contas',k:['contas']},casa:{n:'Casa',k:['compras','estoque','manutencao']},peso:{n:'Peso',k:['peso']},radio:{n:'Rádio',k:['radios','rd_favs','rd_hist','rd_sched']},livros:{n:'Livros',k:['livros','livro_ativo','livros_del']}};
 function bkResumoTexto(d){const linhas=[];for(const g of Object.keys(BK_GRUPOS)){const G=BK_GRUPOS[g];let qtd=0,tem=false;G.k.forEach(k=>{if(typeof d[k]!=='string')return;tem=true;try{const v=JSON.parse(d[k]);qtd+=Array.isArray(v)?v.length:(v&&typeof v==='object'?Object.keys(v).length:1)}catch(_){qtd+=1}});if(tem)linhas.push(G.n+': '+qtd+(qtd===1?' item':' itens'))}
@@ -3608,8 +3480,7 @@ function tplAdd(k){const tp=tplAll()[k];if(!tp)return;const hoje=dayKey(new Date
  tp.itens.forEach((t,i)=>{S.tasks.unshift({id:'m'+now.toString(36)+i,t,w:'',c:0,d:false,due:hoje,r:tp.r||'',mod:now})});
  save();view();say(tp.n+': '+tp.itens.length+' tarefas adicionadas')}
 function overdueHtml(){const hoje=dayKey(new Date());const n=(S.tasks||[]).filter(t=>!t.d&&t.due&&t.due<hoje).length;return n?'<div class="note" role="status">'+n+' tarefa(s) atrasada(s).</div>':''}
-function radioHistHtml(){let h=[];try{h=JSON.parse(ls.get('rd_hist')||'[]')||[]}catch(_){}if(!Array.isArray(h)||!h.length)return '';
- return '<details class="dt" style="margin-top:0.75rem"><summary>Tocadas recentemente</summary><ul class="svlist">'+h.map(n=>{const i=S.rd.list.findIndex(x=>x.n===n);return i<0?'':'<li class="svd"><button type="button" class="svdbtn" data-a="rpick" data-i="'+i+'"><span class="grow">'+esc(n)+'</span></button></li>'}).join('')+'</ul></details>'}
+
 async function spReplay(uri){await spApi(spPlayPath(),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({uris:[uri]})})}
 async function spHistLoad(){const box=$('#hsthist');if(!box)return;const r=await spApi('/me/player/recently-played?limit=20');const items=(r&&r.items)||[];const seen=new Set();const list=[];
  items.forEach(it=>{const t=it.track;if(!t||seen.has(t.uri))return;seen.add(t.uri);list.push(t)});
@@ -3758,9 +3629,9 @@ function freeGaps(){const now=Date.now(),hoje=dayKey(new Date());const ev=(S.ev|
  return out}
 function gapsHtml(){const g=freeGaps();if(!g.length)return '';return '<div class="tp-card" style="margin:0 0 10px"><div class="tp-k">Intervalos livres hoje</div>'+g.map(x=>'<div class="tp-s" style="font-size:0.875rem;color:var(--ink)">'+x.min+' min entre "'+x.de+'" e "'+x.ate+'"</div>').join('')+'</div>'}
 function schedHtml(){const sc=(()=>{try{return JSON.parse(ls.get('rd_sched')||'null')}catch(_){return null}})();
- const opts=S.rd.list.map((x,i)=>x.u?'<option value="'+i+'"'+(sc&&sc.i===i?' selected':'')+'>'+esc(x.n||('Emissora '+(i+1)))+'</option>':'').join('');
+ const opts=RADIO.s.list.map((x,i)=>x.u?'<option value="'+i+'"'+(sc&&sc.i===i?' selected':'')+'>'+esc(x.n||('Emissora '+(i+1)))+'</option>':'').join('');
  return '<details class="dt" style="margin-top:0.75rem"><summary>Programar horário</summary><div class="add" style="margin:0.5rem 0 0"><label class="sr" for="rschT">Horário</label><input type="time" id="rschT" value="'+(sc?sc.t:'07:00')+'"><label class="sr" for="rschI">Emissora</label><select id="rschI">'+opts+'</select><button type="button" class="chip" data-a="rschSet">Programar</button></div>'+
- (sc?'<p class="sub" style="margin:0.5rem 0 0">Programada para '+sc.t+' · '+esc(S.rd.list[sc.i]?S.rd.list[sc.i].n:'emissora')+' <button type="button" class="chip" data-a="rschDel" style="margin-left:0.375rem">Cancelar</button></p>':'')+'<p class="sub" style="margin:0.375rem 0 0">Funciona com o painel aberto. O navegador pode bloquear o som sem um toque antes.</p></details>'}
+ (sc?'<p class="sub" style="margin:0.5rem 0 0">Programada para '+sc.t+' · '+esc(RADIO.s.list[sc.i]?RADIO.s.list[sc.i].n:'emissora')+' <button type="button" class="chip" data-a="rschDel" style="margin-left:0.375rem">Cancelar</button></p>':'')+'<p class="sub" style="margin:0.375rem 0 0">Funciona com o painel aberto. O navegador pode bloquear o som sem um toque antes.</p></details>'}
 function tvSchedHtml(){let sc;try{sc=JSON.parse(ls.get('tv_sched')||'null')}catch(_){}
  const opts=(S.tv.list||[]).map((x,i)=>x.u?'<option value="'+i+'"'+(sc&&sc.i===i?' selected':'')+'>'+esc(x.n)+'</option>':'').join('');
  return '<details class="dt" style="margin-top:0.75rem"><summary>Programar horário</summary><div class="add" style="margin:0.5rem 0 0"><label class="sr" for="tvschT">Horário</label><input type="time" id="tvschT" value="'+(sc?sc.t:'19:00')+'"><label class="sr" for="tvschI">Canal</label><select id="tvschI">'+opts+'</select><button type="button" class="chip" data-a="tvschSet">Programar</button></div>'+
@@ -3769,10 +3640,8 @@ function tvSchedCheck(){let sc;try{sc=JSON.parse(ls.get('tv_sched')||'null')}cat
  const now=new Date(),hm=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0'),hoje=dayKey(now);
  if(hm===sc.t&&sc.last!==hoje){sc.last=hoje;ls.set('tv_sched',JSON.stringify(sc));S.tv.cur=sc.i;pick('tv');say('Programação: abrindo '+S.tv.list[sc.i].n)}}
 agendar(tvSchedCheck,30000);
-function rdSchedCheck(){let sc;try{sc=JSON.parse(ls.get('rd_sched')||'null')}catch(_){return}if(!sc||!S.rd.list[sc.i]||!S.rd.list[sc.i].u)return;
- const now=new Date(),hm=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0'),hoje=dayKey(now);
- if(hm===sc.t&&sc.last!==hoje){sc.last=hoje;ls.set('rd_sched',JSON.stringify(sc));try{rdPlay(sc.i);say('Programação: tocando '+rdName(sc.i))}catch(_){say('Não foi possível iniciar a programação')}}}
-agendar(rdSchedCheck,30000);
+
+agendar(RADIO.rdSchedCheck,30000);
 S.estudo=ls.get('modo_estudo')==='1';
 agendar(()=>{if(ls.get('bk_lembrete')!=='1')return;const last=+(ls.get('bk_last')||0),avisado=+(ls.get('bk_avisado')||0);const sem=7*864e5;
  if(Date.now()-last>sem&&Date.now()-avisado>sem){ls.set('bk_avisado',String(Date.now()));say('Lembrete: exporte um backup do painel em Ajustes');if(window.Notification&&Notification.permission==='granted')new Notification('Backup do painel',{body:'Exporte um backup em Ajustes.'})}},3600000);
@@ -3786,7 +3655,7 @@ function weekHtml(){const ini=weekStart(cd()),hoje=dayKey(new Date());const evs=
    return '<div style="display:flex;gap:0.625rem;padding:0.5rem 0;border-top:1px solid rgba(255,255,255,.08)"><div style="width:4.625rem;flex:none;'+(k===hoje?'font-weight:700;color:var(--acc,#fff)':'')+'">'+x.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit'})+'</div><ul style="margin:0;padding:0 0 0 14px;flex:1;min-width:0">'+(linhas||'<li class="sub" style="font-size:0.8125rem;list-style:none;margin-left:-14px">Livre</li>')+'</ul></div>'}).join('')+'</section>'}
 function notes(){const v=$('#view');if(!v)return;v.querySelectorAll('.note').forEach(n=>n.remove());
  if(S.tab==='cal'&&S.cweek)v.insertAdjacentHTML('afterbegin',weekHtml());
- if(S.tab==='radio')v.insertAdjacentHTML('beforeend',schedHtml());radioExtrasDom();
+ if(S.tab==='radio')v.insertAdjacentHTML('beforeend',schedHtml());RADIO.radioExtrasDom();
  if(S.tab==='tv')v.insertAdjacentHTML('beforeend',tvSchedHtml());
  if(S.tab==='cal')v.insertAdjacentHTML('afterbegin',gapsHtml());
  if(S.tab==='pomo')v.insertAdjacentHTML('beforeend',pomoMonthHtml());if(S.tab==='pomo')v.insertAdjacentHTML('beforeend','<button type="button" class="chip" data-a="estudo" aria-pressed="'+(!!S.estudo)+'" style="margin-top:0.75rem">'+(S.estudo?'Desligar modo estudo':'Modo estudo: rádio de fundo')+'</button>');
@@ -3800,13 +3669,13 @@ function notes(){const v=$('#view');if(!v)return;v.querySelectorAll('.note').for
  if(grupoFerr()){utilExtraDom();lixeiraDom()}
  if(S.tab==='kanban')plannerSecaoDom();
  listenAuto();
- if(S.tab==='radio'){rdCorDom();semLogoDom();radioQualDom();rdExplorarDom();rdGerenciarDom();rdOrdenarDom();rdMoverDom();if(!S.rdLogoAuto){S.rdLogoAuto=1;rdLogosBuscar()}}
+ if(S.tab==='radio'){RADIO.rdCorDom();semLogoDom();RADIO.radioQualDom();RADIO.rdExplorarDom();RADIO.rdGerenciarDom();RADIO.rdOrdenarDom();RADIO.rdMoverDom();if(!S.rdLogoAuto){S.rdLogoAuto=1;RADIO.rdLogosBuscar()}}
  if(S.tab==='livros')livrosAutoSync();
- if(S.tab==='set'){bkParcialDom();bkCifradoDom()}
+ if(S.tab==='set'){bkParcialDom();bkCifradoDom();diarioSenhaDom()}
  if(S.tab==='kanban')kbFiltroDom();
  if(S.tab==='music')spSugsDatalist();
  if(S.tab==='dia')offDom();
- if(S.tab==='radio')radioFiltrosDom();
+ if(S.tab==='radio')RADIO.radioFiltrosDom();
  if(S.tab==='music')lfmDom();
  if(S.tab==='cal')evShareDom();
  
@@ -3816,7 +3685,7 @@ function notes(){const v=$('#view');if(!v)return;v.querySelectorAll('.note').for
  if(S.tab==='music')npCorDom();
  sonoBtnDom();
  if(S.tab==='cal')feriadoAvisoDom();
- if(S.tab==='radio')v.insertAdjacentHTML('beforeend',radioHistHtml());
+ if(S.tab==='radio')v.insertAdjacentHTML('beforeend',RADIO.radioHistHtml());
  if(S.tab==='cal'){if(!S.cweek)v.insertAdjacentHTML('beforeend','<button type="button" class="chip" data-a="cweek" aria-pressed="false" style="margin-top:0.5rem">Ver semana</button>');v.insertAdjacentHTML('beforeend',linksHtml());v.insertAdjacentHTML('beforeend','<button type="button" class="chip" data-a="ics" style="margin-top:0.75rem">Exportar agenda (.ics)</button>');v.insertAdjacentHTML('beforeend',evForm());v.insertAdjacentHTML('beforeend',evDelHtml())}
  if(S.tab==='set')v.insertAdjacentHTML('beforeend','<details class="dt" style="margin-top:0.75rem"><summary>Animações</summary><label class="opt row" style="margin:0.5rem 0"><input type="checkbox" id="oBgAnim"'+(ls.get('bg_anim')!=='0'?' checked':'')+'><span>Fundo que muda com a hora (no modo escuro)</span></label><label class="opt row" style="margin:0.5rem 0"><input type="checkbox" id="oSlide"'+(ls.get('slide_on')!=='0'?' checked':'')+'><span>Deslizar ao trocar de aba</span></label><p class="sub" style="margin:0.25rem 0 0">Se o sistema pedir menos movimento, as animações ficam desligadas.</p></details><details class="dt" style="margin-top:0.75rem"><summary>Lembrete de backup</summary><p class="sub" style="margin:0.375rem 0">Avisa uma vez por semana para exportar um backup em arquivo. O backup do OneDrive continua automático.</p><button type="button" class="chip" data-a="bkrem" aria-pressed="'+(ls.get('bk_lembrete')==='1')+'">'+(ls.get('bk_lembrete')==='1'?'Desligar lembrete':'Ligar lembrete semanal')+'</button></details><details class="dt" style="margin-top:0.75rem"><summary>Pausa longa</summary><label style="display:flex;gap:0.625rem;align-items:center;margin:0.5rem 0">Após quantos ciclos <select id="plongN">'+[2,3,4,5,6,8].map(n=>'<option value="'+n+'"'+(pomoLongAfter()===n?' selected':'')+'>'+n+' ciclos</option>').join('')+'</select></label><p class="sub" style="margin:0">A pausa vira longa depois desse número de ciclos de foco.</p></details>');if(S.tab==='set'&&S.tok)v.insertAdjacentHTML('beforeend','');if(S.tab==='set')v.insertAdjacentHTML('beforeend','<details class="dt" style="margin-top:0.75rem"><summary>Sons do foco</summary><label style="display:flex;gap:0.625rem;align-items:center;margin:0.5rem 0">Início do foco <select id="sndIni">'+[[880,'Agudo'],[659,'Médio'],[784,'Alto']].map(([f,n])=>'<option value="'+f+'"'+((+ls.get('snd_ini')||880)===f?' selected':'')+'>'+n+'</option>').join('')+'</select></label><label style="display:flex;gap:0.625rem;align-items:center;margin:0.5rem 0">Fim do foco <select id="sndFim">'+[[523,'Grave'],[392,'Médio'],[659,'Agudo']].map(([f,n])=>'<option value="'+f+'"'+((+ls.get('snd_fim')||523)===f?' selected':'')+'>'+n+'</option>').join('')+'</select></label></details><details class="dt" style="margin-top:0.75rem"><summary>Tema</summary><div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin:0.5rem 0"><button type="button" class="chip" data-a="tpreset" data-k="padrao">Padrão</button><button type="button" class="chip" data-a="tpreset" data-k="azul">Noite azul</button><button type="button" class="chip" data-a="tpreset" data-k="floresta">Floresta</button><button type="button" class="chip" data-a="tpreset" data-k="roxo">Roxo</button><button type="button" class="chip" data-a="tpreset" data-k="claro">Claro</button></div><label style="display:flex;gap:0.625rem;align-items:center;margin:0.5rem 0">Fundo <input type="color" id="thBg" value="'+(temaAtual().bg||'#000000')+'"></label><label style="display:flex;gap:0.625rem;align-items:center;margin:0.5rem 0">Texto <input type="color" id="thInk" value="'+(temaAtual().ink||'#ffffff')+'"></label><label style="display:flex;gap:0.625rem;align-items:center;margin:0.5rem 0">Cartões <input type="color" id="thRow" value="'+(temaAtual().row||'#1c1c1e')+'"></label><label style="display:flex;gap:0.625rem;align-items:center;margin:0.5rem 0">Destaque <input type="color" id="thAcc" value="'+(temaAtual().acc||'#0a84ff')+'"></label><button type="button" class="chip" data-a="thReset">Tema padrão</button></details><details class="dt" style="margin-top:0.75rem"><summary>Aparência</summary><button type="button" class="chip" data-a="mono" aria-pressed="'+(ls.get('opt_mono')==='1')+'">'+(ls.get('opt_mono')==='1'?'Usar ícones coloridos':'Usar ícones monocromáticos')+'</button></details>');if(S.tab==='set')v.insertAdjacentHTML('beforeend','<details class="dt" style="margin-top:0.75rem"><summary>Registro de erros</summary><p class="sub">Guarda os 20 erros mais recentes neste aparelho. Copie e envie para análise.</p><button type="button" class="chip" data-a="errcopy">Copiar registro de erros</button></details>');
  if(S.tab==='music'&&S.tok)v.insertAdjacentHTML('beforeend',spExtra());
@@ -3901,7 +3770,7 @@ const RD_V6=[
  {n:"Hunter.FM Tropical",u:"https://live.hunter.fm/tropical_stream?ag=mp3",g:"Brasil · estilos e regionais"},
  {n:"Hunter.FM lo-Fi",u:"https://live.hunter.fm/lofi_stream?ag=mp3",g:"Brasil · estilos e regionais"},
  {n:"Rádio Dumont FM 104.3",u:"https://8402.brasilstream.com.br/stream",g:"Brasil · estilos e regionais",alt:"Dumont FM 104.3"}];
-if(!ls.get('radios_v6')){const L=S.rd.list;RD_V6.forEach(d=>{const k=L.findIndex(x=>nrm(x.n)===nrm(d.n)||(d.alt&&nrm(x.n)===nrm(d.alt)));if(k>=0){if(!L[k].u)L[k].u=d.u;L[k].n=d.n;L[k].g=d.g}else L.push({n:d.n,u:d.u,g:d.g})});ls.set('radios',JSON.stringify(L));ls.set('radios_v6','1')}
+if(!ls.get('radios_v6')){const L=RADIO.s.list;RD_V6.forEach(d=>{const k=L.findIndex(x=>nrm(x.n)===nrm(d.n)||(d.alt&&nrm(x.n)===nrm(d.alt)));if(k>=0){if(!L[k].u)L[k].u=d.u;L[k].n=d.n;L[k].g=d.g}else L.push({n:d.n,u:d.u,g:d.g})});ls.set('radios',JSON.stringify(L));ls.set('radios_v6','1')}
 /* ===== TV: canais ao vivo (links oficiais informados pelo usuário) ===== */
 const TV_DEF=[
  ['TV Brasil','https://tvbrasil.ebc.com.br/'],
@@ -3979,7 +3848,7 @@ function tvAct(a,b){const T=S.tv,n=T.list.length;
  if(e.target.closest('[data-a="tvschDel"]')){ls.del('tv_sched');view();say('Programação cancelada');return}
  if(e.target.closest('[data-a="rschDel"]')){ls.del('rd_sched');view();say('Programação cancelada');return}
  if(e.target.closest('[data-a="errcopy"]')){const t=ls.get('err_log')||'[]';(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>say('Registro copiado')).catch(()=>say('Não foi possível copiar. Registro: '+t.length+' caracteres'));return}const pg=e.target.closest('[data-a="pgoal"]');if(pg){const g=Math.min(12,Math.max(1,pomoGoal()+(+pg.dataset.d)));ls.set('pomo_goal',String(g));view();const n=$('#view [data-a="pgoal"][data-d="'+pg.dataset.d+'"]');if(n)n.focus();say('Meta diária: '+g+' ciclos')}const f=e.target.closest('[data-a="tfilt"]');if(f){S.tf=f.dataset.f;view();const n=$('#view [data-a="tfilt"][data-f="'+S.tf+'"]');if(n)n.focus()}})}
-$('#view').addEventListener('change',e=>{if(e.target.id==='rscm'){const v=Math.round(+e.target.value);if(v>=1&&v<=1440){S.rd.sleepM=v;S.rd.sleepAt=Date.now()+v*60000;const x=$('#rslp');if(x)x.textContent=sleepTxt();say('A rádio vai parar em '+v+' minutos')}else{say('Informe entre 1 e 1440 minutos')}}});
+$('#view').addEventListener('change',e=>{if(e.target.id==='rscm'){const v=Math.round(+e.target.value);if(v>=1&&v<=1440){RADIO.s.sleepM=v;RADIO.s.sleepAt=Date.now()+v*60000;const x=$('#rslp');if(x)x.textContent=sleepTxt();say('A rádio vai parar em '+v+' minutos')}else{say('Informe entre 1 e 1440 minutos')}}});
 try{const c=JSON.parse(ls.get('wx_cache')||'null');if(c&&c.d&&c.loc===WX.loc.n){WX.data=c.d;WX.at=c.at}}catch(_){}
 setOpen(true,true);
 paintClock();paintWx();wxLoad();
@@ -4035,7 +3904,7 @@ setTimeout(()=>{if(!ls.get('dados_versao'))ls.set('dados_versao','1');abaRestaur
 agendar(()=>{if(!S.apres||apresModoAtual()!=='cronometro')return;const el=document.getElementById('apSwV');if(el)el.textContent=swFmt(swMs())},100);
 
 /* ===== Rádios: atalhos de mais ouvidas por país ===== */
-document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="rstop"]');if(!b)return;const q=$('#rsq');if(q)q.value='';S.rd.rsQ='';const br=$('#rsbr');if(br)br.checked=false;rsRun({order:'clickcount',cc:b.dataset.cc})});
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="rstop"]');if(!b)return;const q=$('#rsq');if(q)q.value='';RADIO.s.rsQ='';const br=$('#rsbr');if(br)br.checked=false;RADIO.rsRun({order:'clickcount',cc:b.dataset.cc})});
 /* ===== Equipes: tarefas do Planner (somente leitura) ===== */
 let pnrCache=null;
 function pnrOn(){return ls.get('planner_on')==='1'&&ls.get('ms_planner')==='1'&&msOn()}
