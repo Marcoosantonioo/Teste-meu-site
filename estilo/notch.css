@@ -317,12 +317,6 @@ main{max-width:none!important;padding:0!important;margin:0!important;height:100%
 .goal .gb{position:relative;height:0.5rem;border-radius:0.25rem;background:rgba(255,255,255,.14);margin:0.5rem 0 0.25rem;overflow:hidden}
 .goal .gb i{position:absolute;left:0;top:0;bottom:0;border-radius:0.25rem;background:var(--acc,#30d158)}
 .goal .gb i.ok{background:#30d158}
-
-/* ===== Rádio no mesmo layout da música ===== */
-.notch[data-tab="radio"] #view{padding:1.5rem 0.625rem 0 1.125rem}
-.notch[data-tab="radio"] .ctrl{display:flex;justify-content:center;align-items:center;gap:1.125rem;margin:0.375rem 0}
-.notch[data-tab="radio"] .ctrl .ib{width:3.625rem;height:3.625rem;border-radius:50%;background:rgba(255,255,255,.14);color:var(--ink);display:flex;align-items:center;justify-content:center}
-.notch[data-tab="radio"] .ctrl .ib svg{width:1.625rem;height:1.625rem}
 /* ===== Música: fila, volume ===== */
 .spx{margin-top:1rem;background:var(--row);border-radius:1rem;padding:0.75rem 0.875rem}
 .spx h3{margin:0 0 0.5rem;font-size:0.75rem;text-transform:uppercase;letter-spacing:.04em;color:var(--mute);font-weight:600}
@@ -334,16 +328,6 @@ main{max-width:none!important;padding:0!important;margin:0!important;height:100%
 .wk i{display:block;width:100%;border-radius:0.375rem 0.375rem 0.125rem 0.125rem;background:var(--acc,#30d158);min-height:0.1875rem}
 /* ===== Tempo: alerta de temperatura ===== */
 .tpalert{margin-top:0.75rem;background:var(--row);border-radius:1rem;padding:0.75rem 0.875rem}
-
-/* ===== Rádio: botões no padrão visual ===== */
-.notch[data-tab="radio"] .redact .chip{display:inline-flex;align-items:center;gap:0.5rem;min-height:2.5rem;padding:0.5rem 1rem;border-radius:62.4375rem;border:0;background:rgba(255,255,255,.12);color:var(--ink);font-weight:600;font-size:0.875rem}
-.notch[data-tab="radio"] .redact .chip svg{width:1.125rem;height:1.125rem}
-.notch[data-tab="radio"] .redact .chip[aria-pressed="true"]{background:var(--acc,#ffffff);color:#111}
-.notch[data-tab="radio"] .ctrl .ib{transition:transform .15s,background .15s}
-.notch[data-tab="radio"] .ctrl .ib:active{transform:scale(.94)}
-.notch[data-tab="radio"] .ctrl .ib:nth-child(2){width:4.625rem;height:4.625rem}
-.notch[data-tab="radio"] .ctrl .ib:nth-child(2) svg{width:1.875rem;height:1.875rem}
-.notch[data-tab="radio"] .ctrl .ib[aria-pressed="true"]{background:rgba(255,255,255,.3)}
 .rsv{margin-top:0.75rem}
 .rsv summary{cursor:pointer;padding:0.5rem 0;color:var(--ink);font-weight:600}
 .svlist{list-style:none;margin:0;padding:0;max-height:20rem;overflow-y:auto}
@@ -352,9 +336,6 @@ main{max-width:none!important;padding:0!important;margin:0!important;height:100%
 .svdbtn:focus-visible{outline:2px solid var(--acc,#fff);outline-offset:-2px;border-radius:0.5rem}
 .svd.cur .svdbtn{font-weight:700;color:var(--acc,#fff)}
 .fav{color:#ffd60a;margin-left:0.375rem}
-
-.notch[data-tab="radio"] .ctrl .ib.sm{width:3.625rem;height:3.625rem;border-radius:50%}
-.notch[data-tab="radio"] .ctrl{flex-wrap:nowrap}
 #rscm{min-height:2.5rem;border-radius:0.75rem}
 
 .tpdots{display:flex;justify-content:center;gap:0.5rem;margin:0.75rem 0 0.25rem}
@@ -383,7 +364,6 @@ main{max-width:none!important;padding:0!important;margin:0!important;height:100%
 .tp-k{font-weight:600}
 .notch[data-focus="1"] .tabs,.notch[data-focus="1"] #back,.notch[data-focus="1"] #grid,.notch[data-focus="1"] #hwx{display:none!important}
 .notch[data-focus="1"] #view>*:not(:first-child){display:none!important}
-.notch[data-tab="radio"]::before,.notch[data-tab="radio"]::after{opacity:0!important}
 /* ===== Claro e escuro de verdade ===== */
 :root[data-theme="light"]{--chip-bg:#ffffff;--chip-h:#ececf1;--bgc:#f2f2f7;--ink:#111111;--row:#ffffff;--mute:#6b6b73}
 :root[data-theme="dark"]{--bgc:#000000;--ink:#ffffff;--row:#18181b;--mute:#a9a9b0}
@@ -668,11 +648,6 @@ a{color:#0645ad}
 .notch[data-tab="music"] .np.npc{color:#fff;min-height:100%;padding:1rem 0;border-radius:0}.notch[data-tab="music"] .np.npc .np-state,.notch[data-tab="music"] .np.npc .prog{color:#fff}
 .notch[data-tab="music"] h2{color:#fff}
 
-/* ===== Rádio em tela inteira: cor média do logotipo da emissora ===== */
-.notch[data-tab="radio"]{background:var(--rdbg,#c8102e)!important;transition:background .6s ease}
-.notch[data-tab="radio"] #view{background:transparent!important}
-.notch[data-tab="radio"] #view h2,.notch[data-tab="radio"] #view .sub{color:#fff}
-
 /* ===== Meu dia ===== */
 .dia-lin-tl{display:flex;flex-direction:column;gap:0.25rem;background:var(--row,rgba(0,0,0,.05));border-radius:1.25rem;padding:0.75rem;margin-bottom:0.75rem}
 .dia-row{display:grid;grid-template-columns:3.6rem 2.6rem minmax(0,1fr);gap:0.6rem;align-items:start;padding:0.35rem 0}
@@ -724,7 +699,7 @@ html.lowbat *,html.lowbat *::before,html.lowbat *::after{animation:none!importan
 .dia-semana label{display:flex;gap:0.25rem;align-items:center;font-size:0.85rem;padding:0.3rem 0.5rem;border-radius:999px;background:var(--row,rgba(0,0,0,.06))}
 /* ===== Modo foco na tela ===== */
 html.focusmode #tabs,html.focusmode #tabsMoreBox,html.focusmode #grid{display:none!important}
-html.focusmode #view{max-width:100%!important;width:100%!important}.notch[data-tab="radio"] #view{overflow:visible!important;max-height:none!important;height:auto!important}
+html.focusmode #view{max-width:100%!important;width:100%!important}
 /* ===== Botão Mais: mesma largura da coluna de abas e ícone visível ===== */
 #tabsMoreBox{align-items:stretch;justify-content:stretch;padding:0.25rem 0.125rem 3.5rem}
 #tabsMore,#tabsMoreBox .chip{width:100%;min-height:2.75rem;color:#111!important;background:#fff!important;border:1px solid rgba(0,0,0,.35)!important;border-radius:0.875rem;font-size:1.25rem;line-height:1}
@@ -750,9 +725,6 @@ html.app .panel .inner{max-height:none!important;height:100%!important;overflow-
 /* ===== Dica de teclado fora do layout (sem faixa), mantida para leitores de tela ===== */
 html .hint,html.app .hint,.notch .hint{position:absolute!important;width:1px!important;height:1px!important;margin:0!important;padding:0!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
 html .notch #view{align-self:stretch!important}
-
-/* ===== Rádio: a área de conteúdo volta a ter rolagem (sem cortar os controles) ===== */
-.notch[data-tab="radio"] #view{overflow-y:auto!important;overflow-x:hidden!important;height:auto!important;max-height:none!important;min-height:0!important;align-self:stretch!important;padding-bottom:6rem!important;-webkit-overflow-scrolling:touch}
 
 /* ===== Sistema visual v87: estrutura do cabeçalho, ritmo e hierarquia ===== */
 /* Coluna de conteúdo em três linhas: cabeçalho, navegação e conteúdo. A barra de ícones ocupa a altura toda. */
@@ -850,24 +822,17 @@ html[data-leit-contraste] .chip,html[data-leit-contraste] .tr-card,html[data-lei
 .tp-resumo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:0.5rem;margin:0.5rem 0}
 .tp-resumo-grid>*{margin:0!important;padding:0.5rem 0.625rem!important;min-width:0}
 .tp-resumo-grid .tp-s{font-size:0.875rem!important}
-.tp-resumo-grid p{margin:0.25rem 0 0!important}.notch[data-tab="radio"] h2,.notch[data-tab="radio"] h3,.notch[data-tab="radio"] .rvol label{color:var(--rdfg,#ffffff)!important}.notch[data-tab="radio"] .rvol label{opacity:.8}
-
-.notch[data-tab="radio"] #back,.notch[data-tab="radio"] #fwd{color:var(--rdfg,#ffffff)!important;background:var(--rdnav,rgba(255,255,255,0.14))!important}
-.notch[data-tab="radio"] h1.tela-titulo{color:var(--rdfg,#ffffff)!important}
+.tp-resumo-grid p{margin:0.25rem 0 0!important}
 @media (max-width:420px){}
 .notch[data-tab="music"] .sp-box .sub{color:#ffffff!important;opacity:.92}
-.notch[data-tab="music"] .sp-box .chip{white-space:nowrap}.notch[data-tab="radio"] .sub,.notch[data-tab="radio"] .dt summary{color:var(--rdfg,#ffffff)!important;opacity:1!important}
+.notch[data-tab="music"] .sp-box .chip{white-space:nowrap}
 .notch[data-tab="music"] .sub,.notch[data-tab="music"] .dt summary,.notch[data-tab="music"] .np a,.notch[data-tab="music"] .sp-box .sub{color:#ffffff!important;opacity:1!important}
 #view .svdbtn{min-height:44px}
 .notch[data-tab="music"] input[type="range"]{min-height:44px}
-html .notch[data-tab="radio"] .sub,html .notch[data-tab="radio"] .dt summary,html .notch[data-tab="radio"] label{color:var(--rdfg,#ffffff)!important;opacity:1!important}
 html .notch[data-tab="music"] .sub,html .notch[data-tab="music"] .dt summary,html .notch[data-tab="music"] label,html .notch[data-tab="music"] .np a{color:#ffffff!important;opacity:1!important}
 html .notch[data-tab="music"] .np [style*="color"]{color:#ffffff!important;text-decoration:underline}
-#notch[data-tab="radio"] #view label,#notch[data-tab="radio"] #view .sub,#notch[data-tab="radio"] #view summary{color:var(--rdfg,#ffffff)!important;opacity:1!important}
 #notch[data-tab="music"] #view label,#notch[data-tab="music"] #view .sub,#notch[data-tab="music"] #view summary,#notch[data-tab="music"] #view .np a{color:#ffffff!important;opacity:1!important}
 #notch[data-tab="music"] #view .np [style*="color"]{color:#ffffff!important}
-#notch[data-tab="radio"] #view .np *:not(button):not(input):not(select):not(svg):not(path){color:var(--rdfg,#ffffff)!important}
-#notch[data-tab="radio"] #view #rsvdet .chip,#notch[data-tab="radio"] #view #rdGerenciar .chip,#notch[data-tab="radio"] #view #rdExplorar .chip,#notch[data-tab="radio"] #view #rstopBox .chip,#notch[data-tab="radio"] #view #rsdet .chip{min-height:44px}
 
 /* ===== Treino: plano semanal em cartões verticais em telas estreitas ===== */
 @media (max-width:480px){
@@ -926,32 +891,6 @@ button.tr-bar:focus-visible{outline:2px solid var(--blue);outline-offset:2px;bor
 .mus-fundo-ctl .chip,.mus-fundo-btn{background:rgba(0,0,0,.5)!important;color:#fff!important;border:1px solid rgba(255,255,255,.3)!important}
 .mus-root .ctrl .ib,.mus-bar .ib{color:#111}
 .mus-root .ctrl .ib.big,.mus-bar .ib.big{background:#ffffff;color:#111}
-
-/* ===== Rádio: menu de estações e tela de reprodução em painéis de vidro ===== */
-.rad-root .sub,.rad-root label{color:#ffffff!important;opacity:.92}
-.rad-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(7rem,1fr));gap:0.75rem}
-.rad-card{background:transparent;border:0;color:#fff;text-align:left;padding:0;cursor:pointer;font:inherit;display:flex;flex-direction:column;gap:0.25rem;min-width:0}
-.rad-logo{display:flex;align-items:center;justify-content:center;width:100%;aspect-ratio:1;border-radius:0.9rem;background:#fff center/contain no-repeat;box-shadow:0 6px 16px rgba(0,0,0,.35);font-weight:800;color:#111}
-.rad-logo.sem{background:rgba(255,255,255,.16);color:#fff}
-.rad-card.on .rad-logo{outline:2px solid #fff;outline-offset:3px}
-.rad-card b{font-size:0.85rem;overflow-wrap:anywhere;line-height:1.25}
-.rad-card .sub{font-size:0.75rem}
-.rad-live{display:inline-block;background:#e0242d;color:#fff;font-size:0.7rem;font-weight:700;padding:0.1rem 0.45rem;border-radius:0.4rem;letter-spacing:0.04em;opacity:1}
-.rad-chips{display:flex;gap:0.4rem;flex-wrap:wrap;margin:0 0 0.5rem}
-.rad-chips .chip.on{background:#fff;color:#111}
-.rad-player{display:flex;flex-direction:column;align-items:center;gap:0.75rem;text-align:center}
-.rad-hero{display:flex;align-items:center;justify-content:center;width:min(100%,19rem,max(10rem,calc(100vh - 36rem)));aspect-ratio:1;border-radius:1.25rem;background:#fff;box-shadow:0 18px 40px rgba(0,0,0,.45);overflow:hidden}
-.rad-hero img{width:100%;height:100%;object-fit:contain;padding:0.75rem;box-sizing:border-box}
-.rad-hero.sem-logo{background:rgba(255,255,255,.16)}
-.rad-hero .eq{display:flex;align-items:flex-end;gap:0.3rem;height:3rem}
-.rad-hero .eq i{display:block;width:0.45rem;height:0.6rem;border-radius:0.2rem;background:#fff;opacity:.85}
-.rad-hero.on .eq i{animation:eqSobe 1s ease-in-out infinite}
-.rad-hero.on .eq i:nth-child(2){animation-delay:.25s}
-.rad-hero.on .eq i:nth-child(3){animation-delay:.5s}
-.rad-info b{display:block;font-size:1.15rem;overflow-wrap:anywhere}
-.rad-viz{width:3.5rem;aspect-ratio:1;border-radius:0.6rem;border:0;padding:0;background:#fff;overflow:hidden;cursor:pointer;opacity:.9;box-shadow:0 6px 14px rgba(0,0,0,.3)}
-.rad-viz img{width:100%;height:100%;object-fit:contain;padding:0.2rem;box-sizing:border-box}
-.rad-player .ctrl,.rad-player .ctrl2{width:100%;max-width:32rem}
 @media (max-width:640px){
   .mus-menu{grid-template-columns:minmax(0,1fr)}
   .mus-menu>*{min-width:0;max-width:100%}
@@ -973,56 +912,14 @@ button.tr-bar:focus-visible{outline:2px solid var(--blue);outline-offset:2px;bor
 .notas-root .mus-top input[type="search"]{flex:1;min-width:0}
 .notas-root .mus-top{display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap}
 .notas-root .mus-top input{width:auto;flex:1 1 12rem}
-
-/* ===== Rádio: tela de reprodução com a emissora central e as vizinhas ao redor (como na referência) ===== */
-.rad-stage{position:relative;width:100%;height:min(46vh,15rem);display:flex;align-items:center;justify-content:center;overflow:hidden;--sp:9rem}
-.rad-stage .rad-hero{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;width:min(42vw,11rem);max-width:11rem;height:auto;aspect-ratio:1;margin:0;box-shadow:0 18px 40px rgba(0,0,0,.5)}
-.rad-viz{position:absolute;left:50%;top:50%;width:7rem;aspect-ratio:1;padding:0;border:0;border-radius:1rem;background:#fff;overflow:hidden;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.4);transform:translate(calc(-50% + var(--d) * var(--sp)),-50%) scale(var(--s));opacity:var(--o);z-index:var(--z);transition:transform .35s ease,opacity .35s ease}
-.rad-viz img{width:100%;height:100%;object-fit:contain;padding:0.5rem;box-sizing:border-box}
-.rad-viz:focus-visible{outline:2px solid #fff;outline-offset:3px}
 @media (max-width:640px){.rad-stage{--sp:5.5rem;height:min(40vh,13rem)}.rad-viz{width:5.5rem}.rad-stage .rad-hero{width:9.5rem;max-width:9.5rem}}
 .mus-nav{display:flex;flex-direction:column;align-items:flex-start;gap:0.1rem}
 .mus-nav-sub{font-size:0.72rem;font-weight:400;opacity:.75;overflow-wrap:anywhere}
-
-/* ===== Rádio: equalizador, rótulos dos controles e pontos de tela (itens 2 a 6) ===== */
-.rad-now{display:flex;align-items:center;gap:0.4rem;min-width:0}
-.rad-now b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
-.rad-eq{display:inline-flex;align-items:flex-end;gap:2px;height:0.9rem;flex:none}
-.rad-eq i{display:block;width:3px;height:40%;background:#fff;border-radius:1px}
-.rad-eq.on i{animation:eqSobe 1s ease-in-out infinite}
-.rad-eq.on i:nth-child(2){animation-delay:.25s}
-.rad-eq.on i:nth-child(3){animation-delay:.5s}
 @media (prefers-reduced-motion: reduce){.rad-eq.on i{animation:none;height:70%}}
-.rad-bar .ib{display:flex;flex-direction:column;align-items:center;gap:0.15rem;height:auto;padding:0.3rem 0.4rem;min-width:44px;min-height:44px;justify-content:center}
-.rad-bar .rad-lbl{font-size:0.62rem;line-height:1;color:#fff}
-.rad-bar .ib{color:#111}
-.rad-bar .ib .rad-lbl{color:#fff}
-.rad-dots{display:flex;justify-content:center;gap:0.25rem;margin-top:0.25rem}
-.rad-dot{width:1.5rem;height:1.5rem;min-width:24px;min-height:24px;background:transparent;border:0;padding:0;position:relative;cursor:pointer}
-.rad-dot::after{content:"";position:absolute;left:50%;top:50%;width:0.55rem;height:0.55rem;margin:-0.275rem 0 0 -0.275rem;border-radius:50%;background:rgba(255,255,255,.45)}
-.rad-dot.on::after{background:#fff}
-.rad-dot:focus-visible{outline:2px solid #fff;outline-offset:2px}
-.rad-bar .ib{height:auto!important;min-height:44px}
-.rad-bar .rad-lbl,.rad-bar .ib .rad-lbl{color:#111!important;font-size:0.62rem;line-height:1}
 .mus-nav{flex-direction:row;align-items:center;gap:0.6rem}
 .mus-nav-ic{display:inline-flex;flex:none;opacity:.9}
 .mus-nav-tx{display:flex;flex-direction:column;align-items:flex-start;gap:0.1rem;min-width:0}
 @media (max-width:640px){.mus-nav-tx{flex-direction:row;align-items:center;gap:0.35rem;white-space:nowrap}}
-
-/* ===== Rádio: tela de edição de emissoras no mesmo painel de vidro ===== */
-.rad-edit{display:flex;flex-direction:column;gap:0.6rem}
-.rad-edit input:not([type="file"]){background:rgba(0,0,0,.35);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:0.6rem;min-height:44px;padding:0 0.6rem;font:inherit;box-sizing:border-box;min-width:0}
-.rad-edit .rrow{display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap}
-.rad-edit .rrow input:first-child{flex:1 1 9rem}
-.rad-edit .rrow input:nth-child(2){flex:2 1 14rem}
-.rad-edit .redact{display:flex;gap:0.5rem;flex-wrap:wrap}
-.rad-edit .chip{background:rgba(255,255,255,.92);color:#111}
-.rad-edit .ib{background:rgba(255,255,255,.92);color:#111}
-.rad-edit .err{color:#ffd1d1}
-.rad-edit .rad-head{margin-bottom:0.25rem}
-.rad-menu-solo{grid-template-columns:minmax(0,1fr)}
-.rad-head-play{justify-content:space-between}
-.rad-head-play .rad-search{flex:1 1 12rem;max-width:20rem}
 @media (max-width:640px){
   .mus-side{min-width:0;overflow:hidden}
   .mus-navs{width:100%;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -1038,7 +935,6 @@ button.tr-bar:focus-visible{outline:2px solid var(--blue);outline-offset:2px;bor
 .mus-barra-prog span{display:block;height:100%;background:#fff;border-radius:2px;width:0}
 .mus-bar{padding-bottom:0.7rem;flex-wrap:wrap}
 .mus-bar .chip{white-space:nowrap;background:rgba(255,255,255,.92);color:#111}
-.mus-root .rad-dots{margin-top:0.25rem}
 .mus-bar .mus-vol{width:36px;height:36px;min-width:36px;min-height:36px;padding:0;border:0;border-radius:999px;background:rgba(255,255,255,.92);color:#111;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
 .mus-bar .mus-vol:focus-visible{outline:2px solid #fff;outline-offset:2px}
 
@@ -1050,8 +946,6 @@ button.tr-bar:focus-visible{outline:2px solid var(--blue);outline-offset:2px;bor
 .notas-acao:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .notas-lbl{font-size:0.62rem;line-height:1.1;text-align:center;max-width:6.5rem}
 .notas-bar .chip{display:none}
-.notas-root .rad-head{display:flex;justify-content:space-between;align-items:center;gap:0.5rem;flex-wrap:wrap;margin:0 0 0.5rem}
-.notas-root .rad-head .mus-h{margin:0}
 .notas-sum{list-style:none;cursor:pointer}
 .notas-sum::-webkit-details-marker{display:none}
 .notas-sub{padding-left:0.5rem}
@@ -1086,19 +980,7 @@ button.tr-bar:focus-visible{outline:2px solid var(--blue);outline-offset:2px;bor
 .dt-cont{margin:0;font-size:1.05rem}
 .metas-root .chip{background:rgba(255,255,255,.92);color:#111}
 .meta-top{display:flex;flex-direction:column;gap:0.15rem;min-width:0}.meta-top span{display:block}
-
-/* ===== Rádio: posição da busca no canto superior direito (menu e reprodução) ===== */
-.rad-menu .rad-head{display:flex;justify-content:space-between;align-items:center;gap:0.75rem;flex-wrap:wrap;margin:0 0 0.5rem}
-.rad-menu .rad-head .mus-h{margin:0}
-.rad-menu .rad-search{margin-left:auto}
-.rad-search input{width:100%;min-height:44px;border-radius:0.75rem;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.3);color:#ffffff;padding:0 0.8rem;font:inherit;box-sizing:border-box}
-.rad-player .rad-head{width:100%;align-self:stretch;display:flex;justify-content:space-between;align-items:center;gap:0.5rem;flex-wrap:wrap}
-.rad-player .rad-head-play .rad-search{flex:1 1 14rem;max-width:20rem;margin-left:auto}
-.rad-bar .chip{background:rgba(255,255,255,.92);color:#111;white-space:nowrap}
 @media (max-width:640px){.rad-menu .rad-search,.rad-player .rad-head-play .rad-search{flex:1 1 100%;max-width:none;margin-left:0}}
-#notch .rad-root h3,#notch .rad-root .sub,#notch .rad-root .rvol,#notch .rad-root .rvol span{color:#ffffff!important;opacity:.92!important}
-#notch .rad-player p.sub,#notch .rad-player .rad-info .sub,#notch .rad-player .sub{color:#ffffff!important;opacity:.92!important}
-#notch .rad-root{--rdfg:#ffffff}
 
 /* ===== Modo foco ===== */
 #focoBtn{position:fixed;left:5.5rem;bottom:1rem;z-index:20;min-height:44px;padding:0 1rem;border-radius:999px;border:0;background:rgba(255,255,255,.92);color:#111;font:inherit;font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.35)}
@@ -1230,7 +1112,6 @@ body.dev-computador #quick{top:auto!important;bottom:calc(4.75rem + env(safe-are
 #notch.dev-celular #view input[type="time"],#notch.auto-celular #view input[type="time"]{min-width:7.5rem;width:auto}
 #notch.dev-celular #view button,#notch.auto-celular #view button{min-height:24px;min-width:24px}
 #notch.dev-celular #view input[type="checkbox"],#notch.auto-celular #view input[type="checkbox"]{width:1.5rem;height:1.5rem;min-width:24px;min-height:24px}
-#notch.dev-celular #view input[type="radio"],#notch.auto-celular #view input[type="radio"]{width:1.5rem;height:1.5rem;min-width:24px;min-height:24px}
 #notch.dev-celular #view input[type="text"],#notch.auto-celular #view input[type="text"]{min-height:40px}
 #notch.dev-celular #view .tr-h,#notch.auto-celular #view .tr-h{font-size:11px!important}
 #notch.dev-celular #view .dia-sub,#notch.auto-celular #view .dia-sub{min-height:40px!important;height:auto!important}
@@ -1240,7 +1121,6 @@ body.dev-computador #quick{top:auto!important;bottom:calc(4.75rem + env(safe-are
 .dev-tablet .kb-board{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:0.6rem;overflow:visible;align-items:start}
 .dev-tablet .kb-col{flex:none;min-width:0;width:auto}
 .dev-tablet .mus-menu{grid-template-columns:minmax(9.5rem,11rem) minmax(0,1fr)}
-.dev-tablet .rad-grid{grid-template-columns:repeat(auto-fill,minmax(6.5rem,1fr));gap:0.75rem}
 .dev-tablet .tr-grid{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
 :where(.dev-tablet) .agnd-ctrl label,:where(.dev-tablet) .agnd-ctrl span{color:var(--ink)!important;opacity:1!important}
 :where(.dev-tablet) textarea{background:var(--bgc,#f2f2f7);color:var(--ink);border:1px solid rgba(127,127,127,.35);border-radius:0.6rem;font:inherit;box-sizing:border-box;width:100%}
@@ -1274,9 +1154,6 @@ body.dev-computador #quick{top:auto!important;bottom:calc(4.75rem + env(safe-are
 #notch.dev-tablet .inner,#notch.dev-computador .inner{display:flex!important;flex-direction:column;height:100%;min-height:0;overflow:hidden!important}
 #notch.dev-tablet .inner::after,#notch.dev-computador .inner::after{display:none}
 #notch.dev-tablet #view,#notch.dev-computador #view{flex:1 1 auto;min-height:0;overflow-y:auto!important;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;padding-bottom:4rem;padding-top:0.75rem}
-
-/* ===== Carrossel da Rádio: iniciais nas emissoras sem logotipo ===== */
-.rad-viz-ini{display:grid;place-items:center;width:100%;height:100%;font-weight:700;font-size:0.9rem;color:#111;background:#e5e7eb}
 
 /* ===== Tema claro: abas com cores fixas escuras passam a usar superfícies claras ===== */
 :root[data-theme="light"] #notch .npc:not(:has(.mus-player)),#notch .mus-root:not(:has(.mus-player)){background:#f3f3f6!important}
@@ -1433,14 +1310,6 @@ body.dev-computador #quick{top:auto!important;bottom:calc(4.75rem + env(safe-are
 #notch[data-tab="music"] #view:has(.mus-player){position:relative}
 #notch[data-tab="music"] #view:has(.mus-player) .mus-root:not(.a):not(.b){position:absolute!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;height:auto!important;min-height:0!important;overflow-y:auto!important;overscroll-behavior:contain}
 #notch[data-tab="music"] #view:has(.mus-player) .mus-root:not(.a):not(.b){padding-bottom:2.2rem!important}
-
-/* ===== Rádio (player): mesmos efeitos da Música — fundo na tela inteira, sobreposição e vidro claro ===== */
-#notch[data-tab="radio"] #view:has(.rad-player){position:relative}
-#notch[data-tab="radio"] #view:has(.rad-player) .rad-root:not(.a):not(.b){position:absolute!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:auto!important;height:auto!important;min-height:0!important;max-width:none!important;margin:0!important;border:0!important;border-radius:0!important;padding:0 0 2.2rem!important;overflow-y:auto!important;overscroll-behavior:contain;background:url('../assets/papel-de-parede-musica.jpg') center/cover no-repeat fixed!important;box-shadow:none!important}
-#notch[data-tab="radio"] #view:has(.rad-player) .rad-stage:not(.a):not(.b){--sp:6.5rem;height:min(52vh,20rem)}
-#notch[data-tab="radio"] #view:has(.rad-player) .rad-viz:not(.a):not(.b){background:rgba(255,255,255,.38)!important;backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.75)!important;box-shadow:0 18px 40px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.7)!important}
-#notch[data-tab="radio"] #view:has(.rad-player) .rad-hero:not(.a):not(.b){background:rgba(255,255,255,.5)!important;backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.8)!important}
-#notch[data-tab="radio"] #view:has(.rad-player) .rad-bar:not(.a):not(.b){background:rgba(246,246,248,.6)!important;backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.85)!important;box-shadow:0 14px 34px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.8)!important}
 
 /* ===== Música (player): verificação do documento — transporte à esquerda, sub-cápsula no centro, ícones à direita ===== */
 #notch[data-tab="music"] #view:has(.mus-player) .mus-bar > .mus-barra-ctl{order:0}
