@@ -1331,3 +1331,15 @@ body.dev-computador #quick{top:auto!important;bottom:calc(4.75rem + env(safe-are
 #notch[data-tab="music"] #view:has(.mus-player) .mus-bar .mus-barra-txt > .mus-barra-prog span:not(.a):not(.b){background:#1d1d1f!important}
 #notch[data-tab="music"] #view:has(.mus-player) .mus-bar .mus-barra-txt{min-width:0;flex:1 1 0}
 #notch[data-tab="music"] #view:has(.mus-player) .mus-bar:not(.a):not(.b){width:min(96%,800px)}
+
+/* ===== Música (player): aparelho e volume como ícones da barra; controle flutuante; seções em cartão de vidro ===== */
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > #musDevBtn:not(.a):not(.b){order:2}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > .mus-vol:not(.a):not(.b){order:3}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-volpop:not(.a):not(.b){width:min(94%,640px);margin:0.5rem auto 0.25rem;padding:0.6rem 1rem;border-radius:999px;background:rgba(246,246,248,.7);backdrop-filter:blur(20px) saturate(170%);-webkit-backdrop-filter:blur(20px) saturate(170%);border:1px solid rgba(255,255,255,.85);box-shadow:0 10px 26px rgba(0,0,0,.14)}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-volpop .rvol{margin:0;color:#1d1d1f!important}
+#notch[data-tab="music"] #view:has(.mus-player) details.dt:not(.a):not(.b){width:min(92%,560px);margin:0.45rem auto!important;padding:0.55rem 1rem;border-radius:18px;background:rgba(255,255,255,.42);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);border:1px solid rgba(255,255,255,.75);box-shadow:0 10px 24px rgba(0,0,0,.12)}
+#notch[data-tab="music"] #view:has(.mus-player) details.dt > summary:not(.a):not(.b){font-weight:600;color:#1d1d1f!important;cursor:pointer;list-style:none}
+#notch[data-tab="music"] #view:has(.mus-player) details.dt > summary::-webkit-details-marker{display:none}
+/* Treinos: texto claro sobre o fundo escuro dos cartões (contraste WCAG 1.4.3); botões e campos mantêm o próprio estilo */
+#notch #view .tr-card,#notch #view .tr-card *:not(button):not(.chip):not(input):not(select):not(label.tr-x):not(.tr-bb):not(.tr-bar){color:#f5f5f7!important}
+#notch #view .tr-card .sub:not(button){color:#c8ccd6!important}
