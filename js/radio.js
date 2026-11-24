@@ -42,7 +42,7 @@ function rdStep(d){const pl=rdPool();if(!pl.length){rdEmpty();return false}
 function rdRand(){const pl=rdPool();if(!pl.length){rdEmpty();return}
  let k=pl[Math.floor(Math.random()*pl.length)];if(pl.length>1&&k===RADIO.s.cur)k=pl[(pl.indexOf(k)+1)%pl.length];rdPlay(k)}
 
-function rdCollect(){RADIO.s.draft=RADIO.s.draft.map((s,k)=>{const n=$('#rn'+k),u=$('#ru'+k);return n&&u?{n:n.value,u:u.value,g:s.g||''}:s})}
+function rdCollect(){RADIO.s.draft=RADIO.s.draft.map((s,k)=>{const n=$('#rn'+k),u=$('#ru'+k);return n&&u?{...s,n:n.value,u:u.value,g:s.g||''}:s})}
 
 function radioPlayerHtml(){const R=RADIO.s;const L=R.list,pl=L.map((x,i)=>x.u?i:-1).filter(i=>i>=0),k=R.cur,s=L[k]||{n:'',u:'',img:''},on=rdPlaying()&&R.i===k,pos=pl.indexOf(k)+1;
  const ehTocavel=j=>j!==k&&L[j]&&L[j].u;
@@ -61,6 +61,14 @@ function radGradeHtml(itens){if(!itens.length)return '<p class="sub">Nenhuma emi
  return '<div class="rad-grid">'+itens.map(([x,i])=>{const on=rdPlaying()&&RADIO.s.i===i;const sem=!x.u;const nome=x.n||('Emissora '+(i+1));
   return '<button type="button" class="rad-card'+(on?' on':'')+'" data-a="rpick" data-i="'+i+'" aria-label="'+esc(nome)+(sem?', sem endereço':'')+(on?', ao vivo':'')+'"><span class="rad-logo'+(x.img?'':' sem')+'"'+(x.img?' style="background-image:url(\''+esc(x.img)+'\')"':'')+' aria-hidden="true">'+(x.img?'':esc(nome.slice(0,2).toUpperCase()))+'</span><b>'+esc(nome)+'</b><span class="sub">'+(on?'<span class="rad-live">Ao vivo</span>':esc(sem?'Sem endereço':(x.g||'Emissora')))+'</span></button>'}).join('')+'</div>'}
 
+/* Aba Rádio · Todas as estações: destaques (mais ouvidas) + grade com 4 linhas visíveis (rolagem) + gêneros em abas */
+function radTodasHtml(itens,chips){const L=RADIO.s.list;let h=[];try{h=JSON.parse(ls.get('rd_hist')||'[]')||[]}catch(_){h=[]}
+ const idx=[];(Array.isArray(h)?h:[]).forEach(n=>{const j=L.findIndex((x,q)=>x&&x.u&&rdName(q)===n);if(j>=0&&!idx.includes(j))idx.push(j)});
+ for(let j=0;idx.length<8&&j<L.length;j++){if(L[j]&&L[j].u&&!idx.includes(j))idx.push(j)}
+ const dest=idx.slice(0,8).map(j=>[L[j],j]);
+ return '<h3 class="rad-sec-tit">Destaques · mais ouvidas</h3><div class="rad-destaques">'+radGradeHtml(dest)+'</div>'+
+  '<h3 class="rad-sec-tit">Todas as estações</h3><div class="rad-todas">'+radGradeHtml(itens)+'</div>'+
+  '<h3 class="rad-sec-tit">Gêneros</h3><div class="rad-gen-tabs" role="group" aria-label="Gêneros">'+chips+'</div>'}
 function radioMenuHtml(){const R=RADIO.s;const L=R.list;const sec=RADIO.s.radSec||'todas';const q=livNorm(S.radBusca||'');const gen=S.radGen||'';
  const generos=[...new Set(L.map(x=>(x.g||'').split(',')[0].trim()).filter(Boolean))].slice(0,12);
  const resumoGen=generos.slice(0,3).join(', ');
@@ -78,7 +86,7 @@ function radioMenuHtml(){const R=RADIO.s;const L=R.list;const sec=RADIO.s.radSec
   if(q)itens=itens.filter(([x])=>livNorm((x.n||'')+' '+(x.g||'')).includes(q));
   const chips=sec==='explorar'||sec==='salvas'?'':'<div class="rad-chips" role="group" aria-label="Filtrar por gênero">'+['',...generos].map(g=>'<button type="button" class="chip'+(g===gen?' on':'')+'" data-a="radGen" data-g="'+esc(g)+'" aria-pressed="'+(g===gen)+'">'+esc(g||'Todas')+'</button>').join('')+'<button type="button" class="chip" data-a="radSec" data-s="favs" aria-pressed="'+(sec==='favs')+'">Favoritas</button></div>';
   const vazio=sec==='favs'&&!itens.length?'<p class="sub">Nenhuma estação favorita ainda. Toque em ♡ na tela de reprodução para favoritar.</p>':'';
-  corpo='<p class="sub" style="margin:0 0 0.5rem">'+itens.length+' estaç'+(itens.length===1?'ão':'ões')+'</p>'+vazio+radGradeHtml(itens)+chips}
+  corpo='<p class="sub" style="margin:0 0 0.5rem">'+itens.length+' estaç'+(itens.length===1?'ão':'ões')+'</p>'+vazio+(sec==='todas'&&!q&&!gen?radTodasHtml(itens,chips):radGradeHtml(itens)+chips)}
  return '<div class="mus-menu rad-menu"><aside class="mus-glass mus-side" aria-label="Rádio"><h2 class="mus-h">Rádio</h2><nav class="mus-navs">'+nav+'</nav></aside><section class="mus-glass mus-main" aria-label="'+esc(titulo)+'"><div class="rad-head"><h3 class="mus-h">'+esc(titulo)+'</h3><div class="rad-search"><label class="sr" for="radBuscaQ">Buscar emissora</label><input id="radBuscaQ" type="search" value="'+esc(S.radBusca||'')+'" placeholder="Buscar por nome, gênero ou cidade" data-a="radBusca"></div></div>'+corpo+'</section></div>'}
 
 function radBarra(s,on){const ctl=(acao,icone,rotulo,extra)=>'<button type="button" class="ib'+(extra||'')+'" data-a="'+acao+'" aria-label="'+rotulo+'">'+icone+'<span class="rad-lbl" aria-hidden="true">'+rotulo+'</span></button>';
@@ -94,7 +102,7 @@ function radioView(){const R=RADIO.s;
  const tela=RADIO.s.radTela||'menu';return radioRoot(tela==='player'?radioPlayerHtml():radioMenuHtml())}
 
 function radioAct(a,i,b){const R=RADIO.s;
- if(a==='redit'){R.draft=R.list.map(x=>({n:x.n,u:x.u,g:x.g||''}));if(!R.draft.length)R.draft.push({n:'',u:'',g:''});R.edit=true;view();const n=$('#rn0');if(n)n.focus();return true}
+ if(a==='redit'){R.draft=R.list.map(x=>({...x,n:x.n,u:x.u,g:x.g||''}));if(!R.draft.length)R.draft.push({n:'',u:'',g:''});R.edit=true;view();const n=$('#rn0');if(n)n.focus();return true}
  if(a==='rcan'){R.edit=false;view();const b=$('#view [data-a="redit"]');if(b)b.focus();return true}
  if(a==='radd'){if(R.draft.length>=200){say('Limite de 200 emissoras');return true}rdCollect();R.draft.push({n:'',u:''});view();const n=$('#rn'+(R.draft.length-1));if(n)n.focus();return true}
  if(a==='rrm'){rdCollect();R.draft.splice(i,1);view();const b=$('#view [data-a="rrm"][data-i="'+Math.min(i,R.draft.length-1)+'"]')||$('#view [data-a="radd"]');if(b)b.focus();say('Emissora removida');return true}
@@ -127,7 +135,7 @@ function radioExtrasDom(){const v=$('#view');if(!v||S.tab!=='radio')return;
  const top=Object.entries(tot).sort((a,b)=>b[1].sec-a[1].sec).slice(0,6);
  const sec2=x=>{const h=Math.floor(x/3600),m=Math.round((x%3600)/60);return h?h+' h '+m+' min':m+' min'};
  const wk=document.createElement('section');wk.id='rweek';wk.setAttribute('aria-label','Tempo ouvido por emissora na semana');wk.className='tp-card';wk.style.margin='0 0 12px';
- wk.innerHTML='<div class="tp-k">Últimos 7 dias por emissora</div>'+(top.length?top.map(([n,o])=>{const max=Math.max(1,...dias.map(k=>o.dia[k]||0));return '<div style="margin-top:0.5rem"><div style="display:flex;justify-content:space-between;font-size:0.875rem"><span>'+esc(n)+'</span><b>'+sec2(o.sec)+'</b></div><div style="display:flex;align-items:flex-end;gap:0.1875rem;height:2.125rem;margin-top:0.25rem" role="img" aria-label="'+esc(n)+': '+sec2(o.sec)+' na semana">'+dias.map(k=>'<i style="flex:1;display:block;min-height:0.125rem;height:'+Math.round((o.dia[k]||0)/max*100)+'%;background:var(--acc,#30d158);border-radius:0.1875rem 3px 1px 1px"></i>').join('')+'</div></div>'}).join(''):'<p class="sub" style="margin:0.375rem 0 0">Ainda sem dados de escuta na semana.</p>');
+ wk.innerHTML='<div class="tp-k">Últimos 7 dias por emissora</div>'+(top.length?'<div style="margin-top:0.5rem">'+top.map(([n,o])=>'<div style="display:flex;justify-content:space-between;font-size:0.875rem"><span>'+esc(n)+'</span><b>'+sec2(o.sec)+'</b></div>').join('')+'</div>'+(()=>{const tot=dias.map(k=>top.reduce((t,[n,o])=>t+(o.dia[k]||0),0));const mx=Math.max(1,...tot);const barras=tot.map((v,q)=>'<div role="listitem" class="tr-bar"><span class="tr-bv">'+(v?sec2(v):'-')+'</span><span class="tr-bb" style="height:'+Math.max(6,Math.round(v/mx*100))+'%"></span><span class="tr-bd">'+esc(dias[q].slice(5))+'</span></div>').join('');return '<p class="sub" style="margin:0.6rem 0 0.25rem">Tempo de escuta por dia</p><div class="tr-bars" role="list" tabindex="0" aria-label="Tempo de escuta por dia na semana">'+barras+'</div>'})():'<p class="sub" style="margin:0.375rem 0 0">Ainda sem dados de escuta na semana.</p>');
  const detW=v.querySelector('#rsvdet');if(detW)detW.after(wk);else(v.querySelector('.rad-root .mus-main')||v).appendChild(wk);radioListDom();
  const det=v.querySelector('#rsvdet');
  if(det&&!det.querySelector('#rsearch')){const wrap=document.createElement('div');wrap.style.margin='8px 0';wrap.innerHTML='<label class="sr" for="rsearch">Buscar nas rádios salvas</label><input id="rsearch" type="search" placeholder="Buscar rádio pelo nome" maxlength="40" autocomplete="off" style="width:100%;box-sizing:border-box;border-radius:0.75rem;padding:0.625rem;background:var(--row);color:var(--ink);border:0;font:inherit">';const sm=det.querySelector('summary');sm?sm.after(wrap):det.prepend(wrap)}
@@ -231,8 +239,8 @@ function radioFiltrosDom(){const v=$('#view');if(!v||S.tab!=='radio'||v.querySel
 
 function rdLogoTent(){try{return JSON.parse(ls.get('rd_logo_tent')||'{}')||{}}catch(_){return {}}}
 
-async function rdLogosBuscar(){if(S.rdLogoBusy)return;S.rdLogoBusy=true;let tent=rdLogoTent();let n=0;if(ls.get('rd_logo_v')!=='2'){tent={};ls.del('rd_logo_tent');ls.set('rd_logo_v','2')}
- try{const pend=RADIO.s.list.filter(x=>x&&x.u&&!x.img&&(tent[x.u]||0)<2).slice(0,15);
+async function rdLogosBuscar(){if(S.rdLogoBusy)return;S.rdLogoBusy=true;let tent=rdLogoTent();let n=0;if(ls.get('rd_logo_v')!=='3'){tent={};ls.del('rd_logo_tent');ls.set('rd_logo_v','3')}
+ try{const pend=RADIO.s.list.filter(x=>x&&x.u&&!x.img&&(tent[x.u]||0)<3).slice(0,15);
   if(!pend.length){say('Todas as emissoras já têm logotipo ou já foram tentadas');return}
   say('Buscando logotipos… '+pend.length+' emissora(s)');
   for(const x of pend){tent[x.u]=(tent[x.u]||0)+1;
