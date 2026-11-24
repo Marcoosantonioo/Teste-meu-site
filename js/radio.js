@@ -230,7 +230,7 @@ function radFimMontar(){const m=document.querySelector('#view .rad-root .mus-mai
 
  ['#rvolstation','.rad-chips','#rweek'].forEach(sel=>{const e=m.querySelector(sel);if(e&&e.parentElement===m&&m.lastElementChild!==e&&!e.closest('.rad-semana-acc'))m.appendChild(e)})}
 
-function radFundoAplicar(){const r=document.querySelector('#view .rad-player');const root=r&&r.closest('.rad-root');if(!root)return;const img=S.musBgImg||ls.get('mus_bg');root.style.backgroundImage=img?"url('"+img+"')":'';root.style.backgroundSize=img?'cover':'';root.style.backgroundPosition=img?'center':''}
+function radFundoAplicar(){const r=document.querySelector('#view .rad-player');const root=r?r.closest('.rad-root'):document.querySelector('#view .rad-menu');if(!root)return;const img=S.musBgImg||ls.get('mus_bg');root.style.backgroundImage=img?"url('"+img+"')":'';root.style.backgroundSize=img?'cover':'';root.style.backgroundPosition=img?'center':''}
 
 function rdDevId(){let d=ls.get('device_id');if(!d){d=Math.random().toString(36).slice(2,10);ls.set('device_id',d)}return d}
 
