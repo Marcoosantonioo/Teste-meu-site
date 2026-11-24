@@ -175,3 +175,11 @@ html .notch[data-tab="radio"] .sub,html .notch[data-tab="radio"] .dt summary,htm
 #notch[data-tab="radio"] #view:has(.rad-player) .rad-bar > .ib{width:34px;height:34px;min-width:34px}
 #notch[data-tab="radio"] #view:has(.rad-player) .rad-bar > .mus-barra-ctl{gap:0.1rem}
 }
+
+/* Rádio (player): volume em um controle flutuante acionado pelo ícone; filtro e "Mais opções" abaixo da pílula */
+#notch[data-tab="radio"] #view .rad-player:not(.vol-on) .rvol:has(#rvol){display:none!important}
+#notch[data-tab="radio"] #view .rad-player.vol-on .rvol:has(#rvol){display:flex!important;justify-content:center;width:min(94%,640px);margin:0 auto;padding:0.5rem 1rem;border-radius:999px;background:rgba(246,246,248,.92);border:1px solid rgba(255,255,255,.9);box-shadow:0 10px 24px rgba(0,0,0,.14)}
+/* Últimos 7 dias: contraste (fundo escuro com texto claro) */
+#notch[data-tab="radio"] #view #rweek,#notch[data-tab="radio"] #view .rad-semana-acc > .tp-card{background:rgba(22,28,46,.96)!important;color:#f5f5f7!important;border-radius:16px}
+#notch[data-tab="radio"] #view .rad-semana-acc{width:min(94%,760px);margin:0.5rem auto}
+#notch[data-tab="radio"] #view .rad-semana-acc > summary{font-weight:700;cursor:pointer;padding:0.5rem 0.2rem;color:#1d1d1f}
