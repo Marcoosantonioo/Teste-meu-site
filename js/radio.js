@@ -62,6 +62,9 @@ function radGradeHtml(itens){if(!itens.length)return '<p class="sub">Nenhuma emi
   return '<button type="button" class="rad-card'+(on?' on':'')+'" data-a="rpick" data-i="'+i+'" aria-label="'+esc(nome)+(sem?', sem endereço':'')+(on?', ao vivo':'')+'"><span class="rad-logo'+(x.img?'':' sem')+'"'+(x.img?' style="background-image:url(\''+esc(x.img)+'\')"':'')+' aria-hidden="true">'+(x.img?'':esc(nome.slice(0,2).toUpperCase()))+'</span><b>'+esc(nome)+'</b><span class="sub">'+(on?'<span class="rad-live">Ao vivo</span>':esc(sem?'Sem endereço':(x.g||'Emissora')))+'</span></button>'}).join('')+'</div>'}
 
 /* Aba Rádio · Todas as estações: destaques (mais ouvidas) + grade com 4 linhas visíveis (rolagem) + gêneros em abas */
+/* Rádio (player): favorito e aleatório ficam na pílula, depois da emissora (como na Música) */
+function radBarraAjustes(){const pl=document.querySelector('#view .rad-player');if(!pl)return;const root=pl.closest('.rad-root');const bar=root&&root.querySelector(':scope > .rad-bar');const c2=pl.querySelector('.ctrl2');if(!bar||!c2)return;
+ c2.querySelectorAll('button').forEach(b=>{if(b.parentElement!==bar)bar.appendChild(b)});c2.hidden=true}
 function radTodasHtml(itens,chips){const L=RADIO.s.list;let h=[];try{h=JSON.parse(ls.get('rd_hist')||'[]')||[]}catch(_){h=[]}
  const idx=[];(Array.isArray(h)?h:[]).forEach(n=>{const j=L.findIndex((x,q)=>x&&x.u&&rdName(q)===n);if(j>=0&&!idx.includes(j))idx.push(j)});
  for(let j=0;idx.length<8&&j<L.length;j++){if(L[j]&&L[j].u&&!idx.includes(j))idx.push(j)}
@@ -294,4 +297,4 @@ function rdSchedCheck(){let sc;try{sc=JSON.parse(ls.get('rd_sched')||'null')}cat
  if(hm===sc.t&&sc.last!==hoje){sc.last=hoje;ls.set('rd_sched',JSON.stringify(sc));try{rdPlay(sc.i);say('Programação: tocando '+rdName(sc.i))}catch(_){say('Não foi possível iniciar a programação')}}}
 
 /* Fachada: o restante do painel usa somente estas funções da Rádio */
-window.RADIO={emissoraForaAr,radBarra,radDots,radFimMontar,radFundoAplicar,radGradeHtml,radioAct,radioExtrasDom,radioFiltrosDom,radioHistHtml,radioListDom,radioMenuHtml,radioPlayerHtml,radioQualDom,radioRoot,radioTocando,radioView,rdAplicarCor,rdCollect,rdCorDom,rdDetach,rdDevId,rdEmpty,rdExpMais,rdExplorarDom,rdFail,rdGerenciarDom,rdJaSalva,rdLogoTent,rdLogosBuscar,rdMedia,rdMerge,rdMove,rdMoverDom,rdOrdenarDom,rdPlay,rdPool,rdRand,rdRender,rdSaveList,rdSchedCheck,rdSleepTick,rdSort,rdSortList,rdStep,rdStop,rsBox,rsRun,rsTopBoxHtml};
+window.RADIO={emissoraForaAr,radBarra,radDots,radFimMontar,radFundoAplicar,radGradeHtml,radioAct,radioExtrasDom,radioFiltrosDom,radioHistHtml,radioListDom,radioMenuHtml,radioPlayerHtml,radioQualDom,radioRoot,radioTocando,radioView,rdAplicarCor,rdCollect,rdCorDom,rdDetach,rdDevId,rdEmpty,rdExpMais,rdExplorarDom,rdFail,rdGerenciarDom,rdJaSalva,rdLogoTent,rdLogosBuscar,rdMedia,rdMerge,rdMove,rdMoverDom,rdOrdenarDom,rdPlay,rdPool,rdRand,rdRender,rdSaveList,rdSchedCheck,rdSleepTick,rdSort,rdSortList,rdStep,rdStop,rsBox,rsRun,rsTopBoxHtml,radBarraAjustes};
