@@ -183,3 +183,14 @@ html .notch[data-tab="radio"] .sub,html .notch[data-tab="radio"] .dt summary,htm
 #notch[data-tab="radio"] #view #rweek,#notch[data-tab="radio"] #view .rad-semana-acc > .tp-card{background:rgba(22,28,46,.96)!important;color:#f5f5f7!important;border-radius:16px}
 #notch[data-tab="radio"] #view .rad-semana-acc{width:min(94%,760px);margin:0.5rem auto}
 #notch[data-tab="radio"] #view .rad-semana-acc > summary{font-weight:700;cursor:pointer;padding:0.5rem 0.2rem;color:#1d1d1f}
+
+/* Rádio (menu): Destaques e Todas as estações em vidro translúcido, como na referência */
+#notch[data-tab="radio"] #view .rad-menu > section.mus-main:not(.a):not(.b){background:transparent!important;box-shadow:none!important;border:0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#notch[data-tab="radio"] #view .rad-destaques:not(.a):not(.b),#notch[data-tab="radio"] #view .rad-todas:not(.a):not(.b){background:rgba(255,255,255,.2)!important;backdrop-filter:blur(22px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%);border:1px solid rgba(255,255,255,.6)!important;border-radius:22px;box-shadow:0 12px 30px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.6)!important;padding:0.75rem 0.9rem}
+#notch[data-tab="radio"] #view .rad-destaques .rad-card,#notch[data-tab="radio"] #view .rad-todas .rad-card{background:rgba(255,255,255,.26)!important;backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);border:1px solid rgba(255,255,255,.55)!important;border-radius:18px;box-shadow:0 8px 18px rgba(0,0,0,.1)}
+#notch[data-tab="radio"] #view .rad-sec-tit{color:#fff!important;text-shadow:0 1px 3px rgba(0,0,0,.35)}
+/* Rádio (menu): o fundo escolhido vale também para o menu; o contêiner fica transparente para o vidro aparecer */
+#notch[data-tab="radio"] #view .rad-menu:not(.a):not(.b){background-color:transparent!important;background-size:cover;background-position:center;border-radius:22px;box-shadow:none!important}
+#notch[data-tab="radio"] #view .rad-menu > section.mus-main{background-color:transparent!important}
+#notch[data-tab="radio"] #view .rad-menu > section.mus-main{min-width:0;max-width:100%;overflow:hidden}
+#notch[data-tab="radio"] #view .rad-destaques,#notch[data-tab="radio"] #view .rad-todas{max-width:100%;min-width:0;box-sizing:border-box}
