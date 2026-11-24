@@ -63,8 +63,25 @@ function radGradeHtml(itens){if(!itens.length)return '<p class="sub">Nenhuma emi
 
 /* Aba Rádio · Todas as estações: destaques (mais ouvidas) + grade com 4 linhas visíveis (rolagem) + gêneros em abas */
 /* Rádio (player): favorito e aleatório ficam na pílula, depois da emissora (como na Música) */
-function radBarraAjustes(){const pl=document.querySelector('#view .rad-player');if(!pl)return;const root=pl.closest('.rad-root');const bar=root&&root.querySelector(':scope > .rad-bar');const c2=pl.querySelector('.ctrl2');if(!bar||!c2)return;
- c2.querySelectorAll('button').forEach(b=>{if(b.parentElement!==bar)bar.appendChild(b)});c2.hidden=true}
+function radBarraAjustes(){const pl=document.querySelector('#view .rad-player');if(!pl)return;const root=pl.closest('.rad-root');const bar=root&&root.querySelector(':scope > .rad-bar');const c2=pl.querySelector('.ctrl2');
+ if(bar&&c2){
+  let vb=bar.querySelector('[data-a="rvolAtalho"]');
+  if(!vb){vb=document.createElement('button');vb.type='button';vb.className='ib';vb.dataset.a='rvolAtalho';vb.setAttribute('aria-label','Volume');vb.setAttribute('title','Volume');
+   vb.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>';bar.appendChild(vb)}
+  vb.setAttribute('aria-expanded',String(!!RADIO.s.volOpen));pl.classList.toggle('vol-on',!!RADIO.s.volOpen);
+  c2.querySelectorAll('button').forEach(b=>{if(b.parentElement!==bar)bar.appendChild(b)});c2.hidden=true;
+  const navBtn=[...pl.querySelectorAll('button[data-a="rfonly"]')][0];const navRow=navBtn&&navBtn.closest('.rvol');
+  const mais=[...pl.querySelectorAll(':scope > details')].find(d=>/Mais opções/.test(d.textContent));
+  if(mais&&mais.parentElement!==root){bar.after(mais)}
+  if(navRow&&navRow.parentElement!==root){bar.after(navRow)}
+ }
+ /* Últimos 7 dias por emissora: acordeom fechado por padrão; ao expandir, mostra o gráfico */
+ const wk=document.querySelector('#view #rweek');
+ if(wk&&!(wk.parentElement&&wk.parentElement.classList.contains('rad-semana-acc'))){
+  const d=document.createElement('details');d.className='dt rad-semana-acc';const sm=document.createElement('summary');sm.textContent='Últimos 7 dias por emissora';d.appendChild(sm);
+  wk.parentElement.insertBefore(d,wk);d.appendChild(wk);const t=wk.querySelector('.tp-k');if(t)t.hidden=true}
+}
+
 function radTodasHtml(itens,chips){const L=RADIO.s.list;let h=[];try{h=JSON.parse(ls.get('rd_hist')||'[]')||[]}catch(_){h=[]}
  const idx=[];(Array.isArray(h)?h:[]).forEach(n=>{const j=L.findIndex((x,q)=>x&&x.u&&rdName(q)===n);if(j>=0&&!idx.includes(j))idx.push(j)});
  for(let j=0;idx.length<8&&j<L.length;j++){if(L[j]&&L[j].u&&!idx.includes(j))idx.push(j)}
@@ -105,6 +122,7 @@ function radioView(){const R=RADIO.s;
  const tela=RADIO.s.radTela||'menu';return radioRoot(tela==='player'?radioPlayerHtml():radioMenuHtml())}
 
 function radioAct(a,i,b){const R=RADIO.s;
+ if(a==='rvolAtalho'){R.volOpen=!R.volOpen;view();return true}
  if(a==='redit'){R.draft=R.list.map(x=>({...x,n:x.n,u:x.u,g:x.g||''}));if(!R.draft.length)R.draft.push({n:'',u:'',g:''});R.edit=true;view();const n=$('#rn0');if(n)n.focus();return true}
  if(a==='rcan'){R.edit=false;view();const b=$('#view [data-a="redit"]');if(b)b.focus();return true}
  if(a==='radd'){if(R.draft.length>=200){say('Limite de 200 emissoras');return true}rdCollect();R.draft.push({n:'',u:''});view();const n=$('#rn'+(R.draft.length-1));if(n)n.focus();return true}
@@ -208,9 +226,9 @@ async function rsRun(preset){const R=RADIO.s,out=$('#rsres'),q=($('#rsq').value|
 function radioTocando(){return !!(RADIO.s.i===RADIO.s.cur&&typeof RA!=='undefined'&&RA&&!RA.paused)}
 
 function radFimMontar(){const m=document.querySelector('#view .rad-root .mus-main');
- if(!m){const r=document.getElementById('rweek'),v=document.getElementById('view'),nb=document.getElementById('navBaixo');if(r&&v&&nb&&r.nextElementSibling!==nb)v.insertBefore(r,nb);return}
+ if(!m){const r=document.getElementById('rweek'),v=document.getElementById('view'),nb=document.getElementById('navBaixo');if(r&&v&&nb&&!r.closest('.rad-semana-acc')&&r.nextElementSibling!==nb)v.insertBefore(r,nb);return}
 
- ['#rvolstation','.rad-chips','#rweek'].forEach(sel=>{const e=m.querySelector(sel);if(e&&e.parentElement===m&&m.lastElementChild!==e)m.appendChild(e)})}
+ ['#rvolstation','.rad-chips','#rweek'].forEach(sel=>{const e=m.querySelector(sel);if(e&&e.parentElement===m&&m.lastElementChild!==e&&!e.closest('.rad-semana-acc'))m.appendChild(e)})}
 
 function radFundoAplicar(){const r=document.querySelector('#view .rad-player');const root=r&&r.closest('.rad-root');if(!root)return;const img=S.musBgImg||ls.get('mus_bg');root.style.backgroundImage=img?"url('"+img+"')":'';root.style.backgroundSize=img?'cover':'';root.style.backgroundPosition=img?'center':''}
 
