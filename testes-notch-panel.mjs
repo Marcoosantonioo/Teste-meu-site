@@ -222,7 +222,7 @@ w.eval("RADIO.s.radTela='menu';RADIO.s.radSec='salvas';view()");await sl(40);
  abaClick(d,'radio');await sl(40);
 w.eval("RADIO.s.radTela='player';view()");await sl(40);
 const secundaria=d.querySelector('#view .ctrl2');
-  const barraCtl=d.querySelectorAll('.rad-bar .mus-barra-ctl button');ok(barraCtl.length===3&&!!secundaria&&secundaria.querySelectorAll('.ib').length===2,'três controles na barra inferior e favorita/aleatória em linha secundária');
+  const barraCtl=d.querySelectorAll('.rad-bar .mus-barra-ctl button');ok(barraCtl.length===3&&d.querySelectorAll('.rad-bar [data-a="rfav"], .rad-bar [data-a="rrand"]').length===2,'três controles na barra inferior e favorita/aleatória dentro da pílula');
   const rp=d.querySelector('.rad-bar [data-a="rplay"]');ok(!!rp&&/Ouvir|Pausar/.test(rp.getAttribute('aria-label')||rp.textContent),'botão de reproduzir da barra diz a ação disponível');
 w.eval("RADIO.s.radTela='player';view()");await sl(40);
  ok(!!d.querySelector('details summary')&&[...d.querySelectorAll('summary')].some(s=>/Mais opções/.test(s.textContent)),'temporizador e edição ficam em Mais opções');
