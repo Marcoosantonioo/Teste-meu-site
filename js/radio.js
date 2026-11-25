@@ -361,7 +361,19 @@ function radFimMontar(){const m=document.querySelector('#view .rad-root .mus-mai
 
  ['#rvolstation','.rad-chips','#rweek'].forEach(sel=>{const e=m.querySelector(sel);if(e&&e.parentElement===m&&m.lastElementChild!==e&&!e.closest('.rad-semana-acc'))m.appendChild(e)})}
 
-function radFundoAplicar(){const r=document.querySelector('#view .rad-player');const root=r?r.closest('.rad-root'):document.querySelector('#view .rad-menu');if(!root)return;const img=S.musBgImg||ls.get('mus_bg');root.style.backgroundImage=img?"url('"+img+"')":'';root.style.backgroundSize=img?'cover':'';root.style.backgroundPosition=img?'center':''}
+/* Fundo da Rádio (padrão Apple): uma única camada atrás de todas as abas da Rádio.
+   Usa a imagem escolhida pelo usuário (Música > Imagem de fundo) ou, sem escolha, um degradê neutro. */
+function radFundoAplicar(){const v=document.querySelector('#view');if(!v)return;
+ let f=v.querySelector(':scope > .rad-fundo');
+ if(S.tab!=='radio'){if(f)f.remove();return}
+ if(!f){f=document.createElement('div');f.className='rad-fundo';f.setAttribute('aria-hidden','true');const h1=v.querySelector(':scope > h1.tela-titulo');h1?h1.after(f):v.prepend(f)}
+ const img=S.musBgImg||ls.get('mus_bg');
+ f.style.backgroundImage=img?"url('"+img+"')":'';f.style.backgroundSize=img?'cover':'';f.style.backgroundPosition=img?'center':'';
+ /* limpa o fundo que versões anteriores aplicavam em cada contêiner */
+ v.querySelectorAll('.rad-root,.rad-menu').forEach(e=>{e.style.backgroundImage='';e.style.backgroundSize='';e.style.backgroundPosition=''});
+ /* rótulo "Agora ouvindo" e bloco de volume da emissora saem da pílula e das abas */
+ v.querySelectorAll('.rad-bar *').forEach(e=>{if(e.children.length===0&&e.textContent.trim()==='Agora ouvindo')e.style.display='none'});
+}
 
 function rdDevId(){let d=ls.get('device_id');if(!d){d=Math.random().toString(36).slice(2,10);ls.set('device_id',d)}return d}
 
