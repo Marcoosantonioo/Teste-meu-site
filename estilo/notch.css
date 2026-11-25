@@ -1343,3 +1343,25 @@ body.dev-computador #quick{top:auto!important;bottom:calc(4.75rem + env(safe-are
 /* Treinos: texto claro sobre o fundo escuro dos cartões (contraste WCAG 1.4.3); botões e campos mantêm o próprio estilo */
 #notch #view .tr-card,#notch #view .tr-card *:not(button):not(.chip):not(input):not(select):not(label.tr-x):not(.tr-bb):not(.tr-bar){color:#f5f5f7!important}
 #notch #view .tr-card .sub:not(button){color:#c8ccd6!important}
+
+/* Música (player): barra sempre em uma linha; em telas estreitas o texto secundário e a capa saem */
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar:not(.a):not(.b){flex-wrap:nowrap!important;gap:0.35rem!important;padding:0.4rem 0.55rem!important;min-width:0}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > .mus-barra-txt{flex:1 1 0!important;min-width:0!important;overflow:hidden}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > .mus-barra-txt > b,#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > .mus-barra-txt > .sub{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > .mus-barra-ctl,#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > .mus-ico,#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > #musDevBtn,#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > .mus-vol{flex:0 0 auto!important}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > .mus-ico,#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > #musDevBtn,#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > .mus-vol{width:34px!important;height:34px!important;min-width:34px!important}
+@media (max-width:760px){
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > .mus-barra-txt > .sub{display:none!important}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > .mus-barra-capa{display:none!important}
+#notch[data-tab="music"] #view:has(.mus-player) .mus-bar > .mus-barra-ctl .ib{width:36px!important;height:36px!important;min-width:36px!important}
+}
+
+/* Treinos: texto claro sobre o fundo escuro da aba (contraste WCAG 1.4.3); botões mantêm o próprio estilo */
+#notch[data-tab="treino"] #view,#notch[data-tab="treino"] #view *:not(button):not(.chip):not(input):not(select):not(textarea){color:#f5f5f7}
+#notch[data-tab="treino"] #view p,#notch[data-tab="treino"] #view .sub,#notch[data-tab="treino"] #view label{color:#d3d8e2!important}
+#notch[data-tab="treino"] #view input:not([type=checkbox]):not([type=radio]),#notch[data-tab="treino"] #view select,#notch[data-tab="treino"] #view textarea{color:#f5f5f7!important;background:#0c1426!important;border:1px solid #8a94a8!important}
+#notch[data-tab="treino"] #view ::placeholder{color:#aab3c5!important;opacity:1}
+#notch[data-tab="treino"] #view input[type=date]::-webkit-calendar-picker-indicator{filter:invert(1)}
+#notch[data-tab="treino"] #view input[type=date],#notch[data-tab="treino"] #view input[type=month],#notch[data-tab="treino"] #view input[type=time]{color-scheme:dark;color:#f5f5f7!important}
+/* Reduzir transparência (Ajustes): superfícies de vidro opacas em toda a aplicação */
+#notch.reduzir-transp .mus-volpop,#notch.reduzir-transp .mus-bar,#notch.reduzir-transp details.dt{background:#f4f5f8!important;border-color:#c9ced8!important}

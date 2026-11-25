@@ -194,3 +194,145 @@ html .notch[data-tab="radio"] .sub,html .notch[data-tab="radio"] .dt summary,htm
 #notch[data-tab="radio"] #view .rad-menu > section.mus-main{background-color:transparent!important}
 #notch[data-tab="radio"] #view .rad-menu > section.mus-main{min-width:0;max-width:100%;overflow:hidden}
 #notch[data-tab="radio"] #view .rad-destaques,#notch[data-tab="radio"] #view .rad-todas{max-width:100%;min-width:0;box-sizing:border-box}
+
+/* Rádio: nomes e textos dos cartões centralizados */
+#notch[data-tab="radio"] #view .rad-destaques .rad-card,#notch[data-tab="radio"] #view .rad-todas .rad-card{text-align:center}
+#notch[data-tab="radio"] #view .rad-destaques .rad-card *,#notch[data-tab="radio"] #view .rad-todas .rad-card *{text-align:center}
+/* Rádio (menu): sem papel de parede, um gradiente de reserva deixa o vidro visível */
+#notch[data-tab="radio"] #view .rad-menu:not([style*="background-image"]){background-image:linear-gradient(135deg,#5b3a6b 0%,#1f3c5c 55%,#7a2a3a 100%)!important;background-color:transparent!important}
+
+/* ===== Rádio: mini player, voltar com chevron, gêneros em controle segmentado e seções em lista agrupada (padrão Apple) ===== */
+#notch[data-tab="radio"] #view .rad-mini:not(.a):not(.b){display:flex;align-items:center;gap:0.6rem;width:min(96%,640px);margin:0.75rem auto 0;padding:0.45rem 0.5rem 0.45rem 0.6rem;border-radius:999px;background:rgba(255,255,255,.6);backdrop-filter:blur(20px) saturate(170%);-webkit-backdrop-filter:blur(20px) saturate(170%);border:1px solid rgba(255,255,255,.85);box-shadow:0 10px 26px rgba(0,0,0,.14);color:#1d1d1f;box-sizing:border-box}
+#notch[data-tab="radio"] #view .rad-mini-info{flex:1 1 auto;display:flex;align-items:center;gap:0.6rem;min-width:0;background:none;border:0;padding:0;text-align:left;color:inherit;cursor:pointer;min-height:44px}
+#notch[data-tab="radio"] #view .rad-mini-capa{width:40px;height:40px;min-width:40px;border-radius:10px;overflow:hidden;background:#d8dbe2;display:block}
+#notch[data-tab="radio"] #view .rad-mini-capa > span{display:block;width:100%;height:100%;background-size:cover;background-position:center}
+#notch[data-tab="radio"] #view .rad-mini-txt{min-width:0;display:flex;flex-direction:column}
+#notch[data-tab="radio"] #view .rad-mini-txt b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:0.95rem;color:#1d1d1f}
+#notch[data-tab="radio"] #view .rad-mini-txt .sub{color:#3a3a3e}
+#notch[data-tab="radio"] #view .rad-mini-btn{width:44px;height:44px;min-width:44px;border-radius:50%;border:0;background:#fff;color:#1d1d1f;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);cursor:pointer}
+#notch[data-tab="radio"] #view .rad-voltar{background:none;border:0;padding:0.4rem 0.3rem;min-height:44px;display:inline-flex;align-items:center;gap:0.25rem;font-size:1.05rem;font-weight:600;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.4);cursor:pointer}
+#notch[data-tab="radio"] #view .rad-voltar > span{font-size:1.4rem;line-height:1}
+#notch[data-tab="radio"] #view .rad-gen-tabs{display:inline-flex;gap:0;padding:3px;border-radius:999px;background:rgba(0,0,0,.18);overflow-x:auto;max-width:100%;scrollbar-width:none}
+#notch[data-tab="radio"] #view .rad-gen-tabs .chip{background:transparent!important;border:0!important;border-radius:999px;min-height:36px;padding:0 0.9rem;color:#fff!important;box-shadow:none!important;white-space:nowrap}
+#notch[data-tab="radio"] #view .rad-gen-tabs .chip[aria-pressed="true"],#notch[data-tab="radio"] #view .rad-gen-tabs .chip.on{background:#fff!important;color:#111!important;box-shadow:0 2px 6px rgba(0,0,0,.2)!important}
+#notch[data-tab="radio"] #view details.dt:not(.a):not(.b){background:rgba(255,255,255,.35);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);border:1px solid rgba(255,255,255,.6);border-radius:14px;margin:0.4rem auto;width:min(94%,760px);box-sizing:border-box}
+#notch[data-tab="radio"] #view details.dt > summary:not(.a):not(.b){display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 0.9rem;font-weight:600;color:#1d1d1f;cursor:pointer;list-style:none}
+#notch[data-tab="radio"] #view details.dt > summary::-webkit-details-marker{display:none}
+#notch[data-tab="radio"] #view details.dt > summary::after{content:"›";font-size:1.4rem;line-height:1;color:#3a3a3e;transform:rotate(0deg);transition:transform .15s}
+#notch[data-tab="radio"] #view details.dt[open] > summary::after{transform:rotate(90deg)}
+#notch[data-tab="radio"] #view details.dt[open] > :not(summary){padding:0 0.9rem 0.75rem}
+#notch[data-tab="radio"] #view .rad-menu > section.mus-main{overflow:visible}
+#notch[data-tab="radio"] #view .rad-mini:not(.a):not(.b){position:sticky;bottom:0.6rem;z-index:6}
+
+/* ===== Rádio: ajustes de layout (itens 6–15) ===== */
+/* 12 · Hierarquia tipográfica: título da tela, título de seção e texto de apoio */
+#notch[data-tab="radio"] #view .rad-sec-tit{font-size:1.1rem;font-weight:700;letter-spacing:-0.01em;margin:1rem 0 0.5rem;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.35)}
+#notch[data-tab="radio"] #view .sub{font-size:0.875rem;line-height:1.4}
+/* 14 · Espaçamento em múltiplos de 8 */
+#notch[data-tab="radio"] #view .rad-root:not(.a):not(.b){gap:1rem!important}
+#notch[data-tab="radio"] #view .rad-player:not(.a):not(.b){gap:1rem}
+#notch[data-tab="radio"] #view .rad-sec-head{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin:1rem 0 0.5rem}
+#notch[data-tab="radio"] #view .rad-sec-head .rad-sec-tit{margin:0}
+#notch[data-tab="radio"] #view .rad-sec-head .sub{color:#fff;opacity:.9}
+#notch[data-tab="radio"] #view .rad-sec-head .chip{margin-left:auto;min-height:36px}
+/* 7 · Destaques: cartões maiores em carrossel horizontal */
+#notch[data-tab="radio"] #view .rad-destaques .rad-card{flex:0 0 10.5rem}
+/* 9 · Total da semana em destaque e o dia atual marcado */
+#notch[data-tab="radio"] #view .rad-total{display:flex;align-items:baseline;gap:0.5rem;margin:0.5rem 0 0.75rem}
+#notch[data-tab="radio"] #view .rad-total b{font-size:1.75rem;font-weight:700;color:#fff}
+#notch[data-tab="radio"] #view .rad-total .sub{color:#fff;opacity:.9}
+#notch[data-tab="radio"] #view .tr-bar.hoje .tr-bb{background:#fff!important;box-shadow:0 0 0 2px rgba(255,255,255,.6)}
+#notch[data-tab="radio"] #view .tr-bar.hoje .tr-bd{font-weight:700}
+/* 8 · Estados vazios com ícone, mensagem e ação */
+#notch[data-tab="radio"] #view .rad-vazio{display:flex;flex-direction:column;align-items:center;gap:0.5rem;text-align:center;padding:1rem;border-radius:16px;background:rgba(255,255,255,.2);margin:0.5rem 0}
+#notch[data-tab="radio"] #view .rad-vazio b{color:#fff;font-size:1rem}
+#notch[data-tab="radio"] #view .rad-vazio .sub{color:#fff;opacity:.9;margin:0}
+#notch[data-tab="radio"] #view .rad-vazio-ic{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.35);display:inline-flex;align-items:center;justify-content:center;color:#fff}
+/* 13 · Ícones de um só estilo (traço 2, pontas arredondadas) */
+#notch[data-tab="radio"] #view svg{stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* 10 · Celular: lista com logo à esquerda, em vez de grade de colunas irregulares */
+@media (max-width:640px){
+ #notch[data-tab="radio"] #view .rad-todas > .rad-grid{grid-template-columns:1fr;gap:0.5rem}
+ #notch[data-tab="radio"] #view .rad-todas .rad-card{flex-direction:row;align-items:center;text-align:left;gap:0.75rem;padding:0.5rem;min-height:64px}
+ #notch[data-tab="radio"] #view .rad-todas .rad-card .rad-logo{width:56px;height:56px;min-width:56px;flex:0 0 56px}
+}
+/* 15 · Reduzir transparência (Ajustes): sem desfoque, superfícies opacas */
+#notch.reduzir-transp *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#notch.reduzir-transp .rad-card,#notch.reduzir-transp .rad-destaques,#notch.reduzir-transp .rad-todas,#notch.reduzir-transp .rad-mini,#notch.reduzir-transp .rad-semana-acc,#notch.reduzir-transp .rad-vazio,#notch.reduzir-transp details.dt,#notch.reduzir-transp .mus-volpop,#notch.reduzir-transp .mus-glass,#notch.reduzir-transp .rad-bar{background:#f4f5f8!important;border-color:#c9ced8!important;color:#1d1d1f}
+#notch.reduzir-transp .rad-todas .rad-card *,#notch.reduzir-transp .rad-destaques .rad-card *,#notch.reduzir-transp .rad-mini *,#notch.reduzir-transp .rad-bar *{color:#1d1d1f}
+
+/* ===== Rádio · padrão Apple (itens 1–7) ===== */
+/* 1 · Título grande que encolhe ao rolar */
+#notch[data-tab="radio"] #view .rad-titulo-grande{font-size:2rem;font-weight:800;letter-spacing:-0.02em;line-height:1.15;padding:0.5rem 0.25rem 0.25rem;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.35);position:sticky;top:0;z-index:4;transition:font-size .2s ease,padding .2s ease,background-color .2s ease}
+#notch[data-tab="radio"] #view .rad-titulo-grande.compacto{font-size:1.05rem;padding:0.6rem 0.25rem;background:rgba(0,0,0,.28);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:0}
+/* 2 · Busca em largura total, abaixo do título */
+#notch[data-tab="radio"] #view .rad-head{display:flex;flex-direction:column;align-items:stretch;gap:0.6rem}
+#notch[data-tab="radio"] #view .rad-search,#notch[data-tab="radio"] #view .rad-search input{width:100%;box-sizing:border-box}
+/* 3 · Lista ou grade (controle segmentado) */
+#notch[data-tab="radio"] #view .rad-vista{display:inline-flex;padding:3px;border-radius:999px;background:rgba(0,0,0,.18);margin:0.5rem 0}
+#notch[data-tab="radio"] #view .rad-vista-b{background:transparent;border:0;border-radius:999px;min-height:36px;padding:0 1rem;color:#fff;font-weight:600;cursor:pointer}
+#notch[data-tab="radio"] #view .rad-vista-b[aria-pressed="true"]{background:#fff;color:#111;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+#notch[data-tab="radio"] #view .rad-todas.lista > .rad-grid{grid-template-columns:1fr;gap:0.5rem}
+#notch[data-tab="radio"] #view .rad-todas.lista .rad-card{flex-direction:row;align-items:center;text-align:left;gap:0.75rem;padding:0.5rem;min-height:64px}
+#notch[data-tab="radio"] #view .rad-todas.lista .rad-card .rad-logo{width:56px;height:56px;min-width:56px;flex:0 0 56px}
+/* 4 · Tela de reprodução como folha: alça no topo e animação de subida (respeita reduzir movimento) */
+#notch[data-tab="radio"] #view .rad-alca{display:block;width:72px;height:32px;margin:0 auto;border:0;padding:0;background:linear-gradient(transparent 42%,rgba(255,255,255,.9) 42% 58%,transparent 58%) center/56px 100% no-repeat;cursor:pointer}
+#notch[data-tab="radio"] #view .rad-player:not(.a):not(.b){animation:radSobe .25s ease-out}
+@keyframes radSobe{from{transform:translateY(24px);opacity:.5}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){#notch[data-tab="radio"] #view .rad-player{animation:none}}
+/* 5 · Hierarquia: nome em destaque, gênero secundário, badge "Ao vivo" discreto */
+#notch[data-tab="radio"] #view .rad-player b{font-size:1.35rem;font-weight:700;letter-spacing:-0.01em}
+#notch[data-tab="radio"] #view .rad-player .sub{font-size:0.9rem;color:#3a3a3e}
+#notch[data-tab="radio"] #view .rad-live{display:inline-block;background:#c8102e;color:#fff;border-radius:999px;padding:0.1rem 0.5rem;font-size:0.75rem;font-weight:700}
+/* 6 · Volume fixo abaixo dos controles, com ícones nas extremidades (o rótulo fica só para leitores de tela) */
+#notch[data-tab="radio"] #view .rad-player:not(.vol-on) .rvol:has(#rvol),#notch[data-tab="radio"] #view .rad-player.vol-on .rvol:has(#rvol){display:flex!important;align-items:center;justify-content:center;gap:0.5rem;width:min(94%,520px);margin:0 auto;padding:0.25rem 0;background:none!important;border:0!important;box-shadow:none!important}
+#notch[data-tab="radio"] #view .rad-player .rvol label[for="rvol"]{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#notch[data-tab="radio"] #view .rad-player .rvol input[type="range"]{flex:1 1 auto;min-width:0;accent-color:#fff}
+#notch[data-tab="radio"] #view .rad-vol-ic{display:inline-flex;color:#1d1d1f;flex:0 0 auto}
+#notch[data-tab="radio"] #view [data-a="rvolAtalho"]{display:none!important}
+/* 7 · Menu "…": ações secundárias num cartão que abre sobre a pílula, sem linha no meio da tela */
+#notch[data-tab="radio"] #view details.rad-mais-pop:not(.a):not(.b){width:min(94%,520px);margin:0.5rem auto;border-radius:18px;background:rgba(246,246,248,.92);border:1px solid rgba(255,255,255,.9);box-shadow:0 12px 28px rgba(0,0,0,.18)}
+#notch[data-tab="radio"] #view details.rad-mais-pop:not([open]){display:none}
+#notch[data-tab="radio"] #view details.rad-mais-pop > summary{display:none}
+#notch[data-tab="radio"] #view details.rad-mais-pop[open] > :not(summary){padding:0.75rem 1rem}
+/* O título padrão da aba é substituído pelo título grande da Rádio (item 1) */
+#notch[data-tab="radio"] #view > .tela-titulo{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important}
+
+/* ===== Rádio · itens 8–16 (padrão Apple) ===== */
+/* 11 · Tokens de espaçamento (múltiplos de 8), margem de 16 px e raios padronizados */
+#notch[data-tab="radio"]{--rad-sp:8px;--rad-margem:16px;--rad-raio:16px;--rad-raio-grande:22px;--rad-accent:#c8102e}
+#notch[data-tab="radio"] #view .rad-root:not(.a):not(.b){padding:var(--rad-margem)!important;gap:calc(var(--rad-sp) * 2)!important}
+#notch[data-tab="radio"] #view .rad-viz,#notch[data-tab="radio"] #view .rad-card,#notch[data-tab="radio"] #view .rad-mini{border-radius:var(--rad-raio)}
+/* 10 · Cor de destaque vinda da emissora */
+#notch[data-tab="radio"] #view .rad-live{background:var(--rad-accent)}
+#notch[data-tab="radio"] #view .rad-mini-btn{color:var(--rad-accent)}
+#notch[data-tab="radio"] #view .rad-vista-b[aria-pressed="true"]{color:var(--rad-accent)}
+/* 12 · Separadores recuados (começam depois da miniatura), como nas listas do iOS */
+#notch[data-tab="radio"] #view .rad-todas.lista .rad-card{position:relative;border-radius:0!important;background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#notch[data-tab="radio"] #view .rad-todas.lista .rad-card::before{content:"";position:absolute;left:84px;right:0;top:0;height:1px;background:rgba(255,255,255,.4)}
+#notch[data-tab="radio"] #view .rad-todas.lista .rad-card:first-child::before{display:none}
+/* 13 · Confirmação HUD: aviso central com visto, some sozinho */
+.rad-hud{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);z-index:10000;display:flex;align-items:center;gap:8px;padding:12px 18px;border-radius:18px;background:rgba(20,22,30,.82);color:#fff;font:600 15px/1.2 system-ui,-apple-system,sans-serif;box-shadow:0 12px 32px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+.rad-hud.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.rad-hud-ic{display:inline-flex;width:24px;height:24px;border-radius:50%;background:#34c759;align-items:center;justify-content:center;color:#fff}
+/* 8 · Menu de contexto do toque longo: prévia da emissora e ações nomeadas */
+.rad-ctx{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.35);display:flex;align-items:flex-end;justify-content:center;padding:16px}
+.rad-ctx-card{width:min(100%,420px);background:rgba(246,246,248,.96);border-radius:22px;padding:8px;box-shadow:0 20px 48px rgba(0,0,0,.3);color:#1d1d1f}
+.rad-ctx-prev{display:flex;align-items:center;gap:12px;padding:12px}
+.rad-ctx-logo{width:56px;height:56px;min-width:56px;border-radius:14px;background:#d8dbe2;display:inline-flex;align-items:center;justify-content:center;font-weight:700;overflow:hidden}
+.rad-ctx-logo > span{display:block;width:100%;height:100%;background-size:cover;background-position:center}
+.rad-ctx-txt{display:flex;flex-direction:column;min-width:0}
+.rad-ctx-txt b{font-size:17px}
+.rad-ctx-op{display:block;width:100%;min-height:50px;border:0;border-top:1px solid rgba(0,0,0,.08);background:transparent;font:500 17px/1.2 system-ui,-apple-system,sans-serif;color:#0a6cff;cursor:pointer;border-radius:0}
+.rad-ctx-op:first-of-type{border-top:0}
+.rad-ctx-cancel{color:#c8102e;font-weight:600;margin-top:8px;background:#fff;border-radius:14px;border:0}
+/* 14 · Estados vazios padronizados (já usados no gráfico e em favoritas) */
+#notch[data-tab="radio"] #view .rad-vazio button{min-height:44px}
+/* 15 · Transições com mola e alternativa para reduzir movimento */
+#notch[data-tab="radio"] #view .rad-card,#notch[data-tab="radio"] #view .rad-mini,#notch[data-tab="radio"] #view .rad-vazio{transition:transform .35s cubic-bezier(.2,.9,.3,1.15),opacity .25s ease}
+@media (prefers-reduced-motion:reduce){
+ #notch[data-tab="radio"] *,.rad-hud,.rad-ctx{transition:none!important;animation:none!important}
+}
+/* 16 · Alvos de 44 px nos controles da pílula e ícones de um só traço */
+#notch[data-tab="radio"] #view .rad-bar .ib,#notch[data-tab="radio"] #view .rad-bar [data-a="radMais"]{min-width:44px;min-height:44px}
+#notch[data-tab="radio"] #view .rad-vol-ic svg,#notch[data-tab="radio"] #view .rad-hud svg{stroke-width:2}
