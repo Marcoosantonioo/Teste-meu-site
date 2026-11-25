@@ -53,7 +53,7 @@ function radioPlayerHtml(){const R=RADIO.s;const L=R.list,pl=L.map((x,i)=>x.u?i:
  const hero='<span class="rad-hero'+(s.img?' com-logo':' sem-logo')+(on?' on':'')+'" aria-hidden="true">'+(s.img?'<img src="'+esc(s.img)+'" alt="" loading="lazy" referrerpolicy="no-referrer">':'<span class="eq"><i></i><i></i><i></i></span>')+'</span>';
  const iniciais=n=>String(n||'').replace(/[^A-Za-zÀ-ú0-9 ]/g,' ').split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase()||'?';
  const carrossel='<div class="rad-stage" aria-label="Rádios anteriores e próximas">'+viz.map(o=>{const a=Math.abs(o.d),sc=a===1?0.72:0.5,op=a===1?0.85:0.5,z=a===1?2:1;const midia=L[o.i].img?'<img src="'+esc(L[o.i].img)+'" alt="" loading="lazy" referrerpolicy="no-referrer">':'<span class="rad-viz-ini" aria-hidden="true">'+esc(iniciais(rdName(o.i)))+'</span>';return '<button type="button" class="rad-viz" data-a="rpick" data-i="'+o.i+'" style="--d:'+o.d+';--s:'+sc+';--o:'+op+';--z:'+z+'" aria-label="Ouvir '+esc(rdName(o.i))+'">'+midia+'</button>'}).join('')+hero+'</div>';
- return `<div class="rad-player"><div class="rad-head rad-head-play"><button type="button" class="chip" data-a="radMenu">‹ Menu de rádio</button><div class="rad-search"><label class="sr" for="radBuscaP">Buscar emissora</label><input id="radBuscaP" type="search" value="${esc(S.radBusca||'')}" placeholder="Buscar por nome, gênero ou cidade" data-a="radBuscaP"></div></div>${carrossel}<div class="rad-info"><b>${esc(L.length?rdName(k):'Sem emissoras')}</b>${on?'<span class="rad-live">Ao vivo</span>':''}</div><p class="sub" style="margin:0 0 10px">${s.g?esc(s.g)+' · ':''}${pos?'Emissora '+pos+' de '+pl.length:(RADIO.s.onlyFav?pl.length+(pl.length===1?' favorita':' favoritas'):pl.length+(pl.length===1?' emissora com link':' emissoras com link'))}</p>\n 
+ return `<div class="rad-player"><div class="rad-head rad-head-play"><button type="button" class="rad-voltar" data-a="radMenu" aria-label="Voltar para Rádio"><span aria-hidden="true">‹</span> Rádio</button><div class="rad-search"><label class="sr" for="radBuscaP">Buscar emissora</label><input id="radBuscaP" type="search" value="${esc(S.radBusca||'')}" placeholder="Buscar por nome, gênero ou cidade" data-a="radBuscaP"></div></div>${carrossel}<div class="rad-info"><b>${esc(L.length?rdName(k):'Sem emissoras')}</b>${on?'<span class="rad-live">Ao vivo</span>':''}</div><p class="sub" style="margin:0 0 10px">${s.g?esc(s.g)+' · ':''}${pos?'Emissora '+pos+' de '+pl.length:(RADIO.s.onlyFav?pl.length+(pl.length===1?' favorita':' favoritas'):pl.length+(pl.length===1?' emissora com link':' emissoras com link'))}</p>\n 
  ${RADIO.s.i>=0&&RADIO.s.i!==RADIO.s.cur&&RADIO.s.st?'<p class="sub" style="margin:0 0 8px">Tocando agora: <b>'+esc(rdName(RADIO.s.i))+'</b></p>':''}<div class="rvol" style="margin:0 0 8px"><button type="button" class="chip" data-a="rfonly" aria-pressed="${RADIO.s.onlyFav?'true':'false'}">Navegar só entre favoritas: ${RADIO.s.onlyFav?'ligado':'desligado'}</button></div>${RADIO.s.st==='err'&&s.u?'<div class="rvol" style="margin:0 0 8px"><button type="button" class="chip" data-a="rplay">Tentar novamente</button><button type="button" class="chip" data-a="rnext">Escolher outra rádio</button></div><details class="dt" style="margin:0 0 8px"><summary>Mais informações</summary><p class="sub">Endereço da transmissão: '+esc(s.u)+'</p></details>':''}<div class="ctrl ctrl2"><button type="button" class="ib sm like" data-a="rfav" aria-pressed="${isFav(s.u)}" aria-label="${isFav(s.u)?'Remover dos favoritos':'Adicionar aos favoritos'}">${ic(isFav(s.u)?'heartf':'heart')}</button><button type="button" class="ib" data-a="rrand" aria-label="Ouvir rádio aleatória">${ic('shuf')}</button></div>
  <div class="rvol"><label for="rvol" class="sub">Volume</label><input id="rvol" type="range" min="0" max="1" step="0.05" value="${R.vol}"></div><details class="dt" style="margin:0.5rem 0"><summary>Mais opções</summary><div class="rvol"><button class="chip" data-a="redit">Editar emissoras</button></div>${sleepRow()}</details></div>`}
 
@@ -63,7 +63,13 @@ function radGradeHtml(itens){if(!itens.length)return '<p class="sub">Nenhuma emi
 
 /* Aba Rádio · Todas as estações: destaques (mais ouvidas) + grade com 4 linhas visíveis (rolagem) + gêneros em abas */
 /* Rádio (player): favorito e aleatório ficam na pílula, depois da emissora (como na Música) */
-function radBarraAjustes(){const pl=document.querySelector('#view .rad-player');if(!pl)return;const root=pl.closest('.rad-root');const bar=root&&root.querySelector(':scope > .rad-bar');const c2=pl.querySelector('.ctrl2');
+/* Últimos 7 dias por emissora: acordeom fechado por padrão, na página Explorar */
+function radSemanaAcordeon(){ const wk=document.querySelector('#view #rweek');
+ if(wk&&!(wk.parentElement&&wk.parentElement.classList.contains('rad-semana-acc'))){
+  const d=document.createElement('details');d.className='dt rad-semana-acc';const sm=document.createElement('summary');sm.textContent='Últimos 7 dias por emissora';d.appendChild(sm);
+  wk.parentElement.insertBefore(d,wk);d.appendChild(wk);const t=wk.querySelector('.tp-k');if(t)t.hidden=true}
+}
+function radBarraAjustes(){radSemanaAcordeon();const pl=document.querySelector('#view .rad-player');if(!pl)return;const root=pl.closest('.rad-root');const bar=root&&root.querySelector(':scope > .rad-bar');const c2=pl.querySelector('.ctrl2');
  if(bar&&c2){
   let vb=bar.querySelector('[data-a="rvolAtalho"]');
   if(!vb){vb=document.createElement('button');vb.type='button';vb.className='ib';vb.dataset.a='rvolAtalho';vb.setAttribute('aria-label','Volume');vb.setAttribute('title','Volume');
@@ -75,13 +81,129 @@ function radBarraAjustes(){const pl=document.querySelector('#view .rad-player');
   if(mais&&mais.parentElement!==root){bar.after(mais)}
   if(navRow&&navRow.parentElement!==root){bar.after(navRow)}
  }
- /* Últimos 7 dias por emissora: acordeom fechado por padrão; ao expandir, mostra o gráfico */
- const wk=document.querySelector('#view #rweek');
- if(wk&&!(wk.parentElement&&wk.parentElement.classList.contains('rad-semana-acc'))){
-  const d=document.createElement('details');d.className='dt rad-semana-acc';const sm=document.createElement('summary');sm.textContent='Últimos 7 dias por emissora';d.appendChild(sm);
-  wk.parentElement.insertBefore(d,wk);d.appendChild(wk);const t=wk.querySelector('.tp-k');if(t)t.hidden=true}
+ 
 }
 
+/* Rádio · ajustes de layout: filtro curto, destaques com "Ver todas", estado vazio com ação, total da semana e toque longo para favoritar */
+function radLayoutAjustes(){const v=document.querySelector('#view');if(!v||S.tab!=='radio')return;
+ radAcessibilidade(v);
+ const f=v.querySelector('button[data-a="rfonly"]');if(f&&f.textContent.indexOf('Só favoritas')<0)f.textContent='Só favoritas';
+ const h=[...v.querySelectorAll('h3.rad-sec-tit')].find(e=>/Destaques/.test(e.textContent));
+ if(h&&!h.dataset.ajustado){h.dataset.ajustado='1';h.textContent='Destaques';const head=document.createElement('div');head.className='rad-sec-head';h.parentNode.insertBefore(head,h);
+  const sub=document.createElement('span');sub.className='sub';sub.textContent='mais ouvidas';const btn=document.createElement('button');btn.type='button';btn.className='chip';btn.dataset.a='radVerTodas';btn.textContent='Ver todas';head.append(h,sub,btn)}
+ const vazio=[...v.querySelectorAll('p.sub')].find(p=>/Ainda sem dados de escuta/.test(p.textContent));
+ if(vazio){const bloco=document.createElement('div');bloco.className='rad-vazio';bloco.innerHTML='<span class="rad-vazio-ic" aria-hidden="true">'+ic('heart')+'</span><b>Sem escuta esta semana</b><p class="sub">Ouça uma emissora para ver o seu tempo aqui.</p><button type="button" class="chip" data-a="radIrTodas">Escolher emissoras</button>';vazio.replaceWith(bloco)}
+ const wk=v.querySelector('#rweek');
+ if(wk&&!wk.dataset.total){wk.dataset.total='1';
+  const L=S.listenAll||(()=>{try{return JSON.parse(ls.get('listen')||'{}')||{}}catch(_){return {}}})();
+  const dias=[...Array(7).keys()].reverse().map(i=>dayKey(new Date(Date.now()-i*864e5)));
+  const soma=dias.reduce((t,k)=>{const d=L[k];return t+(d&&d.r?Object.values(d.r).reduce((x,y)=>x+y,0):0)},0);
+  const h2=Math.floor(soma/3600),m2=Math.round((soma%3600)/60);
+  const tot=document.createElement('div');tot.className='rad-total';tot.innerHTML='<b>'+(h2?h2+' h '+m2+' min':m2+' min')+'</b><span class="sub">nesta semana</span>';
+  const pz=wk.querySelector('p.sub');if(pz)pz.before(tot);else wk.prepend(tot);
+  const bars=wk.querySelectorAll('.tr-bar');if(bars.length)bars[bars.length-1].classList.add('hoje')}
+}
+/* Rádio · acessibilidade e experiência (itens 20–26): dica do toque longo, atalho F, anúncio ao vivo, atalhos de teclado,
+   erro e carregamento visíveis, e retorno do foco à tela de origem */
+let radUltimoAnuncio=null,radTextoAnuncio='',radRetorno=false;
+/* Rádio · itens 8, 10, 13 e 14: menu de contexto, confirmação HUD, cor de destaque e estados vazios */
+function radToast(t){let h=document.getElementById('radHud');if(!h){h=document.createElement('div');h.id='radHud';h.className='rad-hud';h.setAttribute('role','status');document.body.appendChild(h)}
+ h.innerHTML='<span class="rad-hud-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M20 6L9 17l-5-5"/></svg></span><span>'+esc(t)+'</span>';
+ h.classList.add('on');clearTimeout(h._t);h._t=setTimeout(()=>h.classList.remove('on'),1600)}
+function radMenuContexto(i){const x=RADIO.s.list[i];if(!x)return;document.querySelectorAll('.rad-ctx').forEach(e=>e.remove());
+ const era=isFav(x.u);const o=document.createElement('div');o.className='rad-ctx';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label','Ações da emissora '+(x.n||''));
+ o.innerHTML='<div class="rad-ctx-card"><div class="rad-ctx-prev"><span class="rad-ctx-logo" aria-hidden="true">'+(x.img?'<span style="background-image:url(\''+esc(x.img)+'\')"></span>':esc((x.n||'Em').slice(0,2).toUpperCase()))+'</span><span class="rad-ctx-txt"><b>'+esc(x.n||'Emissora')+'</b><span class="sub">'+esc(x.g||'')+'</span></span></div><button type="button" class="rad-ctx-op" data-ctx="tocar">Tocar agora</button><button type="button" class="rad-ctx-op" data-ctx="fav">'+(era?'Remover dos favoritos':'Adicionar aos favoritos')+'</button><button type="button" class="rad-ctx-op rad-ctx-cancel" data-ctx="fechar">Cancelar</button></div>';
+ document.body.appendChild(o);const primeiro=o.querySelector('button');if(primeiro)primeiro.focus();
+ const tecla=e=>{if(e.key==='Escape'){e.preventDefault();fechar()}};
+ const fechar=()=>{o.remove();document.removeEventListener('keydown',tecla,true)};
+ document.addEventListener('keydown',tecla,true);
+ const abertoEm=Date.now();o.addEventListener('click',e=>{const b=e.target.closest('[data-ctx]');if(!b){if(e.target===o&&Date.now()-abertoEm>400)fechar();return}
+  const op=b.dataset.ctx;if(op==='fav'){const f=isFav(x.u);toggleFav(i);radToast(f?'Removida dos favoritos':'Adicionada aos favoritos')}
+  if(op==='tocar'){const c=document.querySelector('#view .rad-card[data-i="'+i+'"]');if(c)c.click()}
+  fechar()})}
+/* 10 · cor de destaque tirada da emissora (campo de cor da emissora, ou da arte quando o navegador permite) */
+const radCorCache={};
+function radCorDestaque(){const notch=document.getElementById('notch');if(!notch)return;const x=RADIO.s.list&&RADIO.s.list[RADIO.s.i];
+ const aplica=c=>{if(c)notch.style.setProperty('--rad-accent',c);else notch.style.removeProperty('--rad-accent')};
+ if(!x){aplica(null);return}
+ if(x.c){aplica(x.c);return}
+ if(!x.img){aplica(null);return}
+ if(radCorCache[x.img]!==undefined){aplica(radCorCache[x.img]);return}
+ try{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>{try{const cv=document.createElement('canvas');cv.width=cv.height=8;const g=cv.getContext('2d');g.drawImage(im,0,0,8,8);const d=g.getImageData(0,0,8,8).data;let R=0,G=0,B=0,n=0;for(let k=0;k<d.length;k+=4){R+=d[k];G+=d[k+1];B+=d[k+2];n++}const c='rgb('+Math.round(R/n*.8)+','+Math.round(G/n*.8)+','+Math.round(B/n*.8)+')';radCorCache[x.img]=c;aplica(c)}catch(_){radCorCache[x.img]=null;aplica(null)}};im.onerror=()=>{radCorCache[x.img]=null;aplica(null)};im.src=x.img}catch(_){aplica(null)}}
+/* 14 · favoritas vazias: estado com ícone, mensagem e ação (padrão "Conteúdo indisponível") */
+function radEstadosVazios(v){const p=[...v.querySelectorAll('p.sub')].find(e=>/Nenhuma estação favorita ainda/.test(e.textContent));
+ if(p){const b=document.createElement('div');b.className='rad-vazio';b.innerHTML='<span class="rad-vazio-ic" aria-hidden="true">'+ic('heart')+'</span><b>Nenhuma favorita ainda</b><p class="sub">Toque e segure uma emissora para favoritar.</p><button type="button" class="chip" data-a="radIrTodas">Ver emissoras</button>';p.replaceWith(b)}}
+/* Rádio · padrão Apple (itens 1–7): título grande que encolhe ao rolar, lista ou grade, folha com alça, hierarquia,
+   volume fixo com ícones nas extremidades e menu "…" para as ações secundárias */
+const RAD_SPK_LO='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M11 5L6 9H2v6h4l5 4V5z"/></svg>';
+const RAD_SPK_HI='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>';
+function radApple(v){
+ const pl=v.querySelector('.rad-player');const root=pl&&pl.closest('.rad-root');
+ /* 1 · título grande; o cabeçalho antigo com o mesmo nome fica só para leitores de tela (sem duplicar na tela) */
+ if(v.querySelector('.rad-titulo-grande')||true){[...v.querySelectorAll('h2,h3')].filter(h=>!h.closest('aside')&&h.textContent.trim()==='Rádio'&&!h.classList.contains('sr')).forEach(h=>h.classList.add('sr'))}
+ if(!v.querySelector('.rad-titulo-grande')){const tg=document.createElement('div');tg.className='rad-titulo-grande';tg.textContent='Rádio';const h1=v.querySelector(':scope > h1.tela-titulo');if(h1)h1.after(tg);else v.prepend(tg)}
+ if(!v.dataset.tgOk){v.dataset.tgOk='1';v.addEventListener('scroll',()=>{const t=v.querySelector('.rad-titulo-grande');if(t)t.classList.toggle('compacto',v.scrollTop>40)},{passive:true})}
+ /* 3 · lista ou grade (padrão Biblioteca do Apple Music) */
+ const grade=v.querySelector('.rad-todas');const modo=ls.get('rd_vista')||'lista';
+ if(grade&&!v.querySelector('.rad-vista')){const d=document.createElement('div');d.className='rad-vista';d.setAttribute('role','group');d.setAttribute('aria-label','Modo de exibição');
+  d.innerHTML='<button type="button" class="rad-vista-b" data-a="radVista" data-v="lista" aria-pressed="'+(modo==='lista')+'">Lista</button><button type="button" class="rad-vista-b" data-a="radVista" data-v="grade" aria-pressed="'+(modo==='grade')+'">Grade</button>';grade.before(d)}
+ if(grade)grade.classList.toggle('lista',modo==='lista');
+ /* 4 · alça da folha: toque ou arrasto para baixo volta à lista */
+ if(pl&&!pl.querySelector('.rad-alca')){const al=document.createElement('button');al.type='button';al.className='rad-alca';al.dataset.a='radMenu';al.setAttribute('aria-label','Fechar e voltar para Rádio');pl.prepend(al)}
+ /* 6 · volume fixo abaixo dos controles, com ícones nas extremidades */
+ const rv=pl&&pl.querySelector('.rvol:has(#rvol)');
+ if(rv&&!rv.querySelector('.rad-vol-ic')){const lo=document.createElement('span');lo.className='rad-vol-ic';lo.innerHTML=RAD_SPK_LO;const hi=document.createElement('span');hi.className='rad-vol-ic';hi.innerHTML=RAD_SPK_HI;rv.prepend(lo);rv.append(hi)}
+ /* 7 · "…" na pílula: abre as ações secundárias (antes em "Mais opções") */
+ const bar=root&&root.querySelector(':scope > .rad-bar');
+ const mais=[...v.querySelectorAll('details')].find(d=>{const s=d.querySelector(':scope > summary');return s&&/Mais opções/.test(s.textContent)});
+ if(mais&&!mais.classList.contains('rad-mais-pop'))mais.classList.add('rad-mais-pop');
+ if(bar&&!bar.querySelector('[data-a="radMais"]')){const b=document.createElement('button');b.type='button';b.className='ib';b.dataset.a='radMais';b.setAttribute('aria-label','Mais opções');b.setAttribute('aria-expanded','false');b.setAttribute('title','Mais opções');b.innerHTML=musPontosIcone();bar.appendChild(b)}
+}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="rvolsave"]');if(b)radToast('Volume salvo para esta emissora')},true);
+/* alça da folha: arrasto para baixo de mais de 60 px fecha a tela de reprodução */
+let radAlcaY=null;
+document.addEventListener('pointerdown',e=>{const a=e.target.closest&&e.target.closest('.rad-alca');radAlcaY=a?e.clientY:null},true);
+document.addEventListener('pointerup',e=>{if(radAlcaY!==null&&e.clientY-radAlcaY>60){radAlcaY=null;const a=document.querySelector('#view .rad-alca');if(a)a.click()}else radAlcaY=null},true);
+function radAcessibilidade(v){
+ radApple(v);radEstadosVazios(v);radCorDestaque();
+ const pl=v.querySelector('.rad-player');
+ /* 22 · anúncio da emissora atual para leitores de tela */
+ let an=v.querySelector('#radAnuncio');if(!an){an=document.createElement('div');an.id='radAnuncio';an.className='sr';an.setAttribute('role','status');an.setAttribute('aria-live','polite');v.appendChild(an)}
+ const x=RADIO.s.list&&RADIO.s.list[RADIO.s.i];const chave=(RADIO.s.i)+'|'+(RADIO.s.on?'on':'off');
+ if(x&&chave!==radUltimoAnuncio){radUltimoAnuncio=chave;radTextoAnuncio=(RADIO.s.on?'Tocando: ':'Pausado: ')+(x.n||'emissora')}
+ if(radTextoAnuncio&&an.textContent!==radTextoAnuncio)an.textContent=radTextoAnuncio;
+ /* 24 · falha ao tocar: mensagem clara com tentativa de novo */
+ if(pl){const erro=pl.querySelector('.rad-erro');
+  if(RADIO.s.st==='err'&&!erro){const d=document.createElement('div');d.className='rad-erro';d.setAttribute('role','alert');d.innerHTML='<p class="sub">Não foi possível tocar esta emissora.</p><button type="button" class="chip" data-a="rretry">Tentar de novo</button>';const info=pl.querySelector('.rad-info')||pl.firstElementChild;info?info.after(d):pl.prepend(d)}
+  else if(RADIO.s.st!=='err'&&erro)erro.remove();
+  /* 25 · carregamento visível enquanto a emissora conecta */
+  let carr=pl.querySelector('.rad-carrega');
+  if(RADIO.s.st==='load'){if(!carr){carr=document.createElement('p');carr.className='sub rad-carrega';carr.setAttribute('role','status');carr.textContent='Carregando emissora…';const info2=pl.querySelector('.rad-info')||pl.firstElementChild;info2?info2.after(carr):pl.prepend(carr)}}
+  else if(carr)carr.remove();
+ }
+ /* 20 · dica do toque longo, mostrada uma vez, na seção Todas as estações */
+ const grade=v.querySelector('.rad-todas');
+ if(grade&&!ls.get('rd_dica_fav')&&!v.querySelector('.rad-dica')){const dica=document.createElement('div');dica.className='rad-dica';dica.innerHTML='<p class="sub">Dica: toque e segure uma emissora para favoritar. Com o teclado, selecione a emissora e pressione F.</p><button type="button" class="chip" data-a="radDicaOk">Entendi</button>';grade.before(dica)}
+ /* 26 · ao voltar da tela de reprodução, o foco retorna ao botão que a abriu */
+ if(radRetorno&&RADIO.s.radTela==='menu'){radRetorno=false;const m=v.querySelector('.rad-mini-info');if(m)setTimeout(()=>m.focus(),0)}
+}
+/* 21 · atalho F: favorita a emissora com foco; 23 · Espaço e setas controlam a reprodução fora dos campos de texto */
+document.addEventListener('keydown',e=>{
+ if(!S||S.tab!=='radio')return;const t=e.target;const campo=t&&(/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)||t.isContentEditable);if(campo)return;if(t&&t.closest&&t.closest('#tabs'))return;
+ if((e.key==='f'||e.key==='F')&&t.classList&&t.classList.contains('rad-card')){const i=+t.dataset.i;const x=RADIO.s.list[i];if(!x)return;const era=isFav(x.u);toggleFav(i);radToast(era?'Removida dos favoritos':'Adicionada aos favoritos');e.preventDefault();return}
+ const c=(sel)=>{const b=document.querySelector('#view .rad-bar '+sel)||document.querySelector('#view '+sel);if(b){b.click();return true}return false};
+ if(e.key===' '||e.code==='Space'){if(c('[data-a="rplay"]')){e.preventDefault()}}
+ else if(e.key==='ArrowRight'){if(c('[data-a="rnext"]')){e.preventDefault()}}
+ else if(e.key==='ArrowLeft'){if(c('[data-a="rprev"]')){e.preventDefault()}}
+},true);
+/* 26 · marca o botão que abriu a tela de reprodução para devolver o foco ao voltar */
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-a="radPlayer"]');if(b)radRetorno=true},true);
+/* Toque longo (600 ms) num cartão de emissora alterna os favoritos; o toque curto continua tocando a emissora */
+let radPressT=null,radPressI=null,radPressFeito=false;
+document.addEventListener('pointerdown',e=>{const c=e.target.closest&&e.target.closest('#view button.rad-card[data-a="rpick"]');if(!c)return;radPressI=+c.dataset.i;radPressFeito=false;clearTimeout(radPressT);
+ radPressT=setTimeout(()=>{radPressFeito=true;radMenuContexto(radPressI)},600)});
+['pointerup','pointerleave','pointercancel'].forEach(t=>document.addEventListener(t,()=>clearTimeout(radPressT)));
+document.addEventListener('click',e=>{if(radPressFeito){e.stopPropagation();e.preventDefault();radPressFeito=false}},true);
 function radTodasHtml(itens,chips){const L=RADIO.s.list;let h=[];try{h=JSON.parse(ls.get('rd_hist')||'[]')||[]}catch(_){h=[]}
  const idx=[];(Array.isArray(h)?h:[]).forEach(n=>{const j=L.findIndex((x,q)=>x&&x.u&&rdName(q)===n);if(j>=0&&!idx.includes(j))idx.push(j)});
  for(let j=0;idx.length<8&&j<L.length;j++){if(L[j]&&L[j].u&&!idx.includes(j))idx.push(j)}
@@ -89,6 +211,9 @@ function radTodasHtml(itens,chips){const L=RADIO.s.list;let h=[];try{h=JSON.pars
  return '<h3 class="rad-sec-tit">Destaques · mais ouvidas</h3><div class="rad-destaques">'+radGradeHtml(dest)+'</div>'+
   '<h3 class="rad-sec-tit">Todas as estações</h3><div class="rad-todas">'+radGradeHtml(itens)+'</div>'+
   '<h3 class="rad-sec-tit">Gêneros</h3><div class="rad-gen-tabs" role="group" aria-label="Gêneros">'+chips+'</div>'}
+/* Mini player (padrão Tocando agora): aparece no menu; o toque na faixa abre a tela de reprodução */
+function radMiniHtml(){if(!RADIO.s.list||!RADIO.s.list.length)return '';const s=RADIO.s.list[RADIO.s.cur]||{};const on=!!RADIO.s.on;
+ return '<div class="rad-mini" role="region" aria-label="Tocando agora"><button type="button" class="rad-mini-info" data-a="radPlayer"><span class="rad-mini-capa" aria-hidden="true">'+(s.img?'<span style="background-image:url(\''+esc(s.img)+'\')"></span>':'')+'</span><span class="rad-mini-txt"><b>'+esc(s.n||'Nenhuma rádio')+'</b><span class="sub">'+(on?'Ao vivo':'Parada')+'</span></span></button><button type="button" class="rad-mini-btn" data-a="rplay" aria-label="'+(on?'Pausar':'Ouvir')+'">'+ic(on?'pause':'play')+'</button></div>'}
 function radioMenuHtml(){const R=RADIO.s;const L=R.list;const sec=RADIO.s.radSec||'todas';const q=livNorm(S.radBusca||'');const gen=S.radGen||'';
  const generos=[...new Set(L.map(x=>(x.g||'').split(',')[0].trim()).filter(Boolean))].slice(0,12);
  const resumoGen=generos.slice(0,3).join(', ');
@@ -107,7 +232,7 @@ function radioMenuHtml(){const R=RADIO.s;const L=R.list;const sec=RADIO.s.radSec
   const chips=sec==='explorar'||sec==='salvas'?'':'<div class="rad-chips" role="group" aria-label="Filtrar por gênero">'+['',...generos].map(g=>'<button type="button" class="chip'+(g===gen?' on':'')+'" data-a="radGen" data-g="'+esc(g)+'" aria-pressed="'+(g===gen)+'">'+esc(g||'Todas')+'</button>').join('')+'<button type="button" class="chip" data-a="radSec" data-s="favs" aria-pressed="'+(sec==='favs')+'">Favoritas</button></div>';
   const vazio=sec==='favs'&&!itens.length?'<p class="sub">Nenhuma estação favorita ainda. Toque em ♡ na tela de reprodução para favoritar.</p>':'';
   corpo='<p class="sub" style="margin:0 0 0.5rem">'+itens.length+' estaç'+(itens.length===1?'ão':'ões')+'</p>'+vazio+(sec==='todas'&&!q&&!gen?radTodasHtml(itens,chips):radGradeHtml(itens)+chips)}
- return '<div class="mus-menu rad-menu"><aside class="mus-glass mus-side" aria-label="Rádio"><h2 class="mus-h">Rádio</h2><nav class="mus-navs">'+nav+'</nav></aside><section class="mus-glass mus-main" aria-label="'+esc(titulo)+'"><div class="rad-head"><h3 class="mus-h">'+esc(titulo)+'</h3><div class="rad-search"><label class="sr" for="radBuscaQ">Buscar emissora</label><input id="radBuscaQ" type="search" value="'+esc(S.radBusca||'')+'" placeholder="Buscar por nome, gênero ou cidade" data-a="radBusca"></div></div>'+corpo+'</section></div>'}
+ return '<div class="mus-menu rad-menu"><aside class="mus-glass mus-side" aria-label="Rádio"><h2 class="mus-h">Rádio</h2><nav class="mus-navs">'+nav+'</nav>'+radMiniHtml()+'</aside><section class="mus-glass mus-main" aria-label="'+esc(titulo)+'"><div class="rad-head"><h3 class="mus-h">'+esc(titulo)+'</h3><div class="rad-search"><label class="sr" for="radBuscaQ">Buscar emissora</label><input id="radBuscaQ" type="search" value="'+esc(S.radBusca||'')+'" placeholder="Buscar por nome, gênero ou cidade" data-a="radBusca"></div></div>'+corpo+'</section></div>'}
 
 function radBarra(s,on){const ctl=(acao,icone,rotulo,extra)=>'<button type="button" class="ib'+(extra||'')+'" data-a="'+acao+'" aria-label="'+rotulo+'">'+icone+'<span class="rad-lbl" aria-hidden="true">'+rotulo+'</span></button>';
  return '<div class="mus-bar rad-bar" role="region" aria-label="Rádio em reprodução"><button type="button" class="mus-barra-capa" data-a="radPlayer" aria-label="Abrir tela de reprodução">'+(s.img?'<span style="background-image:url(\''+esc(s.img)+'\')" aria-hidden="true"></span>':'')+'</button><div class="mus-barra-txt"><span class="sub">Agora ouvindo</span><span class="rad-now"><span class="rad-eq'+(on?' on':'')+'" aria-hidden="true"><i></i><i></i><i></i></span><b>'+esc(s.n||'Nenhuma rádio')+'</b></span><span class="sub">'+(on?'Ao vivo':'Parada')+'</span></div><div class="mus-barra-ctl">'+ctl('rprev',ic('prev'),'Anterior')+ctl('rplay',ic(on?'pause':'play'),on?'Pausar':'Ouvir',on?' big':' big')+ctl('rnext',ic('next'),'Próxima')+'</div></div>'}
@@ -123,6 +248,11 @@ function radioView(){const R=RADIO.s;
 
 function radioAct(a,i,b){const R=RADIO.s;
  if(a==='rvolAtalho'){R.volOpen=!R.volOpen;view();return true}
+ if(a==='radVerTodas'){const t=document.querySelector('#view .rad-todas');if(t)t.scrollIntoView({behavior:'smooth',block:'start'});return true}
+ if(a==='radIrTodas'){R.radSec='todas';R.radTela='menu';view();return true}
+ if(a==='radDicaOk'){ls.set('rd_dica_fav','1');view();return true}
+ if(a==='radVista'){ls.set('rd_vista',b&&b.dataset?b.dataset.v:'lista');view();return true}
+ if(a==='radMais'){const d=document.querySelector('#view details.rad-mais-pop');if(d){d.open=!d.open;if(b&&b.setAttribute)b.setAttribute('aria-expanded',String(d.open))}return true}
  if(a==='redit'){R.draft=R.list.map(x=>({...x,n:x.n,u:x.u,g:x.g||''}));if(!R.draft.length)R.draft.push({n:'',u:'',g:''});R.edit=true;view();const n=$('#rn0');if(n)n.focus();return true}
  if(a==='rcan'){R.edit=false;view();const b=$('#view [data-a="redit"]');if(b)b.focus();return true}
  if(a==='radd'){if(R.draft.length>=200){say('Limite de 200 emissoras');return true}rdCollect();R.draft.push({n:'',u:''});view();const n=$('#rn'+(R.draft.length-1));if(n)n.focus();return true}
@@ -149,6 +279,7 @@ function rsTopBoxHtml(){return '<details class="dt" id="rstopBox"'+(S.rsTopOpen?
 function radioExtrasDom(){const v=$('#view');if(!v||S.tab!=='radio')return;
  const rf=v.querySelector('#rsform');if(rf&&!v.querySelector('#rstopBox'))rf.insertAdjacentHTML('afterend',rsTopBoxHtml());
  v.querySelectorAll('#rtile,#rweek').forEach(n=>n.remove());
+ const noExplorar=!(RADIO.s.radSec==='explorar'&&RADIO.s.radTela!=='player');
  
  const listen=S.listenAll||(()=>{try{return JSON.parse(ls.get('listen')||'{}')||{}}catch(_){return {}}})();
  const dias=[...Array(7).keys()].reverse().map(i=>dayKey(new Date(Date.now()-i*864e5)));
@@ -157,9 +288,9 @@ function radioExtrasDom(){const v=$('#view');if(!v||S.tab!=='radio')return;
  const sec2=x=>{const h=Math.floor(x/3600),m=Math.round((x%3600)/60);return h?h+' h '+m+' min':m+' min'};
  const wk=document.createElement('section');wk.id='rweek';wk.setAttribute('aria-label','Tempo ouvido por emissora na semana');wk.className='tp-card';wk.style.margin='0 0 12px';
  wk.innerHTML='<div class="tp-k">Últimos 7 dias por emissora</div>'+(top.length?'<div style="margin-top:0.5rem">'+top.map(([n,o])=>'<div style="display:flex;justify-content:space-between;font-size:0.875rem"><span>'+esc(n)+'</span><b>'+sec2(o.sec)+'</b></div>').join('')+'</div>'+(()=>{const tot=dias.map(k=>top.reduce((t,[n,o])=>t+(o.dia[k]||0),0));const mx=Math.max(1,...tot);const barras=tot.map((v,q)=>'<div role="listitem" class="tr-bar"><span class="tr-bv">'+(v?sec2(v):'-')+'</span><span class="tr-bb" style="height:'+Math.max(6,Math.round(v/mx*100))+'%"></span><span class="tr-bd">'+esc(dias[q].slice(5))+'</span></div>').join('');return '<p class="sub" style="margin:0.6rem 0 0.25rem">Tempo de escuta por dia</p><div class="tr-bars" role="list" tabindex="0" aria-label="Tempo de escuta por dia na semana">'+barras+'</div>'})():'<p class="sub" style="margin:0.375rem 0 0">Ainda sem dados de escuta na semana.</p>');
- const detW=v.querySelector('#rsvdet');if(detW)detW.after(wk);else(v.querySelector('.rad-root .mus-main')||v).appendChild(wk);radioListDom();
+ if(!noExplorar){const detW=v.querySelector('#rsvdet');if(detW)detW.after(wk);else(v.querySelector('.rad-root .mus-main')||v).appendChild(wk)}radioListDom();
  const det=v.querySelector('#rsvdet');
- if(det&&!det.querySelector('#rsearch')){const wrap=document.createElement('div');wrap.style.margin='8px 0';wrap.innerHTML='<label class="sr" for="rsearch">Buscar nas rádios salvas</label><input id="rsearch" type="search" placeholder="Buscar rádio pelo nome" maxlength="40" autocomplete="off" style="width:100%;box-sizing:border-box;border-radius:0.75rem;padding:0.625rem;background:var(--row);color:var(--ink);border:0;font:inherit">';const sm=det.querySelector('summary');sm?sm.after(wrap):det.prepend(wrap)}
+ if(det&&!det.querySelector('#rsearch')){const wrap=document.createElement('div');wrap.style.margin='8px 0';wrap.innerHTML='<label class="sr" for="rsearch">Buscar nas rádios salvas</label><input id="rsearch" hidden type="search" placeholder="Buscar rádio pelo nome" maxlength="40" autocomplete="off" style="width:100%;box-sizing:border-box;border-radius:0.75rem;padding:0.625rem;background:var(--row);color:var(--ink);border:0;font:inherit">';const sm=det.querySelector('summary');sm?sm.after(wrap):det.prepend(wrap)}
  const cur=RADIO.s.list[RADIO.s.cur];
  const ex=v.querySelector('#rvolstation');if(ex)ex.remove();
  if(cur&&cur.u){const box=document.createElement('div');box.id='rvolstation';box.className='rvol';box.style.flexWrap='wrap';
@@ -315,4 +446,4 @@ function rdSchedCheck(){let sc;try{sc=JSON.parse(ls.get('rd_sched')||'null')}cat
  if(hm===sc.t&&sc.last!==hoje){sc.last=hoje;ls.set('rd_sched',JSON.stringify(sc));try{rdPlay(sc.i);say('Programação: tocando '+rdName(sc.i))}catch(_){say('Não foi possível iniciar a programação')}}}
 
 /* Fachada: o restante do painel usa somente estas funções da Rádio */
-window.RADIO={emissoraForaAr,radBarra,radDots,radFimMontar,radFundoAplicar,radGradeHtml,radioAct,radioExtrasDom,radioFiltrosDom,radioHistHtml,radioListDom,radioMenuHtml,radioPlayerHtml,radioQualDom,radioRoot,radioTocando,radioView,rdAplicarCor,rdCollect,rdCorDom,rdDetach,rdDevId,rdEmpty,rdExpMais,rdExplorarDom,rdFail,rdGerenciarDom,rdJaSalva,rdLogoTent,rdLogosBuscar,rdMedia,rdMerge,rdMove,rdMoverDom,rdOrdenarDom,rdPlay,rdPool,rdRand,rdRender,rdSaveList,rdSchedCheck,rdSleepTick,rdSort,rdSortList,rdStep,rdStop,rsBox,rsRun,rsTopBoxHtml,radBarraAjustes};
+window.RADIO={emissoraForaAr,radBarra,radDots,radFimMontar,radFundoAplicar,radGradeHtml,radioAct,radioExtrasDom,radioFiltrosDom,radioHistHtml,radioListDom,radioMenuHtml,radioPlayerHtml,radioQualDom,radioRoot,radioTocando,radioView,rdAplicarCor,rdCollect,rdCorDom,rdDetach,rdDevId,rdEmpty,rdExpMais,rdExplorarDom,rdFail,rdGerenciarDom,rdJaSalva,rdLogoTent,rdLogosBuscar,rdMedia,rdMerge,rdMove,rdMoverDom,rdOrdenarDom,rdPlay,rdPool,rdRand,rdRender,rdSaveList,rdSchedCheck,rdSleepTick,rdSort,rdSortList,rdStep,rdStop,rsBox,rsRun,rsTopBoxHtml,radBarraAjustes,radLayoutAjustes,radAcessibilidade,radApple,radToast,radMenuContexto};
