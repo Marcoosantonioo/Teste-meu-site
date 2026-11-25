@@ -336,3 +336,56 @@ html .notch[data-tab="radio"] .sub,html .notch[data-tab="radio"] .dt summary,htm
 /* 16 · Alvos de 44 px nos controles da pílula e ícones de um só traço */
 #notch[data-tab="radio"] #view .rad-bar .ib,#notch[data-tab="radio"] #view .rad-bar [data-a="radMais"]{min-width:44px;min-height:44px}
 #notch[data-tab="radio"] #view .rad-vol-ic svg,#notch[data-tab="radio"] #view .rad-hud svg{stroke-width:2}
+
+/* ===================================================================
+   Rádio · fundo e vidro no padrão Apple (um sistema para todas as abas)
+   =================================================================== */
+/* Tokens: vidro escuro translúcido com texto claro — legível sobre fotos claras e escuras */
+#notch[data-tab="radio"]{--rad-vidro:rgba(18,20,30,.42);--rad-vidro-forte:rgba(18,20,30,.6);--rad-vidro-borda:rgba(255,255,255,.22);--rad-texto:#f5f5f7;--rad-texto-2:#d8dce6;--rad-raio-vidro:20px}
+/* Camada de fundo única, atrás de todo o conteúdo da aba */
+#notch[data-tab="radio"] #view{position:relative}
+#notch[data-tab="radio"] #view > .rad-fundo{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(120% 90% at 18% 0%,#5b6b8c 0%,#2a3350 48%,#12151f 100%) center/cover no-repeat}
+#notch[data-tab="radio"] #view > :not(.rad-fundo):not(h1):not(.rad-titulo-grande){position:relative;z-index:1}
+#notch[data-tab="radio"] #view .rad-menu,#notch[data-tab="radio"] #view .rad-root,#notch[data-tab="radio"] #view .rad-menu > section.mus-main{background:transparent!important;background-image:none!important}
+/* Volume da emissora (bloco "Volume desta emissora") não aparece nas abas da Rádio */
+#notch[data-tab="radio"] #view #rvolstation{display:none!important}
+/* Superfícies de vidro: mesma cor, borda e desfoque em todas as abas */
+#notch[data-tab="radio"] #view .rad-card,#notch[data-tab="radio"] #view .rad-destaques,#notch[data-tab="radio"] #view .rad-todas,#notch[data-tab="radio"] #view .rad-mini,#notch[data-tab="radio"] #view .rad-bar,#notch[data-tab="radio"] #view details.dt,#notch[data-tab="radio"] #view .rad-semana-acc,#notch[data-tab="radio"] #view .rad-vazio,#notch[data-tab="radio"] #view .rad-gen-tabs,#notch[data-tab="radio"] #view .rad-vista,#notch[data-tab="radio"] #view .rvol:has(#rvol),#notch[data-tab="radio"] #view .mus-volpop{background:var(--rad-vidro)!important;border:1px solid var(--rad-vidro-borda)!important;border-radius:var(--rad-raio-vidro);backdrop-filter:blur(24px) saturate(170%);-webkit-backdrop-filter:blur(24px) saturate(170%);box-shadow:0 12px 30px rgba(0,0,0,.22)!important;color:var(--rad-texto)}
+#notch[data-tab="radio"] #view .rad-destaques .rad-card,#notch[data-tab="radio"] #view .rad-todas .rad-card{background:var(--rad-vidro-forte)!important;border:1px solid var(--rad-vidro-borda)!important;border-radius:16px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+/* Textos claros sobre o vidro (botões mantêm o próprio contraste) */
+#notch[data-tab="radio"] #view :is(p,span,b,label,h2,h3,summary,small):not(.chip *):not(.ib *):not(.rad-vista-b *):not(.rad-sec-tit){color:var(--rad-texto)}
+#notch[data-tab="radio"] #view .sub:not(.chip *):not(.ib *):not(.rad-vista-b *){color:var(--rad-texto-2)!important}
+#notch[data-tab="radio"] #view .rad-sec-tit{color:var(--rad-texto)}
+/* Controle da reprodução (pílula): transporte e ações em ícones, capsula da emissora compacta */
+#notch[data-tab="radio"] #view .rad-bar:not(.a):not(.b){min-height:64px;padding:8px 10px!important;border-radius:999px!important;gap:8px!important}
+#notch[data-tab="radio"] #view .rad-bar > .mus-barra-txt{background:rgba(255,255,255,.12)!important;border:0!important;border-radius:999px!important;padding:6px 14px 6px 6px!important}
+#notch[data-tab="radio"] #view .rad-bar > .mus-barra-ctl .ib,#notch[data-tab="radio"] #view .rad-bar > .ib{background:rgba(255,255,255,.14)!important;color:var(--rad-texto)!important;border:0!important;box-shadow:none!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;border-radius:50%!important}
+#notch[data-tab="radio"] #view .rad-bar > .mus-barra-ctl .ib.big,#notch[data-tab="radio"] #view .rad-bar > .mus-barra-ctl .ib[data-a="rplay"]{background:#fff!important;color:#111!important;width:52px!important;height:52px!important;min-width:52px!important;min-height:52px!important}
+#notch[data-tab="radio"] #view .rad-bar .mus-barra-txt b{color:var(--rad-texto)!important;font-size:0.95rem}
+#notch[data-tab="radio"] #view .rad-bar .mus-barra-txt .sub{color:var(--rad-texto-2)!important}
+/* Seções recolhidas: linhas de vidro com seta à direita */
+#notch[data-tab="radio"] #view details.dt > summary{color:var(--rad-texto)!important}
+/* Textos claros sobre o vidro com prioridade explícita (vencem as cores antigas das seções) */
+#notch[data-tab="radio"] #view :is(p,span,b,label,h2,h3,h4,summary,small,strong,em,li):not(.chip *):not(.ib *):not(.rad-vista-b *):not(.rad-ctx *):not(.rad-hud *){color:var(--rad-texto)!important}
+#notch[data-tab="radio"] #view .sub:not(.chip *):not(.ib *):not(.rad-vista-b *){color:var(--rad-texto-2)!important}
+#notch[data-tab="radio"] #view .rad-live,#notch[data-tab="radio"] #view .rad-live *{color:#fff!important}
+/* Barra lateral também em vidro, para o menu ficar na mesma linguagem */
+#notch[data-tab="radio"] #view .rad-menu > aside.mus-side{background:var(--rad-vidro)!important;border:1px solid var(--rad-vidro-borda)!important;backdrop-filter:blur(24px) saturate(170%);-webkit-backdrop-filter:blur(24px) saturate(170%);color:var(--rad-texto)}
+#notch[data-tab="radio"] #view .rad-menu > aside.mus-side :is(h2,span,b,p,a,button,small){color:var(--rad-texto)!important}
+#notch[data-tab="radio"] #view .rad-menu > aside.mus-side .mus-nav-on,#notch[data-tab="radio"] #view .rad-menu > aside.mus-side [aria-current="page"]{background:rgba(255,255,255,.18)!important}
+#notch[data-tab="radio"] #view .rad-menu > aside.mus-side .rad-mini{background:rgba(255,255,255,.14)!important}
+/* Texto claro na Rádio também no contexto do tema claro (mesma especificidade das regras de superfície) */
+:root:not([data-theme="dark"]) #notch[data-tab="radio"] #view .mus-glass :is(p,span,b,label,h2,h3,h4,summary,small,strong,em,li):not(.chip *):not(.ib *):not(.rad-vista-b *):not(.rad-ctx *):not(.rad-hud *),
+:root:not([data-theme="dark"]) #notch[data-tab="radio"] #view .npc :is(p,span,b,label,h2,h3,h4,summary,small,strong,em,li):not(.chip *):not(.ib *):not(.rad-vista-b *):not(.rad-ctx *):not(.rad-hud *),
+:root:not([data-theme="dark"]) #notch[data-tab="radio"] #view .mus-bar :is(p,span,b,label,h2,h3,h4,summary,small,strong,em,li):not(.chip *):not(.ib *):not(.rad-vista-b *):not(.rad-ctx *):not(.rad-hud *),
+:root[data-theme="light"] #notch[data-tab="radio"] #view .mus-glass :is(p,span,b,label,h2,h3,h4,summary,small,strong,em,li):not(.chip *):not(.ib *):not(.rad-vista-b *):not(.rad-ctx *):not(.rad-hud *),
+:root[data-theme="light"] #notch[data-tab="radio"] #view .npc :is(p,span,b,label,h2,h3,h4,summary,small,strong,em,li):not(.chip *):not(.ib *):not(.rad-vista-b *):not(.rad-ctx *):not(.rad-hud *){color:var(--rad-texto)!important}
+:root:not([data-theme="dark"]) #notch[data-tab="radio"] #view .mus-glass .sub:not(.chip *):not(.ib *):not(.rad-vista-b *),:root:not([data-theme="dark"]) #notch[data-tab="radio"] #view .npc .sub:not(.chip *):not(.ib *):not(.rad-vista-b *),:root[data-theme="light"] #notch[data-tab="radio"] #view .mus-glass .sub:not(.chip *):not(.ib *):not(.rad-vista-b *),:root[data-theme="light"] #notch[data-tab="radio"] #view .npc .sub:not(.chip *):not(.ib *):not(.rad-vista-b *){color:var(--rad-texto-2)!important}
+/* Controle da reprodução no padrão Apple: vidro escuro, cápsula da emissora translúcida e texto claro */
+#notch[data-tab="radio"] #view:has(.rad-player) .rad-bar:not(.a):not(.b){background:var(--rad-vidro)!important;border:1px solid var(--rad-vidro-borda)!important;box-shadow:0 12px 30px rgba(0,0,0,.22)!important;backdrop-filter:blur(24px) saturate(170%);-webkit-backdrop-filter:blur(24px) saturate(170%)}
+#notch[data-tab="radio"] #view:has(.rad-player) .rad-bar > .mus-barra-txt:not(.a):not(.b){background:rgba(255,255,255,.14)!important;border:0!important}
+#notch[data-tab="radio"] #view:has(.rad-player) .rad-bar > .mus-barra-txt :is(b,span,p){color:var(--rad-texto)!important}
+#notch[data-tab="radio"] #view:has(.rad-player) .rad-bar > .mus-barra-txt .sub{color:var(--rad-texto-2)!important}
+#notch[data-tab="radio"] #view:has(.rad-player) .rad-bar .ib{color:var(--rad-texto)!important;background:rgba(255,255,255,.12)!important}
+#notch[data-tab="radio"] #view:has(.rad-player) .rad-bar .ib svg{color:inherit}
+#notch[data-tab="radio"] #view:has(.rad-player) .rad-bar > .mus-barra-ctl .ib[data-a="rplay"]{background:#fff!important;color:#111!important}
