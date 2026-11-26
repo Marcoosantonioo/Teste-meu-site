@@ -405,7 +405,7 @@ html .notch[data-tab="radio"] .sub,html .notch[data-tab="radio"] .dt summary,htm
 #notch[data-tab="radio"]{--rad-vidro:rgba(255,255,255,.72);--rad-vidro-forte:rgba(255,255,255,.9);--rad-vidro-borda:rgba(0,0,0,.08);--rad-texto:#1d1d1f;--rad-texto-2:#4a4a52}
 /* 1 · Cartões de estação coloridos, nome grande dentro (estilo "Ouça música sem parar") */
 #notch[data-tab="radio"] #view .rad-destaques .rad-card,#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card{background:linear-gradient(180deg,var(--rc,#555) 0%,var(--rc,#555) 58%,rgba(0,0,0,.42) 100%)!important;border:0!important;border-radius:14px!important;color:#fff!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:0 10px 22px rgba(0,0,0,.14)!important;justify-content:flex-end;align-items:flex-start;text-align:left;padding:12px!important;overflow:hidden}
-#notch[data-tab="radio"] #view .rad-destaques .rad-card .rad-logo,#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card .rad-logo{background:transparent!important;color:rgba(255,255,255,.85)!important;font-size:2.2rem;font-weight:800;letter-spacing:-.02em;width:100%;text-align:left;align-self:flex-start;flex:1 1 auto}
+#notch[data-tab="radio"] #view .rad-destaques .rad-card .rad-logo,#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card .rad-logo{background-color:transparent!important;color:rgba(255,255,255,.85)!important;font-size:2.2rem;font-weight:800;letter-spacing:-.02em;width:100%;text-align:left;align-self:flex-start;flex:1 1 auto}
 #notch[data-tab="radio"] #view .rad-destaques .rad-card :is(b,span,p),#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card :is(b,span,p){color:#fff!important;text-align:left}
 #notch[data-tab="radio"] #view .rad-destaques .rad-card b,#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card b{font-size:1.25rem;font-weight:800;letter-spacing:-.01em;line-height:1.15;text-shadow:0 1px 6px rgba(0,0,0,.25)}
 #notch[data-tab="radio"] #view .rad-destaques .rad-card .sub,#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card .sub{color:rgba(255,255,255,.88)!important;font-size:.9rem}
@@ -438,7 +438,7 @@ html .notch[data-tab="radio"] .sub,html .notch[data-tab="radio"] .dt summary,htm
 :root:not([data-theme="dark"]) #notch[data-tab="radio"] #view .rad-destaques .rad-card .sub,:root:not([data-theme="dark"]) #notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card .sub{color:rgba(255,255,255,.9)!important}
 /* Logotipo dentro do cartão colorido: sem caixa clara por trás */
 #notch[data-tab="radio"] #view .rad-destaques .rad-card .rad-logo *,#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card .rad-logo *{background:transparent!important;box-shadow:none!important;border:0!important}
-#notch[data-tab="radio"] #view .rad-destaques .rad-card .rad-logo,#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card .rad-logo{background:transparent!important;box-shadow:none!important;border:0!important;padding:0!important}
+#notch[data-tab="radio"] #view .rad-destaques .rad-card .rad-logo,#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card .rad-logo{background-color:transparent!important;box-shadow:none!important;border:0!important;padding:0!important}
 
 /* Itens 6–7: botão "…" em cada emissora e rodapé da aba Rádio */
 #notch[data-tab="radio"] #view .rad-item{position:relative;min-width:0}
@@ -484,3 +484,10 @@ html .notch[data-tab="radio"] .sub,html .notch[data-tab="radio"] .dt summary,htm
 #notch[data-tab="radio"] #view .rad-destaques.arrastando .rad-card{pointer-events:none}
 /* 11 · Pílula acima da barra inferior, com 12 px de respiro (medido no aparelho) */
 .rad-flutuante{bottom:var(--rad-pilula-bottom,84px)!important}
+
+/* ===== Capa da emissora: a logo real volta a aparecer nos cartões coloridos =====
+   Cartão com logo: caixa branca com a logo centralizada (a cor fica só como fundo do cartão).
+   Cartão sem logo: iniciais grandes em branco sobre a cor. */
+#notch[data-tab="radio"] #view .rad-destaques .rad-card .rad-logo:not(.sem),#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card .rad-logo:not(.sem){background-color:#fff!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;width:64px!important;height:64px!important;min-width:64px!important;flex:0 0 64px!important;border-radius:14px!important;box-shadow:0 2px 8px rgba(0,0,0,.2)!important;color:transparent!important;font-size:0!important;margin:0 0 auto 0!important;padding:0!important;align-self:flex-start!important}
+#notch[data-tab="radio"] #view .rad-destaques .rad-card .rad-logo.sem,#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card .rad-logo.sem{background:transparent!important;color:#fff!important;font-size:2.2rem!important;font-weight:800!important}
+#notch[data-tab="radio"] #view .rad-destaques .rad-card .rad-logo *,#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card .rad-logo *{display:none!important}
