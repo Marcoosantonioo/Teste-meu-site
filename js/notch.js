@@ -2400,12 +2400,7 @@ function musCoresCarregar(url){S.musCores=S.musCores||{};if(S.musCores[url]!==un
   catch(_){S.musCores[url]='none'}
   if(S.tab==='music')view()};
  im.onerror=()=>{S.musCores[url]='none';if(S.tab==='music')view()};im.src=url}
-const MUS_FUNDO_PADRAO=null;
-function musFundo(){const img=S.musBgImg||ls.get('mus_bg')||MUS_FUNDO_PADRAO;if(img)return "background:url('"+img+"') center/cover no-repeat fixed";
- const tr=(S.m.list||[])[S.m.i]||{};const c=tr.img?(S.musCores||{})[tr.img]:undefined;
- if(tr.img&&c===undefined)musCoresCarregar(tr.img);
- if(Array.isArray(c))return 'background:linear-gradient(160deg,'+c[0]+' 0%,'+c[1]+' 50%,#0b0b0d 100%)';
- return 'background:#1d1d20'}
+function musFundo(){return 'background:var(--app-bg,#f5f5f7)'}
 function musCarregarPl(){if(!S.tok||S.musPlAt)return;S.musPlAt=Date.now();spApi('/me/playlists?limit=50').then(r=>{if(r&&Array.isArray(r.items)){S.musPl=r.items.filter(Boolean);if(S.tab==='music')view()}else{S.musPl=[];if(S.tab==='music')view()}})}
 async function musCarregarRec(){if(!S.tok||S.musRecAt)return;S.musRecAt=Date.now();const r=await spApi('/me/player/recently-played?limit=50');
  if(!r||!Array.isArray(r.items)){S.musRec=[];if(S.tab==='music')view();return}
@@ -2593,8 +2588,44 @@ function transpAjustes(){const n=document.getElementById('notch');if(!n)return;c
  const box=document.createElement('details');box.id='transpBox';box.className='dt';box.style.marginTop='0.75rem';
  box.innerHTML='<summary>Aparência</summary><label style="display:flex;gap:0.6rem;align-items:center;margin:0.5rem 0;cursor:pointer"><input type="checkbox" id="transpRed"'+(red?' checked':'')+'> <span>Reduzir transparência do vidro</span></label><p class="sub" style="margin:0">Deixa as superfícies mais opacas, para melhorar a leitura.</p>';
  v.appendChild(box);box.querySelector('#transpRed').addEventListener('change',e=>{ls.set('ui_reduzir_transp',e.target.checked?'1':'0');transpAjustes()})}
+/* Cor de fundo e da letra (padrão do Diário): valem para a Rádio e a Música; ficam salvas neste aparelho */
+const COR_FUNDO_PRESETS=[['Creme','#f6f1ea'],['Branco','#ffffff'],['Azul claro','#eef3f7'],['Verde claro','#f2f5ef'],['Rosa claro','#f7eef1'],['Escuro','#1c1519'],['Azul escuro','#1e2430']];
+const COR_LETRA_PRESETS=[['Grafite','#2b1f24'],['Preto','#000000'],['Branco','#ffffff'],['Vinho','#7d2e4a'],['Azul petróleo','#1f5a6b'],['Marrom','#5b3f2f'],['Rosa','#f3e6ea'],['Verde','#2e5e3a']];
+function corHexRgba(h,a){const n=parseInt(h.slice(1),16);return 'rgba('+(n>>16&255)+','+(n>>8&255)+','+(n&255)+','+a+')'}
+function corLuminancia(h){const n=parseInt(h.slice(1),16);const r=n>>16&255,g=n>>8&255,b=n&255;return (0.299*r+0.587*g+0.114*b)/255}
+function corAplicar(){const n=document.getElementById('notch');if(!n)return;
+ const bg=ls.get('app_cor_fundo'),fg=ls.get('app_cor_letra');
+ if(bg){n.style.setProperty('--app-bg',bg);n.style.setProperty('--rad-vidro',corHexRgba(bg,0.55));n.style.setProperty('--rad-vidro-forte',corHexRgba(bg,0.75));n.style.setProperty('--rad-vidro-borda',corHexRgba(corLuminancia(bg)>0.6?'#000000':'#ffffff',0.22))}
+ else{['--app-bg','--rad-vidro','--rad-vidro-forte','--rad-vidro-borda'].forEach(v=>n.style.removeProperty(v))}
+ /* sem letra escolhida, a cor da letra acompanha o fundo para manter o contraste */
+ const letra=fg||(bg?(corLuminancia(bg)>0.6?'#1d1d1f':'#f5f5f7'):null);
+ if(letra){n.style.setProperty('--rad-texto',letra);n.style.setProperty('--rad-texto-2',corHexRgba(letra,0.82))}
+ else{n.style.removeProperty('--rad-texto');n.style.removeProperty('--rad-texto-2')}
+ /* o fundo de imagem (versões anteriores) é removido */
+ ls.del('mus_bg');ls.del('rd_fundo');
+ document.querySelectorAll('.mus-fundo-ctl').forEach(e=>e.remove());
+}
+function corAjustes(){if(S.tab!=='set')return;const v=$('#view');if(!v||v.querySelector('#corBox'))return;
+ const bg=ls.get('app_cor_fundo'),fg=ls.get('app_cor_letra');
+ const box=document.createElement('details');box.id='corBox';box.className='dt';box.open=true;box.style.marginTop='0.75rem';
+ const sw=(lista,ativa,rot,chave)=>lista.map(([nome,hex])=>'<button type="button" class="chip" data-cor-'+chave+'="'+hex+'" aria-label="'+rot+': '+nome+'" title="'+nome+'" aria-pressed="'+(ativa===hex)+'" style="width:44px;min-height:40px;padding:0;background:'+hex+';border:2px solid '+(ativa===hex?'#111':'rgba(0,0,0,.2)')+'"></button>').join('');
+ box.innerHTML='<summary>Cor de fundo e da letra</summary>'+
+  '<p class="sub" style="margin:0.5rem 0 0.25rem">Cor de fundo</p><div style="display:flex;gap:8px;flex-wrap:wrap">'+sw(COR_FUNDO_PRESETS,bg,'Cor de fundo','fundo')+'</div>'+
+  '<div style="display:flex;gap:8px;align-items:center;margin:8px 0;flex-wrap:wrap"><label class="sub">Outra cor <input type="color" id="corFundoOutra" value="'+(bg||'#1e2430')+'"></label><button type="button" class="chip" data-cor-reset="fundo">Cor padrão</button></div>'+
+  '<p class="sub" style="margin:0.75rem 0 0.25rem">Cor da letra</p><div style="display:flex;gap:8px;flex-wrap:wrap">'+sw(COR_LETRA_PRESETS,fg,'Cor da letra','letra')+'</div>'+
+  '<div style="display:flex;gap:8px;align-items:center;margin:8px 0;flex-wrap:wrap"><label class="sub">Outra cor <input type="color" id="corLetraOutra" value="'+(fg||'#2b1f24')+'"></label><button type="button" class="chip" data-cor-reset="letra">Cor padrão da letra</button></div>'+
+  '<p class="sub" style="margin:0">As cores ficam salvas neste aparelho. Sem escolher a letra, ela acompanha o fundo para manter o contraste.</p>';
+ v.appendChild(box);
+ box.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.corFundo){ls.set('app_cor_fundo',b.dataset.corFundo);corAplicar();view()}
+  else if(b.dataset.corLetra){ls.set('app_cor_letra',b.dataset.corLetra);corAplicar();view()}
+  else if(b.dataset.corReset==='fundo'){ls.del('app_cor_fundo');corAplicar();view()}
+  else if(b.dataset.corReset==='letra'){ls.del('app_cor_letra');corAplicar();view()}});
+ box.querySelector('#corFundoOutra').addEventListener('change',e=>{ls.set('app_cor_fundo',e.target.value);corAplicar();view()});
+ box.querySelector('#corLetraOutra').addEventListener('change',e=>{ls.set('app_cor_letra',e.target.value);corAplicar();view()});
+}
 function musCapaNaCapsula(){document.querySelectorAll('#view .mus-bar').forEach(b=>{const capa=b.querySelector(':scope > .mus-barra-capa'),txt=b.querySelector(':scope > .mus-barra-txt'),prog=b.querySelector(':scope > #mbarprog');if(capa&&txt&&capa.parentElement!==txt)txt.prepend(capa);if(prog&&txt&&prog.parentElement!==txt)txt.appendChild(prog)})}
-(function setasObservadas(){const v=document.getElementById('view');const acompanha=()=>{navBaixoMontar();RADIO.radFimMontar();musCapaNaCapsula();musAjustesBarra();musCurtidasFixo();RADIO.radFundoAplicar();RADIO.radBarraAjustes();RADIO.radLayoutAjustes();transpAjustes()};acompanha();if(v)new MutationObserver(acompanha).observe(v,{childList:true});})();
+(function setasObservadas(){const v=document.getElementById('view');const acompanha=()=>{navBaixoMontar();RADIO.radFimMontar();musCapaNaCapsula();musAjustesBarra();musCurtidasFixo();RADIO.radFundoAplicar();RADIO.radBarraAjustes();RADIO.radLayoutAjustes();transpAjustes();corAjustes();corAplicar()};acompanha();if(v)new MutationObserver(acompanha).observe(v,{childList:true});})();
 /* Gesto de arrastar: esquerda = próxima aba, direita = aba anterior (ignora listas com rolagem lateral e campos) */
 (function gestoAbas(){let x0=0,y0=0,t0=0,ativo=false;
  const ignora=alvo=>{for(let e=alvo;e&&e.id!=='view';e=e.parentElement){if(!e.tagName)continue;const tg=e.tagName;if(tg==='INPUT'||tg==='TEXTAREA'||tg==='SELECT'||tg==='CANVAS'||e.isContentEditable)return true;const cs=getComputedStyle(e);if(/(auto|scroll)/.test(cs.overflowX)&&e.scrollWidth>e.clientWidth+2)return true}return false};

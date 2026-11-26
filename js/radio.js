@@ -141,7 +141,8 @@ function radApple(v){
  const pl=v.querySelector('.rad-player');const root=pl&&pl.closest('.rad-root');
  /* 1 · título grande; o cabeçalho antigo com o mesmo nome fica só para leitores de tela (sem duplicar na tela) */
  if(v.querySelector('.rad-titulo-grande')||true){[...v.querySelectorAll('h2,h3')].filter(h=>!h.closest('aside')&&h.textContent.trim()==='Rádio'&&!h.classList.contains('sr')).forEach(h=>h.classList.add('sr'))}
- if(!v.querySelector('.rad-titulo-grande')){const tg=document.createElement('div');tg.className='rad-titulo-grande';tg.textContent='Rádio';const h1=v.querySelector(':scope > h1.tela-titulo');if(h1)h1.after(tg);else v.prepend(tg)}
+ const colunaMain=v.querySelector('.rad-menu > section.mus-main');
+ if(!v.querySelector('.rad-titulo-grande')){const tg=document.createElement('div');tg.className='rad-titulo-grande';tg.textContent='Rádio';if(colunaMain)colunaMain.prepend(tg);else{const h1=v.querySelector(':scope > h1.tela-titulo');if(h1)h1.after(tg);else v.prepend(tg)}}
  if(!v.dataset.tgOk){v.dataset.tgOk='1';v.addEventListener('scroll',()=>{const t=v.querySelector('.rad-titulo-grande');if(t)t.classList.toggle('compacto',v.scrollTop>40)},{passive:true})}
  /* 3 · lista ou grade (padrão Biblioteca do Apple Music) */
  const grade=v.querySelector('.rad-todas');const modo=ls.get('rd_vista')||'lista';
@@ -164,7 +165,58 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
 let radAlcaY=null;
 document.addEventListener('pointerdown',e=>{const a=e.target.closest&&e.target.closest('.rad-alca');radAlcaY=a?e.clientY:null},true);
 document.addEventListener('pointerup',e=>{if(radAlcaY!==null&&e.clientY-radAlcaY>60){radAlcaY=null;const a=document.querySelector('#view .rad-alca');if(a)a.click()}else radAlcaY=null},true);
+/* Rádio · padrão Apple (itens 1–5): cartões coloridos, setas de carrossel, chevron nos títulos e pílula de player flutuante */
+const RAD_PALETA=['#c2185b','#7b1fa2','#1565c0','#00838f','#2e7d32','#ef6c00','#b71c1c','#4e342e','#37474f','#f9a825'];
+function radCorDe(txt,fixa){if(fixa)return fixa;let h=0;for(const ch of String(txt||''))h=(h*31+ch.charCodeAt(0))>>>0;return RAD_PALETA[h%RAD_PALETA.length]}
+/* Rádio · itens 6–7: botão "…" em cada emissora (menu de ações) e rodapé da aba */
+function radItensMais(v){
+ v.querySelectorAll('.rad-destaques .rad-grid > .rad-card, .rad-todas .rad-grid > .rad-card').forEach(c=>{
+  if(c.parentElement.classList.contains('rad-item'))return;
+  const x=RADIO.s.list&&RADIO.s.list[+c.dataset.i];const nome=x?x.n:'emissora';
+  const item=document.createElement('div');item.className='rad-item';c.before(item);item.appendChild(c);
+  const m=document.createElement('button');m.type='button';m.className='rad-mais';m.dataset.i=c.dataset.i;m.setAttribute('aria-label','Mais opções de '+nome);m.setAttribute('title','Mais opções');
+  m.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>';
+  item.appendChild(m)});
+ const mm=v.querySelector('.rad-menu > section.mus-main');
+ if(mm&&!mm.querySelector('.rad-rodape')&&v.querySelector('.rad-menu')){const f=document.createElement('footer');f.className='rad-rodape';f.innerHTML='<p class="sub">As estações são transmitidas por terceiros. A disponibilidade e o áudio dependem de cada emissora.</p>';mm.appendChild(f)}
+}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.rad-mais');if(!b)return;e.stopPropagation();radMenuContexto(+b.dataset.i)},true);
+function radVisualApple(v){
+ radItensMais(v);
+ /* 1 · cartões de estação coloridos, com o nome grande dentro */
+ v.querySelectorAll('.rad-destaques .rad-card,.rad-todas .rad-card').forEach(c=>{if(c.dataset.rc)return;const x=RADIO.s.list&&RADIO.s.list[+c.dataset.i];const cor=radCorDe(x&&x.n,x&&x.c);c.dataset.rc=cor;c.style.setProperty('--rc',cor)});
+ /* 1 · textos dos cartões coloridos em branco (prioridade máxima, sobre as cores do tema) */
+ v.querySelectorAll('.rad-destaques .rad-card,.rad-todas .rad-card').forEach(c=>{if(c.closest('.rad-todas')&&(ls.get('rd_vista')||'lista')==='lista')return;c.querySelectorAll('b,span,p,.rad-logo').forEach(e=>{e.style.setProperty('color',e.classList.contains('sub')?'rgba(255,255,255,.9)':'#fff','important')})});
+ /* 1 · cartões de gênero coloridos (lugar das abas de gênero) */
+ v.querySelectorAll('.rad-gen-tabs .chip').forEach(b=>{if(b.dataset.rc)return;const cor=radCorDe(b.textContent.trim());b.dataset.rc=cor;b.style.setProperty('--rc',cor)});
+ /* 3 · setas de carrossel (anterior e próxima) */
+ const dst=v.querySelector('.rad-destaques');
+ if(dst&&!dst.parentElement.classList.contains('rad-carrossel')){const w=document.createElement('div');w.className='rad-carrossel';dst.before(w);w.appendChild(dst);
+  ['-1','1'].forEach(d=>{const s=document.createElement('button');s.type='button';s.className='rad-seta rad-seta-'+(d==='-1'?'ant':'prox');s.dataset.dir=d;s.setAttribute('aria-label',d==='-1'?'Estações anteriores':'Próximas estações');s.innerHTML=d==='-1'?'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>':'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';w.appendChild(s)})}
+ /* 5 · pílula de player flutuante centralizada, como na Apple Music */
+ let fl=document.getElementById('radFlutuante');
+ const x=RADIO.s.list&&RADIO.s.list[RADIO.s.cur];const mostra=RADIO.s.radTela==='menu'&&!!x;
+ const barraBase=document.getElementById('barraBase');if(barraBase){const n=document.getElementById('notch');if(n)n.style.setProperty('--rad-pilula-bottom',(barraBase.offsetHeight+12)+'px')}
+ if(!mostra){if(fl)fl.remove();return}
+ if(!fl){fl=document.createElement('div');fl.id='radFlutuante';fl.className='rad-flutuante';fl.setAttribute('role','region');fl.setAttribute('aria-label','Tocando agora');document.getElementById('notch').appendChild(fl)}
+ const on=!!RADIO.s.on;
+ const ic=(p)=>'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+p+'</svg>';
+ fl.innerHTML='<button type="button" class="rf-b" data-a="rprev" aria-label="Anterior">'+ic('<path d="M19 5l-9 7 9 7z"/><path d="M5 5v14"/>')+'</button>'+
+  '<button type="button" class="rf-b rf-play" data-a="rplay" aria-label="'+(on?'Pausar':'Ouvir')+'">'+ic(on?'<path d="M9 5v14M15 5v14"/>':'<path d="M7 5l12 7-12 7z"/>')+'</button>'+
+  '<button type="button" class="rf-b" data-a="rnext" aria-label="Próxima">'+ic('<path d="M5 5l9 7-9 7z"/><path d="M19 5v14"/>')+'</button>'+
+  '<button type="button" class="rf-info" data-a="radPlayer" aria-label="Abrir tela de reprodução: '+esc(x.n||'emissora')+'"><span class="rf-capa" aria-hidden="true">'+(x.img?'<span style="background-image:url(\''+esc(x.img)+'\')"></span>':'')+'</span><span class="rf-txt"><b>'+esc(x.n||'Emissora')+'</b><span>'+(on?'Ao vivo':'Parada')+'</span></span></button>'+
+  '<button type="button" class="rf-b" data-a="radPlayer" aria-label="Volume e mais opções">'+ic('<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/>')+'</button>';
+ /* 12 · aleatório à esquerda da pílula (como na Apple) */
+ if(fl&&!fl.querySelector('[data-a="rrand"]')){const b=document.createElement('button');b.type='button';b.className='rf-b';b.dataset.a='rrand';b.setAttribute('aria-label','Ouvir rádio aleatória');b.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>';fl.prepend(b)}
+ /* 13 · rodapé com a linha de copyright */
+ const rod=v.querySelector('.rad-rodape');if(rod&&!rod.querySelector('.rad-copy')){const c=document.createElement('p');c.className='sub rad-copy';c.textContent='Copyright © 2026 · Painel notch. Todos os direitos reservados.';rod.appendChild(c)}
+ /* legenda de origem nos cartões (o painel não tem o produtor; usa o endereço do serviço de transmissão) */
+ v.querySelectorAll('.rad-destaques .rad-card,.rad-todas .rad-card').forEach(c=>{if(c.querySelector('.rad-host'))return;const x=RADIO.s.list&&RADIO.s.list[+c.dataset.i];let host='';try{host=new URL(x&&x.u||'').hostname}catch(_){host=''}if(!host)return;const s=document.createElement('span');s.className='sub rad-host';s.textContent=host;c.appendChild(s)});
+}
+/* 3 · setas: rolam o carrossel de destaques */
+document.addEventListener('click',e=>{const s=e.target.closest&&e.target.closest('.rad-seta');if(!s)return;const w=s.closest('.rad-carrossel');const alvo=w&&w.querySelector('.rad-destaques');if(alvo)alvo.scrollBy({left:(+s.dataset.dir)*300,behavior:'smooth'})});
 function radAcessibilidade(v){
+ radVisualApple(v);
  radApple(v);radEstadosVazios(v);radCorDestaque();
  const pl=v.querySelector('.rad-player');
  /* 22 · anúncio da emissora atual para leitores de tela */
@@ -363,15 +415,12 @@ function radFimMontar(){const m=document.querySelector('#view .rad-root .mus-mai
 
 /* Fundo da Rádio (padrão Apple): uma única camada atrás de todas as abas da Rádio.
    Usa a imagem escolhida pelo usuário (Música > Imagem de fundo) ou, sem escolha, um degradê neutro. */
+/* Fundo da Rádio: uma camada atrás de todas as abas, com a cor escolhida em Ajustes (sem imagem nem degradê). */
 function radFundoAplicar(){const v=document.querySelector('#view');if(!v)return;
  let f=v.querySelector(':scope > .rad-fundo');
  if(S.tab!=='radio'){if(f)f.remove();return}
  if(!f){f=document.createElement('div');f.className='rad-fundo';f.setAttribute('aria-hidden','true');const h1=v.querySelector(':scope > h1.tela-titulo');h1?h1.after(f):v.prepend(f)}
- const img=S.musBgImg||ls.get('mus_bg');
- f.style.backgroundImage=img?"url('"+img+"')":'';f.style.backgroundSize=img?'cover':'';f.style.backgroundPosition=img?'center':'';
- /* limpa o fundo que versões anteriores aplicavam em cada contêiner */
  v.querySelectorAll('.rad-root,.rad-menu').forEach(e=>{e.style.backgroundImage='';e.style.backgroundSize='';e.style.backgroundPosition=''});
- /* rótulo "Agora ouvindo" e bloco de volume da emissora saem da pílula e das abas */
  v.querySelectorAll('.rad-bar *').forEach(e=>{if(e.children.length===0&&e.textContent.trim()==='Agora ouvindo')e.style.display='none'});
 }
 
@@ -459,3 +508,10 @@ function rdSchedCheck(){let sc;try{sc=JSON.parse(ls.get('rd_sched')||'null')}cat
 
 /* Fachada: o restante do painel usa somente estas funções da Rádio */
 window.RADIO={emissoraForaAr,radBarra,radDots,radFimMontar,radFundoAplicar,radGradeHtml,radioAct,radioExtrasDom,radioFiltrosDom,radioHistHtml,radioListDom,radioMenuHtml,radioPlayerHtml,radioQualDom,radioRoot,radioTocando,radioView,rdAplicarCor,rdCollect,rdCorDom,rdDetach,rdDevId,rdEmpty,rdExpMais,rdExplorarDom,rdFail,rdGerenciarDom,rdJaSalva,rdLogoTent,rdLogosBuscar,rdMedia,rdMerge,rdMove,rdMoverDom,rdOrdenarDom,rdPlay,rdPool,rdRand,rdRender,rdSaveList,rdSchedCheck,rdSleepTick,rdSort,rdSortList,rdStep,rdStop,rsBox,rsRun,rsTopBoxHtml,radBarraAjustes,radLayoutAjustes,radAcessibilidade,radApple,radToast,radMenuContexto};
+
+/* Arrasto horizontal nos carrosséis (dedo ou mouse), como na Apple */
+let radArrasto=null,radArrastou=false;
+document.addEventListener('pointerdown',e=>{const c=e.target.closest&&e.target.closest('.rad-destaques');if(!c||e.target.closest('.rad-seta,.rad-mais'))return;radArrasto={el:c,x:e.clientX,esq:c.scrollLeft,id:e.pointerId};radArrastou=false;c.classList.add('arrastando')},true);
+document.addEventListener('pointermove',e=>{if(!radArrasto)return;const dx=e.clientX-radArrasto.x;if(Math.abs(dx)>5)radArrastou=true;radArrasto.el.scrollLeft=radArrasto.esq-dx});
+['pointerup','pointercancel'].forEach(t=>document.addEventListener(t,()=>{if(radArrasto){radArrasto.el.classList.remove('arrastando');radArrasto=null}},true));
+document.addEventListener('click',e=>{if(radArrastou){e.stopPropagation();e.preventDefault();radArrastou=false}},true);
