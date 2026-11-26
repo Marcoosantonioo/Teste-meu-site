@@ -1365,3 +1365,6 @@ body.dev-computador #quick{top:auto!important;bottom:calc(4.75rem + env(safe-are
 #notch[data-tab="treino"] #view input[type=date],#notch[data-tab="treino"] #view input[type=month],#notch[data-tab="treino"] #view input[type=time]{color-scheme:dark;color:#f5f5f7!important}
 /* Reduzir transparência (Ajustes): superfícies de vidro opacas em toda a aplicação */
 #notch.reduzir-transp .mus-volpop,#notch.reduzir-transp .mus-bar,#notch.reduzir-transp details.dt{background:#f4f5f8!important;border-color:#c9ced8!important}
+/* Música: o fundo é a cor escolhida em Ajustes (não há mais imagem de fundo) */
+#notch[data-tab="music"] #view:has(.mus-player) .mus-root:not(.a):not(.b){background:var(--app-bg,#1e2430)!important;background-image:none!important}
+#notch .mus-fundo-ctl,#notch .mus-fundo-btn{display:none!important}
