@@ -491,3 +491,90 @@ html .notch[data-tab="radio"] .sub,html .notch[data-tab="radio"] .dt summary,htm
 #notch[data-tab="radio"] #view .rad-destaques .rad-card .rad-logo:not(.sem),#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card .rad-logo:not(.sem){background-color:#fff!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;width:64px!important;height:64px!important;min-width:64px!important;flex:0 0 64px!important;border-radius:14px!important;box-shadow:0 2px 8px rgba(0,0,0,.2)!important;color:transparent!important;font-size:0!important;margin:0 0 auto 0!important;padding:0!important;align-self:flex-start!important}
 #notch[data-tab="radio"] #view .rad-destaques .rad-card .rad-logo.sem,#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card .rad-logo.sem{background:transparent!important;color:#fff!important;font-size:2.2rem!important;font-weight:800!important}
 #notch[data-tab="radio"] #view .rad-destaques .rad-card .rad-logo *,#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card .rad-logo *{display:none!important}
+
+/* Um só controle de reprodução: a pílula fixa na parte de baixo; a pílula de dentro da tela de reprodução fica oculta */
+#notch[data-tab="radio"] #view:has(.rad-player) .rad-bar{display:none!important}
+
+/* Um único controle de música: esconde a pílula grande dentro da tela de reprodução; fica só a pílula fixa embaixo */
+#notch[data-tab="radio"] #view .rad-bar{display:none!important}
+#notch[data-tab="radio"] #view:has(.rad-player) .rad-bar,:root:not([data-theme="dark"]) #notch[data-tab="radio"] #view .rad-bar,:root[data-theme="light"] #notch[data-tab="radio"] #view .rad-bar{display:none!important}
+#notch[data-tab="radio"] #view:has(.rad-player) .rad-bar:not(.a):not(.b){display:none!important}
+
+/* ===== Itens 1 a 7 (padrão Apple) ===== */
+/* 1 · Texto secundário em cinza médio (#6e6e73, contraste 4,5:1 ou mais sobre o fundo, WCAG 1.4.3) — prioridade explícita */
+:root:not([data-theme="dark"]) #notch[data-tab="radio"] #view .sub:not(.rad-ctx *):not(.rad-hud *),:root[data-theme="light"] #notch[data-tab="radio"] #view .sub:not(.rad-ctx *):not(.rad-hud *),#notch[data-tab="radio"] #view .sub.rad-host:not(.rad-ctx *){color:var(--rad-texto-2,#6e6e73)!important}
+#notch[data-tab="radio"]{--rad-texto-2:#6e6e73}
+/* 2 · Conteúdo em branco puro */
+:root:not([data-theme="dark"]) #notch[data-tab="radio"] #view .rad-menu > section.mus-main,:root[data-theme="light"] #notch[data-tab="radio"] #view .rad-menu > section.mus-main,#notch[data-tab="radio"] #view .rad-menu > section.mus-main{background-color:#ffffff!important;background-image:none!important}
+/* 4 · Título com o preto do tema */
+#notch[data-tab="radio"] #view .rad-titulo-grande{color:#1d1d1f!important}
+/* 5 · Sem o mini player na barra lateral (a pílula fixa já mostra a emissora atual) */
+#notch[data-tab="radio"] #view .rad-menu > aside.mus-side .rad-mini{display:none!important}
+/* 7 · Sem a dica e o botão "Entendi" no topo da lista */
+#notch[data-tab="radio"] #view .rad-dica{display:none!important}
+/* Grade de cartões coloridos (padrão da aba): mesma largura e altura em todos os cartões; o nome quebra entre palavras, não no meio */
+#notch[data-tab="radio"] #view .rad-todas:not(.lista) > .rad-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:16px;align-items:stretch}
+#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-item{width:100%;height:100%}
+#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card{width:100%;height:100%;min-height:15rem;box-sizing:border-box}
+#notch[data-tab="radio"] #view .rad-todas:not(.lista) .rad-card b{overflow-wrap:break-word;hyphens:auto}
+
+/* ===== Acessibilidade e organização (itens aplicados) ===== */
+/* Acess. 2 · Espaço no fim do conteúdo para a pílula fixa não cobrir o último item (WCAG 2.4.11) */
+#notch[data-tab="radio"] #view .rad-menu > section.mus-main{padding-bottom:120px!important}
+/* Acess. 5 · Setas do carrossel fora da área dos cartões (sem sobreposição) */
+#notch[data-tab="radio"] #view .rad-carrossel{padding:0 44px}
+#notch[data-tab="radio"] #view .rad-seta-ant{left:0}
+#notch[data-tab="radio"] #view .rad-seta-prox{right:0}
+/* Acess. 3 · Pílula adaptada à largura do celular: o nome quebra em duas linhas em vez de ser cortado (WCAG 1.4.10) */
+.rad-flutuante .rf-info{flex:1 1 auto;max-width:none;min-width:0}
+.rad-flutuante .rf-txt b{white-space:normal;line-height:1.2}
+@media (max-width:480px){
+ .rad-flutuante{width:calc(100vw - 24px);justify-content:space-between;gap:2px;padding:4px 6px}
+ .rad-flutuante .rf-b{width:40px;min-width:40px;height:40px}
+}
+/* Acess. 6 · Cabeçalho da seção em uma linha, sem a legenda subir acima do título */
+#notch[data-tab="radio"] #view .rad-sec-head{flex-wrap:nowrap;align-items:baseline}
+#notch[data-tab="radio"] #view .rad-sec-head .sub{white-space:nowrap;flex:0 0 auto}
+/* Acess. 7 · Alvos de toque de 44 px (recomendação WCAG 2.5.5 e padrão Apple) */
+#notch[data-tab="radio"] #view .rad-mais{width:44px;height:44px;min-width:44px}
+.rad-flutuante .rf-b{width:44px;min-width:44px;height:44px}
+/* Acess. 9 · Cinza do texto secundário com mais margem de contraste */
+#notch[data-tab="radio"]{--rad-texto-2:#636366}
+/* Acess. 10 · Foco visível em qualquer fundo: anel branco com contorno escuro (WCAG 2.4.7 e 1.4.11) */
+#notch[data-tab="radio"] #view :focus-visible,.rad-flutuante :focus-visible{outline:3px solid #ffffff!important;outline-offset:2px;box-shadow:0 0 0 6px #1d1d1f!important}
+/* Organização 2 · Seções recolhidas com a mesma largura e alinhamento */
+#notch[data-tab="radio"] #view .rad-menu > section.mus-main > details.dt{width:100%!important;max-width:100%;margin:8px 0!important;box-sizing:border-box}
+/* Organização 13 · Dica visível do toque longo */
+#notch[data-tab="radio"] #view .rad-dica-f{margin:8px 0 12px;font-size:14px}
+/* Organização 14 · Rodapé só com o copyright */
+#notch[data-tab="radio"] #view .rad-rodape{text-align:center}
+/* Organização 15 · No celular, a barra lateral vira uma linha de atalhos compacta, sem ocupar a primeira tela */
+@media (max-width:640px){
+ #notch[data-tab="radio"] #view .rad-menu > aside.mus-side{display:flex!important;flex-direction:row!important;overflow-x:auto;gap:6px;padding:8px!important;align-items:center}
+ #notch[data-tab="radio"] #view .rad-menu > aside.mus-side h2.mus-h{display:none!important}
+ #notch[data-tab="radio"] #view .rad-menu > aside.mus-side .mus-navs{display:flex!important;flex-direction:row!important;gap:6px;flex:0 0 auto}
+ #notch[data-tab="radio"] #view .rad-menu > aside.mus-side .mus-navs button{white-space:nowrap;min-height:44px;padding:0 12px;flex:0 0 auto}
+ #notch[data-tab="radio"] #view .rad-menu > aside.mus-side .mus-navs button span:not(.mus-nav-ic){display:inline}
+ #notch[data-tab="radio"] #view .rad-menu > aside.mus-side > :not(.mus-navs){display:none!important}
+}
+/* Ajustes de celular: uma linha, sem quebras e sem cortes */
+@media (max-width:640px){
+ #notch[data-tab="radio"] #view .rad-menu > aside.mus-side{flex-wrap:nowrap!important}
+ #notch[data-tab="radio"] #view .rad-menu > aside.mus-side .mus-navs{flex-wrap:nowrap!important;grid-template-columns:none!important;grid-auto-flow:column}
+ #notch[data-tab="radio"] #view .rad-sec-head{flex-wrap:wrap;align-items:center;row-gap:6px}
+ #notch[data-tab="radio"] #view .rad-sec-head .sub{white-space:normal;flex:1 1 auto;min-width:0}
+ #notch[data-tab="radio"] #view .rad-sec-head .chip{flex:0 0 auto;white-space:nowrap;margin-left:auto}
+ #notch[data-tab="radio"] #view .rad-sec-tit{white-space:nowrap}
+}
+@media (max-width:480px){
+ .rad-flutuante .rf-b:last-of-type:not(.rf-mais){display:none}
+}
+@media (max-width:480px){
+ /* no celular: favoritar fica no "…" (menu de ações) e a capa pequena sai, para o nome caber */
+ .rad-flutuante > .rf-b:nth-child(3){display:none}
+ .rad-flutuante .rf-capa{display:none}
+ .rad-flutuante .rf-info{padding:0 4px}
+}
+/* Só favoritas: controle da aba de menu (ao lado de Lista | Grade) */
+#notch[data-tab="radio"] #view .rad-so-fav{margin:0 0 0 8px;min-height:44px;vertical-align:middle}
+#notch[data-tab="radio"] #view .rad-so-fav[aria-pressed="true"]{outline:2px solid #fff;outline-offset:2px}
