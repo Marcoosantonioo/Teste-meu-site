@@ -1,4 +1,4 @@
-const VERSAO = 'painel-v159';
+const VERSAO = 'painel-v161';
 const ARQUIVOS = ['./', './notch-panel.html', './estilo/notch.css', './estilo/radio.css', './js/notch.js', './js/radio.js', './js/dados.js', './diario.html', './segundo-cerebro.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('message', e => {
